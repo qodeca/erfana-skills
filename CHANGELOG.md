@@ -3,6 +3,24 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched. No skill, agent, hook, or command behaviour change, and the plugin version is unchanged; this folds into the next version bump.
+
+### Added
+
+- **Gate 15 Check 7 – per-gate detail-file count.** A seventh doc-claim check guards "N per-gate detail files" / `gates/01-N` claims against `ls docs/gates/*.md`, closing the gap that let the v6.0.0 `16 -> 17` gate-file drift (the new Gate 17) reach release uncaught. Two narrowly-scoped patterns that skip generic "N gates" phrasings and historical enumerations; verified adversarially (reintroducing "16" fails the check).
+
+### Fixed
+
+- **Stale gate-file count.** `docs/architecture.md` and `CLAUDE.md` claimed "16 per-gate detail files" / `gates/01-16`; corrected to 17 (Gate 17 publication-readiness shipped in v6.0.0). The historical `CHANGELOG.md` mention is accurate for its release and left as-is.
+- **README version-pin example.** The pinning example in `README.md` lagged at `v5.0.0`; bumped to `v6.0.0` to match the current release.
+- **Count-consistency in the docs.** Clarified the generic-name agent count (9 strict / 15 by the no-team-prefix definition in `SECURITY.md`), enumerated all six orchestration skills on one line in `CLAUDE.md`, and standardized gate-count phrasing in `docs/verification-gates.md`.
+
+### Changed
+
+- **README concision.** Compressed the over-long slash-command and skill table cells to one-to-two sentences plus a link to the command / architecture file, and de-duplicated the cross-platform hooks narrative (kept authoritative in `docs/architecture.md`). No count claim was altered.
+
 ## [6.0.0] - 2026-06-13
 
 The **open-source release**. erfana moves from a private, proprietary, Qodeca-internal plugin to a public project licensed **GPL-3.0-only**, and replaces the proprietary qodeca brand bundle with a neutral default brand so the design skills work for everyone out of the box. This is a breaking, posture-changing release; it does not change skill, agent, hook, or command counts.
