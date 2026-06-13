@@ -94,7 +94,7 @@ erfana-skills/
 └── docs/
     ├── architecture.md      ← this document
     ├── verification-gates.md← index for the 17 gates
-    └── gates/               ← 16 per-gate detail files (v4.1.3+: 01-cjk.md … 15-doc-claims.md; v4.2.9+ adds 16-hook-fixtures.md)
+    └── gates/               ← 17 per-gate detail files (v4.1.3+: 01-cjk.md … 15-doc-claims.md; v4.2.9+ adds 16-hook-fixtures.md; v6.0.0 adds 17-publication-readiness.md)
 ```
 
 ### Cross-cutting safety surface (v4.1+)
@@ -119,7 +119,7 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Two layered shared resources
 
-- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **`skills/design-shared/` bundle** – design-only shared content. Not a skill (no SKILL.md). Invisible to auto-discovery. Deduplicates content design sub-skills would otherwise copy. Orchestration skills do NOT consume `design-shared/`.
 
 ### Per-skill nested agents

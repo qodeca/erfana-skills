@@ -1,4 +1,4 @@
-# Gate 15 – doc-claim sync (v4.1.2+, extended v4.1.3+ and v4.2.2+)
+# Gate 15 – doc-claim sync (v4.1.2+, extended v4.1.3+, v4.2.2+, and v6.0.0)
 
 Verifies that prose claims in **6 docs** about plugin shape stay in sync with the actual filesystem. The `docs_to_scan` list lives at `scripts/gate-15-doc-claims.sh:44`:
 
@@ -9,7 +9,7 @@ Verifies that prose claims in **6 docs** about plugin shape stay in sync with th
 5. `skills/using-erfana/SKILL.md` (added v4.2.2 V5c)
 6. `docs/verification-gates.md` (added v4.2.2 V5c)
 
-Catches **six** classes of drift that manual review repeatedly missed (three landed in v4.1.2; three more added in v4.1.3+):
+Catches **seven** classes of drift that manual review repeatedly missed (three landed in v4.1.2; three more in v4.1.3+; a seventh in v6.0.0):
 
 1. **`CLAUDE.md` "Current version" banner.** The regex `Current version:\s*\*\*v(\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?)\*\*` must match exactly once and the captured version must equal `.claude-plugin/plugin.json` `version`. v4.1.1 release commit `c6a12a4` shipped with the banner still at `v4.1.0` and was caught only by manual sweep; this check makes that failure mode CI-blocking.
 2. **Per-skill internal agent counts.** Walks every `skills/managing-*/agents/` directory, counts `*.md` files, then scans the docs for prose claims using the patterns `Ships <N> (internal|skill-internal|management) agents`, `<N> skill-internal agents`, `<N> internal agents`, and `<skill>/agents/` (<N>) inline references. Each prose claim must match the filesystem count. To avoid false positives, claims are checked only on lines that mention exactly one `managing-*` skill (aggregate / comparison lines are skipped).
@@ -17,6 +17,7 @@ Catches **six** classes of drift that manual review repeatedly missed (three lan
 4. **Top-level skills count (v4.1.3+).** Pattern `(\d+)\s+(?:auto-discovered\s+)?skills\b(?![/-])` matches claims like `14 skills` or `14 auto-discovered skills`. Compared to `ls skills/` minus the `design-shared` bundle (which is not a skill). Negative lookahead excludes path-like uses (`skills/foo`) and compounds (`skills-related`).
 5. **Hooks count (v4.1.3+).** Pattern `(\d+)\s+(?:safety\s+hooks?|hook\s+scripts?)\b(?![/-])` matches claims like `4 safety hooks` or `4 hook scripts`. Compared to `ls hooks/*.sh` **excluding the `dispatch.sh` cross-platform launcher** (v4.2.20+) – the launcher is plumbing, not a safety hook, so the count stays at the 4 hooks that each ship a `.sh` + `.ps1` pair.
 6. **Slash commands count (v4.1.3+).** Pattern `(\d+)\s+slash\s+commands?\b(?![/-])` matches claims like `1 slash command`. Compared to `ls commands/*.md`.
+7. **Per-gate detail-file count (v6.0.0+).** Two narrowly-scoped patterns – `(\d+)\s+per-gate\s+detail\s+files?` and `gates/01[-–](\d+)` – match claims like `17 per-gate detail files` and the range `gates/01-17`. Compared to `ls docs/gates/*.md`. Deliberately narrow: it must **not** match generic `N gates` / `N hard gates` / `Seventeen static checks` phrasings, the Gate-15 `Seven classes ... (7)` self-reference, or the historical `01-cjk.md ... 15-doc-claims.md` enumeration (no digit immediately before the dash). Added after the v6.0.0 `16 -> 17` drift (Gate 17 publication-readiness) shipped because no check covered this class.
 
 ## Implementation
 
@@ -28,7 +29,7 @@ bash scripts/gate-15-doc-claims.sh
 
 ## Pass criteria
 
-Up to six `PASS:` lines (one per check; checks 5 and 6 are skipped if `hooks/` or `commands/` directories don't exist). Failures print `<file>:<line>: <quoted-claim> disagrees with filesystem (<actual>)` so the offending line is locatable in one click.
+Up to seven `PASS:` lines (one per check; checks 5, 6, and 7 are skipped if `hooks/`, `commands/`, or `docs/gates/` directories don't exist). Failures print `<file>:<line>: <quoted-claim> disagrees with filesystem (<actual>)` so the offending line is locatable in one click.
 
 ## Adding a new prose claim that should be checked
 

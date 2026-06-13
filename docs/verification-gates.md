@@ -52,7 +52,7 @@ Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1
 bash scripts/run-all-gates.sh
 ```
 
-The runner executes all 16 hard gates plus the 1 soft gate plus `claude plugin validate` in sequence and exits non-zero on the first failure. It is the same script CI runs on every push and PR – keeping local and CI in sync.
+The runner executes all 17 gates (16 hard + 1 soft) plus `claude plugin validate` in sequence and exits non-zero on the first failure. It is the same script CI runs on every push and PR – keeping local and CI in sync.
 
 If any gate fails, the commit is not ready. Fix, re-run, then commit.
 
