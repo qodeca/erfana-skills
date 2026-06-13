@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
 # gate-15-doc-claims.sh – verifies that prose claims about plugin shape stay
-# in sync with the actual filesystem. Catches six classes of drift that
+# in sync with the actual filesystem. Catches seven classes of drift that
 # manual review repeatedly missed pre-v4.1.2:
 #
 #   1. CLAUDE.md "Current version: **vX.Y.Z**" banner not bumped on release
@@ -20,6 +20,10 @@
 #      diverge from `ls hooks/*.sh` (added v4.1.3+).
 #   6. Slash command count claims ("1 slash command") that diverge from
 #      `ls commands/*.md` (added v4.1.3+).
+#   7. Per-gate detail-file count claims ("16 per-gate detail files",
+#      "gates/01-16") that diverge from `ls docs/gates/*.md` (added v6.0.0;
+#      the v6.0.0 "16 -> 17" drift on Gate 17 shipped because no check
+#      covered this class).
 #
 # Hard gate. Wired into scripts/run-all-gates.sh between Gate 14 (hooks)
 # and Gate 13 (brandbook hex, soft).
@@ -207,6 +211,36 @@ if os.path.isdir('commands'):
                 )
                 break  # one error per doc
     passes.append(f'commands/*.md count {commands_count} aligns with all "X slash command(s)" claims')
+
+# === Check 7 (v6.0.0+): per-gate detail-file count ===
+# `ls docs/gates/*.md`. Guards claims about the NUMBER of per-gate detail
+# files ("N per-gate detail files") and the range enumeration ("gates/01-N").
+# Narrowly scoped on purpose: it must NOT match generic "N gates" / "N hard
+# gates" / "Seventeen static checks" phrasings, the Gate-15 "Seven classes
+# ... (7)" self-reference, or the historical "01-cjk.md ... 15-doc-claims.md"
+# prose (no digit immediately before the dash there).
+if os.path.isdir('docs/gates'):
+    gate_files_count = sum(1 for f in os.listdir('docs/gates') if f.endswith('.md'))
+    gate_file_patterns = [
+        re.compile(r'(\d+)\s+per-gate\s+detail\s+files?'),
+        re.compile(r'gates/01[-–](\d+)'),
+    ]
+    for doc in docs_to_scan:
+        if not os.path.isfile(doc):
+            continue
+        text = open(doc).read()
+        flagged = False
+        for pat in gate_file_patterns:
+            for m in pat.finditer(text):
+                if int(m.group(1)) != gate_files_count:
+                    errors.append(
+                        f'{doc}: "{m.group(0)}" disagrees with docs/gates/*.md count ({gate_files_count})'
+                    )
+                    flagged = True
+                    break
+            if flagged:
+                break
+    passes.append(f'docs/gates/*.md count {gate_files_count} aligns with all "X per-gate detail files" / "gates/01-X" claims')
 
 # === Output ===
 if errors:
