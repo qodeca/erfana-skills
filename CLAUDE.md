@@ -11,7 +11,7 @@ Current version: **v6.0.0**. The plugin ships 15 auto-discovered skills + 87 sha
 **Skills (15)** – all invoke as `/erfana:<name>`:
 
 - Design (6): `design-direction`, `design-prototype`, `design-slides`, `design-motion`, `design-infographic`, `design-review` (user-invoked only – `disable-model-invocation: true`).
-- Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, plus `managing-reports` below which ships nested agents.
+- Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `managing-reports`, `managing-articles` (per-skill agent notes below).
 - `managing-articles` delegates to 5 plugin-root `article-*` shared agents (hoisted from nested in v4.3.0); it ships no skill-internal agents.
 - `managing-reports` ships 11 internal validation agents.
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
@@ -65,7 +65,7 @@ Detailed multi-domain architecture, shared-content layers, brand-system layer, c
 | `skills/<name>/SKILL.md` | 15 skills (design + orchestration + process + verification + bootstrap); `managing-reports` ships nested `agents/` (`managing-articles` delegates to 5 plugin-root `article-*` agents as of v4.3.0) |
 | `skills/design-shared/` | Shared design `assets/`, `demos/`, `scripts/`, `references/`, `brands/<id>/` (design sub-skills only, via `../design-shared/...`) |
 | `scripts/run-all-gates.sh` | Single-command verifier for gates 1–17 (per-gate `gate-NN-*.sh` scripts alongside) |
-| `docs/` | `architecture.md`, `verification-gates.md` + `gates/01–16`, `modernization-registry.md`, `known-caveats.md` |
+| `docs/` | `architecture.md`, `verification-gates.md` + `gates/01–17`, `modernization-registry.md`, `known-caveats.md` |
 | `.github/workflows/verify.yml`, `CODEOWNERS` | CI gate runner; code-owner routing |
 | `tests/` | Maintainer scratch; per-deck local `assets/` copies |
 | `MAINTAINER.md`, `SECURITY.md` | Succession plan; vulnerability disclosure |
