@@ -1,0 +1,4 @@
+{
+  "stop_hook_active": false,
+  "last_assistant_message": "## Issue #17: Authentication token refresh edge case at the hour boundary\n\n**An in-flight bug where the token refresher returns a stale token at the 60-minute mark, with PR #21 ready for merge.**\n\n- **The problem:** Users are silently signed out after exactly one hour because the refresher hands back the previous token instead of the new one.\n- **Impact:** Every signed-in user is exposed; the failure window aligns with the 1-hour session boundary and has been reproduced.\n- **Where we are:** PR #21 carries the fix and the implementation is complete pending review.\n\n<!-- erfana:explain-template -->"
+}

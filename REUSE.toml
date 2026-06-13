@@ -1,0 +1,13 @@
+version = 1
+
+# REUSE specification (https://reuse.software/spec-3.3/) coverage for files that
+# cannot carry an inline SPDX header (markdown with line-1 frontmatter, JSON,
+# binary assets). Scripts carry inline `SPDX-License-Identifier` headers instead
+# and are not annotated here. Per-asset overrides (e.g. a future CC0-licensed asset)
+# are added as more specific [[annotations]] blocks with precedence = "closest".
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025-2026 Qodeca sp. z o.o."
+SPDX-License-Identifier = "GPL-3.0-only"

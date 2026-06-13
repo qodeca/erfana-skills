@@ -1,0 +1,3 @@
+{
+  "$description": "Single source of truth for brandbook hex codes. The Gate 13 verifier (scripts/check-brandbook-hex.sh) loads this file and confirms every listed hex appears in the corresponding brand's tokens.tokens.json. When a brand with a published brandbook is added, add an entry keyed by brand id whose values are objects keyed by brandbook page reference for human auditability. The default 'erfana' house brand ships no brandbook, so no brand entries are listed and the Gate 13 check passes with nothing to verify."
+}

@@ -1,0 +1,26 @@
+{
+  "erfana": {
+    "$description": "erfana default house-brand tokens (DTCG 2025.10). A neutral, restrained palette shipped as the plugin's working example brand. Wrapped under the brand-id group for root-$description conformance and runtime brand-swap symmetry.",
+    "color": {
+      "$type": "color",
+      "indigo": { "$value": "#4338CA", "$description": "erfana Indigo - primary brand colour" },
+      "cyan":   { "$value": "#06B6D4", "$description": "erfana Cyan - accent / call-to-action" },
+      "ink":    { "$value": "#0B1020", "$description": "erfana Ink - dark surface background" },
+      "paper":  { "$value": "#F5F7FA", "$description": "erfana Paper - light text / surface" },
+      "brand": {
+        "primary":      { "$value": "{erfana.color.indigo}", "$description": "Primary brand role" },
+        "accent":       { "$value": "{erfana.color.cyan}",   "$description": "Accent / call-to-action" },
+        "surface-dark": { "$value": "{erfana.color.ink}",    "$description": "Dark surface background" },
+        "text-light":   { "$value": "{erfana.color.paper}",  "$description": "Light text on dark surface" }
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "$type": "fontFamily",
+        "primary": { "$value": "Inter",          "$description": "Body and UI copy (Inter, SIL OFL)" },
+        "display": { "$value": "Inter",          "$description": "Headlines (Inter, SIL OFL)" },
+        "mono":    { "$value": "JetBrains Mono",  "$description": "Code (JetBrains Mono, SIL OFL)" }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/qodeca/erfana-skills/discussions
+    about: Ask "how do I...", share ideas, or show what you built. Not for bug reports.
+  - name: Report a security vulnerability
+    url: https://github.com/qodeca/erfana-skills/security/advisories/new
+    about: Report security issues privately. Do NOT open a public issue for vulnerabilities.
+  - name: Support and getting help
+    url: https://github.com/qodeca/erfana-skills/blob/main/SUPPORT.md
+    about: Where to get help and what each channel is for.

@@ -1,0 +1,26 @@
+{
+  "$schema": "../brand.schema.json",
+  "id": "erfana",
+  "displayName": "erfana",
+  "legalName": "Qodeca sp. z o.o.",
+  "version": "1.0.0",
+  "tokens": "./tokens.tokens.json",
+  "logos": [
+    { "id": "primary", "src": "./logo/erfana-logo.svg", "usage": ["light-bg", "marketing", "footer"] }
+  ],
+  "typography": {
+    "primary": "Inter",
+    "display": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "voice": {
+    "attributes": ["confident", "direct", "matter-of-fact"],
+    "doNotUse": ["hype", "superlatives", "filler"],
+    "watermark": "Created with erfana",
+    "guide": "./voice.md"
+  },
+  "imagery": {
+    "logoLibrary": "./logo/"
+  },
+  "platforms": ["web", "print", "desktop"]
+}

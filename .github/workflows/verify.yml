@@ -1,0 +1,61 @@
+name: Verify plugin
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install Python deps
+        run: pip install pyyaml 'reuse==5.1.1'
+      - name: Run verification gates
+        run: bash scripts/run-all-gates.sh
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Validate plugin + marketplace manifests (strict)
+        env:
+          DISABLE_AUTOUPDATER: '1'
+        run: claude plugin validate . --strict
+      - name: REUSE license-metadata compliance
+        run: reuse lint
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: gitleaks (full git history)
+        run: |
+          version=8.30.1
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${version}/gitleaks_${version}_linux_x64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" version
+          "$RUNNER_TEMP/gitleaks" detect --source . --log-opts="--all" --redact -v
+      - name: trufflehog (full git history, verified secrets)
+        run: |
+          version=3.95.5
+          curl -sSfL "https://github.com/trufflesecurity/trufflehog/releases/download/v${version}/trufflehog_${version}_linux_amd64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP" trufflehog
+          "$RUNNER_TEMP/trufflehog" --version
+          "$RUNNER_TEMP/trufflehog" git "file://$PWD" --results=verified --fail --no-update

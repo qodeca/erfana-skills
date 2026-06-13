@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qodeca/erfana-skills/blob/main/skills/design-shared/brands/brand.schema.json",
+  "$comment": "Schema v1.3 (extends v1.2). Adds optional imagery.logoLibrary as a directory pointer mirroring imagery.{photoLibrary,backgroundLibrary,shapeLibrary,templateLibrary}. Brings the logo/ folder into the imagery vocabulary so Gate 12's INDEX.md cross-checks can treat all asset libraries uniformly; the existing top-level logos[] array remains the source of truth for tagged variants (light-bg, dark-bg, watermark, favicon) consumed by render scripts. Backward-compatible with v1.2. Versioned independently of plugin semver.",
+  "title": "erfana-skills brand manifest",
+  "description": "Schema for brand.json manifests under skills/design-shared/brands/<id>/. One file per brand. Discovered by convention (folder name = id). See brands/README.md for the full contract including the default tokensContract.",
+  "type": "object",
+  "required": ["id", "displayName", "legalName", "version", "voice"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional pointer to this schema for IDE / editor hints. Typically '../brand.schema.json'."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 64,
+      "description": "Brand id. Lowercase ASCII + hyphens, no consecutive hyphens, must equal the parent folder basename. Enforced by Gate 12."
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Human-readable brand name (e.g., 'Qodeca', 'ACME Corp'). Used in marketing copy and Claude responses."
+    },
+    "legalName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Legal entity that owns the brand (e.g., 'Qodeca sp. z o.o.'). Used in copyright lines."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$",
+      "description": "Brand-manifest semver. Independent from plugin version. Bump on schema-shape changes within a brand."
+    },
+    "tokens": {
+      "type": "string",
+      "description": "Relative path (from this manifest) to a DTCG 2025.10 design-tokens file (e.g., './tokens.tokens.json'). Optional but strongly recommended. Tokens MUST be wrapped under a top-level group whose key equals this manifest's id."
+    },
+    "tokensContract": {
+      "type": "object",
+      "description": "Optional override of the default token contract. Maps dotted token paths (relative to the brand-id wrapping group in tokens.tokens.json) to expected DTCG $type strings. Gate 12 enforces every entry resolves to a token of the declared type. When omitted, the default contract from brands/README.md applies (color.brand.{primary,accent,surface-dark,text-light}, typography.fontFamily.{primary,display,mono}). Declaring this field is an explicit production-readiness decision; it surfaces in PR review.",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "logos": {
+      "type": "array",
+      "description": "Logo variants. Each entry points at a real file under the brand folder.",
+      "items": {
+        "type": "object",
+        "required": ["id", "src"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "src": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative path to the logo file."
+          },
+          "usage": {
+            "type": "array",
+            "description": "Usage tags. Canonical values are listed in the anyOf enum branch (IDE autocomplete-friendly); arbitrary strings are also accepted via the string branch. Consumers filter by tag.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "light-bg",
+                    "dark-bg",
+                    "watermark",
+                    "marketing",
+                    "footer",
+                    "favicon",
+                    "social"
+                  ]
+                },
+                { "type": "string", "minLength": 1 }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "description": "Font-family roles (e.g., 'primary', 'display', 'mono'). Values are font-family strings; consumers feed them into CSS or PPTX export pipelines.",
+      "additionalProperties": { "type": "string" }
+    },
+    "voice": {
+      "type": "object",
+      "required": ["watermark"],
+      "additionalProperties": false,
+      "description": "Voice / tone metadata. Schema is strict so typos like 'watermak' fail validation. Forward compatibility is handled via schema versioning — adding a new optional field bumps the schema to v1.2 with no breaking impact on existing brands.",
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "description": "Tone descriptors. Canonical values from the Nielsen / Mailchimp tone-axis literature are listed in the anyOf enum branch (IDE autocomplete-friendly); arbitrary strings are also accepted.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "confident",
+                  "direct",
+                  "lowercase-technical",
+                  "playful",
+                  "warm",
+                  "approachable",
+                  "formal",
+                  "casual",
+                  "serious",
+                  "funny",
+                  "respectful",
+                  "irreverent",
+                  "matter-of-fact",
+                  "enthusiastic"
+                ]
+              },
+              { "type": "string", "minLength": 1 }
+            ]
+          }
+        },
+        "doNotUse": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Words / phrases that violate brand voice. Used by Claude as negative constraints when generating copy."
+        },
+        "watermark": {
+          "description": "Canonical watermark for animation / video outputs. Single source of truth — never hardcode in scripts. v1: bare string. v1.1+: optional object form for placement / color / font control (consumers will land in v2.4+).",
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            {
+              "type": "object",
+              "required": ["text"],
+              "additionalProperties": false,
+              "properties": {
+                "text": { "type": "string", "minLength": 1 },
+                "position": {
+                  "type": "string",
+                  "enum": [
+                    "top-left",
+                    "top-right",
+                    "bottom-left",
+                    "bottom-right"
+                  ]
+                },
+                "color": { "type": "string", "minLength": 1 },
+                "font": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
+        },
+        "guide": {
+          "type": "string",
+          "description": "Relative path to long-form voice / tone prose (e.g., './voice.md')."
+        }
+      }
+    },
+    "imagery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "photoLibrary": {
+          "type": "string",
+          "description": "Relative path to the brand's photo library directory."
+        },
+        "illustrationStyle": {
+          "type": "string",
+          "description": "Relative path to the brand's illustration-style guide (typically './illustration.md'). Should NOT point at voice.md — illustration and voice are separate concerns."
+        },
+        "backgroundLibrary": {
+          "type": "string",
+          "description": "Relative path to a directory of brand background images (e.g., './backgrounds/'). Mirrors photoLibrary — a path pointer, not a file enumeration. Consumers list the directory at consumption time."
+        },
+        "shapeLibrary": {
+          "type": "string",
+          "description": "Relative path to a directory of brand shape-vocabulary SVGs (e.g., './shapes/'). Used by sub-skills for decorative cuts, arrows, and editorial accents. Mirrors photoLibrary."
+        },
+        "templateLibrary": {
+          "type": "string",
+          "description": "Relative path to a directory of brand templates (e.g., './templates/'). Forward-looking slot for slide masters, layout sketches, and other reference templates. SVGs under templates/ subfolders bypass Gate 5 content rules — they are reference material, not loaded by render-video.js."
+        },
+        "logoLibrary": {
+          "type": "string",
+          "description": "Relative path to the brand's logo directory (e.g., './logo/'). Schema v1.3+. Brings logos into the imagery vocabulary so the per-library INDEX.md and Gate 12 cross-checks treat them uniformly with shapes / photos / backgrounds. The existing top-level logos[] array remains the source of truth for tagged variants (light-bg, dark-bg, watermark, favicon) — logoLibrary is the catalog pointer, not a replacement."
+        }
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "description": "Platforms the brand is designed for. Open string set; canonical values include 'ios', 'android', 'web', 'desktop', 'print', 'tv', 'watch', 'embed'. Consumers may filter assets by platform.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "minLength": 1
+      }
+    }
+  }
+}

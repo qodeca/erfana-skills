@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Video render temp (render-video.js outputs)
+.video-tmp-*/
+**/.video-tmp-*/
+
+# Personal asset index (real personal data — only the .example.json template is checked in)
+assets/personal-asset-index.json
+
+# Node / editor / OS
+node_modules/
+*.swp
+.idea/
+.vscode/
+Thumbs.db
+
+# Verification artifacts (screenshots, temp test scripts)
+demos/_frames_*.png
+demos/_verify.js
+demos/_verify.mjs
+
+# Claude Code local state (per-machine; keep rest of .claude/ trackable)
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+
+# Doc-update protocol scratch space (per-invocation; deleted at protocol step 13)
+temp/
+
+# Modernize/Modify backup directories (ms-modifier creates these per atomic-rollback contract)
+.backups-*/
+**/.backups-*/
+
+# Python bytecode cache
+__pycache__/
+*.pyc

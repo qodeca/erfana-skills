@@ -1,0 +1,73 @@
+# GitHub Issue Form — enhancement / feature request.
+# Reference form: copy to a consuming repo's .github/ISSUE_TEMPLATE/ to activate structured intake.
+# Structured fields enforce required input and auto-apply labels before a human or AI implementer reads the issue.
+name: Enhancement / feature request
+description: Suggest a new feature or an improvement
+title: "[Enhancement]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the feature from the user's perspective. Guide research — do not prescribe an implementation.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence describing the feature or improvement.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve? What user pain point does it address?
+    validations:
+      required: true
+  - type: dropdown
+    id: affected-users
+    attributes:
+      label: Affected users
+      description: Who is affected? Helps an implementer prioritize by impact, not just mechanics.
+      options:
+        - All users
+        - A specific role or segment
+        - Power users
+        - Maintainers / internal
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: How the feature should work from a user's perspective, including edge cases.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: 2-5 testable checkboxes.
+      value: |
+        - [ ]
+        - [ ] No regression in existing functionality
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P1
+        - P2
+        - P3
+    validations:
+      required: false
+  - type: checkboxes
+    id: automation
+    attributes:
+      label: Automation (optional)
+      description: Only if this repo auto-implements issues via Claude Code GitHub Actions. Harmless when unused.
+      options:
+        - label: Ready for @claude to implement
+          required: false

@@ -1,0 +1,85 @@
+# GitHub Issue Form — bug report.
+# Reference form: copy to a consuming repo's .github/ISSUE_TEMPLATE/ to activate structured intake.
+# Structured fields enforce required input and auto-apply labels before a human or AI implementer reads the issue.
+name: Bug report
+description: Report something that is not working as expected
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Describe behavior and user impact — no file paths or line numbers (they go stale).
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence — what behavior is broken and what the user experiences (not where in the code).
+      placeholder: File save fails silently when the filename contains special characters.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered, specific, reproducible. Note if the bug is intermittent.
+      placeholder: |
+        1. Open a project
+        2. ...
+        3. Observe the failure
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen when following the steps above.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happens. Include error messages, but not stack traces with line numbers.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Only the relevant details.
+      placeholder: |
+        OS: macOS 14.0
+        App version: 0.4.1
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: 3-5 testable checkboxes — fixed behavior, at least one edge case, and a no-regression check.
+      value: |
+        - [ ]
+        - [ ]
+        - [ ] No regression in related functionality
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: false
+  - type: checkboxes
+    id: automation
+    attributes:
+      label: Automation (optional)
+      description: Only if this repo auto-implements issues via Claude Code GitHub Actions. Harmless when unused.
+      options:
+        - label: Ready for @claude to implement
+          required: false

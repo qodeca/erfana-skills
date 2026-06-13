@@ -1,0 +1,53 @@
+name: Bug report
+description: Report a reproducible problem with the erfana plugin
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please do **not** report security vulnerabilities here — see [SECURITY.md](https://github.com/qodeca/erfana-skills/blob/main/SECURITY.md). Search existing issues first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear description of the bug and what you expected instead.
+      placeholder: When I run ..., the skill ... but I expected ...
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact trigger phrase / command and steps.
+      placeholder: |
+        1. Install the plugin
+        2. Type "..."
+        3. See ...
+    validations:
+      required: true
+  - type: input
+    id: skill
+    attributes:
+      label: Affected skill / command / agent
+      placeholder: "erfana:design-slides, /erfana:lens-review, agents/mi-..."
+    validations:
+      required: false
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Claude Code version, OS, plugin version (`/plugin list`).
+      placeholder: |
+        - Claude Code:
+        - OS:
+        - erfana version:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output or screenshots
+      description: Paste any error output. Do not paste secrets or confidential data.
+    validations:
+      required: false

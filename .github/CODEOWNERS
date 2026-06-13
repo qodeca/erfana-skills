@@ -1,0 +1,10 @@
+# Code owners for erfana-skills plugin
+#
+# Until a backup maintainer joins, all paths fall under @marcinobel.
+# Organisation-owner break-glass (per GOVERNANCE.md) is handled out-of-band
+# via the qodeca org settings, not through this file.
+# When a second maintainer is onboarded, replace the catch-all with
+# path-scoped rules so the second person reviews changes to skill
+# content while @marcinobel keeps gatekeeping plugin manifests.
+
+* @marcinobel

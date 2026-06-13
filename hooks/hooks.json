@@ -1,0 +1,51 @@
+{
+  "description": "erfana plugin hooks: project-agnostic safety, secret detection, post-compact reminders, and verification nudge. Each hook routes through dispatch.sh, which runs the .sh sibling on macOS/Linux and the .ps1 sibling on Windows.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" bash-safety",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" secret-detector",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" post-compact-reminder",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" verify-completion",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

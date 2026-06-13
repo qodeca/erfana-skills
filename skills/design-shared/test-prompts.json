@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "prompt": "I want to design a login page for a SaaS product. Give me 3 style directions to compare.",
+    "expected": "Triggers clarifying questions about design context / brand; produces a design_canvas with 3 variations; no purple gradients / emoji / Inter or other AI slop; gives concrete reasoning for each variation's differentiating dimension",
+    "tests": "workflow question-asking + variations logic + anti-AI-slop checklist + design_canvas usage"
+  },
+  {
+    "id": 2,
+    "prompt": "Make me a 10-page product pitch deck for an AI-tool startup.",
+    "expected": "Uses deck_stage.js as the foundation; vocalizes the design system (color / type / layout pacing) first and waits for confirmation; alternates Section divider / content / data / quote layouts; font sizes >= 24px; 1-indexed labels",
+    "tests": "Junior Designer report-before-build + deck_stage usage + visual pacing + scale spec"
+  },
+  {
+    "id": 3,
+    "prompt": "Make a 30-second HTML animation explaining how a neural network works.",
+    "expected": "Uses animations.jsx Stage+Sprite; writes the timeline before components; easeOut on entry, easeIn on exit; tells the story in phases rather than piling on motion; text stays on screen >= 3 seconds",
+    "tests": "animations workflow + correct easing + pacing design + duration control"
+  },
+  {
+    "id": 4,
+    "prompt": "Build a Habit Tracker App prototype.",
+    "expected": "Asks the user whether to do overview-tile or flow-demo (defaults to overview); uses assets/ios_frame.jsx, does not hand-write the Dynamic Island; Tracker is a high-density type, every screen has >= 3 information-density elements (habit completion rate, streak days, trend curve, achievement badges — non-decorative); at least 5-7 screens side-by-side (home / new habit / detail / stats / settings)",
+    "tests": "overview/flow shape routing + ios_frame hard-binding + information density typing (high-density) + multi-screen tiling"
+  },
+  {
+    "id": 5,
+    "prompt": "Build a Reading Notes App prototype.",
+    "expected": "Overview tile is primary; ios_frame.jsx; reading notes lean toward content display, density requirements are less extreme than Tracker, but the note list page still needs >= 3 layers of information (book, quote, tags, progress); at least 4-6 screens (home/library / note detail / highlight / search / notebook management); font preference serif display",
+    "tests": "overview default + ios_frame + information hierarchy + content-led visual pacing"
+  },
+  {
+    "id": 6,
+    "prompt": "Build a Running Tracker App prototype.",
+    "expected": "Overview tile; ios_frame.jsx; running app is a high-density type (map, pace curve, heart rate zones, per-kilometer segment data), every screen has >= 3 product-differentiating signals; at least 5 screens (today overview / live run data / route map / history / monthly stats); avoid AI slop (no purple gradient, no decorative icon piles, but data-visualization icons are allowed)",
+    "tests": "overview + ios_frame + high-density data viz + map/chart mixing + slop boundary conditions"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "example-acme": {
+    "$description": "ACME Corp example brand tokens — placeholder values, demonstrates DTCG 2025.10 layout. Wrapped under the brand-id group for root-$description conformance.",
+    "color": {
+      "$type": "color",
+      "slate": { "$value": "#475569", "$description": "ACME Slate — primary" },
+      "teal":  { "$value": "#14B8A6", "$description": "ACME Teal — accent" },
+      "ink":   { "$value": "#0F172A", "$description": "ACME Ink — dark surface" },
+      "paper": { "$value": "#F8FAFC", "$description": "ACME Paper — light surface" },
+      "brand": {
+        "primary":      { "$value": "{example-acme.color.slate}", "$description": "Primary brand role" },
+        "accent":       { "$value": "{example-acme.color.teal}",  "$description": "Accent / call-to-action" },
+        "surface-dark": { "$value": "{example-acme.color.ink}",   "$description": "Dark surface background" },
+        "text-light":   { "$value": "{example-acme.color.paper}", "$description": "Light text on dark surface" }
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "$type": "fontFamily",
+        "primary": { "$value": "Inter",          "$description": "Body and UI copy (placeholder; real ACME would pick its own family)" },
+        "display": { "$value": "Inter Display",  "$description": "Headlines (placeholder)" },
+        "mono":    { "$value": "JetBrains Mono", "$description": "Code (placeholder)" }
+      }
+    }
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude.ai/skills/managing-specs/registry",
+  "title": "Spec Registry",
+  "description": "Global registry for tracking all tier (T1-T4) specification documents with globally unique sequential IDs",
+  "type": "object",
+  "required": ["sequence", "registry"],
+  "properties": {
+    "sequence": {
+      "type": "object",
+      "description": "Sequential ID management – IDs never repeat, only increment",
+      "required": ["current", "next"],
+      "properties": {
+        "current": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Last assigned spec ID (0 if none assigned yet)"
+        },
+        "next": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Next available spec ID to assign"
+        }
+      }
+    },
+    "registry": {
+      "type": "array",
+      "description": "All spec documents ever created (including deprecated and archived)",
+      "items": {
+        "type": "object",
+        "required": ["id", "slug", "tier", "status", "path"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Globally unique sequential spec ID. IDs are unique across ALL tiers and never reused."
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "URL-friendly identifier derived from name"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable spec name"
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["T1", "T2", "T3", "T4"],
+            "description": "Documentation tier: T1 (Issue), T2 (Spec), T3 (Lite spec), T4 (Standard spec)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "active", "deprecated", "archived", "reserved", "failed"],
+            "description": "Lifecycle status: draft (in progress), active (ready for use), deprecated (superseded), archived (completed), reserved (ID claimed, file creation not yet confirmed), failed (reserved claim whose file creation failed - a permanent tombstone; ID is never reused, RECONCILE may prune the empty folder but keeps this entry). INIT saga: reserved -> active (confirm_claim) or reserved -> failed (fail_claim)."
+          },
+          "scope": {
+            "type": "string",
+            "enum": ["full-application", "feature", "module", "component"],
+            "description": "What is being documented"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when spec was initialized"
+          },
+          "archived": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when spec was archived (if applicable)"
+          },
+          "deprecated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp when spec was deprecated (if applicable)"
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(archived/)?spec-t[1-4]-[0-9]{3,4}-[a-z0-9-]+$",
+            "description": "Directory name: spec-t{tier}-{id:03d}-{slug} (e.g., spec-t4-004-user-auth). Archived specs have an optional 'archived/' prefix (e.g., archived/spec-t4-004-user-auth)."
+          },
+          "last_modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last modification timestamp"
+          },
+          "sections_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of sections currently in this spec"
+          },
+          "requirements_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Total number of requirements across all sections"
+          },
+          "components": {
+            "description": "Component folders status (T3-T4 only). Two valid shapes: boolean flags (legacy) or aggregate counters (v2.0.0).",
+            "anyOf": [
+              {
+                "type": "object",
+                "required": ["requirements", "architecture", "solution", "design", "ux"],
+                "properties": {
+                  "requirements": { "type": "boolean" },
+                  "architecture": { "type": "boolean" },
+                  "solution":     { "type": "boolean" },
+                  "design":       { "type": "boolean" },
+                  "ux":           { "type": "boolean" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["total", "implemented", "list"],
+                "properties": {
+                  "total":       { "type": "integer", "minimum": 0 },
+                  "implemented": { "type": "integer", "minimum": 0 },
+                  "list":        { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            ]
+          },
+          "documents": {
+            "type": "object",
+            "description": "Linked external documents for this spec. These keys are the CANONICAL documents vocabulary (referenced by spec-document-linker and downstream-integrations.md). 'solution_specs' covers solution design docs (do not use the legacy 'solution_docs' alias).",
+            "properties": {
+              "technical_adrs":    { "type": "array", "items": { "type": "string" } },
+              "solution_adrs":     { "type": "array", "items": { "type": "string" } },
+              "solution_specs":    { "type": "array", "items": { "type": "string" } },
+              "designs":           { "type": "array", "items": { "type": "string" } },
+              "ux":                { "type": "array", "items": { "type": "string" } },
+              "e2e_test_designs":  { "type": "array", "items": { "type": "string" } },
+              "issues":            { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Registry metadata",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "3.0.0",
+          "description": "Registry schema version. v3.0.0 adds the 'failed' tombstone status and metadata.version. Registries at 2.0.0 (or absent) are auto-migrated on first touch (see spec-registry-manager 'migrate')."
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonic write counter, incremented on every registry write. Audit / cross-invocation drift detection only - NOT a runtime lock. A single agent's Read and Write are separate tool calls in an isolated context and cannot observe interleaving; the real concurrency guarantee is the orchestrator's sequential-dispatch contract (never two registry-mutating agents in one parallel batch)."
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When registry was first created"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last registry modification"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "sequence": {
+        "current": 5,
+        "next": 6
+      },
+      "registry": [
+        {
+          "id": 1,
+          "tier": "T1",
+          "slug": "fix-tooltip",
+          "name": "Fix tooltip positioning",
+          "path": "spec-t1-001-fix-tooltip",
+          "status": "active",
+          "scope": "component",
+          "created": "2026-01-22T10:00:00Z"
+        },
+        {
+          "id": 2,
+          "tier": "T2",
+          "slug": "pdf-export",
+          "name": "PDF Export Feature",
+          "path": "spec-t2-002-pdf-export",
+          "status": "active",
+          "scope": "feature",
+          "created": "2026-01-22T11:00:00Z"
+        },
+        {
+          "id": 3,
+          "tier": "T3",
+          "slug": "payment",
+          "name": "Payment Integration",
+          "path": "spec-t3-003-payment",
+          "status": "active",
+          "scope": "feature",
+          "created": "2026-01-22T12:00:00Z",
+          "components": {"requirements": true, "architecture": true, "solution": false, "design": false, "ux": false}
+        },
+        {
+          "id": 4,
+          "tier": "T4",
+          "slug": "user-auth",
+          "name": "User Authentication",
+          "path": "spec-t4-004-user-auth",
+          "status": "active",
+          "scope": "module",
+          "created": "2026-01-22T13:00:00Z",
+          "components": {"total": 5, "implemented": 5, "list": ["requirements", "architecture", "solution", "design", "ux"]},
+          "documents": {
+            "technical_adrs": ["docs/architecture/adrs/adr-spec-004-001-auth-patterns.md"],
+            "solution_adrs": ["specs/solution/adrs/adr-spec-004-001-oauth-provider.md"],
+            "solution_specs": ["specs/solution/spec-004-auth-data-model.md"],
+            "designs": ["specs/designs/spec-004-user-auth/sd-001-implementation.md"],
+            "issues": ["#42"]
+          }
+        },
+        {
+          "id": 5,
+          "tier": "T3",
+          "slug": "old-feature",
+          "name": "Old Feature (archived)",
+          "path": "archived/spec-t3-005-old-feature",
+          "status": "archived",
+          "scope": "feature",
+          "created": "2025-12-01T10:00:00Z",
+          "archived": "2026-04-01T10:00:00Z"
+        }
+      ],
+      "metadata": {
+        "schema_version": "2.0.0",
+        "created": "2026-01-22T10:00:00Z",
+        "last_updated": "2026-04-01T10:00:00Z"
+      }
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claude.ai/skills/managing-specs/manifest",
+  "title": "Spec Manifest",
+  "description": "Manifest file for multi-file specification document",
+  "type": "object",
+  "required": ["spec_id", "slug", "tier", "version", "created", "updated", "sections"],
+  "properties": {
+    "spec_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Unique sequential ID from registry (never changes)"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "URL-friendly identifier derived from name"
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["T1", "T2", "T3", "T4"],
+      "description": "Documentation tier: T1 (Issue), T2 (Spec), T3 (Lite spec), T4 (Standard spec)."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the spec (e.g., 0.1.0, 1.0.0)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when spec was initialized"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last modification"
+    },
+    "archived": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when spec was archived (if applicable)"
+    },
+    "archived_by": {
+      "type": "string",
+      "description": "Identifier of who performed the archive (user/agent name)"
+    },
+    "application": {
+      "type": "object",
+      "description": "Application metadata",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Application/feature name"
+        },
+        "domain": {
+          "type": ["string", "null"],
+          "description": "Business domain (e.g., productivity, finance)"
+        },
+        "tech_stack": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Technology stack (optional)"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "description": "Spec scope definition",
+      "required": ["type", "name"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["full-application", "feature", "module", "component"],
+          "description": "What is being documented"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of scope (e.g., 'User Authentication' for feature scope)"
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Component folders status (T3-T4 only). T1-T2 omit this field entirely.",
+      "properties": {
+        "requirements": { "type": "boolean", "description": "Always true for T3-T4" },
+        "architecture": { "type": "boolean" },
+        "solution": { "type": "boolean" },
+        "design": { "type": "boolean" },
+        "ux": { "type": "boolean" }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Registry of spec section files (only sections that exist)",
+      "items": {
+        "type": "object",
+        "required": ["id", "file", "title", "exists"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9]{2}$",
+            "description": "Section ID (01-05 depending on tier)"
+          },
+          "file": {
+            "type": "string",
+            "description": "Path relative to spec folder (e.g., requirements/01-overview.md, spec.md for T1-T2)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Section title"
+          },
+          "exists": {
+            "type": "boolean",
+            "description": "Whether the section file exists"
+          },
+          "word_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Word count for token budgeting"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this section was last modified"
+          },
+          "validation_score": {
+            "type": ["number", "null"],
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Last validation score for this section"
+          }
+        }
+      }
+    },
+    "requirements_index": {
+      "type": "object",
+      "description": "Index of all requirements with their locations and status (T3-T4 only)",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["section", "status", "created"],
+        "properties": {
+          "section": {
+            "type": "string",
+            "pattern": "^[0-9]{2}$",
+            "description": "Section ID where requirement is located"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Line number in section file (approximate)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "deprecated", "deferred"],
+            "description": "Current status of requirement"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["Must", "Should", "Could", "High", "Medium", "Low"],
+            "description": "Requirement priority"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When requirement was added"
+          },
+          "deprecated_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When requirement was deprecated (if applicable)"
+          },
+          "deprecated_reason": {
+            "type": "string",
+            "description": "Reason for deprecation (if applicable)"
+          }
+        }
+      }
+    },
+    "requirement_sequences": {
+      "type": "object",
+      "description": "Per-type counters for generating unique requirement IDs (T3-T4 only)",
+      "properties": {
+        "ES": { "type": "integer", "minimum": 0 },
+        "BO": { "type": "integer", "minimum": 0 },
+        "SH": { "type": "integer", "minimum": 0 },
+        "FR": { "type": "integer", "minimum": 0 },
+        "NFR": { "type": "integer", "minimum": 0 },
+        "UC": { "type": "integer", "minimum": 0 },
+        "AC": { "type": "integer", "minimum": 0 },
+        "CA": { "type": "integer", "minimum": 0 },
+        "AP": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "cross_references": {
+      "type": "array",
+      "description": "Explicit links between requirements (T3-T4 only)",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source requirement ID"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target requirement ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["traces_to", "implements", "depends_on", "related_to"],
+            "description": "Type of relationship"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "orphaned"],
+            "description": "Reference status"
+          },
+          "orphaned_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When reference became orphaned (if applicable)"
+          }
+        }
+      }
+    },
+    "id_migrations": {
+      "type": "array",
+      "description": "Record of ID changes when requirements are moved between sections (T3-T4 only)",
+      "items": {
+        "type": "object",
+        "required": ["old_id", "new_id", "date"],
+        "properties": {
+          "old_id": {
+            "type": "string",
+            "description": "Previous requirement ID"
+          },
+          "new_id": {
+            "type": "string",
+            "description": "New requirement ID"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When migration occurred"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for ID change"
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "Aggregate statistics for the spec (T3-T4 only)",
+      "required": ["total_sections", "total_requirements", "total_words"],
+      "properties": {
+        "total_sections": {
+          "type": "integer",
+          "description": "Number of section files that exist"
+        },
+        "total_requirements": {
+          "type": "integer",
+          "description": "Total count of requirements (all types)"
+        },
+        "total_use_cases": {
+          "type": "integer",
+          "description": "Count of use cases"
+        },
+        "total_stakeholders": {
+          "type": "integer",
+          "description": "Count of stakeholder entries"
+        },
+        "total_words": {
+          "type": "integer",
+          "description": "Total word count across all sections"
+        },
+        "deprecated_count": {
+          "type": "integer",
+          "description": "Count of deprecated requirements"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Last validation results",
+      "properties": {
+        "overall_score": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "passed": {
+          "type": ["boolean", "null"]
+        },
+        "last_validated": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "threshold": {
+          "type": "number",
+          "description": "Validation threshold: 50 for T3, 80 for T4"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags for searchability (optional, all tiers)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "related_specs": {
+      "type": "array",
+      "description": "Cross-references to related spec IDs (optional, all tiers)",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "change_history": {
+      "type": "array",
+      "description": "Audit trail of all operations on this spec",
+      "items": {
+        "type": "object",
+        "required": ["date", "operation", "target"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "operation": {
+            "type": "string",
+            "enum": ["INIT", "ADD", "UPDATE", "REMOVE", "MOVE", "VALIDATE", "RECONCILE", "REFRESH_STATS", "ARCHIVE", "DEPRECATE", "RECONCILE-IMPL", "MIGRATE"],
+            "description": "Operation type. Valid values: INIT, ADD, UPDATE, REMOVE, MOVE, VALIDATE, RECONCILE, REFRESH_STATS, ARCHIVE, DEPRECATE, RECONCILE-IMPL, MIGRATE."
+          },
+          "target": {
+            "type": "string",
+            "description": "Target of operation (requirement ID, section ID, 'manifest', etc.)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of change"
+          },
+          "changes": {
+            "type": "object",
+            "description": "Details of what changed"
+          },
+          "by": {
+            "type": "string",
+            "description": "Who made the change (user/system)"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "tier": { "enum": ["T1", "T2"] }
+        }
+      },
+      "then": {
+        "properties": {
+          "components": false,
+          "sections": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "const": "spec.md"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "tier": { "const": "T3" }
+        }
+      },
+      "then": {
+        "required": ["spec_id", "slug", "tier", "version", "created", "updated", "sections", "requirements_index", "requirement_sequences", "statistics", "components"],
+        "properties": {
+          "components": {
+            "required": ["requirements"],
+            "properties": {
+              "requirements": { "const": true }
+            }
+          },
+          "sections": {
+            "type": "array",
+            "minItems": 3
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "tier": { "const": "T4" }
+        }
+      },
+      "then": {
+        "required": ["spec_id", "slug", "tier", "version", "created", "updated", "sections", "requirements_index", "requirement_sequences", "statistics", "components"],
+        "properties": {
+          "components": {
+            "required": ["requirements"],
+            "properties": {
+              "requirements": { "const": true }
+            }
+          },
+          "sections": {
+            "type": "array",
+            "minItems": 5
+          }
+        }
+      }
+    }
+  ],
+  "examples": [
+    {
+      "$comment": "T1/T2 example – single-file spec",
+      "spec_id": 12,
+      "slug": "fix-login-timeout",
+      "tier": "T2",
+      "version": "1.0.0",
+      "created": "2025-12-22T09:00:00Z",
+      "updated": "2025-12-22T09:30:00Z",
+      "application": {
+        "name": "Login Timeout Fix",
+        "domain": "security"
+      },
+      "scope": {
+        "type": "component",
+        "name": "Session Handler"
+      },
+      "sections": [
+        {
+          "id": "01",
+          "file": "spec.md",
+          "title": "Spec",
+          "exists": true,
+          "word_count": 250,
+          "last_updated": "2025-12-22T09:30:00Z",
+          "validation_score": null
+        }
+      ],
+      "validation": {
+        "overall_score": null,
+        "passed": null,
+        "last_validated": null,
+        "threshold": 50
+      },
+      "change_history": [
+        {
+          "date": "2025-12-22T09:00:00Z",
+          "operation": "INIT",
+          "target": "manifest",
+          "description": "Spec initialized",
+          "by": "system"
+        }
+      ]
+    },
+    {
+      "$comment": "T4 example – full multi-file spec",
+      "spec_id": 6,
+      "slug": "user-authentication",
+      "tier": "T4",
+      "version": "0.3.0",
+      "created": "2025-12-20T10:00:00Z",
+      "updated": "2025-12-20T14:30:00Z",
+      "application": {
+        "name": "User Authentication",
+        "domain": "security",
+        "tech_stack": []
+      },
+      "scope": {
+        "type": "feature",
+        "name": "User Authentication"
+      },
+      "components": {
+        "requirements": true,
+        "architecture": false,
+        "solution": false,
+        "design": false,
+        "ux": false
+      },
+      "sections": [
+        {
+          "id": "01",
+          "file": "requirements/01-overview.md",
+          "title": "Overview",
+          "exists": true,
+          "word_count": 150,
+          "last_updated": "2025-12-20T10:30:00Z",
+          "validation_score": null
+        },
+        {
+          "id": "02",
+          "file": "requirements/02-requirements.md",
+          "title": "Requirements",
+          "exists": true,
+          "word_count": 450,
+          "last_updated": "2025-12-20T14:30:00Z",
+          "validation_score": null
+        },
+        {
+          "id": "03",
+          "file": "requirements/03-acceptance.md",
+          "title": "Acceptance Criteria",
+          "exists": true,
+          "word_count": 200,
+          "last_updated": "2025-12-20T15:00:00Z",
+          "validation_score": null
+        },
+        {
+          "id": "04",
+          "file": "requirements/04-use-cases.md",
+          "title": "Use Cases",
+          "exists": true,
+          "word_count": 300,
+          "last_updated": "2025-12-20T15:30:00Z",
+          "validation_score": null
+        },
+        {
+          "id": "05",
+          "file": "requirements/05-notes.md",
+          "title": "Notes",
+          "exists": true,
+          "word_count": 180,
+          "last_updated": "2025-12-20T16:00:00Z",
+          "validation_score": null
+        }
+      ],
+      "requirements_index": {
+        "006-FR-001": {
+          "section": "02",
+          "line": 15,
+          "status": "active",
+          "priority": "Must",
+          "created": "2025-12-20T11:00:00Z"
+        },
+        "006-FR-002": {
+          "section": "02",
+          "line": 35,
+          "status": "deprecated",
+          "priority": "Should",
+          "created": "2025-12-20T11:15:00Z",
+          "deprecated_date": "2025-12-20T14:00:00Z",
+          "deprecated_reason": "Replaced by 2FA requirement"
+        }
+      },
+      "requirement_sequences": {
+        "ES": 0,
+        "BO": 0,
+        "SH": 0,
+        "FR": 5,
+        "NFR": 0,
+        "UC": 2,
+        "AC": 0,
+        "CA": 0,
+        "AP": 0
+      },
+      "cross_references": [
+        {
+          "from": "006-FR-003",
+          "to": "006-UC-001",
+          "type": "implements",
+          "status": "active"
+        }
+      ],
+      "id_migrations": [],
+      "statistics": {
+        "total_sections": 5,
+        "total_requirements": 5,
+        "total_use_cases": 2,
+        "total_stakeholders": 0,
+        "total_words": 1280,
+        "deprecated_count": 1
+      },
+      "validation": {
+        "overall_score": null,
+        "passed": null,
+        "last_validated": null,
+        "threshold": 80
+      },
+      "change_history": [
+        {
+          "date": "2025-12-20T10:00:00Z",
+          "operation": "INIT",
+          "target": "manifest",
+          "description": "Spec initialized",
+          "by": "system"
+        },
+        {
+          "date": "2025-12-20T11:00:00Z",
+          "operation": "ADD",
+          "target": "006-FR-001",
+          "description": "Added login requirement",
+          "by": "user"
+        }
+      ]
+    }
+  ]
+}
