@@ -1,6 +1,22 @@
-# erfana toolkit for Claude Code
+<div align="center">
 
-An open-source Claude Code toolkit (GPL-3.0-only). Two domains in one plugin:
+<img src="skills/design-shared/brands/erfana/logo/erfana-logo.svg" alt="Erfana Skills logo" width="200">
+
+# Erfana Skills
+
+**An open-source Claude Code toolkit (GPL-3.0-only) – design and orchestration in one plugin.**
+
+by [Qodeca](https://github.com/qodeca)
+
+[![CI](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml/badge.svg)](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml)
+[![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/qodeca/erfana-skills)](https://github.com/qodeca/erfana-skills/releases/latest)
+![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757)
+[![Made by Qodeca](https://img.shields.io/badge/made_by-Qodeca-1f2937)](https://github.com/qodeca)
+
+</div>
+
+Two domains in one plugin:
 
 - **Design.** Build production-grade design artifacts directly inside Claude Code: clickable UI prototypes, 1920×1080 slide decks (HTML / PDF / editable PPTX), MP4 / GIF motion graphics, vertical print-grade infographics, and 5-dimension design critiques.
 - **Orchestration.** Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications. 6 orchestration skills plus 87 shared agents, all delegating substantive work via the `Task` tool.
