@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="skills/design-shared/brands/erfana/logo/erfana-logo.svg" alt="Erfana Skills logo" width="200">
-
 # Erfana Skills
 
 **An open-source Claude Code toolkit (GPL-3.0-only) – design and orchestration in one plugin.**
