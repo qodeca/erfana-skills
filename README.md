@@ -19,7 +19,7 @@ Two domains in one plugin:
 - **Design.** Build production-grade design artifacts directly inside Claude Code: clickable UI prototypes, 1920×1080 slide decks (HTML / PDF / editable PPTX), MP4 / GIF motion graphics, vertical print-grade infographics, and 5-dimension design critiques.
 - **Orchestration.** Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications. 6 orchestration skills plus 87 shared agents, all delegating substantive work via the `Task` tool.
 
-Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require signing the project [Contributor License Agreement](CLA.md) (the CLA-assistant bot prompts you on your first PR). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them — see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic.
+Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them — see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic.
 
 ---
 
@@ -285,7 +285,7 @@ Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-onl
 Erfana Skills is part of the **Erfana** family from Qodeca:
 
 - **[Erfana](https://github.com/qodeca/erfana)** — the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the Claude Code plugin, not the app.
-- **[8cli](https://github.com/qodeca/8cli)** — an AI-first, JSON-native CLI for managing n8n instances.
+- **[8cli](https://github.com/qodeca/8cli)** — an AI-first, JSON-native CLI for remotely managing n8n instances.
 
 Built by **[Qodeca](https://qodeca.com)** — [qodeca.com](https://qodeca.com) · [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)
 

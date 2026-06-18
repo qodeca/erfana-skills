@@ -43,8 +43,9 @@ jobs:
         # this fails loudly instead of letting the count drift silently.
         run: |
           set -euo pipefail
+          [ -d agents ] || { echo "::error::agents/ directory missing"; exit 1; }
           AGENTS=$(find agents -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
-          if ! grep -q "${AGENTS} shared agents" README.md; then
+          if ! grep -qE "(^|[^0-9])${AGENTS} shared agents" README.md; then
             echo "::error::README.md does not state '${AGENTS} shared agents' but agents/ has ${AGENTS} *.md files — update the count."
             exit 1
           fi
