@@ -9,7 +9,7 @@ by [Qodeca](https://github.com/qodeca)
 [![CI](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml/badge.svg)](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml)
 [![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/qodeca/erfana-skills)](https://github.com/qodeca/erfana-skills/releases/latest)
-![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-d97757)
+![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
 [![Made by Qodeca](https://img.shields.io/badge/made_by-Qodeca-1f2937)](https://github.com/qodeca)
 
 </div>
@@ -19,7 +19,7 @@ Two domains in one plugin:
 - **Design.** Build production-grade design artifacts directly inside Claude Code: clickable UI prototypes, 1920×1080 slide decks (HTML / PDF / editable PPTX), MP4 / GIF motion graphics, vertical print-grade infographics, and 5-dimension design critiques.
 - **Orchestration.** Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications. 6 orchestration skills plus 87 shared agents, all delegating substantive work via the `Task` tool.
 
-Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and [`SECURITY.md`](SECURITY.md). "erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them — see [`TRADEMARKS.md`](TRADEMARKS.md).
+Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills uses it to verify rendered output and is not affiliated with or endorsed by Microsoft.
 
 ---
 
@@ -239,7 +239,7 @@ Sample opener: *"Grill me on this rollout plan before we build it – I want to 
 ## Troubleshooting
 
 **`/plugin marketplace add` fails or hangs**
-Check network access to `api.github.com` and `raw.githubusercontent.com` (a corporate proxy may block them — see the proxy note below). The public marketplace needs no token.
+Check network access to `api.github.com` and `raw.githubusercontent.com` (a corporate proxy may block them – see the proxy note below). The public marketplace needs no token.
 
 **Auto-updates haven't appeared in 2+ sessions**
 Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin update erfana@erfana-skills`, then restart Claude Code. If still stale, clear the cache: `rm -rf ~/.claude/plugins/cache/` and restart.
@@ -272,11 +272,28 @@ Iterate on your fork. When ready, push a `feature/...` branch (cut from `develop
 
 ---
 
+## Security
+
+To report a vulnerability, follow [`SECURITY.md`](SECURITY.md) – please use private disclosure, not a public issue. Supported versions and the disclosure process are documented there.
+
+---
+
 ## License
 
 Copyright © 2025-2026 Qodeca sp. z o.o.
 
-Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-only`). You are free to use, study, share, and modify it; distributed derivatives must remain under the same license and ship their source. The license covers code, documentation, and bundled assets — it does **not** grant rights to the "erfana" or "Qodeca" names or logos (see [`TRADEMARKS.md`](TRADEMARKS.md)). Per-file licensing follows the [REUSE](https://reuse.software) specification; run `reuse lint` to verify.
+Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-only`). You are free to use, study, share, and modify it; distributed derivatives must remain under the same license and ship their source. The license covers code, documentation, and bundled assets – it does **not** grant rights to the "Erfana" or "Qodeca" names or logos (see [`TRADEMARKS.md`](TRADEMARKS.md)). Per-file licensing follows the [REUSE](https://reuse.software) specification; run `reuse lint` to verify. Contributions are accepted under the project [Contributor License Agreement](CLA.md) (see [`CONTRIBUTING.md`](CONTRIBUTING.md)).
+
+---
+
+## Related projects
+
+Erfana Skills is part of the **Erfana** family from Qodeca:
+
+- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the Claude Code plugin, not the app.
+- **[8cli](https://github.com/qodeca/8cli)** – an AI-first, JSON-native CLI for remotely managing n8n instances.
+
+Built by **[Qodeca](https://qodeca.com)** – [qodeca.com](https://qodeca.com) · [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)
 
 ---
 

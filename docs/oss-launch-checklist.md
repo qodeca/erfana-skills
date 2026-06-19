@@ -32,12 +32,12 @@ The reversible, file-based prep for the open-source release is done on the `feat
 
 ## After publishing (GitHub settings)
 
-- [ ] Enable **private vulnerability reporting** (Security tab) — `SECURITY.md` already points at it.
-- [ ] Enable **Dependabot alerts**, **secret scanning**, and **push protection** (free on public repos).
-- [ ] Harden Actions: require approval for **fork-PR workflows**; set `GITHUB_TOKEN` to **read-only**.
-- [ ] Add repo **description** + **topics** (`claude-code`, `claude-code-plugin`, `agents`, `design`, `automation`).
-- [ ] Upload a **1280x640 social-preview image**.
-- [ ] Enable **Discussions** (the issue-template `config.yml` already links to it).
+- [x] Enable **private vulnerability reporting** (Security tab) — `SECURITY.md` already points at it.
+- [x] Enable **Dependabot alerts**, **secret scanning**, and **push protection** (free on public repos).
+- [ ] Harden Actions: require approval for **fork-PR workflows** (`GITHUB_TOKEN` is already read-only via `verify.yml` top-level `permissions: contents: read`).
+- [x] Add repo **description** + **topics** (`claude-code`, `claude-code-plugin`, `agents`, `design`, `automation`).
+- [ ] Upload a **1280x640 social-preview image** — prepared at [`docs/assets/social-preview/erfana-social-preview.png`](assets/social-preview/erfana-social-preview.png) (source `card.html` alongside); upload via repo Settings → General → Social preview.
+- [x] Enable **Discussions** (the issue-template `config.yml` already links to it).
 - [ ] Add **`good first issue`** and **`help wanted`** labels and tag a few starter issues.
 
 ## Discoverability (after publishing)
