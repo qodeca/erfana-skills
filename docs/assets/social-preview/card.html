@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Erfana Skills - social preview card</title>
+<!--
+  Source for the GitHub social-preview image (E6), 1280x640. The layout is
+  responsive (viewport units), so it composes identically at any 2:1 viewport.
+  Reproduce the committed erfana-social-preview.png with the bundled renderer:
+    python skills/design-shared/scripts/verify.py docs/assets/social-preview/card.html \
+      --viewports 640x320 --output docs/assets/social-preview/
+  verify.py renders at device_scale_factor=2, so a 640x320 viewport yields a
+  1280x640 PNG. Rename card.png -> erfana-social-preview.png and delete
+  card-full.png. Colors are the erfana brand tokens
+  (skills/design-shared/brands/erfana/tokens.tokens.json).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #4338CA;
+    --cyan: #06B6D4;
+    --ink: #0B1020;
+    --paper: #F5F7FA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100vw; height: 100vh; }
+  body {
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+    color: var(--paper);
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(67, 56, 202, 0.55) 0%, rgba(11, 16, 32, 0) 55%),
+      radial-gradient(90% 120% at 0% 100%, rgba(6, 182, 212, 0.22) 0%, rgba(11, 16, 32, 0) 50%),
+      var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6.875vw 7.5vw;
+    overflow: hidden;
+  }
+  .logo-chip {
+    align-self: flex-start;
+    background: var(--paper);
+    border-radius: 2.2vw;
+    padding: 1.875vw 2.8vw;
+    box-shadow: 0 1.25vw 3.75vw rgba(0, 0, 0, 0.35);
+  }
+  .logo-chip img { display: block; height: 5.3vw; width: auto; }
+  h1 {
+    font-size: 7.2vw;
+    font-weight: 800;
+    letter-spacing: -0.19vw;
+    line-height: 1.02;
+  }
+  h1 .accent { color: var(--cyan); }
+  .rule {
+    width: 10vw;
+    height: 0.78vw;
+    border-radius: 0.5vw;
+    background: var(--cyan);
+    margin: 2.2vw 0;
+  }
+  p.tagline {
+    font-size: 2.8vw;
+    font-weight: 400;
+    line-height: 1.4;
+    color: rgba(245, 247, 250, 0.82);
+    max-width: 81vw;
+  }
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 2.2vw;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 2.03vw;
+    font-weight: 500;
+  }
+  .pill {
+    background: var(--indigo);
+    color: var(--paper);
+    border-radius: 999px;
+    padding: 0.94vw 2.03vw;
+    letter-spacing: 0.2px;
+  }
+  .repo { color: rgba(245, 247, 250, 0.7); }
+</style>
+</head>
+<body>
+  <div class="logo-chip">
+    <img src="erfana-logo.svg" alt="erfana logo">
+  </div>
+
+  <div class="body">
+    <h1>Erfana <span class="accent">Skills</span></h1>
+    <div class="rule"></div>
+    <p class="tagline">An open-source Claude Code toolkit – design and orchestration in one plugin. Skills, shared agents, slash commands, and safety hooks.</p>
+  </div>
+
+  <footer>
+    <span class="pill">GPL-3.0-only</span>
+    <span class="repo">github.com/qodeca/erfana-skills</span>
+  </footer>
+</body>
+</html>

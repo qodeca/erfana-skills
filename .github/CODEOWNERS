@@ -8,3 +8,8 @@
 # content while @marcinobel keeps gatekeeping plugin manifests.
 
 * @marcinobel
+
+# Security-critical surfaces (explicit for emphasis; covered by the catch-all
+# above): CI/release automation and the plugin/marketplace manifests.
+/.github/         @marcinobel
+/.claude-plugin/  @marcinobel

@@ -6,7 +6,7 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) design + orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
 
-Current version: **v6.0.0**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v6.0.1**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (15)** – all invoke as `/erfana:<name>`:
 
@@ -82,6 +82,8 @@ bash scripts/run-all-gates.sh
 
 Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate 13 (brandbook hex coverage) is soft. Gate 15 (doc-claim sync, v4.1.2+) is hard – six checks blocking releases that ship with version banner, agent counts, skills count, hooks count, or slash command count drifted from the filesystem.
 
+REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
+
 Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](docs/verification-gates.md) `## Quick spot-checks`.
@@ -94,8 +96,8 @@ For every release:
 3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent.
 4. Add an entry to `CHANGELOG.md` (Keep a Changelog format).
 5. Commit (auto-signed via SSH) and let CI run.
-6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits + code-owner review.
-7. **Solo-maintainer flow**: GitHub disallows self-approval; use `gh pr merge <num> --admin --squash --delete-branch` (ruleset has a RepositoryRole bypass actor for admin). Bypass becomes unnecessary when a backup maintainer joins.
+6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`).
+7. **Solo-maintainer flow**: GitHub disallows self-approval; use `gh pr merge <num> --admin --squash --delete-branch` (ruleset has a RepositoryRole bypass actor for admin; `--admin` also overrides the required CI checks, so confirm CI is green first). Bypass becomes unnecessary when a backup maintainer joins.
 8. **After merge** (do NOT skip – v4.1.0 missed both, requiring back-fill in v4.1.1+): `git pull origin main && git tag -s vX.Y.Z -m "..." && git push origin vX.Y.Z`.
 9. Create the GitHub Release: `gh release create vX.Y.Z --notes-file -`. Verify `gh release list` shows the new version with the `Latest` flag; if `--latest` was lost (e.g. back-filling), correct with `gh release edit vX.Y.Z --latest`.
 
@@ -146,7 +148,7 @@ Most rules here are the negative form of a Hard constraint above; only non-dupli
 
 ## Repository workflow
 
-- Two long-lived branches: **`main`** (default branch – what the marketplace serves; protected by the `main-protection` ruleset: signed commits + code-owner review) and **`develop`** (integration branch; CI-gated via `verify.yml`, no branch protection). Feature work goes on `feature/...` branches cut from `develop` and PR'd back into `develop`; a release promotes `develop` into `main` via PR, then tags `main`. Conventional Commits: `feat(...)`, `fix(...)`, `docs(...)`, `chore(...)`. Remote: `github.com/qodeca/erfana-skills`.
+- Two long-lived branches: **`main`** (default branch – what the marketplace serves; protected by the `main-protection` ruleset: signed commits, code-owner review, and passing `verify.yml` status checks) and **`develop`** (integration branch; CI-gated via `verify.yml`, no branch protection). `verify.yml` runs on push and PR to both branches. Feature work goes on `feature/...` branches cut from `develop` and PR'd back into `develop`; a release promotes `develop` into `main` via PR, then tags `main`. Conventional Commits: `feat(...)`, `fix(...)`, `docs(...)`, `chore(...)`. Remote: `github.com/qodeca/erfana-skills`.
 
 ### Pre-commit checklist (touches brand or deck files)
 

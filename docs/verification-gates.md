@@ -8,7 +8,7 @@ Seventeen static checks (16 hard + 1 soft) that prove the zero-CJK invariant, pl
 bash scripts/run-all-gates.sh
 ```
 
-CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR. Branch protection on `main` (the `main-protection` ruleset) requires signed commits + code-owner review, so a green CI run is the gate before merge.
+CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR. Branch protection on `main` (the `main-protection` ruleset) requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`) before merge.
 
 **Layout reference (v4.0+)**:
 

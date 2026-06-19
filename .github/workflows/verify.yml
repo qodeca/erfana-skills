@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: '3.12'
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: '22'
       - name: Install Python deps
@@ -37,12 +37,25 @@ jobs:
         run: claude plugin validate . --strict
       - name: REUSE license-metadata compliance
         run: reuse lint
+      - name: Doc count guard (README agent count matches agents/*.md)
+        # Single source of truth = the filesystem. If an agent is added or
+        # removed without updating the "NN shared agents" claim in README.md,
+        # this fails loudly instead of letting the count drift silently.
+        run: |
+          set -euo pipefail
+          [ -d agents ] || { echo "::error::agents/ directory missing"; exit 1; }
+          AGENTS=$(find agents -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
+          if ! grep -qE "(^|[^0-9])${AGENTS} shared agents" README.md; then
+            echo "::error::README.md does not state '${AGENTS} shared agents' but agents/ has ${AGENTS} *.md files — update the count."
+            exit 1
+          fi
+          echo "agent count in sync: ${AGENTS}"
 
   secret-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
       - name: gitleaks (full git history)
