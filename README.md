@@ -181,10 +181,10 @@ SSH-based marketplace URLs are not recommended (known Windows issue).
 If you turned on auto-update and need stability for a critical project, pin to a specific version:
 
 ```
-/plugin install erfana@erfana-skills@v6.0.0   # for example – pick the version you want
+/plugin install erfana@erfana-skills@v6.0.1   # for example – pick the version you want
 ```
 
-Replace `v6.0.0` with whichever release you want to lock to. A pinned version is never auto-updated. To upgrade later, run the same command with a newer tag and restart Claude Code.
+Replace `v6.0.1` with whichever release you want to lock to. A pinned version is never auto-updated. To upgrade later, run the same command with a newer tag and restart Claude Code.
 
 Use case: you are mid-flight on a deck, a new version drops, and you do not want trigger-phrase behavior to shift under you. Pin until you are done, then unpin (`/plugin install erfana@erfana-skills` without a `@vX.Y.Z` suffix).
 
