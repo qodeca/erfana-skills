@@ -1,6 +1,6 @@
 {
   "name": "erfana",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "A Claude Code toolkit for design and orchestration. Six design skills (prototype, slides, motion, direction, infographic, review), six orchestration skills (managing-agents, -articles, -issues, -reports, -skills, -specs) including the Modernize operation that applies 4.7 patterns to existing skills and the Display operation in managing-issues (single / list / search modes), one process skill (grill-me) for Socratic plan / design stress-testing, one verification skill (fact-checking) that traces atomic factual claims in analysis documents to source passages and applies user-approved corrections, 87 shared agents with per-agent effort/model overrides (including the four-agent fc-* fact-checking quartet), the using-erfana router, four safety hooks (bash-safety, secret-detector, post-compact-reminder, verify-completion), and five slash commands (doc-update, project-status, session-status, lens-review, explain-issue).",
   "author": {
     "name": "Qodeca sp. z o.o.",

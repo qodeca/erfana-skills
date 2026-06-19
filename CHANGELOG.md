@@ -3,9 +3,9 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [6.0.1] - 2026-06-19
 
-Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched, plus a follow-on `oss-readiness` audit that added the licensing-metadata, third-party-trademark, and README security/license items below. No skill, agent, hook, or command behaviour change, and the plugin version is unchanged; this folds into the next version bump.
+Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched, plus a follow-on `oss-readiness` audit that added the licensing-metadata, third-party-trademark, README security/license, and social-preview items below. No skill, agent, hook, or command behaviour change; skill / agent / hook / command counts are unchanged.
 
 ### Added
 
