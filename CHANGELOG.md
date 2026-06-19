@@ -5,21 +5,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 ## [Unreleased]
 
-Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched. No skill, agent, hook, or command behaviour change, and the plugin version is unchanged; this folds into the next version bump.
+Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched, plus a follow-on `oss-readiness` audit that added the licensing-metadata, third-party-trademark, and README security/license items below. No skill, agent, hook, or command behaviour change, and the plugin version is unchanged; this folds into the next version bump.
 
 ### Added
 
 - **Gate 15 Check 7 – per-gate detail-file count.** A seventh doc-claim check guards "N per-gate detail files" / `gates/01-N` claims against `ls docs/gates/*.md`, closing the gap that let the v6.0.0 `16 -> 17` gate-file drift (the new Gate 17) reach release uncaught. Two narrowly-scoped patterns that skip generic "N gates" phrasings and historical enumerations; verified adversarially (reintroducing "16" fails the check).
+- **Third-party trademark notices for GitHub and Playwright.** `TRADEMARKS.md` now carries nominative-use + non-affiliation notes for GitHub / GitHub Actions (GitHub, Inc., a Microsoft company) and Playwright (Microsoft Corporation), alongside the existing Anthropic notice, so every third-party mark the plugin leans on is covered.
+- **README Security section.** A dedicated `## Security` heading points at `SECURITY.md` for private vulnerability disclosure (previously only an inline mention), so GitHub community-profile tooling reliably surfaces it.
+- **CLA reference in the README License section.** The License section now links the [Contributor License Agreement](CLA.md) and `CONTRIBUTING.md`, co-locating the GPL + CLA + trademark framing.
 
 ### Fixed
 
 - **Stale gate-file count.** `docs/architecture.md` and `CLAUDE.md` claimed "16 per-gate detail files" / `gates/01-16`; corrected to 17 (Gate 17 publication-readiness shipped in v6.0.0). The historical `CHANGELOG.md` mention is accurate for its release and left as-is.
 - **README version-pin example.** The pinning example in `README.md` lagged at `v5.0.0`; bumped to `v6.0.0` to match the current release.
 - **Count-consistency in the docs.** Clarified the generic-name agent count (9 strict / 15 by the no-team-prefix definition in `SECURITY.md`), enumerated all six orchestration skills on one line in `CLAUDE.md`, and standardized gate-count phrasing in `docs/verification-gates.md`.
+- **REUSE package metadata.** `REUSE.toml` now declares the optional `SPDX-PackageName`, `SPDX-PackageSupplier` (`Qodeca sp. z o.o.`), and `SPDX-PackageDownloadLocation` header keys.
+- **Inline SPDX headers on the remaining scripts.** `scripts/_lib/__init__.py`, `scripts/_lib/json_schema_lite.py`, and `skills/design-shared/scripts/verify.py` now carry the same `GPL-3.0-only` SPDX header as the other scripts (they were previously covered only by the `REUSE.toml` catch-all).
 
 ### Changed
 
 - **README concision.** Compressed the over-long slash-command and skill table cells to one-to-two sentences plus a link to the command / architecture file, and de-duplicated the cross-platform hooks narrative (kept authoritative in `docs/architecture.md`). No count claim was altered.
+- **House-style dash sweep.** Replaced em dashes with en dashes in `README.md` and `CONTRIBUTING.md` to match the project prose style.
 
 ## [6.0.0] - 2026-06-13
 

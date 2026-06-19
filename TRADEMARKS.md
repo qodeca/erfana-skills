@@ -4,12 +4,12 @@ The Erfana source code, documentation, and bundled assets are licensed under the
 
 ## What is not licensed
 
-The names **"Erfana"** and **"Qodeca"**, the Qodeca and Erfana logos, and any associated marks are trademarks of **Qodeca sp. z o.o.** The GPL does not grant any right to use them — see GPLv3 section 7(e), which expressly permits a licensor to decline to grant trademark rights. Nothing in the license or this repository transfers, licenses, or dilutes those marks.
+The names **"Erfana"** and **"Qodeca"**, the Qodeca and Erfana logos, and any associated marks are trademarks of **Qodeca sp. z o.o.** The GPL does not grant any right to use them – see GPLv3 section 7(e), which expressly permits a licensor to decline to grant trademark rights. Nothing in the license or this repository transfers, licenses, or dilutes those marks.
 
 ## What you may do
 
 - **Use the software** under the terms of the GPL-3.0-only license.
-- **Refer to the project by name** in a descriptive, nominative way — for example, "a plugin built with Erfana", "compatible with Erfana", or "a fork of Erfana". This is ordinary fair/nominative use and needs no permission.
+- **Refer to the project by name** in a descriptive, nominative way – for example, "a plugin built with Erfana", "compatible with Erfana", or "a fork of Erfana". This is ordinary fair/nominative use and needs no permission.
 
 ## What you may not do without permission
 
@@ -21,9 +21,13 @@ The names **"Erfana"** and **"Qodeca"**, the Qodeca and Erfana logos, and any as
 
 **"Claude"** and **"Claude Code"** are trademarks of **Anthropic**. Erfana Skills is an independent, third-party plugin for Claude Code and is not affiliated with, sponsored by, or endorsed by Anthropic. References to Claude Code describe compatibility only (nominative use).
 
+**"GitHub"** and **"GitHub Actions"** are trademarks of **GitHub, Inc. (Microsoft Corporation)**. Erfana Skills integrates with GitHub through its public API and Actions and is not affiliated with, sponsored by, or endorsed by GitHub or Microsoft. References to GitHub describe interoperability only (nominative use).
+
+**"Playwright"** is a trademark of **Microsoft Corporation**. Erfana Skills uses Playwright to verify rendered design output and is not affiliated with, sponsored by, or endorsed by Microsoft. References to Playwright describe the tooling used only (nominative use).
+
 ## Logos and brand assets
 
-The repository ships a neutral default brand (`skills/design-shared/brands/erfana/`) so the design skills work out of the box. Its logo is provided as a functional default for the toolkit; treat the Erfana and Qodeca marks as trademarks per the rules above — do not present them as your own brand.
+The repository ships a neutral default brand (`skills/design-shared/brands/erfana/`) so the design skills work out of the box. Its logo is provided as a functional default for the toolkit; treat the Erfana and Qodeca marks as trademarks per the rules above – do not present them as your own brand.
 
 ## Questions
 

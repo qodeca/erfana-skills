@@ -33,7 +33,7 @@ The reversible, file-based prep for the open-source release is done on the `feat
 ## After publishing (GitHub settings)
 
 - [ ] Enable **private vulnerability reporting** (Security tab) — `SECURITY.md` already points at it.
-- [ ] Enable **Dependabot alerts**, **secret scanning**, and **push protection** (free on public repos).
+- [x] Enable **Dependabot alerts**, **secret scanning**, and **push protection** (free on public repos).
 - [ ] Harden Actions: require approval for **fork-PR workflows**; set `GITHUB_TOKEN` to **read-only**.
 - [ ] Add repo **description** + **topics** (`claude-code`, `claude-code-plugin`, `agents`, `design`, `automation`).
 - [ ] Upload a **1280x640 social-preview image**.

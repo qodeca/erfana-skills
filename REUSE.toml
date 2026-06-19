@@ -1,5 +1,9 @@
 version = 1
 
+SPDX-PackageName = "erfana"
+SPDX-PackageSupplier = "Qodeca sp. z o.o."
+SPDX-PackageDownloadLocation = "https://github.com/qodeca/erfana-skills"
+
 # REUSE specification (https://reuse.software/spec-3.3/) coverage for files that
 # cannot carry an inline SPDX header (markdown with line-1 frontmatter, JSON,
 # binary assets). Scripts carry inline `SPDX-License-Identifier` headers instead

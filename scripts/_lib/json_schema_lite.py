@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
+# SPDX-License-Identifier: GPL-3.0-only
 """Minimal stdlib JSON Schema 2020-12 validator.
 
 Subset supported (covers brand.schema.json exhaustively):
