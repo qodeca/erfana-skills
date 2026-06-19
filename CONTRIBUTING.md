@@ -7,7 +7,7 @@ By participating you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md)
 ## Licensing of contributions
 
 - **Inbound = outbound.** Contributions are accepted under the project's license, **GPL-3.0-only**. You retain copyright in your contribution.
-- **Contributor License Agreement (CLA).** Because the maintainer keeps the option to offer the project under additional terms (dual-licensing), contributions also require signing the project CLA – see [`CLA.md`](CLA.md). The CLA is being finalised; once it is and the CLA-assistant check is enabled, each pull request will prompt you to sign once, and PRs will require a signed CLA before merge.
+- **Contributor License Agreement (CLA).** Because the maintainer keeps the option to offer the project under additional terms (dual-licensing), contributions also require agreeing to the project CLA – see [`CLA.md`](CLA.md). The CLA is final; until a CLA-assistant check is wired, opening a pull request is your agreement to it (your Git author identity is your signature of record). Once the assistant is enabled, each pull request will prompt you to sign once, and PRs will require a signed CLA before merge.
 
 ## Before you start
 

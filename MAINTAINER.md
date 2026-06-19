@@ -16,7 +16,7 @@ This section is intentionally version-independent – treat it as the always-tru
 
 Until a backup maintainer is named:
 
-- **Routine releases (patch + minor)**: only Marcin pushes to `main`. CI must pass before merge.
+- **Routine releases (patch + minor)**: only Marcin pushes to `main`. CI must pass before merge – the `main-protection` ruleset enforces the `verify.yml` checks (`gates`, `secret-scan`) as required status checks (an `--admin` merge overrides them, so confirm CI is green first).
 - **Hotfixes**: same path; no separate emergency channel — downtime is non-blocking for a developer tool.
 - **Major releases (breaking changes)**: announce in the maintainers' release channel at least 48 hours before tagging.
 
