@@ -33,7 +33,7 @@ change log, or comparison report – redact and flag instead.
 
 | Operation | Command | Primary Agent |
 |-----------|---------|---------------|
-| CREATE | "Create a new report" | gather-report-requirements → design-report-structure |
+| CREATE | "Create a new report" | skill interviews -> gather-report-requirements compiles -> design-report-structure |
 | REVIEW | "Review this report" | skill runs 6 validators in parallel → review-report consolidates |
 | MODIFY | "Fix these issues" | modify-report |
 | MAINTAIN | "Version this report" | maintain-report |
@@ -87,9 +87,13 @@ ship a failing report at their own discretion; the skill never marks it PASS.)
 
 | Step | Agent | Validation | Quality Gate |
 |------|-------|------------|--------------|
-| 1. Gather requirements | `gather-report-requirements` | Spec created, 5 categories, user confirms | Max 3 retries |
-| 2. Design structure | `design-report-structure` | Pyramid Principle, sections present, user approves | Max 3 retries |
-| 3. Provide templates | (direct) | Templates presented, user acknowledges | - |
+| 1. Interview user | (direct, AskUserQuestion) | All 5 categories answered (see reference/interview-questions.md) | User may skip questions; gaps recorded |
+| 2. Compile spec | `gather-report-requirements` | Spec compiled from answers, gaps flagged | Max 3 retries |
+| 3. Persist spec | (direct, Write) | Spec written to an agreed path; STOP if the path already exists and the user has not confirmed overwrite | - |
+| 4. Design structure | `design-report-structure` | Pyramid Principle, sections present, user approves | Max 3 retries |
+| 5. Provide templates | (direct) | Templates presented, user acknowledges | - |
+
+The interview runs in the main conversation - subagents cannot call AskUserQuestion. Pass the collected answers inline to gather-report-requirements; it returns the spec text, which the skill writes to disk before invoking design-report-structure.
 
 ### Operation 2: REVIEW
 
@@ -185,6 +189,7 @@ validate-style, validate-formatting, validate-precision, validate-executive-summ
 | Five C's framework | reference/five-cs-framework.md | Finding structure |
 | Plain language guide | reference/plain-language-guide.md | Word choice |
 | Quality checklist | reference/quality-checklist.md | Pre-publish validation |
+| Interview questions | reference/interview-questions.md | CREATE interview catalog |
 
 ---
 
@@ -349,9 +354,9 @@ Version history lives in the repository `CHANGELOG.md`.
 User: I need to create an audit report for our client.
 
 Skill Response:
-1. Spawns gather-report-requirements
-2. Conducts structured interview
-3. Creates requirements specification
+1. Interviews the user directly (AskUserQuestion, 5 categories)
+2. Spawns gather-report-requirements with the answers to compile the spec
+3. Writes the requirements specification to disk
 4. Spawns design-report-structure
 5. Produces detailed outline
 6. Presents templates for content creation

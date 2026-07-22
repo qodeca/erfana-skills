@@ -10,9 +10,9 @@ Use these scenarios to verify skill functionality after modifications.
 **Input:** "Create a new audit report for IT security assessment"
 **Expected:**
 - [ ] Todo list created with CREATE steps
-- [ ] gather-report-requirements spawned
-- [ ] 5 requirement categories asked
-- [ ] Requirements specification produced
+- [ ] Skill interviews the user directly (AskUserQuestion, 5 categories); no subagent asks questions
+- [ ] gather-report-requirements spawned with interview_answers, compiles the spec
+- [ ] Requirements specification persisted to disk (direct Write)
 - [ ] design-report-structure spawned
 - [ ] Outline follows Pyramid Principle
 - [ ] Templates presented
