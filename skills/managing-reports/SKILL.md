@@ -117,6 +117,8 @@ it only synthesizes the results it is given.
 **Validators (all blocking):** validate-capitalization, validate-structure,
 validate-style, validate-formatting, validate-precision, validate-executive-summary
 
+Delegations to validate-capitalization, validate-style, and modify-report always include the paths of reference/sentence-case-rules.md and reference/style-rules.md – the reference files are the single source of truth; agent-embedded tables are cached excerpts.
+
 **Levels:** standard (all 6, default) | thorough (6 + manual checklist)
 
 ### Operation 3: MODIFY
