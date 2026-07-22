@@ -203,14 +203,11 @@ Based on the review results:
 
 ---
 
-## Token Budget
+## Output budget
 
-| Metric | Value |
-|--------|-------|
-| Target | 800 tokens |
-| Maximum | 1500 tokens |
-
-**Efficiency:** Consolidate validator outputs. Use summary tables.
+Target ~800 tokens for the summary sections. The enumerated issue list is
+exempt from any budget – every validator issue is preserved, no cap. Use
+summary tables for efficiency.
 
 ---
 

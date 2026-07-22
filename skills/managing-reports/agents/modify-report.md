@@ -330,14 +330,11 @@ We identified three critical issues.
 
 ---
 
-## Token Budget
+## Output budget
 
-| Metric | Value |
-|--------|-------|
-| Target | 600 tokens |
-| Maximum | 1000 tokens |
-
-**Efficiency:** Focus on changes only. Use before/after tables.
+Target ~600 tokens for the summary sections. The enumerated change log is
+exempt from any budget – every applied change is listed, no cap. Use
+before/after tables for efficiency.
 
 ---
 
