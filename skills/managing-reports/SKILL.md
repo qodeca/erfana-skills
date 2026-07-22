@@ -142,8 +142,10 @@ Delegations to validate-capitalization, validate-style, and modify-report always
 | Step | Agent | Validation | Quality Gate |
 |------|-------|------------|--------------|
 | 1. Parse | (direct) | Mods categorized and prioritized | - |
-| 2. Apply | `modify-report` | Changes verified, logged | Max 3 retries |
-| 3. Validate | (direct) | No new issues, summary presented | - |
+| 2. Approve | (direct, AskUserQuestion) | User approved the concrete change list; STOP without approval | - |
+| 3. Backup | (direct, Read+Write) | Copy of the report written next to it as `<name>.pre-modify-<version>.md`; backup path recorded | - |
+| 4. Apply | `modify-report` | Changes verified, logged | Max 3 retries |
+| 5. Validate | (direct) | No new issues, summary presented | - |
 
 ### Operation 4: MAINTAIN
 
@@ -159,6 +161,11 @@ Delegations to validate-capitalization, validate-style, and modify-report always
 | 3. Track | (direct) | Document control updated, confirmed | - |
 
 **Operations:** version | archive (copy-only) | restore | compare | history
+
+`version` and `restore` mutate or write files: the skill confirms the concrete
+target path with the user before delegating, and `version` always snapshots
+first (see maintain-report). `archive`, `compare`, and `history` are
+read/copy-only and need no gate.
 
 ---
 

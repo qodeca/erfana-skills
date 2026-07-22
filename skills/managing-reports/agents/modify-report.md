@@ -42,6 +42,7 @@ based on review feedback, ensuring all changes follow style guidelines.
 |-------|------|----------|------------|
 | report_path | path | Yes | File must exist |
 | modifications | list | Yes | List of changes to apply |
+| backup_path | path | Yes | Pre-made copy of the report; must exist |
 | review_report | path | No | Review results if available |
 | sentence_case_rules_path | path | No | Canonical capitalization rules |
 | style_rules_path | path | No | Canonical style rules |
@@ -50,6 +51,7 @@ based on review feedback, ensuring all changes follow style guidelines.
 
 - [ ] report_path exists and is readable
 - [ ] modifications list is not empty
+- [ ] backup_path exists and is a copy of report_path
 - [ ] If review_report provided, it exists
 
 **If ANY validation fails: STOP and return error.**
@@ -352,3 +354,4 @@ before/after tables for efficiency.
 4. **Verify changes**: Confirm each modification applied
 5. **Check for side effects**: Watch for introduced issues
 6. **Respect scope**: Only modify what's requested
+7. **No backup, no edits**: If backup_path is missing or absent on disk, STOP and return an error – never edit without a recorded backup.

@@ -77,11 +77,12 @@ Create a new version of the report.
 | author | string | Yes | Person making changes |
 
 **Actions:**
-1. Read current document
-2. Update version in metadata
-3. Add entry to version history table
-4. Update "Last modified" date
-5. Save document
+1. Copy the current document to <name>.pre-version-<current-version>.md (read source, write copy); STOP on failure
+2. Read current document
+3. Update version in metadata
+4. Add entry to version history table
+5. Update "Last modified" date
+6. Save document
 
 **Version Numbering Convention:**
 | Change Type | Version Change | Example |
@@ -118,10 +119,11 @@ Restore report from archive.
 |-------|------|----------|-------------|
 | archive_file | path | Yes | Archived file to restore |
 | destination | path | Yes | Where to restore |
+| overwrite | boolean | No | Required true when destination exists |
 
 **Actions:**
 1. Verify archive_file exists
-2. Copy to destination (read source, write destination)
+2. If destination exists and overwrite is not true: STOP and return a collision error naming the existing file – the orchestrator confirms with the user and re-invokes with overwrite: true. Otherwise copy to destination (read source, write destination).
 3. Update metadata (restored date)
 4. Log restoration
 
