@@ -1,5 +1,12 @@
 # Style Rules Reference
 
+## Contents
+
+- [Part 1: automatable rules (47 total)](#part-1-automatable-rules-47-total)
+- [Part 2: judgment-based rules (18 total)](#part-2-judgment-based-rules-18-total)
+- [Scoring guide](#scoring-guide)
+- [Quick reference card](#quick-reference-card)
+
 Complete style rules for consulting reports. 47 automatable rules + 18 judgment-based rules.
 
 ---

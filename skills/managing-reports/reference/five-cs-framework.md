@@ -1,5 +1,13 @@
 # Five C's Framework Reference
 
+## Contents
+
+- [The Five C's](#the-five-cs)
+- [Detailed element guidance](#detailed-element-guidance)
+- [Complete finding example](#complete-finding-example)
+- [Validation checklist](#validation-checklist)
+- [Common mistakes](#common-mistakes)
+
 The Five C's (the five-attributes approach to audit findings) is the required
 structure for all findings here. It supports IIA Standards 2410 and 2420 on
 communicating results – it is a writing convention, not itself a named Standard.
