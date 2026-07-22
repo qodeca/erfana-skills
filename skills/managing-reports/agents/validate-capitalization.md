@@ -126,8 +126,8 @@ For EACH text element:
 |--------|------|-------------|
 | verdict | PASS/FAIL | Overall result |
 | items_validated | number | Total elements checked |
-| violations_found | number | Count of errors |
-| violations_list | array | Every violation with details |
+| issues_found | number | Count of errors |
+| issues | array | Every violation with details |
 | ready_to_proceed | boolean | Can continue to next phase |
 
 ### On PASS
@@ -136,7 +136,7 @@ For EACH text element:
 ## Validation: PASS
 
 **Items Validated:** [count]
-**Violations Found:** 0
+**Issues found:** 0
 
 | Element Type | Count | Status |
 |--------------|-------|--------|
@@ -157,7 +157,7 @@ For EACH text element:
 ## Validation: FAIL
 
 **Items Validated:** [count]
-**Violations Found:** [count]
+**Issues found:** [count]
 
 ### BLOCKING ERRORS (Enumerate ALL)
 
