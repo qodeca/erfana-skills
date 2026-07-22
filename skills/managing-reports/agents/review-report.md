@@ -81,6 +81,8 @@ the report FAIL.
 
 ## Output Contract
 
+A worked sample of this output lives at ../examples/validation-output-example.md.
+
 | Output | Type | Description |
 |--------|------|-------------|
 | overall_verdict | PASS/FAIL | Final verdict |

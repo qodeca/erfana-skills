@@ -88,7 +88,7 @@ Introduction text here.
 |------|-------------|
 | Minimum items | ≥3 items per list |
 | Maximum items | ≤7 items per list |
-| No single-item lists | Lists must have 2+ items |
+| No short lists | Fewer than 3 items = violation |
 | Parallel structure | All items same grammatical form |
 | Consistent punctuation | All items end same way (or none) |
 
@@ -191,7 +191,7 @@ For each figure/table:
 
 | # | Line | Issue | Details |
 |---|------|-------|---------|
-| 1 | 67 | Single-item list | List has only 1 item |
+| 1 | 67 | Short list | List has only 1 item |
 | 2 | 102 | Too many items | List has 12 items (max 7) |
 | 3 | 145 | Not parallel | Mixed verb forms |
 
@@ -235,9 +235,9 @@ For each figure/table:
 ### Automatic Failure Triggers
 
 - Skipped heading level
-- Single-item list
+- List with fewer than 3 items
 - Table without text reference
-- Paragraph >7 sentences
+- Paragraph >5 sentences
 
 ---
 

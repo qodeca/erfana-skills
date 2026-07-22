@@ -39,7 +39,7 @@ Use the BLUF (Bottom Line Up Front) method. Maximum 2 pages.
 
 ## Next steps
 
-[Optional: Immediate actions required before full implementation]
+[Immediate actions required before full implementation]
 
 - [Immediate action 1]
 - [Immediate action 2]
@@ -119,7 +119,7 @@ estimated 15-20%, and position Acme Corp for scalable growth.
 | Key findings | Top 3-5 by impact, quantified |
 | Key recommendations | Top 3-5 by priority, with owner + timeline |
 | Expected outcomes | Benefits of implementation |
-| Next steps | Optional: immediate actions |
+| Next steps | Immediate actions, required |
 
 ### What to Exclude
 

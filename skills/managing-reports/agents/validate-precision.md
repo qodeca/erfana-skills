@@ -105,7 +105,7 @@ For each percentage:
 **Common Abbreviations (no definition needed):**
 - IT, API, ERP, CRM, HR, CEO, CFO, COO
 - PDF, URL, SQL, JSON, XML
-- USD, USD, EUR, GBP
+- USD, EUR, GBP
 
 For each technical abbreviation:
 - [ ] First use defined

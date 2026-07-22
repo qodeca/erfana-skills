@@ -57,7 +57,7 @@ due to integration limitations.
 ### Key findings
 
 1. **System integration failures** affect three core platforms (GymSoft,
-   HR Suite Fusion, Payroll Platform), causing 15+ hours weekly of manual data synchronization
+   HR Suite, Payroll Platform), causing 15+ hours weekly of manual data synchronization
    and USD 225,000 annual labor waste.
 
 2. **Excel dependency** spans 14 critical business processes with no audit trails,
@@ -117,8 +117,7 @@ Expected annual benefit: USD 850,000+ (payback within 10 months)
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Main conclusion | First 1-2 sentences | Answer "so what?" immediately |
-| Overall assessment | Second paragraph | Situational context |
+| Overall assessment (opens with the main conclusion) | First two paragraphs | Answer "so what?" immediately, then situational context |
 | Key findings | Numbered list (3-5) | What we found |
 | Key recommendations | Numbered list (3-5) | What to do |
 | Expected outcomes | Short paragraph | Why it matters |
@@ -132,7 +131,7 @@ Expected annual benefit: USD 850,000+ (payback within 10 months)
 |---------------|-------------------|
 | 20-30 pages | 300-400 words (1 page) |
 | 30-50 pages | 400-500 words (1-1.5 pages) |
-| 50-80 pages | 500-600 words (1.5-2 pages) |
+| 50-80 pages | 450-500 words (1.5 pages) |
 
 **Rule:** Executive summary should be ≤10% of total report length.
 
@@ -142,7 +141,7 @@ Expected annual benefit: USD 850,000+ (payback within 10 months)
 
 ### Structure
 - [ ] Opens with conclusion (not methodology)
-- [ ] Contains all 6 components
+- [ ] Contains all 5 components
 - [ ] 300-500 words total
 - [ ] Can stand alone without full report
 

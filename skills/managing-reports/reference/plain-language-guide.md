@@ -132,7 +132,7 @@ Plain language ensures reports are accessible to all readers, including non-expe
 
 | Rule | Example |
 |------|---------|
-| Define on first use | "GymSoft Management System (PGMS)" |
+| Define on first use | "GymSoft Management System (GMS)" |
 | Don't abbreviate if used 1-2 times | Write full term |
 | Industry-standard abbreviations | API, IT, ERP need no definition for technical audiences |
 | Create abbreviation list if 10+ | Include as appendix |

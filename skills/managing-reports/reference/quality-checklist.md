@@ -46,7 +46,7 @@ Complete validation criteria for consulting reports before client delivery.
 |---|-------|--------|---------------|
 | 4.1 | Heading hierarchy | 3 | No skipped levels (H1→H3) |
 | 4.2 | No stacked headings | 3 | Text between all headings |
-| 4.3 | List item count | 3 | Lists have 2-7 items (fail: 1 item or 8+) |
+| 4.3 | List item count | 3 | Lists have 3-7 items (fail: 2 or fewer items, or 8+) |
 | 4.4 | List parallel structure | 3 | All items same grammatical form |
 | 4.5 | Tables referenced | 3 | All tables mentioned in text |
 

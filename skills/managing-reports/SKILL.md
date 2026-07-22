@@ -225,6 +225,16 @@ read/copy-only and need no gate.
 
 ---
 
+## Examples
+
+| Example | Path | Shows |
+|---------|------|-------|
+| Executive summary | examples/executive-summary-example.md | A compliant BLUF summary with structure breakdown |
+| Finding | examples/finding-example.md | A complete Five C's finding |
+| Validation output | examples/validation-output-example.md | What review-report's consolidated output looks like |
+
+---
+
 ## Style Rules Summary
 
 ### CRITICAL: Sentence Case

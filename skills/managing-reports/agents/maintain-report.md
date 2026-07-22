@@ -93,7 +93,7 @@ Create a new version of the report.
 
 ### Operation 2: ARCHIVE
 
-Move report to archive location.
+Copy report to archive location.
 
 **Params:**
 | Param | Type | Required | Description |
