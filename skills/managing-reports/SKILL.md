@@ -93,7 +93,7 @@ ship a failing report at their own discretion; the skill never marks it PASS.)
 | 4. Design structure | `design-report-structure` | Pyramid Principle, sections present, user approves | Max 3 retries |
 | 5. Provide templates | (direct) | Templates presented, user acknowledges | - |
 
-The interview runs in the main conversation - subagents cannot call AskUserQuestion. Pass the collected answers inline to gather-report-requirements; it returns the spec text, which the skill writes to disk before invoking design-report-structure.
+The interview runs in the main conversation – subagents cannot call AskUserQuestion. Pass the collected answers inline to gather-report-requirements; it returns the spec text, which the skill writes to disk before invoking design-report-structure.
 
 ### Operation 2: REVIEW
 
@@ -155,7 +155,7 @@ validate-style, validate-formatting, validate-precision, validate-executive-summ
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
-| gather-report-requirements | sonnet | Structured requirements interview |
+| gather-report-requirements | sonnet | Compiles requirements from interview answers |
 | design-report-structure | opus | Pyramid Principle outline design |
 
 ### Validation Agents (6, all blocking)
