@@ -1,0 +1,4 @@
+{
+  "stop_hook_active": false,
+  "last_assistant_message": "Map: account[x] goals[~] stakeholders[ ] assumptions[ ] failure[ ] reversibility[ ] metrics[ ] meta[ ]\n\nLocked so far: OIDC as the protocol, JWT tokens. Next I need the session-cutover branch.\n\n<!-- erfana:grill-open -->"
+}

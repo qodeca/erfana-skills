@@ -43,7 +43,7 @@ The v1 plugin shipped a single 800-line `erfana:design` skill that bundled six u
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:grill-me` | Interview the user one question at a time, walking the decision tree with a recommended answer per branch; reads the codebase when the answer is encoded there. Imported verbatim from upstream `superpowers:grill-me`, schema-adapted for plugin frontmatter (split `description` + `when_to_use`, added `allowed-tools`). Brand-agnostic. |
+| `erfana:grill-me` | Interview the user one question at a time until a 16-dimension coverage map is closed – every area done or user-waived. Originally imported from upstream `superpowers:grill-me` (v4.2.3); rewritten in v6.2.0 into a machine-checkable protocol: per-message coverage-map line, laddered follow-ups, decisions ledger, mandatory premortem and reversibility rounds, prediction-test exit gate, rationalization table from observed baseline excuses, and a skill-scoped `grill-guard` Stop hook (frontmatter `hooks:`, scripts + fixtures under `skills/grill-me/hooks/` and `tests/hooks/grill-guard/`, Gate 16). Ships `references/question-stems.md`. Brand-agnostic. |
 
 ### Verification skills (1, v4.2.7+)
 
@@ -78,7 +78,7 @@ erfana-skills/
 │   ├── managing-reports/    ← ships 11 internal validation agents; reference/, templates/
 │   ├── managing-skills/     ← guides/, templates/, validation/, examples/
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
-│   ├── grill-me/            ← process skill (v4.2.3+); SKILL.md only, no references
+│   ├── grill-me/            ← process skill (v4.2.3+); references/ + skill-scoped hooks/ (v6.2.0+)
 │   ├── using-erfana/        ← bootstrap meta-router
 │   └── design-shared/       ← design-only shared bundle
 │       ├── assets/          ← jsx, sfx, bgm, showcases, banner.svg
