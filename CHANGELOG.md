@@ -3,6 +3,37 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.1.0] - 2026-07-22
+
+### Fixed
+- managing-reports: CREATE interview moved to the main conversation – the
+  gather-report-requirements subagent could never call AskUserQuestion
+  (2026-07-22 lens review, findings 1-2). New reference/interview-questions.md
+  holds the question catalog; the agent is now a pure spec compiler.
+- managing-reports: validator/template/example threshold conflicts reconciled
+  with validators as the source of truth (Next steps required, 500-word
+  summary cap, 3-item list minimum, 5 summary components, >5-sentence
+  paragraph auto-fail) (findings 9-11, 20-21).
+- managing-reports: hard token caps removed where they contradicted
+  never-summarize mandates; validate-capitalization output fields aligned
+  with the other five validators (findings 4, 16).
+
+### Added
+- managing-reports: approval gates and pre-edit backups for MODIFY, VERSION,
+  RESTORE, and structure writes; delimiter discipline appended to every
+  agent trust boundary; examples/ directory linked from SKILL.md; TOCs on
+  all reference files (findings 6-8, 12, 18-19).
+
+### Changed
+- managing-reports: style thresholds deduplicated into reference files as
+  the single source of truth, with agents reading them at run start;
+  execution-ceremony prose collapsed; maintenance calendar removed
+  (findings 3, 13-14, 25).
+
+### Deferred
+- validate-capitalization stays on sonnet (finding 17) – no eval harness to
+  verify haiku accuracy parity on proper-noun edge cases.
+
 ## [6.0.1] - 2026-06-19
 
 Post-v6.0.0 documentation and CI maintenance surfaced by a `/erfana:lens-review` over the docs the doc-update sweep had touched, plus a follow-on `oss-readiness` audit that added the licensing-metadata, third-party-trademark, README security/license, and social-preview items below. No skill, agent, hook, or command behaviour change; skill / agent / hook / command counts are unchanged.
