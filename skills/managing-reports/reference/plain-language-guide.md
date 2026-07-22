@@ -1,5 +1,17 @@
 # Plain Language Guide
 
+## Contents
+
+- [Core principles](#core-principles)
+- [Forbidden words and alternatives](#forbidden-words-and-alternatives)
+- [Sentence structure](#sentence-structure)
+- [Redundant phrases to eliminate](#redundant-phrases-to-eliminate)
+- [Abbreviation rules](#abbreviation-rules)
+- [Numbers and dates](#numbers-and-dates)
+- [Translation-friendly writing](#translation-friendly-writing)
+- [Readability testing](#readability-testing)
+- [Quick reference](#quick-reference)
+
 Plain language ensures reports are accessible to all readers, including non-experts.
 
 ---

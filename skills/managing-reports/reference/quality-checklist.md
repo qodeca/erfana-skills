@@ -1,5 +1,14 @@
 # Quality Checklist Reference
 
+## Contents
+
+- [Pre-publish checklist](#pre-publish-checklist)
+- [Scoring and the delivery gate](#scoring-and-the-delivery-gate)
+- [5-minute pre-check](#5-minute-pre-check)
+- [Section-specific checks](#section-specific-checks)
+- [Validation tools](#validation-tools)
+- [Review workflow](#review-workflow)
+
 Complete validation criteria for consulting reports before client delivery.
 
 ---

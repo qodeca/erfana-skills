@@ -1,5 +1,9 @@
 # Report requirements interview questions
 
+## Contents
+
+- [Requirements categories](#requirements-categories)
+
 The canonical question catalog for the CREATE operation. The skill (main
 conversation) asks these via AskUserQuestion – subagents cannot ask the user
 anything. Answers are then passed inline to `gather-report-requirements`,

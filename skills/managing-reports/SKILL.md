@@ -14,6 +14,11 @@ This skill provides support for creating, reviewing, modifying, and maintaining
 professional consulting reports. It enforces industry-standard frameworks and
 style guidelines to produce consistent, high-quality deliverables.
 
+This skill stays model-invocable by design (no disable-model-invocation):
+"create report" auto-discovery is the intended UX. The compensating controls
+for its write operations are the approval gates and backups in MODIFY and
+MAINTAIN (2026-07-22 lens review, finding 15).
+
 ---
 
 ## Trust boundary
@@ -51,32 +56,12 @@ Two standing safety notes for maintainers:
 
 ---
 
-## CRITICAL: Execution Requirements
+## Execution requirements
 
-### Todo List Tracking (MANDATORY)
-
-**ALWAYS create todo list at operation start. No exceptions.**
-
-1. At operation start: Create todo items for all steps
-2. Before each step: Mark step as `in_progress`
-3. After each step: Mark step as `completed`
-4. On failure: Keep step as `in_progress`, note blocker
-
-### Quality Gate Enforcement
-
-**Every step has a quality gate. Max 3 retries before escalation.**
-
-```
-On quality gate FAIL:
-├── Retry 1: Re-run with verbose logging
-├── Retry 2: Re-run with additional context
-├── Retry 3: Final attempt with simplified approach
-└── After 3 failures: STOP and escalate to user
-```
-
-For REVIEW, the retry ladder applies per validator: retry only the individual
-validator that failed (up to 3 times); all six validators must return before
-the report is consolidated.
+Track operation steps as todos. On a quality-gate failure, retry up to 3
+times, then STOP and escalate to the user with the failure context. For
+REVIEW, retries apply per validator: retry only the validator that failed;
+all six must return before consolidation.
 
 ### No validator is optional
 
@@ -235,31 +220,15 @@ read/copy-only and need no gate.
 
 ---
 
-## Style Rules Summary
+## Style rules
 
-### CRITICAL: Sentence Case
+Two non-negotiables at a glance – full rules and thresholds live in the
+reference files, which are the single source of truth:
 
-**Rule:** All headings, list items, table headers use sentence case.
-
-| Element | Correct | Incorrect |
-|---------|---------|-----------|
-| H2 heading | "Key findings" | "Key Findings" |
-| List item | "Integration failures" | "Integration Failures" |
-| Table header | "Risk level" | "Risk Level" |
-
-**Exceptions:** Proper nouns (company names, product names, acronyms), and the
-cover-page report title (which may use title case).
-
-### Writing Style
-
-| Rule | Target |
-|------|--------|
-| Active voice | ≥90% of sentences |
-| Sentence length | Average ≤20 words per section, max ≤40 words per sentence |
-| Nominalizations | Zero from prohibited list |
-| Jargon | Zero from forbidden list |
-
-### Structure
+- **Sentence case everywhere** (headings, list items, table headers);
+  exceptions and word lists: reference/sentence-case-rules.md
+- **Active, plain, quantified prose**; numeric targets:
+  reference/style-rules.md
 
 | Framework | Application |
 |-----------|-------------|
@@ -308,8 +277,8 @@ cover-page report title (which may use title case).
 4. **Bury conclusions**: Lead with key message (Pyramid)
 5. **Incomplete findings**: All Five C's required
 6. **Vague recommendations**: Specific owner + timeline required
-7. **Long sentences**: Max 40 words per sentence
-8. **Passive voice**: Target ≥90% active
+7. **Long sentences**: See style-rules.md limits
+8. **Passive voice**: See style-rules.md target
 
 ### ALWAYS:
 
@@ -367,11 +336,6 @@ Works with any folder structure. Recommended:
 
 ## Maintenance
 
-### Review Schedule
-
-- **Quarterly**: Review style rules against industry updates
-- **Annual**: Full skill review and agent performance analysis
-
 Version history lives in the repository `CHANGELOG.md`.
 
 ---
@@ -385,9 +349,9 @@ User: I need to create an audit report for our client.
 
 Skill Response:
 1. Interviews the user directly (AskUserQuestion, 5 categories)
-2. Spawns gather-report-requirements with the answers to compile the spec
+2. Issues gather-report-requirements with the answers to compile the spec
 3. Writes the requirements specification to disk
-4. Spawns design-report-structure
+4. Issues design-report-structure
 5. Produces detailed outline
 6. Presents templates for content creation
 ```
@@ -398,8 +362,8 @@ Skill Response:
 User: Review the report at /project/reports/audit-report.md
 
 Skill Response:
-1. Issues all 6 validators in one parallel batch
-2. Spawns review-report to consolidate the 6 results
+1. Issues all six validators in one parallel batch
+2. Issues review-report to consolidate the six results
 3. Produces consolidated review
 4. Shows: PASS / FAIL verdict (PASS only if all six pass)
 5. Lists all issues with fixes
@@ -413,7 +377,7 @@ User: Fix all the issues from the review.
 
 Skill Response:
 1. Parses review results
-2. Spawns modify-report
+2. Issues modify-report
 3. Applies each fix
 4. Verifies changes
 5. Produces change log
@@ -426,7 +390,7 @@ Skill Response:
 User: This is version 1.1, I updated the recommendations.
 
 Skill Response:
-1. Spawns maintain-report (operation=version)
+1. Issues maintain-report (operation=version)
 2. Updates version number
 3. Adds version history entry
 4. Updates last modified date
