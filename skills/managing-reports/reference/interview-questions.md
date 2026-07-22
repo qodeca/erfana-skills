@@ -3,6 +3,11 @@
 ## Contents
 
 - [Requirements categories](#requirements-categories)
+- [Category 1: Report purpose](#category-1-report-purpose)
+- [Category 2: Content scope](#category-2-content-scope)
+- [Category 3: Structure preferences](#category-3-structure-preferences)
+- [Category 4: Deliverable format](#category-4-deliverable-format)
+- [Category 5: Quality standards](#category-5-quality-standards)
 
 The canonical question catalog for the CREATE operation. The skill (main
 conversation) asks these via AskUserQuestion – subagents cannot ask the user
@@ -12,9 +17,9 @@ which compiles the requirements specification.
 Ask one category per AskUserQuestion call (max 4 questions per call).
 Open-ended questions (2.1) are asked as free-text prompts.
 
-## Requirements Categories
+## Requirements categories
 
-### Category 1: Report Purpose
+### Category 1: Report purpose
 
 **Question 1.1:** What is the primary purpose of this report?
 
@@ -48,7 +53,7 @@ Open-ended questions (2.1) are asked as free-text prompts.
 | Risk mitigation | Approve risk response actions | |
 | Other | Custom decision (specify) | |
 
-### Category 2: Content Scope
+### Category 2: Content scope
 
 **Question 2.1:** What subject areas must be covered? (Open-ended, list all required topics)
 
@@ -71,7 +76,7 @@ Open-ended questions (2.1) are asked as free-text prompts.
 | Previous reports | Earlier versions or related reports | |
 | None | Starting from scratch | |
 
-### Category 3: Structure Preferences
+### Category 3: Structure preferences
 
 **Question 3.1:** Preferred report type?
 
@@ -103,7 +108,7 @@ Open-ended questions (2.1) are asked as free-text prompts.
 | Interview list | People consulted | |
 | None | No appendices needed | |
 
-### Category 4: Deliverable Format
+### Category 4: Deliverable format
 
 **Question 4.1:** Primary output format?
 
@@ -133,7 +138,7 @@ Open-ended questions (2.1) are asked as free-text prompts.
 | Formal approval workflow | Requires sign-off chain | |
 | Minimal | Direct to final with minor edits | |
 
-### Category 5: Quality Standards
+### Category 5: Quality standards
 
 **Question 5.1:** Review process required?
 

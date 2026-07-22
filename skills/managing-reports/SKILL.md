@@ -50,7 +50,7 @@ Two standing safety notes for maintainers:
 
 | Operation | Command | Primary Agent |
 |-----------|---------|---------------|
-| CREATE | "Create a new report" | skill interviews -> gather-report-requirements compiles -> design-report-structure |
+| CREATE | "Create a new report" | skill interviews → gather-report-requirements compiles → design-report-structure |
 | REVIEW | "Review this report" | skill runs 6 validators in parallel → review-report consolidates |
 | MODIFY | "Fix these issues" | modify-report |
 | MAINTAIN | "Version this report" | maintain-report |
@@ -107,7 +107,7 @@ it only synthesizes the results it is given.
 | Step | Agent | Validation | Quality Gate |
 |------|-------|------------|--------------|
 | 1. Initialize | (direct) | Path verified, files inventoried | - |
-| 2. Run validators | (direct) | All 6 validators issued in one parallel batch; all 6 return | Per-validator retry (max 3) |
+| 2. Run validators | (direct) | All six validators issued in one parallel batch; all six return | Per-validator retry (max 3) |
 | 3. Consolidate | `review-report` | The 6 results passed inline, single report produced | Max 3 retries |
 | 4. Verdict | (direct) | PASS / FAIL determined | - |
 
@@ -116,7 +116,7 @@ validate-style, validate-formatting, validate-precision, validate-executive-summ
 
 Delegations to validate-style and modify-report always include the paths of reference/sentence-case-rules.md and reference/style-rules.md; validate-capitalization receives only the sentence-case path. The reference files are the single source of truth – agent-embedded tables are cached excerpts.
 
-**Levels:** standard (all six, default) | thorough (six + manual checklist)
+**Levels:** standard (all six, default) | thorough (six + the skill walks reference/quality-checklist.md after consolidation and appends its results to the review)
 
 ### Operation 3: MODIFY
 
@@ -164,7 +164,7 @@ read/copy-only and need no gate.
 | gather-report-requirements | sonnet | Compiles requirements from interview answers |
 | design-report-structure | opus | Pyramid Principle outline design |
 
-### Validation Agents (6, all blocking)
+### Validation Agents (six, all blocking)
 
 | Agent | Model | Blocking | Focus |
 |-------|-------|----------|-------|
