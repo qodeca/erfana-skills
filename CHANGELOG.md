@@ -3,6 +3,65 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.2.0] - 2026-07-22
+
+### Changed
+- grill-me: rewritten from a 4-rule prose sketch (23 lines, imported verbatim
+  from upstream superpowers:grill-me in v4.2.3) into a machine-checkable
+  interrogation protocol. Research-grounded design (three research tracks:
+  LLM clarifying-question literature, human interrogation frameworks,
+  skill-enforcement mechanics): per-message coverage-map line over a
+  16-dimension taxonomy, exactly-one-question-per-AskUserQuestion-call rule,
+  laddered follow-ups, decisions ledger with contradiction re-questioning,
+  mandatory premortem and reversibility rounds, five-condition exit gate
+  (map closed, prediction test, meta check, read-back-only exit offer, user
+  confirmation), and a rationalization table built from six observed
+  baseline stop-early excuses. The judgment-based exit ("until shared
+  understanding is reached") is gone - completion is a property of the map.
+
+### Added
+- grill-me: `references/question-stems.md` - the 16-dimension question-stem
+  library with verbatim battle-tested stems (Gause & Weinberg context-free
+  questions, Klein premortem, Shostack Four Questions, UK MOD red-teaming
+  checks, Amazon Working Backwards, Kepner-Tregoe IS/IS NOT, ATAM scenarios,
+  cognitive-interview mnemonics), each dimension tagged with the cognitive
+  bias it counters and its waivability condition.
+- grill-me: skill-scoped `grill-guard` Stop hook (frontmatter `hooks:`,
+  first use of skill-scoped hooks in the plugin) - blocks one stop attempt
+  per turn whose last message still ends with the open marker, end-anchored
+  after balanced-fence stripping so quoted markers never misfire. Ships as
+  `.sh` + `.ps1` siblings under `skills/grill-me/hooks/`, launched via the
+  existing `dispatch.sh`. Advisory backstop by design (one forced
+  continuation per stop attempt; see docs/known-caveats.md v6.2.0 entry).
+  The shared safety hooks and `hooks/hooks.json` are untouched.
+- Gate 16: `grill-guard` fixture family (5 fixtures under
+  `tests/hooks/grill-guard/`) and the grill sentinel-symmetry family
+  (SKILL.md + both hook implementations). Fixture total 10 -> 15; symmetry
+  checks 7 -> 10. Both hook implementations behaviourally verified: bash via
+  the gate, PowerShell via a local pwsh replay of all 15 fixtures.
+
+### Fixed
+- docs/gates/16-hook-fixtures.md: pass-criteria symmetry count corrected
+  from the stale "currently 5" to the actual per-file arithmetic (the
+  v4.2.20 `.ps1` additions were never reflected in the doc; the script
+  always counted correctly).
+
+### Evaluation
+- RED/GREEN pressure-tested per Anthropic skill-authoring guidance: 3
+  scenarios (trivial plan, multi-branch plan, hostile impatient persona)
+  x 2 repetitions per condition, before and after. Baseline (old skill):
+  6/6 runs stopped prematurely while fully compliant with the old text,
+  6-9 questions per interview. New protocol: 12-18 questions with
+  systematically higher hidden-fact discovery; the one exploitable loophole
+  the GREEN runs surfaced (interviewer self-waiver of non-mandatory
+  dimensions) was closed in the shipped wording - all waivers now require
+  explicit user confirmation against the stem library's binding
+  waivability conditions. Post-fix verify runs: trivial scenario 6/6 hidden
+  facts with no premature stop; multi-branch scenario all 16 dimensions
+  covered with zero improper waivers. Residual limitation (documented in
+  docs/known-caveats.md): the one-rung ladder floor bounds breadth, not
+  per-dimension depth.
+
 ## [6.1.0] - 2026-07-22
 
 ### Fixed

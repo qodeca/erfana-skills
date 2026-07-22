@@ -1,0 +1,4 @@
+{
+  "stop_hook_active": false,
+  "last_assistant_message": "The grill-me skill's sentinel protocol works as follows: while the interview is open, every message ends with <!-- erfana:grill-open --> on its own line, and the wrap-up omits it.\n\nThat is the design I reviewed today.\n\nNo interview is running in this session.\n\nLet me know which part you want changed."
+}
