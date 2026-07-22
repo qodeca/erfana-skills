@@ -272,14 +272,10 @@ For each red flag:
 
 ---
 
-## Token Budget
+## Output budget
 
-| Metric | Value |
-|--------|-------|
-| Target | 600 tokens |
-| Maximum | 1000 tokens |
-
-**Efficiency:** Focus on structure compliance. Quote key evidence concisely.
+Target ~600 tokens for the summary sections. The enumerated issue list is
+exempt from any budget – every violation is listed, no cap.
 
 ---
 

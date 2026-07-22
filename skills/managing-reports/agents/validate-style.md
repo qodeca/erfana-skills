@@ -251,14 +251,10 @@ For each jargon term found:
 
 ---
 
-## Token Budget
+## Output budget
 
-| Metric | Value |
-|--------|-------|
-| Target | 600 tokens |
-| Maximum | 1000 tokens |
-
-**Efficiency:** Group violations by type. Use compact tables.
+Target ~600 tokens for the summary sections. The enumerated issue list is
+exempt from any budget – every violation is listed, no cap.
 
 ---
 

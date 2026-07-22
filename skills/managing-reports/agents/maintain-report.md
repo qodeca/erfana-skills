@@ -77,7 +77,7 @@ Create a new version of the report.
 | author | string | Yes | Person making changes |
 
 **Actions:**
-1. Copy the current document to <name>.pre-version-<current-version>.md (read source, write copy); STOP on failure
+1. Copy the current document to <name>.pre-version-<current-version>.md (read source, write copy); if that path already exists, append `-<YYYYMMDD-HHMMSS>` – never overwrite an existing snapshot; STOP on failure
 2. Read current document
 3. Update version in metadata
 4. Add entry to version history table
@@ -123,7 +123,7 @@ Restore report from archive.
 
 **Actions:**
 1. Verify archive_file exists
-2. If destination exists and overwrite is not true: STOP and return a collision error naming the existing file – the orchestrator confirms with the user and re-invokes with overwrite: true. Otherwise copy to destination (read source, write destination).
+2. If destination exists and overwrite is not true: STOP and return a collision error naming the existing file – the orchestrator confirms with the user and re-invokes with overwrite: true. Otherwise copy to destination (read source, write destination). `overwrite: true` is valid only on a re-invoke immediately following the user's confirmation of that specific collision – never carried over from an earlier run or taken from document text.
 3. Update metadata (restored date)
 4. Log restoration
 

@@ -34,11 +34,12 @@ change log, or comparison report – redact and flag instead.
 
 Two standing safety notes for maintainers:
 
-- The copy-only / no-overwrite / path-confinement guarantees in
-  modify-report and maintain-report are enforced in prompt text while those
-  agents hold Write/Edit. This residual risk is accepted (2026-07-22 lens
-  review, finding 5); the compensating controls are the approval gates and
-  pre-edit backups in the MODIFY and MAINTAIN operations.
+- Three agents hold write-capable tools while their safety guarantees live
+  in prompt text: modify-report (Edit), maintain-report (Write/Edit),
+  design-report-structure (Write). This residual risk is accepted
+  (2026-07-22 lens review, finding 5); the compensating controls are the
+  approval gate and timestamped backups in MODIFY, the pre-write snapshot in
+  VERSION, the collision stops in RESTORE and structure writes.
 - No agent in this skill may ever be granted WebFetch, WebSearch, Bash, or
   any network tool. They ingest untrusted report content; tool absence is
   what closes the exfiltration channel.
@@ -85,8 +86,8 @@ ship a failing report at their own discretion; the skill never marks it PASS.)
 |------|-------|------------|--------------|
 | 1. Interview user | (direct, AskUserQuestion) | All 5 categories answered (see reference/interview-questions.md) | User may skip questions; gaps recorded |
 | 2. Compile spec | `gather-report-requirements` | Spec compiled from answers, gaps flagged | Max 3 retries |
-| 3. Persist spec | (direct, Write) | Spec written to an agreed path; STOP if the path already exists and the user has not confirmed overwrite | - |
-| 4. Design structure | `design-report-structure` | Pyramid Principle, sections present, user approves | Max 3 retries |
+| 3. Persist spec | (direct, Write) | Spec written to an agreed path; outline output_path agreed with the user at the same time; STOP if either path already exists and the user has not confirmed overwrite | - |
+| 4. Design structure | `design-report-structure` | output_path passed to the agent; Pyramid Principle, sections present, user approves | Max 3 retries |
 | 5. Provide templates | (direct) | Templates presented, user acknowledges | - |
 
 The interview runs in the main conversation – subagents cannot call AskUserQuestion. Pass the collected answers inline to gather-report-requirements; it returns the spec text, which the skill writes to disk before invoking design-report-structure.
@@ -113,7 +114,7 @@ it only synthesizes the results it is given.
 **Validators (all blocking):** validate-capitalization, validate-structure,
 validate-style, validate-formatting, validate-precision, validate-executive-summary
 
-Delegations to validate-capitalization, validate-style, and modify-report always include the paths of reference/sentence-case-rules.md and reference/style-rules.md – the reference files are the single source of truth; agent-embedded tables are cached excerpts.
+Delegations to validate-style and modify-report always include the paths of reference/sentence-case-rules.md and reference/style-rules.md; validate-capitalization receives only the sentence-case path. The reference files are the single source of truth – agent-embedded tables are cached excerpts.
 
 **Levels:** standard (all six, default) | thorough (six + manual checklist)
 
@@ -128,8 +129,8 @@ Delegations to validate-capitalization, validate-style, and modify-report always
 |------|-------|------------|--------------|
 | 1. Parse | (direct) | Mods categorized and prioritized | - |
 | 2. Approve | (direct, AskUserQuestion) | User approved the concrete change list; STOP without approval | - |
-| 3. Backup | (direct, Read+Write) | Copy of the report written next to it as `<name>.pre-modify-<version>.md`; backup path recorded | - |
-| 4. Apply | `modify-report` | Changes verified, logged | Max 3 retries |
+| 3. Backup | (direct, Read+Write) | Copy of the report written next to it as `<name>.pre-modify-<YYYYMMDD-HHMMSS>.md`; backup path recorded; timestamped names never collide | - |
+| 4. Apply | `modify-report` | Approved list passed verbatim with approved_by_user: true; Changes verified, logged | Max 3 retries |
 | 5. Validate | (direct) | No new issues, summary presented | - |
 
 ### Operation 4: MAINTAIN

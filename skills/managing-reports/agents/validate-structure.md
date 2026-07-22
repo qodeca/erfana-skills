@@ -199,14 +199,10 @@ For EACH finding in the report:
 
 ---
 
-## Token Budget
+## Output budget
 
-| Metric | Value |
-|--------|-------|
-| Target | 700 tokens |
-| Maximum | 1200 tokens |
-
-**Efficiency:** Use tables for Five C's validation. Enumerate findings concisely.
+Target ~700 tokens for the summary sections. The enumerated issue list is
+exempt from any budget – every violation is listed, no cap.
 
 ---
 

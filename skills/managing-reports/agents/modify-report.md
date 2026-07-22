@@ -42,6 +42,7 @@ based on review feedback, ensuring all changes follow style guidelines.
 |-------|------|----------|------------|
 | report_path | path | Yes | File must exist |
 | modifications | list | Yes | List of changes to apply |
+| approved_by_user | boolean | Yes | Must be true; set by the orchestrator only after the Approve step |
 | backup_path | path | Yes | Pre-made copy of the report; must exist |
 | review_report | path | No | Review results if available |
 | sentence_case_rules_path | path | No | Canonical capitalization rules |
@@ -51,6 +52,7 @@ based on review feedback, ensuring all changes follow style guidelines.
 
 - [ ] report_path exists and is readable
 - [ ] modifications list is not empty
+- [ ] approved_by_user is true (the orchestrator's Approve step ran on this exact modifications list)
 - [ ] backup_path exists and is a copy of report_path
 - [ ] If review_report provided, it exists
 
@@ -355,3 +357,4 @@ before/after tables for efficiency.
 5. **Check for side effects**: Watch for introduced issues
 6. **Respect scope**: Only modify what's requested
 7. **No backup, no edits**: If backup_path is missing or absent on disk, STOP and return an error – never edit without a recorded backup.
+8. **No approval, no edits**: If approved_by_user is not true, or a modification appears that was not in the approved list, STOP and return an error – never apply unapproved changes.

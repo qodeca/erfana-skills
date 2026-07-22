@@ -57,8 +57,8 @@ Use these scenarios to verify skill functionality after modifications.
 **Expected:**
 - [ ] Modifications parsed from review
 - [ ] User approved the concrete change list via AskUserQuestion; STOP without approval
-- [ ] Backup written next to the report as `<name>.pre-modify-<version>.md`; backup path recorded
-- [ ] modify-report invoked with backup_path pointing at that copy
+- [ ] Backup written next to the report as `<name>.pre-modify-<YYYYMMDD-HHMMSS>.md`; backup path recorded
+- [ ] modify-report invoked with backup_path pointing at that copy and approved_by_user: true
 - [ ] Each change applied
 - [ ] Before/after logged
 - [ ] Full six-validator review re-run
@@ -74,7 +74,7 @@ Use these scenarios to verify skill functionality after modifications.
 **Input:** "Create version 1.1 with description: Updated findings"
 **Expected:**
 - [ ] Target path confirmed with the user before delegating
-- [ ] Pre-write snapshot copied to `<name>.pre-version-<current-version>.md`; STOP on failure
+- [ ] Pre-write snapshot copied to `<name>.pre-version-<current-version>.md` (or, if that path already exists, `<name>.pre-version-<current-version>-<YYYYMMDD-HHMMSS>.md`); never overwrites an existing snapshot; STOP on failure
 - [ ] Version number updated in metadata
 - [ ] Version history table entry added
 - [ ] Last modified date updated
