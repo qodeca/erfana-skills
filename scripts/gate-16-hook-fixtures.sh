@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Gate 16 — verify-completion hook fixtures + sentinel symmetry.
+# Gate 16 — hook fixtures + sentinel symmetry (verify-completion + grill-guard).
 #
-# Two responsibilities:
+# Three responsibilities:
 #   1. For each tests/hooks/verify-completion/*.json fixture, pipe it through
 #      hooks/verify-completion.sh and assert whether stdout carries the
 #      `{"decision":"block"...}` payload (the Stop-hook block signal).
 #      Exit code is always 0 per the Stop-hook protocol — the block decision
 #      is communicated via stdout JSON, not exit status — so the gate
 #      asserts on stdout shape rather than exit code.
-#   2. Sentinel symmetry across two sentinel families:
+#   2. Same replay for the skill-scoped grill-guard Stop hook
+#      (skills/grill-me/hooks/grill-guard.{sh,ps1}) against
+#      tests/hooks/grill-guard/*.json — end-anchored open-marker blocking.
+#   3. Sentinel symmetry across three sentinel families:
 #        - `<!-- erfana:status-template -->` must appear in
 #          commands/project-status.md, commands/session-status.md, and
-#          hooks/verify-completion.sh.
+#          hooks/verify-completion.{sh,ps1}.
 #        - `<!-- erfana:explain-template -->` must appear in
-#          commands/explain-issue.md and hooks/verify-completion.sh.
-#      If any one is missing, the allowlist would silently break and the
-#      corresponding clean-data report would block.
+#          commands/explain-issue.md and hooks/verify-completion.{sh,ps1}.
+#        - `<!-- erfana:grill-open -->` must appear in
+#          skills/grill-me/SKILL.md and skills/grill-me/hooks/grill-guard.{sh,ps1}.
+#      If any one is missing, the corresponding hook behaviour would silently
+#      break (a clean-data report would block, or the grill backstop would
+#      never fire).
 #
 # Standalone runner — invoked by scripts/run-all-gates.sh; can also be
 # run directly while iterating on hook or fixture changes.
@@ -33,23 +39,33 @@ cd "$(dirname "$0")/.."
 DISPATCH="hooks/dispatch.sh"
 HOOK_NAME="verify-completion"
 FIXTURE_DIR="tests/hooks/verify-completion"
+GRILL_HOOK_NAME="../skills/grill-me/hooks/grill-guard"
+GRILL_FIXTURE_DIR="tests/hooks/grill-guard"
 STATUS_SENTINEL='<!-- erfana:status-template -->'
 EXPLAIN_SENTINEL='<!-- erfana:explain-template -->'
+GRILL_SENTINEL='<!-- erfana:grill-open -->'
 
 if [ ! -x "$DISPATCH" ]; then
   echo "  FAIL: $DISPATCH is missing or not executable"
   exit 1
 fi
-for impl in "hooks/${HOOK_NAME}.sh" "hooks/${HOOK_NAME}.ps1"; do
+for impl in "hooks/${HOOK_NAME}.sh" "hooks/${HOOK_NAME}.ps1" \
+            "skills/grill-me/hooks/grill-guard.sh" "skills/grill-me/hooks/grill-guard.ps1"; do
   if [ ! -f "$impl" ]; then
     echo "  FAIL: $impl is missing (cross-platform sibling required)"
     exit 1
   fi
 done
-if [ ! -d "$FIXTURE_DIR" ]; then
-  echo "  FAIL: $FIXTURE_DIR is missing"
+if [ ! -x "skills/grill-me/hooks/grill-guard.sh" ]; then
+  echo "  FAIL: skills/grill-me/hooks/grill-guard.sh is not executable"
   exit 1
 fi
+for dir in "$FIXTURE_DIR" "$GRILL_FIXTURE_DIR"; do
+  if [ ! -d "$dir" ]; then
+    echo "  FAIL: $dir is missing"
+    exit 1
+  fi
+done
 
 # --- 1. Fixture replays ---------------------------------------------------
 # Format: name|expect|description
@@ -68,47 +84,65 @@ declare -a CASES=(
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
+# Grill-guard fixtures (skill-scoped Stop hook): end-anchored open-marker
+# blocking. Same replay protocol as verify-completion.
+declare -a GRILL_CASES=(
+  "open-blocks|block|end-anchored open marker on a mid-interview message must block"
+  "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
+  "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
+  "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
+  "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
+)
+
 failures=0
-for case_line in "${CASES[@]}"; do
-  IFS='|' read -r name expect desc <<< "$case_line"
-  fixture="$FIXTURE_DIR/$name.json"
-  if [ ! -f "$fixture" ]; then
-    echo "  FAIL: missing fixture: $fixture"
-    failures=$((failures + 1))
-    continue
-  fi
 
-  # Hook always exits 0; we assert on stdout shape.
-  out=$(bash "$DISPATCH" "$HOOK_NAME" < "$fixture")
-
-  has_block=no
-  if echo "$out" | grep -q '"decision":"block"'; then
-    has_block=yes
-  fi
-
-  case "$expect" in
-    block)
-      if [ "$has_block" = "yes" ]; then
-        echo "  PASS: $name → block (as expected): $desc"
-      else
-        echo "  FAIL: $name → expected block but stdout was empty: $desc"
-        failures=$((failures + 1))
-      fi
-      ;;
-    pass)
-      if [ "$has_block" = "no" ]; then
-        echo "  PASS: $name → pass (as expected): $desc"
-      else
-        echo "  FAIL: $name → expected pass but stdout had block JSON: $desc"
-        failures=$((failures + 1))
-      fi
-      ;;
-    *)
-      echo "  FAIL: $name has unknown expected outcome '$expect'"
+run_cases() {
+  local hook="$1" dir="$2"; shift 2
+  local case_line name expect desc fixture out has_block
+  for case_line in "$@"; do
+    IFS='|' read -r name expect desc <<< "$case_line"
+    fixture="$dir/$name.json"
+    if [ ! -f "$fixture" ]; then
+      echo "  FAIL: missing fixture: $fixture"
       failures=$((failures + 1))
-      ;;
-  esac
-done
+      continue
+    fi
+
+    # Hook always exits 0; we assert on stdout shape.
+    out=$(bash "$DISPATCH" "$hook" < "$fixture")
+
+    has_block=no
+    if echo "$out" | grep -q '"decision":"block"'; then
+      has_block=yes
+    fi
+
+    case "$expect" in
+      block)
+        if [ "$has_block" = "yes" ]; then
+          echo "  PASS: $name → block (as expected): $desc"
+        else
+          echo "  FAIL: $name → expected block but stdout was empty: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      pass)
+        if [ "$has_block" = "no" ]; then
+          echo "  PASS: $name → pass (as expected): $desc"
+        else
+          echo "  FAIL: $name → expected pass but stdout had block JSON: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      *)
+        echo "  FAIL: $name has unknown expected outcome '$expect'"
+        failures=$((failures + 1))
+        ;;
+    esac
+  done
+}
+
+run_cases "$HOOK_NAME" "$FIXTURE_DIR" "${CASES[@]}"
+run_cases "$GRILL_HOOK_NAME" "$GRILL_FIXTURE_DIR" "${GRILL_CASES[@]}"
 
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
@@ -124,6 +158,13 @@ EXPLAIN_SENTINEL_FILES=(
   "commands/explain-issue.md"
   "hooks/verify-completion.sh"
   "hooks/verify-completion.ps1"
+)
+# Grill family: the skill that emits the marker and the skill-scoped Stop hook
+# that end-anchors on it (both implementations).
+GRILL_SENTINEL_FILES=(
+  "skills/grill-me/SKILL.md"
+  "skills/grill-me/hooks/grill-guard.sh"
+  "skills/grill-me/hooks/grill-guard.ps1"
 )
 
 check_sentinel() {
@@ -147,11 +188,13 @@ check_sentinel() {
 
 check_sentinel "$STATUS_SENTINEL" "status"  "${STATUS_SENTINEL_FILES[@]}"
 check_sentinel "$EXPLAIN_SENTINEL" "explain" "${EXPLAIN_SENTINEL_FILES[@]}"
+check_sentinel "$GRILL_SENTINEL" "grill" "${GRILL_SENTINEL_FILES[@]}"
 
-SENTINEL_CHECK_COUNT=$((${#STATUS_SENTINEL_FILES[@]} + ${#EXPLAIN_SENTINEL_FILES[@]}))
+SENTINEL_CHECK_COUNT=$((${#STATUS_SENTINEL_FILES[@]} + ${#EXPLAIN_SENTINEL_FILES[@]} + ${#GRILL_SENTINEL_FILES[@]}))
+FIXTURE_COUNT=$((${#CASES[@]} + ${#GRILL_CASES[@]}))
 
 if [ $failures -ne 0 ]; then
   echo "  FAIL: $failures failure(s) total"
   exit 1
 fi
-echo "  PASS: ${#CASES[@]} fixture(s) + $SENTINEL_CHECK_COUNT sentinel symmetry check(s)"
+echo "  PASS: $FIXTURE_COUNT fixture(s) + $SENTINEL_CHECK_COUNT sentinel symmetry check(s)"
