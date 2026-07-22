@@ -72,7 +72,7 @@ Every validator failure blocks delivery. Two validators passed; four failed.
 | # | Location | Issue | Fix |
 |---|----------|-------|-----|
 | 1 | Line 92 | Stacked headings (H2→H3) | Add introductory text between |
-| 2 | Line 134 | Single-item list | Convert to paragraph or add items |
+| 2 | Line 134 | Short list | Convert to paragraph or add items |
 | 3 | Line 189 | Table without reference | Add "Table X shows..." before table |
 
 ### From: precision validator

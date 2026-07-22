@@ -1,5 +1,15 @@
 # Pyramid Principle Reference
 
+## Contents
+
+- [Core concept](#core-concept)
+- [SCQA framework](#scqa-framework)
+- [Application to report sections](#application-to-report-sections)
+- [MECE principle](#mece-principle)
+- [Grouping strategies](#grouping-strategies)
+- [Validation checklist](#validation-checklist)
+- [Anti-patterns](#anti-patterns)
+
 The Pyramid Principle (Barbara Minto, McKinsey) is the foundational structure for all consulting reports.
 
 ---

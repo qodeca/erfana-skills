@@ -22,7 +22,7 @@ Every finding must include all five elements:
 
 **Severity:** Critical
 **Category:** Integration
-**Systems affected:** GymSoft, HR Suite Fusion, Payroll Platform
+**Systems affected:** GymSoft, HR Suite, Payroll Platform
 
 #### Criteria
 
@@ -35,7 +35,7 @@ platforms.
 
 Three critical systems operate in complete isolation:
 - **GymSoft** (membership management) has no API connections to other systems
-- **HR Suite Fusion** (finance) receives membership revenue data via weekly CSV exports
+- **HR Suite** (HR and payroll) receives membership revenue data via weekly CSV exports
 - **Payroll Platform** (HR) contains employee data not synchronized with access control
 
 Data flows between these systems require manual intervention, creating a weekly
@@ -127,7 +127,7 @@ control, limited access restrictions, and no data validation rules.
 
 **Recommendation:** Migrate critical Excel processes to appropriate systems.
 
-**Priority 1 (3 months):** Financial processes → HR Suite Fusion extensions
+**Priority 1 (3 months):** Financial processes → HR Suite extensions
 **Priority 2 (6 months):** HR processes → Payroll Platform workflow modules
 **Priority 3 (9 months):** Operations processes → Purpose-built maintenance system
 

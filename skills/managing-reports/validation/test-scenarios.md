@@ -10,9 +10,9 @@ Use these scenarios to verify skill functionality after modifications.
 **Input:** "Create a new audit report for IT security assessment"
 **Expected:**
 - [ ] Todo list created with CREATE steps
-- [ ] gather-report-requirements spawned
-- [ ] 5 requirement categories asked
-- [ ] Requirements specification produced
+- [ ] Skill interviews the user directly (AskUserQuestion, 5 categories); no subagent asks questions
+- [ ] gather-report-requirements spawned with interview_answers, compiles the spec
+- [ ] Requirements specification persisted to disk (direct Write)
 - [ ] design-report-structure spawned
 - [ ] Outline follows Pyramid Principle
 - [ ] Templates presented
@@ -56,12 +56,15 @@ Use these scenarios to verify skill functionality after modifications.
 **Input:** "Fix all the capitalization issues"
 **Expected:**
 - [ ] Modifications parsed from review
+- [ ] User approved the concrete change list via AskUserQuestion; STOP without approval
+- [ ] Backup written next to the report as `<name>.pre-modify-<YYYYMMDD-HHMMSS>.md`; backup path recorded
+- [ ] modify-report invoked with backup_path pointing at that copy and approved_by_user: true
 - [ ] Each change applied
 - [ ] Before/after logged
 - [ ] Full six-validator review re-run
 - [ ] No new issues introduced
 
-**Pass Criteria:** All issues fixed, change log complete
+**Pass Criteria:** All issues fixed, change log complete, backup file present alongside the report
 
 ---
 
@@ -70,12 +73,29 @@ Use these scenarios to verify skill functionality after modifications.
 **Setup:** Existing report with document control section
 **Input:** "Create version 1.1 with description: Updated findings"
 **Expected:**
+- [ ] Target path confirmed with the user before delegating
+- [ ] Pre-write snapshot copied to `<name>.pre-version-<current-version>.md` (or, if that path already exists, `<name>.pre-version-<current-version>-<YYYYMMDD-HHMMSS>.md`); never overwrites an existing snapshot; STOP on failure
 - [ ] Version number updated in metadata
 - [ ] Version history table entry added
 - [ ] Last modified date updated
 - [ ] Confirmation provided
 
-**Pass Criteria:** Document control section properly updated
+**Pass Criteria:** Document control section properly updated, pre-version snapshot present
+
+---
+
+## Test 5b: MAINTAIN Operation (restore collision)
+
+**Setup:** Archived report; a file already exists at the intended destination path
+**Input:** "Restore [archive_file] to [destination]"
+**Expected:**
+- [ ] Target path confirmed with the user before delegating
+- [ ] Destination collision detected; maintain-report STOPs with a collision error naming the existing file
+- [ ] Skill confirms overwrite with the user
+- [ ] Re-invoked with `overwrite: true`; copy proceeds to destination
+- [ ] Metadata updated (restored date) and restoration logged
+
+**Pass Criteria:** No overwrite without explicit user-confirmed `overwrite: true` re-invoke
 
 ---
 

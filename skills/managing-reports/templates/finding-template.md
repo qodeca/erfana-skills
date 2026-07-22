@@ -56,7 +56,7 @@ Manual data entry between systems should be eliminated where technically feasibl
 #### Condition
 
 Member data is manually entered into three separate systems: GymSoft (member
-management), HR Suite (payroll), and Payroll Platform (HR). Analysis of 200 randomly
+management), HR Suite (HR and payroll), and Payroll Platform (HR). Analysis of 200 randomly
 selected records identified 24 (12%) containing discrepancies between systems.
 Staff interviews confirmed 6+ hours daily are spent on data re-entry tasks
 across the organization.

@@ -1,5 +1,17 @@
 # Sentence Case Rules
 
+## Contents
+
+- [Definition](#definition)
+- [Why sentence case?](#why-sentence-case)
+- [Rules by element type](#rules-by-element-type)
+- [Proper noun exceptions](#proper-noun-exceptions)
+- [Title case exceptions (when permitted)](#title-case-exceptions-when-permitted)
+- [Common violations](#common-violations)
+- [Edge cases](#edge-cases)
+- [Validation checklist](#validation-checklist)
+- [Automated detection patterns](#automated-detection-patterns)
+
 > **CRITICAL**: This is the highest-priority validation rule. All headings, labels, and captions MUST use sentence case.
 
 ## Definition
