@@ -3,6 +3,61 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.3.0] - 2026-08-02
+
+### Added
+- managing-skills: `guides/claude-5-patterns.md` — the current model-pattern
+  reference for the Claude 5 family (Opus 5, Fable 5): reasoning-display
+  hazard, effort recalibration (one step cooler), delegation calibration,
+  prescriptiveness diet, what carries over from the 4.7 era. Grounded in the
+  Anthropic Fable 5 prompting guide and Claude 5 context-engineering post.
+- New Critical Architectural Rule 22 + checklist coverage (12.7 / 8.7 / 13.5):
+  skills and agent prose MUST NOT instruct a model to surface its internal
+  reasoning (`show your reasoning`, `thinking.display: visible`) — on Claude
+  Fable 5 this trips the `reasoning_extraction` safety classifier and silently
+  downgrades the session to Opus 4.8. Author-filled `<critical_thinking>`
+  blocks are exempt. Gate 2 gains a WARN-level detector for skill and agent
+  bodies (with rule-definition and backtick escapes), plus a `model:` presence
+  WARN for ms-* agents (13.2 parity with the existing 13.1 effort check).
+
+### Changed
+- managing-skills Claude 5 refresh (research-driven, 2026-08-02 audit):
+  - Checklist item 12.4 repurposed in place: "Explicit fan-out" (4.7-era,
+    premised on sequential-by-default delegation) becomes "Delegation
+    calibration" — Claude 5 models delegate readily; over-prescribed fan-out
+    is now the anti-pattern. Same number, weight, and N/A profile, so all
+    score totals (66.5/68.0/70.0) and ms-validator's output contract are
+    unchanged. Section 12 retitled "Claude 5 Model Patterns".
+  - `guides/opus-4-7-patterns.md` superseded-bannered (filename kept — cited
+    by tooling); its two reasoning-display hazards fixed in place (§7
+    criterion withdrawn, §15 `display: visible` recommendation replaced with
+    the classifier warning).
+  - Role→model/effort tables recalibrated one step cooler in all three copies
+    (shared-agent-template, ms-designer, agent-pre-release-checklist 13.1) and
+    across the 10 ms-* agents' frontmatter + SKILL.md Agents table
+    (e.g. ms-reviewer xhigh→high, ms-validator medium→low). `xhigh`/`max` are
+    no longer role defaults.
+  - Prescriptiveness diet: Rules 5/8/12 softened (inline glue work allowed;
+    pre-step verification scoped to steps that need it; todo lists required
+    for multi-phase operations instead of always), checklist Section 4
+    reworded to "Progress Tracking" (count/weight-preserving), double
+    end-gates (`<quality_gate>` + `<completion_checklist>`) merged into one
+    per agent, ALL-CAPS mandates trimmed across SKILL.md, templates, and
+    examples.
+  - `guides/cross-model-guide.md` rewritten for the Claude 5 model table
+    (claude-opus-5, claude-fable-5, claude-sonnet-5); "design for Haiku,
+    add more examples" advice replaced with direction-aware guidance;
+    stale model-ID lists fixed in skill-frontmatter-guide and templates.
+  - `guides/migration-guide.md` deleted (4.6-era; contradicted Rule 9 and
+    item 12.3 by mandating post-step validation on every step); surviving
+    orchestrator-migration shape folded into `skill-modernization-guide.md`.
+  - Drive-by hazard fix: `agents/ui-designer.md` "explain the reasoning
+    behind visual choices" reworded to "state the design rationale … in the
+    deliverable" (flagged by the new Gate 2 detector).
+  - Stale "promote to hard-blocking in v4.3.0" promises dropped from
+    checklists, Gate 2 docs, and CLAUDE.md (never executed; Section 12 items
+    12.1-12.6 stay soft-blocking, 12.7 stays BLOCKING at checklist level).
+
 ## [6.2.0] - 2026-07-22
 
 ### Changed

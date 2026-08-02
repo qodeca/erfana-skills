@@ -11,8 +11,8 @@ authors:
 repository-code: "https://github.com/qodeca/erfana-skills"
 url: "https://github.com/qodeca/erfana-skills"
 license: GPL-3.0-only
-version: 6.2.0
-date-released: 2026-07-22
+version: 6.3.0
+date-released: 2026-08-02
 keywords:
   - claude-code
   - claude-code-plugin
