@@ -18,13 +18,14 @@ description: |
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to agents (builtin or shared)
+- Delegates substantial tasks to agents (builtin or shared); small glue work runs inline
 - EVERY step has input conditions (BLOCKING)
-- Validates where it matters — after irreversible work, not after exploratory steps. Opus 4.7 self-verifies; over-validating wastes tokens.
+- Validates where it matters — after irreversible work, not after exploratory steps. The model self-verifies; over-validating wastes tokens.
 - Quality gates apply on irreversible steps (max 3 retries, then escalate)
-- Todo lists ALWAYS created and maintained
+- Multi-phase operations track progress (todo list or equivalent)
 - MUST NOT reference other skills or external agents
-- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7 returns 400 error)
+- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7+ returns 400 error)
+- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — silent Fable 5 → Opus 4.8 fallback
 
 ## Requirements Gathering (Phase 0)
 
@@ -42,28 +43,14 @@ Per-subagent Effort and Model overrides shown below. Per-subagent overrides redu
 
 | Agent | Purpose | Source | Effort | Model | Used In |
 |-------|---------|--------|--------|-------|---------|
-| `validate-input` | Validate input requirements | shared | medium | sonnet | Phase 1 |
-| `process-data` | Process according to rules | shared | xhigh | opus | Phase 2 |
+| `validate-input` | Validate input requirements | shared | low | sonnet | Phase 1 |
+| `process-data` | Process according to rules | shared | medium | opus | Phase 2 |
 | `format-output` | Format final output | shared | low | sonnet | Phase 3 |
-| `verify-result` | Verify completion quality | shared | medium | sonnet | Phase 3 |
+| `verify-result` | Verify completion quality | shared | low | sonnet | Phase 3 |
 
-## Todo List Requirements
+## Progress Tracking
 
-**MANDATORY - No exceptions**
-
-### At Workflow Start
-```
-1. Create todo list with ALL phases and steps
-2. Mark Phase 1, Step 1 as in_progress
-```
-
-### For EVERY Step
-```
-1. Mark step in_progress BEFORE starting
-2. Execute with agent delegation
-3. Validate output against quality gate
-4. Mark complete IMMEDIATELY after gate passes
-```
+This is a multi-phase workflow — create a todo list at start with all phases and steps, update status at phase boundaries, and mark irreversible steps complete only after their quality gate passes.
 
 ---
 
@@ -262,11 +249,11 @@ See `examples.md` for detailed examples including:
 ### Architectural (CRITICAL)
 - ❌ Referencing other skills
 - ❌ Using external agents
-- ❌ Executing directly instead of delegating
+- ❌ Executing directly instead of delegating substantial work
 - ❌ Skipping input condition validation
-- ❌ Missing post-step validation
-- ❌ No quality gates
-- ❌ No todo list tracking
+- ❌ Missing post-step validation on irreversible steps
+- ❌ No quality gates on irreversible steps
+- ❌ No progress tracking on multi-phase runs
 
 ### Workflow
 - ❌ Skipping validation phases

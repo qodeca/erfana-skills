@@ -1,5 +1,7 @@
 # Opus 4.7 patterns for skill and agent authors
 
+> **SUPERSEDED (2026-08-02, v6.3.0):** the Claude 5 family (Opus 5, Fable 5) is now current, and this guide is retained as the historical reference for the 4.7-era pattern set. Author new skills and agents against **`guides/claude-5-patterns.md`** instead. Filename kept stable because Section 12 tooling and several docs cite it by name. Known era-expired claims in this file: the `xhigh` default (§1 — Claude 5 runs cooler), "4.7 spawns fewer subagents" fan-out advice (§4 — inverted on Claude 5), and `display: visible` guidance (§15 — hazardous on Fable 5, see the warning in place).
+
 Practical guidance for designing Claude Code skills and agents targeting Opus 4.7 (`claude-opus-4-7`, default in Claude Code 2.1.111+, 1M token context, default effort `xhigh`).
 
 **Audience:** anyone authoring or modernizing skills and shared agents in this plugin.
@@ -190,7 +192,8 @@ thinking: {"type": "adaptive"}
 Pair with `effort` field for tuning. Most skills don't need to enable adaptive thinking — Opus 4.7's default behavior is already extended-reasoning. Enable adaptive thinking only when:
 
 - The skill drives a long agentic loop (managing-issues implementation phase)
-- The skill's quality benefits from explicit reasoning surfacing
+
+**Revised 2026-08-02:** a second criterion previously listed here — "the skill's quality benefits from explicit reasoning surfacing" — is withdrawn. Instructing a model to surface its reasoning trips the `reasoning_extraction` safety classifier on Claude Fable 5 and silently downgrades the session to Opus 4.8. Request evidence in the structured output instead. See `claude-5-patterns.md` §3.
 
 ---
 
@@ -313,18 +316,11 @@ Per https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking:
 
 > "On Claude Opus 4.7, `thinking.display` defaults to `\"omitted\"`. Thinking blocks still appear in the response stream, but their `thinking` field is empty unless you explicitly opt in."
 
-**Practical implication:** when adaptive thinking is enabled (`thinking: {type: "adaptive"}`), the model still reasons internally but does NOT emit the reasoning to consumers by default. To see the thinking, explicitly set:
+**Practical implication:** when adaptive thinking is enabled (`thinking: {type: "adaptive"}`), the model still reasons internally but does NOT emit the reasoning to consumers by default.
 
-```yaml
-thinking:
-  type: adaptive
-  display: visible   # or "redacted" for partial display
-```
+> **⚠ Claude 5 hazard (revised 2026-08-02):** this section previously recommended `display: visible` for reviewer-shaped skills "to show reasoning to the user". **Do not do this.** On Claude Fable 5, instructing the model to surface its internal reasoning — via `display: visible` config or prose like `show your reasoning` — trips the `reasoning_extraction` safety classifier and silently falls back to Opus 4.8, disabling the skill's intended model. Reviewer-shaped skills should instead require *evidence in the structured output*: the finding, the file:line that drove it, and the failure scenario. That carries the "why" without touching thinking display. See `claude-5-patterns.md` §3 and checklist item 12.7.
 
-**Why this matters for skills:**
-
-- Reviewer-shaped skills (managing-issues code review, design-review) that surface "why" a finding was flagged may need `display: visible` to show reasoning to the user. Default behavior hides it.
-- Orchestrator skills generally don't need visible thinking — adds noise without value.
+- Orchestrator skills never need visible thinking — adds noise without value.
 - Cost: visible thinking IS billed; omitted thinking is cheaper.
 
 ## 16. Interleaved thinking automatic on Opus 4.7 (added v4.2.1) ✓

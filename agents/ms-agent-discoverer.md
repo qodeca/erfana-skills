@@ -119,23 +119,14 @@ Return exactly:
 <quality_gate>
 Before returning, ALL must be true:
 - [ ] Builtin agents list populated (4 core agents minimum)
-- [ ] Shared agents directory checked
-- [ ] Each agent has name, type, capabilities, source
-- [ ] No duplicate agent names across sources
-- [ ] Output format matches schema
+- [ ] Shared agents directory scanned (or noted as missing)
+- [ ] Each discovered agent has complete metadata (name, type, capabilities, source)
+- [ ] No duplicate agent names across sources; total count accurate
+- [ ] Warnings documented for agents with invalid frontmatter
+- [ ] Output format matches schema exactly
 
 On failure: Return partial results with detailed warnings.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] All 4 core builtin agents included in catalog
-- [ ] Shared agents directory scanned (or noted as missing)
-- [ ] Each discovered agent has complete metadata
-- [ ] Warnings documented for agents with invalid frontmatter
-- [ ] Total count accurate
-- [ ] Output format matches schema exactly
-</completion_checklist>
 
 <examples>
 ### Example 1: Full discovery with shared agents

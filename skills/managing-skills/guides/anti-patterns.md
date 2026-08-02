@@ -84,9 +84,9 @@ Task: Validate input file structure
 
 **Bad:** Workflow step with prose description only, no input conditions or validation.
 
-**Good:** Every step has: Input Conditions (checkboxes), Pre-Step Validation (STOP if), Execution (delegate to agent), Post-Step Validation, Quality Gate (retry/escalate).
+**Good:** Every step states its Input Conditions; steps with irreversible side effects (file writes, agent creation, breaking changes) additionally carry Pre-Step Validation (STOP if), Post-Step Validation, and a Quality Gate (retry/escalate). Exploratory steps stay lightweight — the model self-verifies routine work.
 
-**Why:** Consistent structure ensures reliability and enables proper validation.
+**Why:** Structure where it matters ensures reliability without the over-verification that blanket per-step rituals cause on Claude 5 models (checklist 12.3).
 
 ---
 

@@ -10,7 +10,7 @@ Pre-Step / Post-Step Validation blocks are MANDATORY only on steps with irrevers
 - Step 3 (file creation)
 - Step 5 (final validation)
 
-Exploratory steps (0 gather, 1 validate-requirements, 1.5 discover/match, 2 design) MAY skip Pre/Post-Step Validation if Opus 4.7 self-verifies. This mirrors SKILL.md Rule 9's carve-out per Anthropic's Opus 4.7 migration guide ("strip 'verify before returning' rituals on routine work").
+Exploratory steps (0 gather, 1 validate-requirements, 1.5 discover/match, 2 design) MAY skip Pre/Post-Step Validation — the model self-verifies (default on Opus 4.7+ and the Claude 5 family). This mirrors SKILL.md Rule 9's carve-out per Anthropic's migration guidance ("strip 'verify before returning' rituals on routine work").
 
 If you choose to validate exploratory steps anyway, treat the validation as advisory rather than blocking — orchestrator decides retry on first-attempt failure.
 
@@ -101,7 +101,7 @@ If invalid: return to Step 0 for clarification.
 
 ### Execution (Parts A and B - Parallel fan-out, added v4.2.0)
 
-**REQUIRED: spawn ms-agent-discoverer and ms-agent-matcher as concurrent Task calls in the same turn.** Opus 4.7 defaults to sequential subagent delegation; explicit fan-out language is required to enable concurrency. The two agents have no inter-dependencies — discoverer scans available agents, matcher matches against requirements. Running them in series wastes ~50% of the wall time on Step 1.5.
+**Spawn ms-agent-discoverer and ms-agent-matcher as concurrent Task calls in the same turn.** The two agents have no inter-dependencies — discoverer scans available agents, matcher matches against requirements — and each is a substantial read, so this fan-out is genuinely independent, sizeable work (checklist 12.4). Running them in series wastes ~50% of the wall time on Step 1.5.
 
 Concrete orchestrator behavior:
 1. Issue Task call to `ms-agent-discoverer` with discovery scope (builtin + shared sources).
@@ -247,7 +247,7 @@ Task: Run pre-release and security checklists
   - Focused skill: ≥63/66.5
 - [ ] Security score ≥87/93
 - [ ] No critical failures
-- [ ] Section 12.7 (deprecated APIs) MUST pass (BLOCKING — runtime 400 error on Opus 4.7)
+- [ ] Section 12.7 (deprecated APIs + reasoning-display) MUST pass (BLOCKING — runtime 400 error on Opus 4.7+; silent Fable 5 → Opus 4.8 fallback)
 
 ### Quality Gate
 If validation fails: report issues, recommend fixes.

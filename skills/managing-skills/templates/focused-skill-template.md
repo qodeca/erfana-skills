@@ -26,8 +26,8 @@ when_to_use: |
   Trigger phrases: "[trigger 1]", "[trigger 2]", "[trigger 3]", "[trigger 4]", "[trigger 5]".
 allowed-tools: Read, Write, Edit, Glob, Grep, [WebSearch / Bash / etc as needed]
 
-# OPTIONAL: Opus 4.7 effort/model overrides
-# effort: high            # focused skills usually run high (not xhigh) — they're scoped
+# OPTIONAL: effort/model overrides (Claude 5 calibration)
+# effort: medium          # focused skills usually run medium — they're scoped; omit to inherit session effort
 # model: sonnet           # opus only for complex creative work; sonnet handles most focused output
 
 # OPTIONAL: user-invocation only
@@ -89,7 +89,7 @@ After delivering [output], if the user [follow-up trigger], dispatch to `[other 
 | Length | 60-200 lines | 200-500 lines |
 | Sections | Process (5 steps) | Workflow with per-step Input Conditions, Pre/Post-Step Validation, Quality Gates |
 | Agents | 0 or 1 | 3-10 |
-| Todo list | Optional | Mandatory |
+| Progress tracking | Optional | Required (multi-phase) |
 | References dir | Often heavy (`references/*.md`) | Optional |
 | Quality gates | Implicit (the process is the gate) | Explicit per-step |
 | Critical Rules block | Often omitted | Mandatory |
@@ -98,7 +98,7 @@ The focused template trades orchestrator ceremony for terseness. Both are valid;
 
 ---
 
-## Opus 4.7 patterns for focused skills
+## Claude 5 model patterns for focused skills
 
 Most Section 12 patterns from `pre-release-checklist.md` apply, but a few are N/A:
 
@@ -107,10 +107,10 @@ Most Section 12 patterns from `pre-release-checklist.md` apply, but a few are N/
 | 12.1 Description voice | REQUIRED |
 | 12.2 Description triggers | REQUIRED — focused skills depend heavily on description for activation |
 | 12.3 Verify scaffolding cleanup | REQUIRED — focused skills should NOT mandate verify-after-every-step |
-| 12.4 Explicit fan-out | N/A typically — focused skills are single-threaded |
+| 12.4 Delegation calibration | N/A typically — focused skills are single-threaded |
 | 12.5 Per-subagent overrides | N/A typically — focused skills have no agents table |
 | 12.6 Find-vs-filter decoupled | REQUIRED if reviewer-shaped (e.g. `design-review`); N/A otherwise |
-| 12.7 No deprecated APIs | REQUIRED |
+| 12.7 No deprecated APIs / reasoning-display | REQUIRED |
 
 ms-validator's N/A handling means focused skills can score 4.5/4.5 (full applicable max) without artificial penalties for inapplicable patterns.
 

@@ -3,7 +3,7 @@ name: ms-designer
 description: MUST BE USED to design skill structure based on validated requirements. Use PROACTIVELY after requirements validation.
 tools: Read, Glob, Grep
 model: opus
-effort: high
+effort: medium
 capabilities: [architecture-design, template-application]
 ---
 
@@ -92,13 +92,13 @@ Design skill structure based on validated requirements.
 
    | Role | Model | Effort |
    |------|-------|--------|
-   | Orchestrator | opus | xhigh |
-   | File creator | opus | xhigh |
-   | Refactorer | opus | high |
-   | Reviewer/auditor | opus | xhigh |
-   | Validator | sonnet | medium |
+   | Orchestrator | opus | high |
+   | File creator | opus | medium |
+   | Refactorer | opus | medium |
+   | Reviewer/auditor | opus | high |
+   | Validator | sonnet | low |
    | Format-applier | sonnet | low |
-   | Researcher | sonnet | high |
+   | Researcher | sonnet | medium |
    | Classifier | haiku | low |
 
    Output `design.agents[].effort` and `design.agents[].model` so ms-creator can populate the Effort/Model columns.
@@ -202,32 +202,15 @@ Adapt:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Name follows gerund convention (verb+-ing)
-- [ ] Name is lowercase with hyphens only
-- [ ] Name is ≤64 characters
-- [ ] Description is third-person (no "I can help...")
-- [ ] Description includes what + when components
-- [ ] Description is ≤1024 characters
-- [ ] Structure matches complexity level
-- [ ] At least one agent defined (any source)
-- [ ] Each agent has valid source (builtin/shared)
-- [ ] New shared agents have creation plan
+- [ ] Name follows gerund convention (verb+-ing), lowercase with hyphens, ≤64 characters
+- [ ] Description is third-person (no "I can help..."), includes what + when, ≤1024 characters
+- [ ] Complexity determined and template selected to match
+- [ ] At least one agent defined; each agent has valid source (builtin/shared)
+- [ ] new_shared_agents_to_create populated for new agents
+- [ ] Location set (user or project level)
 
 On failure: Return error with suggestions for fixing validation issues.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Skill name generated in gerund form
-- [ ] Name validated (lowercase, hyphens, ≤64 chars)
-- [ ] Description composed with what + when
-- [ ] Description validated (third-person, ≤1024 chars)
-- [ ] Complexity determined based on agent count
-- [ ] Template selected based on complexity
-- [ ] All agents listed with correct source
-- [ ] new_shared_agents_to_create populated for new agents
-- [ ] Location set (user or project level)
-</completion_checklist>
 
 <examples>
 ### Example 1: Skill with mixed agent sources

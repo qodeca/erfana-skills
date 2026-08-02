@@ -80,15 +80,16 @@ capabilities: [code-search, code-analysis, architecture-review]
 - ❌ **No AskUserQuestion** - Silently filtered; gather requirements before delegation
 - ❌ **Never omit tools** - Omitting inherits ALL tools (security risk)
 
-**Opus 4.7 deprecated APIs (return 400 error):**
+**Deprecated APIs (return 400 error on Opus 4.7+):**
 
-- ❌ **`temperature` / `top_p` / `top_k`** - Per Anthropic migration guide, returns 400 on Opus 4.7
+- ❌ **`temperature` / `top_p` / `top_k`** - Per Anthropic migration guide, returns 400
 - ❌ **`thinking: {type: "enabled", budget_tokens: N}`** - Fixed budgets removed; use `{type: "adaptive"}` + `effort` field
 
-**4.7 prose anti-patterns (silently degrade behavior):**
+**Prose anti-patterns (silently degrade behavior on Claude 5):**
 
-- ❌ "Always verify / double-check before returning" on routine steps — 4.7 self-verifies; scaffolding wastes tokens
-- ❌ Implicit fan-out — 4.7 defaults to sequential; spell out parallel explicitly
+- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — trip the Fable 5 `reasoning_extraction` classifier, silent fallback to Opus 4.8
+- ❌ "Always verify / double-check before returning" on routine steps — the model self-verifies; the mandate causes over-verification
+- ❌ Over-prescribed fan-out — Claude 5 delegates readily; reserve fan-out for genuinely independent, sizeable items
 - ❌ Filter-at-find-time in reviewer agents — enumerate findings first, filter in second pass
 
 ---

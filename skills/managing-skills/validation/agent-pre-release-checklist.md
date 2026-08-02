@@ -2,7 +2,7 @@
 
 Complete this checklist before deploying any new or modified agent.
 
-**Last revised:** 2026-05-09 (v4.2.0 — Section 13 added for Opus 4.7 per-agent frontmatter; 13.3 + 13.4 BLOCKING for deprecated APIs).
+**Last revised:** 2026-08-02 (v6.3.0 — Section 13 recalibrated for the Claude 5 family: effort one step cooler, 13.5 extended with the reasoning-display ban; Section 11 consolidated to a single end-of-work gate. Section 13 originally added 2026-05-09, v4.2.0; 13.3 + 13.4 remain BLOCKING).
 
 ### Section equivalence across the three checklists
 
@@ -16,7 +16,7 @@ Section 13 is agent-specific (effort/model frontmatter, deprecated-API negative 
 | Explicit fan-out | 12.4 | 8.4 | (skills only) |
 | Per-subagent overrides | 12.5 | 8.5 | (skills only) |
 | Find-vs-filter decoupled | 12.6 | 8.6 | (skills only) |
-| Deprecated APIs (4.7 400-error) | 12.7 | 8.7 | 13.3 + 13.4 (BLOCKING) |
+| Deprecated APIs + reasoning-display | 12.7 | 8.7 | 13.3 + 13.4 (BLOCKING); reasoning-display in 13.5 |
 | Effort field present | (n/a) | (n/a) | 13.1 |
 | Model field present | (n/a) | (n/a) | 13.2 |
 
@@ -164,6 +164,8 @@ Section 13 is agent-specific (effort/model frontmatter, deprecated-API negative 
 
 This section is **MANDATORY** for all agents. Agents without critical thinking sections automatically fail.
 
+`<critical_thinking>` blocks are *author-filled design records* (alternatives weighed, edge cases, adaptation criteria) written when the agent file is created. They are static content, not runtime instructions to the model — they are explicitly **exempt** from the reasoning-display ban in item 13.5 / skill checklist item 12.7.
+
 ### Structure
 - [ ] Critical thinking section present in agent
 - [ ] Section appears after Execution Logic, before Constraints
@@ -184,9 +186,12 @@ This section is **MANDATORY** for all agents. Agents without critical thinking s
 - [ ] Specifies escalation criteria
 - [ ] Documents partial success handling
 
-### Completion Checklist (Write-Capable Agents Only)
-- [ ] Completion checklist present if agent has Write/Edit/Bash tools
-- [ ] At least 5 checklist items
+### End-of-work gate (Write-Capable Agents Only)
+
+Agents ship a **single** `<quality_gate>` as their end-of-work gate — do not add a separate `<completion_checklist>` duplicating it (consolidated 2026-08-02, v6.3.0).
+
+- [ ] Single end-of-work `<quality_gate>` present if agent has Write/Edit/Bash tools (no duplicate second gate)
+- [ ] At least 5 gate items
 - [ ] Includes "no partial state" verification
 - [ ] Includes output contract verification
 
@@ -203,29 +208,31 @@ This section is **MANDATORY** for all agents. Agents without critical thinking s
 
 ---
 
-## 13. Opus 4.7 frontmatter and prose (added 2026-05-09 in v4.2.0)
+## 13. Claude 5 frontmatter and prose (added 2026-05-09 in v4.2.0; recalibrated 2026-08-02 in v6.3.0)
 
-Per Anthropic Claude Code 4.7 best practices (https://platform.claude.com/docs/en/build-with-claude/effort, https://platform.claude.com/docs/en/about-claude/models/migration-guide).
+Per Anthropic Claude 5 guidance (https://platform.claude.com/docs/en/build-with-claude/effort, https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5). Claude 5 models at `low`/`medium` effort often match or exceed prior-generation `xhigh` output — the role targets below are one step cooler than the 4.x-era table.
 
 ### Effort and model fields
 
 - [ ] **13.1 `effort` field present** and matches role per Model Selection Guide (templates/shared-agent-template.md):
-  - Orchestrator/file-creator/reviewer roles → `xhigh`
-  - Validator/researcher roles → `medium` or `high`
-  - Format-applier/classifier/scoped one-shot → `low`
+  - Orchestrator/reviewer roles → `high`
+  - File-creator/refactorer/researcher roles → `medium`
+  - Validator/format-applier/classifier/scoped one-shot → `low`
+  - `xhigh`/`max` are reserved for genuinely frontier problems, no longer role defaults
 - [ ] **13.2 `model` field present** and matches role:
   - Orchestrator/file-creator/refactorer/reviewer → `opus`
   - Validator/researcher/format-applier → `sonnet`
   - Classifier/router → `haiku`
+  - Never pin `fable` (alias not universally available; inherit the session model instead)
 
-### Deprecated API negative tests (BLOCKING — runtime 400 errors on Opus 4.7)
+### Deprecated API negative tests (BLOCKING — runtime 400 errors on Opus 4.7+)
 
 - [ ] **13.3 No fixed `budget_tokens`** in agent prompts. Use `thinking: {type: "adaptive"}` + `effort` field.
-- [ ] **13.4 No `temperature` / `top_p` / `top_k`** in agent code references (returns 400 error on Opus 4.7).
+- [ ] **13.4 No `temperature` / `top_p` / `top_k`** in agent code references (returns 400 error on Opus 4.7+).
 
 ### Prose hygiene
 
-- [ ] **13.5 No "always verify/double-check before returning"** scaffolding on routine workflow steps. Keep verify steps only on irreversible actions (file writes, breaking changes).
+- [ ] **13.5 No verify rituals and no reasoning-display instructions:** No "always verify/double-check before returning" scaffolding on routine workflow steps (keep verify steps only on irreversible actions — file writes, breaking changes). No prose instructing the model to surface internal reasoning (`show your reasoning`, `explain your chain of thought`, `thinking.display: visible`) — trips the `reasoning_extraction` classifier on Claude Fable 5, silently downgrading to Opus 4.8. Author-filled `<critical_thinking>` blocks are exempt (static authored content). Requesting evidence in structured output ("cite the file:line that drove the decision") is the safe replacement.
 
 **Section 13 Score:** ____ / 5
 
@@ -248,7 +255,7 @@ Per Anthropic Claude Code 4.7 best practices (https://platform.claude.com/docs/e
 | 10. Testing | 5 | __ / 5 |
 | 11. Critical Thinking | 13 | __ / 13 |
 | 12. CC 2.1 Agent Fields | 6 | __ / 6 |
-| **13. Opus 4.7** | **5** | __ / 5 (BLOCKING for 13.3 + 13.4) |
+| **13. Claude 5** | **5** | __ / 5 (BLOCKING for 13.3 + 13.4) |
 | **Total** | **95** | __ / 95 |
 
 ---
@@ -256,7 +263,7 @@ Per Anthropic Claude Code 4.7 best practices (https://platform.claude.com/docs/e
 ## Pass Criteria
 
 - **Minimum:** All isolation items, SRP verified, critical thinking present, items 13.3 + 13.4 PASS (no deprecated APIs)
-- **Recommended:** 90/95 items passed (~95%), including XML structure and 4.7 patterns
+- **Recommended:** 90/95 items passed (~95%), including XML structure and Claude 5 patterns
 - **Production:** 95/95 items passed
 
 ---
@@ -264,7 +271,7 @@ Per Anthropic Claude Code 4.7 best practices (https://platform.claude.com/docs/e
 ## Automatic Fail Conditions
 
 These items cause automatic failure regardless of total score:
-- [ ] Vague constraints without NEVER/ALWAYS/MUST keywords
+- [ ] Constraints section absent, or constraints so vague they cannot be verified (no concrete boundaries)
 
 ### Other Automatic Fails
 - [ ] Purpose contains "and" (SRP violation)
@@ -274,8 +281,8 @@ These items cause automatic failure regardless of total score:
 - [ ] No quality gate section
 - [ ] Agent attempts to spawn other agents
 - [ ] **No critical thinking section**
-- [ ] Write-capable agent missing completion checklist
-- [ ] **`temperature`, `top_p`, `top_k` declared** (item 13.4 — runtime 400 error on Opus 4.7)
+- [ ] Write-capable agent's quality gate lacks "no partial state" verification
+- [ ] **`temperature`, `top_p`, `top_k` declared** (item 13.4 — runtime 400 error on Opus 4.7+)
 - [ ] **Fixed `thinking: {budget_tokens: N}` declared** (item 13.3 — removed in Opus 4.7; use adaptive thinking + effort)
 
 ---

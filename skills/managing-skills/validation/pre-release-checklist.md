@@ -4,21 +4,21 @@ Complete validation before releasing or deploying a skill.
 
 **Scoring note:** This checklist uses a 70-point scale (62 base + Section 12 weighted at 8.0). Section 12 items support N/A scoring for shape-specific patterns (focused vs orchestrator skills). The security-checklist.md uses a 93-point weighted scale (sections have 1x-3x multipliers). The review-checklist.md uses a 40-point scale for audits. Different scales serve different purposes: pre-release validates completeness, security validates risk, review validates ongoing health.
 
-**Last revised:** 2026-05-09 (v4.2.0 — Section 12 added for Opus 4.7 patterns; existing item 7.4 corrected to Anthropic-documented 1,536-char limit).
+**Last revised:** 2026-08-02 (v6.3.0 — Section 12 revised for the Claude 5 family: 12.4 repurposed as delegation calibration, 12.7 extended with the reasoning-display ban; Section 4 reworded to proportionate progress tracking. Originally added 2026-05-09, v4.2.0).
 
 ### Section equivalence across the three checklists
 
-The same Opus 4.7 patterns are tracked in three places with intentionally-different numbering (each checklist serves a different audience and lifecycle stage). Cross-reference table:
+The same model-pattern set is tracked in three places with intentionally-different numbering (each checklist serves a different audience and lifecycle stage). Cross-reference table:
 
 | Concept | pre-release (this file, skills) | review (skills, ongoing health) | agent-pre-release (agents) |
 |---------|---------------------------------|----------------------------------|------------------------------|
 | Description voice (no first-person) | 12.1 | 8.1 | (skills only) |
 | Description triggers (specific phrases; ≥3 = plugin convention) | 12.2 | 8.2 | (skills only) |
 | Verify scaffolding cleanup | 12.3 | 8.3 | 13.5 |
-| Explicit fan-out | 12.4 | 8.4 | (skills only) |
+| Delegation calibration | 12.4 | 8.4 | (skills only) |
 | Per-subagent overrides | 12.5 | 8.5 | (skills only) |
 | Find-vs-filter decoupled | 12.6 | 8.6 | (skills only) |
-| Deprecated APIs (4.7 400-error) | 12.7 (BLOCKING) | 8.7 (CRITICAL) | 13.3 + 13.4 (BLOCKING) |
+| Deprecated APIs + reasoning-display | 12.7 (BLOCKING) | 8.7 (CRITICAL) | 13.3 + 13.4 (BLOCKING) |
 | Effort field present | (n/a — skills inherit from agents) | (n/a) | 13.1 |
 | Model field present | (n/a) | (n/a) | 13.2 |
 
@@ -35,8 +35,8 @@ The same Opus 4.7 patterns are tracked in three places with intentionally-differ
 - [ ] **1.3 Agents table present:** Agents table exists with Source column
 - [ ] **1.4 Orchestrator pattern:** Skill delegates ALL tasks to agents, does not execute directly
 - [ ] **1.5 Input conditions per step:** EVERY step has input conditions section
-- [ ] **1.6 Pre-step validation per step:** EVERY step verifies conditions before proceeding
-- [ ] **1.7 Post-step validation where required:** Every step that produces irreversible side effects (file write, agent file creation, breaking change) has validation after execution. Exploratory steps (discovery, matching, design) MAY skip if Opus 4.7 self-verification suffices — mirrors SKILL.md Critical Architectural Rule 9 wording.
+- [ ] **1.6 Pre-step validation where it matters:** Steps that consume prior-step outputs or precede irreversible side effects verify input conditions before proceeding; lightweight exploratory steps MAY proceed without ritual pre-checks — mirrors SKILL.md Critical Architectural Rule 8 wording
+- [ ] **1.7 Post-step validation where required:** Every step that produces irreversible side effects (file write, agent file creation, breaking change) has validation after execution. Exploratory steps (discovery, matching, design) MAY skip if the model's self-verification suffices (default on Opus 4.7+ and the Claude 5 family) — mirrors SKILL.md Critical Architectural Rule 9 wording.
 - [ ] **1.8 Quality gates per step:** EVERY step has quality gate with retry logic
 
 **Section 1 Score:** ____ / 8 (ALL must pass)
@@ -69,12 +69,12 @@ The same Opus 4.7 patterns are tracked in three places with intentionally-differ
 
 ---
 
-## Section 4: Todo List Compliance (4 items)
+## Section 4: Progress Tracking (4 items)
 
-- [ ] **4.1 Todo requirement stated:** SKILL.md includes todo list requirements
-- [ ] **4.2 Initial todo creation:** Workflow requires todo list at start
-- [ ] **4.3 Step tracking:** Each step updates todo status
-- [ ] **4.4 MANDATORY language:** Uses "ALWAYS", "MANDATORY", "No exceptions"
+- [ ] **4.1 Progress tracking stated:** SKILL.md states how multi-phase operations surface progress (todo list or equivalent)
+- [ ] **4.2 Tracking for long operations:** Multi-phase operations create a task/todo list at start; short single-pass operations MAY skip
+- [ ] **4.3 Phase-boundary updates:** Progress status is updated at phase boundaries (not mandated per micro-step)
+- [ ] **4.4 Proportionate language:** Tracking guidance avoids blanket "ALWAYS"/"MANDATORY"/"No exceptions" rituals; hard language is reserved for irreversible or destructive steps
 
 **Section 4 Score:** ____ / 4
 
@@ -99,7 +99,7 @@ The same Opus 4.7 patterns are tracked in three places with intentionally-differ
 - [ ] **6.2 Blocking language:** Uses "MUST NOT", "CANNOT", "STOP if"
 - [ ] **6.3 Numbered steps:** All workflow steps are numbered
 - [ ] **6.4 Validation checkboxes:** Steps use checkbox format for conditions
-- [ ] **6.5 Rules repeated:** Critical rules restated in relevant sections
+- [ ] **6.5 Rules stated once:** Critical rules live in one authoritative block at the top, referenced (not duplicated) elsewhere — repetition creates conflicting voices when copies drift
 
 **Section 6 Score:** ____ / 5
 
@@ -150,7 +150,7 @@ The same Opus 4.7 patterns are tracked in three places with intentionally-differ
 - [ ] **10.2 Auto-discovery tested:** Skill triggers from relevant questions
 - [ ] **10.3 Haiku compatible:** Instructions explicit enough for simplest model
 - [ ] **10.4 Quality gates tested:** Intentionally failed steps to verify gates
-- [ ] **10.5 Todo tracking tested:** Verified todos created and updated
+- [ ] **10.5 Progress tracking tested:** Verified multi-phase operations surface progress (todo list or equivalent); short operations verified not to over-track
 
 **Section 10 Score:** ____ / 5
 
@@ -169,19 +169,19 @@ The same Opus 4.7 patterns are tracked in three places with intentionally-differ
 
 ---
 
-## Section 12: Opus 4.7 Patterns (7 items, weighted, sums to 8.0)
+## Section 12: Claude 5 Model Patterns (7 items, weighted, sums to 8.0)
 
-**Added 2026-05-09 (v4.2.0). Soft-blocking initially: Section 1 still ALL-required, but Section 12 single-item failures warn rather than block. Promote to hard-blocking in v4.3.0 once sibling cascade is complete.**
+**Added 2026-05-09 (v4.2.0) as "Opus 4.7 Patterns"; revised 2026-08-02 (v6.3.0) for the Claude 5 family (Opus 5, Fable 5). Soft-blocking: Section 1 still ALL-required, but Section 12 single-item failures warn rather than block (12.7 excepted — see Automatic Fail Conditions).**
 
-**Pattern source mix:** items 12.1-12.5, 12.7 are Anthropic-published guidance (cited inline). Item 12.6 is community-observed and labeled as such — verified against Opus 4.7 migration guide but not authoritatively documented as a pattern.
+**Pattern source mix:** items 12.1-12.5, 12.7 are Anthropic-published guidance (Claude 5 prompting + context-engineering guides, cited inline). Item 12.6 is community-observed on Opus 4.7 and confirmed on Opus 5, but not authoritatively documented as a pattern.
 
 - [ ] **12.1 Description voice:** Third-person, no "I can help" / "You can use" / "I'll help" first-person prose [weight: 1.0, severity: High]
 - [ ] **12.2 Description triggers:** Specific quoted activation phrases in `when_to_use` block (Anthropic requires "specific triggers" — see skill-creator/SKILL.md). **Plugin convention: ≥3 phrases** as an activation-reliability heuristic; failing the count alone is a soft warn, not a release blocker. No filler word repetition ("comprehensive", "detailed", "thorough"). [weight: 1.0, severity: High]
-- [ ] **12.3 Verify scaffolding cleanup:** Skill body does NOT mandate "always verify/double-check before returning" on every step. Per Anthropic 4.7 migration guide: *"If existing prompts have mitigations in these areas, try removing that scaffolding and re-baselining."* [weight: 1.5, severity: High]
-- [ ] **12.4 Explicit fan-out:** Where multiple agents could run in parallel, prose says so explicitly (e.g. "spawn parallel subagents for each item"). 4.7 defaults to sequential delegation; explicit fan-out language is required to enable concurrent Task calls. [weight: 1.0, severity: High]
+- [ ] **12.3 Verify scaffolding cleanup:** Skill body does NOT mandate "always verify/double-check before returning" on every step. Per Anthropic migration guidance: *"If existing prompts have mitigations in these areas, try removing that scaffolding and re-baselining."* Claude 5 models over-verify when told to verify — the mandate now costs tokens without improving quality. [weight: 1.5, severity: High]
+- [ ] **12.4 Delegation calibration:** Delegation prose is proportionate. Parallel fan-out is reserved for genuinely independent, sizeable work items; the skill does NOT mandate spawning subagents for small or inherently sequential steps. Claude 5 models delegate readily by default — over-prescribed fan-out ("always spawn parallel subagents") wastes tokens and fragments context. Explicit fan-out language remains appropriate where items are truly independent (e.g. per-file reviews, per-dimension audits). [weight: 1.0, severity: High]
 - [ ] **12.5 Per-subagent overrides:** Agents table includes Effort and Model columns when overrides apply (or note explicitly that all inherit). [weight: 1.0, severity: Medium]
-- [ ] **12.6 Find-vs-filter decoupled:** Any reviewer-shaped skill enumerates findings before filtering. *Community-observed pattern (not Anthropic-documented):* Opus 4.7 follows "report only critical" instructions literally; mid-severity findings may be silently dropped if filtered at find-time. Decoupling preserves the long tail. **Detection note:** semantic check required, not pure regex — additive curation ("Quick Wins: top 3" after a complete enumeration) PASSES; exclusionary filtering ("Output: top 3 critical only") FAILS. [weight: 1.5, severity: High]
-- [ ] **12.7 No deprecated thinking config:** No `thinking: {type: "enabled", budget_tokens: N}` in agent prompts (use `{type: "adaptive"}` + effort). No `temperature`, `top_p`, `top_k` in agent code (Anthropic-documented 400 error on Opus 4.7 per migration-guide breaking changes). [weight: 1.0, severity: High]
+- [ ] **12.6 Find-vs-filter decoupled:** Any reviewer-shaped skill enumerates findings before filtering. *Community-observed pattern (not Anthropic-documented):* Opus 4.7+ and Claude 5 models follow "report only critical" instructions literally; mid-severity findings may be silently dropped if filtered at find-time. Decoupling preserves the long tail. **Detection note:** semantic check required, not pure regex — additive curation ("Quick Wins: top 3" after a complete enumeration) PASSES; exclusionary filtering ("Output: top 3 critical only") FAILS. [weight: 1.5, severity: High]
+- [ ] **12.7 No deprecated config or reasoning-display instructions:** No `thinking: {type: "enabled", budget_tokens: N}` in agent prompts (use `{type: "adaptive"}` + effort). No `temperature`, `top_p`, `top_k` in agent code (Anthropic-documented 400 error on Opus 4.7+). No prose instructing a model to surface its internal reasoning — phrases like `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, or config like `thinking.display: visible` — because on Claude Fable 5 these trip the `reasoning_extraction` safety classifier and silently fall back to Opus 4.8. Safe alternative: request evidence and justification in the structured *output* ("cite the file and line that drove the decision"). Author-filled `<critical_thinking>` design blocks in agent files are exempt (static authored content, not runtime instructions). [weight: 1.0, severity: High]
 
 ### N/A handling (added per Phase 0 pilot finding 1)
 
@@ -192,10 +192,10 @@ Items 12.4 and 12.5 are valid-but-N/A for focused single-purpose skills (no para
 | 12.1 voice | Always applies |
 | 12.2 triggers | Always applies (Anthropic requires specific triggers; ≥3-phrase count is plugin convention) |
 | 12.3 scaffolding cleanup | Always applies |
-| 12.4 fan-out | N/A if skill is single-threaded by design and has no parallel-eligible step |
+| 12.4 delegation calibration | N/A if skill is single-threaded by design and has no parallel-eligible step (no delegation prose to calibrate) |
 | 12.5 per-subagent overrides | N/A if skill does not delegate to subagents (no Agents table) |
 | 12.6 find-vs-filter | Required for any reviewer-shaped skill; N/A otherwise |
-| 12.7 deprecated APIs | Always applies (negative test) |
+| 12.7 deprecated APIs + reasoning-display | Always applies (negative test) |
 
 **Effective Section 12 max** (sum of applicable items by shape):
 
@@ -217,7 +217,7 @@ ms-validator determines `skill_shape` per its workflow Step 1a decision tree bef
 | 1. Architectural Compliance | | 8 | CRITICAL |
 | 2. Agent Design | | 6 | High |
 | 3. Workflow Validation | | 6 | High |
-| 4. Todo List Compliance | | 4 | High |
+| 4. Progress Tracking | | 4 | High |
 | 5. Requirements Gathering | | 4 | High |
 | 6. Guardrails | | 5 | High |
 | 7. Metadata | | 6 | Medium |
@@ -225,7 +225,7 @@ ms-validator determines `skill_shape` per its workflow Step 1a decision tree bef
 | 9. Content | | 6 | Medium |
 | 10. Testing | | 5 | Medium |
 | 11. CC 2.1 Frontmatter | | 6 | High |
-| 12. Opus 4.7 Patterns | | 4.5/6.0/8.0 (shape-dependent) | High (soft-blocking) |
+| 12. Claude 5 Model Patterns | | 4.5/6.0/8.0 (shape-dependent) | High (soft-blocking) |
 | **TOTAL** | | **66.5/68.0/70.0** | |
 
 ---
@@ -248,11 +248,11 @@ Regardless of total score, **FAIL** if ANY of these:
 - **ANY item in Section 1 (Architectural Compliance) fails**
 - Item 2.1 (Single responsibility) fails
 - Item 3.3 (Blocking conditions) fails
-- Item 4.1 (Todo requirement) fails
+- Item 4.1 (Progress tracking stated) fails
 - **Item 5.1 (Trigger conditions for Q&A) fails**
-- **Item 12.7 (Deprecated APIs) fails** — using deprecated APIs causes runtime 400 errors on Opus 4.7
+- **Item 12.7 (Deprecated APIs + reasoning-display) fails** — deprecated APIs cause runtime 400 errors on Opus 4.7+; reasoning-display instructions silently downgrade Fable 5 sessions to Opus 4.8
 
-**Section 12 soft-blocking caveat (v4.2.0 only):** items 12.1-12.6 individual failures warn but do not block release. The total Section 12 score still contributes to the overall threshold. Promote to hard-blocking in v4.3.0.
+**Section 12 soft-blocking caveat:** items 12.1-12.6 individual failures warn but do not block release. The total Section 12 score still contributes to the overall threshold.
 
 ---
 
@@ -277,8 +277,8 @@ These items MUST pass regardless of total score:
 - 9.1 Workflow present
 - 9.3 Examples included
 
-### Opus 4.7 (added 2026-05-09)
-- 12.7 No deprecated APIs (causes runtime 400 error on Opus 4.7)
+### Claude 5 model patterns (added 2026-05-09, revised 2026-08-02)
+- 12.7 No deprecated APIs (runtime 400 error on Opus 4.7+) and no reasoning-display instructions (silent Fable 5 → Opus 4.8 fallback)
 
 ---
 
@@ -289,20 +289,21 @@ These items MUST pass regardless of total score:
 | No agents table | 1.3 | Add agents table with Source column |
 | Direct execution | 1.4 | Delegate all tasks to agents |
 | Missing input conditions | 1.5 | Add input conditions to every step |
-| No post-step validation | 1.7 | Add validation after every step |
+| No post-step validation | 1.7 | Add validation after irreversible steps (file writes, breaking changes) |
 | No quality gates | 1.8 | Add retry logic to every step |
 | Multi-purpose agents | 2.1 | Split into single-responsibility agents |
-| No todo requirement | 4.1 | Add todo list requirements section |
+| No progress tracking statement | 4.1 | State how multi-phase operations surface progress |
 | No requirements gathering | 5.1 | Add trigger conditions for requirements |
 | Missing guardrails | 6.2 | Add blocking language (MUST NOT, STOP) |
 | Skill references found | 1.1 | Remove all cross-skill references |
 | First-person voice in description | 12.1 | Reword: "I can help" → third-person; "Use when the user..." pattern |
 | <3 trigger phrases (plugin convention) | 12.2 | Add specific activation phrases to `when_to_use` block; aim for ≥3 for activation reliability |
 | Always-verify scaffolding | 12.3 | Strip "verify before returning" rituals; keep only on irreversible steps |
-| Implicit fan-out | 12.4 | Spell out parallel: "spawn parallel subagents — one per item — in same turn" |
+| Over-prescribed fan-out | 12.4 | Reserve parallel fan-out for genuinely independent, sizeable items; drop mandated spawning on small or sequential work |
 | Filter at find-time | 12.6 | Enumerate ALL findings first, filter in second pass |
-| `temperature` / `top_p` / `top_k` | 12.7 | Remove (causes 400 error on Opus 4.7) |
+| `temperature` / `top_p` / `top_k` | 12.7 | Remove (causes 400 error on Opus 4.7+) |
 | Fixed `budget_tokens` | 12.7 | Replace with `{type: "adaptive"}` + `effort` field |
+| Reasoning-display instruction | 12.7 | Remove `show your reasoning` / `display: visible` prose; request evidence in structured output instead |
 
 ---
 

@@ -3,7 +3,7 @@ name: ms-requirements-validator
 description: MUST BE USED to validate gathered requirements for completeness and consistency. Use PROACTIVELY before skill design phase.
 tools: Read, Glob
 model: sonnet
-effort: medium
+effort: low
 capabilities: [requirements-analysis, validation]
 ---
 
@@ -144,23 +144,14 @@ Adapt:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All required fields for the operation are present
-- [ ] No conflicting requirements detected (or conflicts resolved)
-- [ ] Complexity level determined
-- [ ] Summary object is complete and structured
-
-On failure: Return valid=false with detailed missing/conflict information.
-</quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Operation type validated (create/modify/review)
-- [ ] All required fields checked for operation type
-- [ ] Conflicts detected and reported
+- [ ] Operation type validated (create/modify/review); all required fields checked for it
+- [ ] Conflicts detected and reported (or resolved)
 - [ ] Complexity assessed based on scope
 - [ ] Summary object populated per output schema
 - [ ] ready_to_proceed correctly reflects validation state
-</completion_checklist>
+
+On failure: Return valid=false with detailed missing/conflict information.
+</quality_gate>
 
 <examples>
 ### Example 1: Valid CREATE requirements

@@ -3,7 +3,7 @@ name: ms-requirements-gatherer
 description: MUST BE USED to analyze user requests and generate questionnaire for orchestrator. Use PROACTIVELY when creating new skills with unclear requirements.
 tools: Read, Glob
 model: sonnet
-effort: medium
+effort: low
 capabilities: [requirements-analysis, question-generation]
 ---
 
@@ -126,24 +126,14 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All significant gaps have corresponding questions
+- [ ] User request analyzed; all significant gaps have corresponding questions
 - [ ] Each question has 2-4 options with one recommended
-- [ ] Questions are ordered by dependency
-- [ ] Question format matches AskUserQuestion schema
+- [ ] Questions ordered by dependency, formatted for the AskUserQuestion schema
+- [ ] Batches defined if more than 4 questions
 - [ ] Extracted requirements capture what's already clear
 
 On failure: Log which criteria failed, return partial state with issues.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] User request analyzed for clear vs unclear items
-- [ ] Complexity assessed based on gaps
-- [ ] Questions generated for each gap
-- [ ] Each question has recommended option marked
-- [ ] Questions formatted for AskUserQuestion tool
-- [ ] Batches defined if more than 4 questions
-</completion_checklist>
 
 <examples>
 ### Example 1: Create operation - some gaps
