@@ -43,6 +43,26 @@ FIRST_PERSON = re.compile(r"\b(I can help|You can use|I'll help|I will help)\b",
 # Quoted-phrase trigger detection (Section 12.2)
 QUOTED_PHRASE = re.compile(r'"[^"]{3,}"')
 
+# Reasoning-display instructions (Section 12.7 / 13.5, added v6.3.0): prose telling the model to
+# surface its internal reasoning trips the reasoning_extraction classifier on Claude Fable 5 and
+# silently falls back to Opus 4.8. Detection skips rule definitions, detection regexes, and
+# backtick-quoted mentions (same philosophy as DEPRECATED_API below).
+REASONING_DISPLAY = re.compile(r"\b(show|reproduce|surface|display|explain)\s+(your|the|its)\s+(reasoning|thinking|chain of thought)\b|\bdisplay:\s*visible\b", re.IGNORECASE)
+NEGATION_CONTEXT = re.compile(r"❌|⚠|MUST NOT|never|not\s+instruct|no\s+prose|reject|hazard|trip|fallback|ban|exempt|forbidden|anti-pattern|withdrawn|Grep|regex|don't|do not|drop|remove", re.IGNORECASE)
+
+def reasoning_display_hits(body):
+    hits = []
+    for i, line in enumerate(body.splitlines(), 1):
+        if not REASONING_DISPLAY.search(line):
+            continue
+        if NEGATION_CONTEXT.search(line):
+            continue  # rule definition / warning text quoting the phrase
+        outside_code = ''.join(line.split('`')[0::2])  # text outside backtick spans
+        if not REASONING_DISPLAY.search(outside_code):
+            continue  # only matched inside backticks (quoted mention)
+        hits.append((i, line.strip()[:100]))
+    return hits
+
 # Skills: require name + description; description checks include 4.7 patterns (added v4.2.0).
 for fp in sorted(glob.glob('skills/*/SKILL.md')):
     parts = open(fp).read().split('---')
@@ -79,6 +99,11 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
         if len(triggers) < 3:
             print(f'WARN: {fp} when_to_use has {len(triggers)} quoted trigger phrases (recommended ≥3, Section 12.2)')
 
+    # 12.7 (v6.3.0): reasoning-display instructions in skill body
+    skill_body = ''.join(parts[2:])
+    for ln, text in reasoning_display_hits(skill_body):
+        print(f'WARN: {fp} body (line ~{ln}) instructs reasoning display: "{text}" — trips Fable 5 reasoning_extraction classifier, silent Opus 4.8 fallback (Section 12.7)')
+
     print(f'  {fp} → name={m.get("name", "?")}')
 
 # Agents: require name + description; invariant: name == filename basename.
@@ -108,16 +133,24 @@ if os.path.isdir('agents'):
             print(f'FAIL: {fp} name "{m.get("name")}" does not match basename "{expected}"')
             ok = False
 
-        # 4.7 patterns for agents (added v4.2.0; soft warnings)
+        # Model patterns for agents (added v4.2.0; revised v6.3.0; soft warnings)
         # Item 13.1: effort field on ms-* agents
         if expected.startswith('ms-') and 'effort' not in m:
             print(f'WARN: {fp} missing `effort` field (Section 13.1; ms-* agents should declare per Model Selection Guide)')
+
+        # Item 13.2: model field on ms-* agents
+        if expected.startswith('ms-') and 'model' not in m:
+            print(f'WARN: {fp} missing `model` field (Section 13.2; ms-* agents should declare per Model Selection Guide)')
 
         # Item 13.4: deprecated APIs in agent body
         body = ''.join(parts[2:]) if len(parts) >= 3 else ''
         if DEPRECATED_API.search(body):
             match = DEPRECATED_API.search(body)
-            print(f'WARN: {fp} body contains deprecated API reference "{match.group(0)}" — Opus 4.7 returns 400 error (Section 13.3/13.4)')
+            print(f'WARN: {fp} body contains deprecated API reference "{match.group(0)}" — Opus 4.7+ returns 400 error (Section 13.3/13.4)')
+
+        # Item 13.5 (v6.3.0): reasoning-display instructions in agent body
+        for ln, text in reasoning_display_hits(body):
+            print(f'WARN: {fp} body (line ~{ln}) instructs reasoning display: "{text}" — trips Fable 5 reasoning_extraction classifier, silent Opus 4.8 fallback (Section 13.5)')
 
         print(f'  {fp} → name={m.get("name", "?")}')
 
