@@ -197,24 +197,14 @@ If error or needs_user_input, return YAML envelope (per input_contract STOP cond
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Mode validated against input_contract
-- [ ] Required mode-specific inputs present
+- [ ] Mode validated against input_contract and dispatched correctly; required mode-specific inputs present
 - [ ] Every value validated + sanitized + variable-bound (Step 0.5); `--` placed before operands
-- [ ] gh auth verified (Step 0)
-- [ ] gh CLI invoked exactly once (single shell invocation per request — no retries on success)
-- [ ] Output is rendered markdown (not raw JSON)
-- [ ] If empty result, "no issues match" block present (not empty table)
+- [ ] gh auth verified (Step 0); gh CLI invoked exactly once (single shell invocation per request — no retries on success)
+- [ ] No state mutations attempted
+- [ ] Output is rendered, valid markdown (table headers match column count; not raw JSON); if empty result, "no issues match" block present (not empty table)
 
 On failure: return error YAML with specific cause.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Mode dispatched correctly
-- [ ] gh CLI args validated, sanitized, variable-bound, with `--` before operands
-- [ ] Markdown output is valid (table headers match column count)
-- [ ] No state mutations attempted
-</completion_checklist>
 
 <examples>
 ### Example 1: single mode

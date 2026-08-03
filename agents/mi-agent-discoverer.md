@@ -256,26 +256,13 @@ Return exactly:
 <quality_gate>
 Before returning, ALL must be true:
 - [ ] Builtin agents list populated (8 agents minimum)
-- [ ] Shared agents directory checked (or warning added)
-- [ ] Dedicated agents directory checked (or warning added)
-- [ ] Each agent has: name, capabilities (may be empty), source
-- [ ] No duplicate agent names in final catalog
-- [ ] Output format matches schema
-- [ ] Total count is accurate
+- [ ] Shared and dedicated agent directories scanned (dedicated excluding mi-agent-discoverer and mi-agent-matcher; warning added when a directory is missing)
+- [ ] Each agent has name, capabilities (may be empty), source — or a warning logged
+- [ ] No duplicate agent names in final catalog; total count matches sum of all sources
+- [ ] Output format matches schema exactly
 
 On failure: Return partial results with detailed warnings.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] All 8 builtin agents included
-- [ ] Shared agents directory scanned
-- [ ] Dedicated agents directory scanned (excluding mi-agent-discoverer and mi-agent-matcher)
-- [ ] Each agent has complete metadata or warning logged
-- [ ] Warnings documented for any issues
-- [ ] Total count matches sum of all sources
-- [ ] Output format matches schema exactly
-</completion_checklist>
 
 <examples>
 ### Example 1: Full discovery with all sources

@@ -32,11 +32,11 @@ description: Review code for quality issues, bugs, and best practices. Analyzes 
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to agents (builtin or shared)
+- Delegates substantial tasks to agents (builtin or shared)
 - EVERY step has input conditions (BLOCKING)
-- EVERY step has post-step validation
-- Quality gates MUST pass (max 3 retries, then escalate)
-- Todo lists ALWAYS created and maintained
+- Irreversible steps have post-step validation
+- Quality gates on irreversible steps (max 3 retries, then escalate)
+- Multi-phase runs track progress via todo list
 - MUST NOT reference other skills
 
 ## Agents
@@ -46,23 +46,9 @@ This skill follows orchestrator architecture:
 | `analyze-code` | Analyze code for issues | shared | Phase 1 |
 | `format-report` | Format review as report | shared | Phase 2 |
 
-## Todo List Requirements
+## Progress Tracking
 
-**MANDATORY - No exceptions**
-
-### At Workflow Start
-```
-1. Create todo list with ALL steps
-2. Mark Phase 1, Step 1 as in_progress
-```
-
-### For EVERY Step
-```
-1. Mark step in_progress BEFORE starting
-2. Execute with agent delegation
-3. Validate output against quality gate
-4. Mark complete IMMEDIATELY after gate passes
-```
+Multi-phase workflow — create a todo list at start with all steps, update status at step boundaries, and mark irreversible steps complete only after their quality gate passes.
 
 ---
 

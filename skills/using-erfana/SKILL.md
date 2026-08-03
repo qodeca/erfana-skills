@@ -3,7 +3,7 @@ name: using-erfana
 description: Use at the start of any conversation that mentions design (prototypes, slide decks, animations, infographics, design critique) or orchestration tasks (managing agents, articles, GitHub issues, consulting reports, skills, or specifications). Establishes the routing rules across erfana sub-skills.
 when_to_use: |
   Trigger phrases (design): "design", "prototype", "mockup", "slide deck", "presentation", "animation", "motion graphic", "infographic", "data visualization", "design review", "critique", "make me something", "I need help designing".
-  Trigger phrases (orchestration): "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply 4.7 patterns", "update for opus 4.7", "create issue", "implement issue", "review code", "create spec", "write article", "create report".
+  Trigger phrases (orchestration): "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply Claude 5 patterns", "create issue", "implement issue", "review code", "create spec", "write article", "create report".
   Invoke before responding when any of these appear in the user's message.
 ---
 
@@ -32,7 +32,7 @@ This plugin is an open-source (GPL-3.0-only) Claude Code toolkit maintained by Q
 | `erfana:managing-articles` | Writing medium-form articles end-to-end – research, outline, draft, review, publish (bilingual Polish/English support) |
 | `erfana:managing-issues` | Full lifecycle of GitHub issues – create, implement (multi-phase), review code, and display (read-only `show issue #N` / `list issues` / `find issues` modes added v4.2.2) |
 | `erfana:managing-reports` | Creating, reviewing, and validating professional consulting reports (Pyramid Principle, SCQA, Five Cs framework) |
-| `erfana:managing-skills` | Creating, reviewing, modifying, and **modernizing** (apply Opus 4.7 patterns) Claude Code skills following Anthropic best practices |
+| `erfana:managing-skills` | Creating, reviewing, modifying, and **modernizing** (apply Claude 5 patterns) Claude Code skills following Anthropic best practices |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue, T2 spec, T3 lite spec, T4 standard spec) |
 
 The orchestration skills delegate substantive work to agents shipped alongside them in `agents/` (87 shared agents) and per-skill `<skill>/agents/` (skill-internal agents). Discovery is automatic; no manual wiring needed.

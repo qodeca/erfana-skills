@@ -109,17 +109,17 @@ Research agents need search and fetch tools:
 
 ---
 
-## Model and effort selection (Opus 4.7)
+## Model and effort selection (Claude 5 calibration)
 
 Research agents are read-heavy with web/codebase synthesis:
 
 | Complexity | Model | Effort |
 |------------|-------|--------|
 | Quick lookups (single source) | `haiku` | `low` |
-| Most research tasks (3-5 sources) | `sonnet` | `high` |
-| Deep synthesis (10+ sources, contradictions) | `opus` | `xhigh` |
+| Most research tasks (3-5 sources) | `sonnet` | `medium` |
+| Deep synthesis (10+ sources, contradictions) | `opus` | `high` |
 
-**Parallel fan-out (REQUIRED for multi-source research):** Opus 4.7 defaults to sequential subagent delegation. To research independent sources in parallel, **explicitly state in the workflow body**: "Spawn parallel subagents — one per source — in same turn, then synthesize".
+**Parallel fan-out (when sources are genuinely independent and substantial):** researching N independent sources is the canonical case where fan-out pays — each source is a sizeable read with no inter-dependency:
 
 ```markdown
 ### Workflow
@@ -130,7 +130,7 @@ Research agents are read-heavy with web/codebase synthesis:
 4. Synthesize findings, surface conflicts
 ```
 
-**Implicit fan-out anti-pattern**: phrasing like "research all sources" — 4.7 picks one and goes deep. Always spell out the parallel mechanic.
+**Calibration note (Claude 5):** don't mandate fan-out for small lookups — Claude 5 delegates readily by default, and spawning a subagent per trivial source costs more than it saves. Reserve the parallel mechanic for sizeable, independent reads (checklist 12.4).
 
 ---
 

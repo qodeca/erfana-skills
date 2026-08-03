@@ -36,11 +36,11 @@ description: Generate unit tests for code. Analyzes functions, creates test case
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to agents (builtin or shared)
+- Delegates substantial tasks to agents (builtin or shared)
 - EVERY step has input conditions (BLOCKING)
-- EVERY step has post-step validation
-- Quality gates MUST pass (max 3 retries, then escalate)
-- Todo lists ALWAYS created and maintained
+- Irreversible steps (file writes) have post-step validation
+- Quality gates on irreversible steps (max 3 retries, then escalate)
+- Multi-phase runs track progress via todo list
 - MUST NOT reference other skills
 
 ## Agents
@@ -52,24 +52,9 @@ This skill follows orchestrator architecture:
 | `validate-tests` | Validate test quality | shared | Phase 2 |
 | `format-output` | Format final test file | shared | Phase 3 |
 
-## Todo List Requirements
+## Progress Tracking
 
-**MANDATORY - No exceptions**
-
-### At Workflow Start
-```
-1. Create todo list with ALL phases and steps
-2. Include: P1.1, P1.2, P2.1, P2.2, P3.1, P3.2
-3. Mark P1.1 as in_progress
-```
-
-### For EVERY Step
-```
-1. Mark step in_progress BEFORE starting
-2. Execute with agent delegation
-3. Validate output against quality gate
-4. Mark complete IMMEDIATELY after gate passes
-```
+This is a multi-phase workflow — create a todo list at start (P1.1 … P3.2) and update status at phase boundaries. Irreversible steps (the file write in Phase 3) are marked complete only after their quality gate passes.
 
 ---
 
@@ -311,24 +296,24 @@ class TestDivide:
 
 | Aspect | Non-Compliant | Compliant |
 |--------|---------------|-----------|
-| Architecture | Skill executes directly | Skill delegates to agents |
+| Architecture | Skill executes directly | Skill delegates substantial tasks to agents |
 | Agents | None or local to skill | Builtin or shared (`agents/`) |
 | Input Conditions | None or implicit | Explicit with STOP |
-| Validation | Post-execution only | Pre AND post-step |
-| Quality Gates | None | Every step with retry |
-| Todo Lists | Optional | MANDATORY |
-| Guardrails | Suggestions | BLOCKING language |
+| Validation | Blanket per-step rituals (or none) | Targeted: irreversible steps only |
+| Quality Gates | None | Irreversible steps, with retry |
+| Progress Tracking | None | Stated for multi-phase operations |
+| Guardrails | Suggestions | BLOCKING language on irreversible actions |
 | Agent Source | Not specified | Source column required |
 
 ## Common Patterns in All Examples
 
-1. **Critical Rules section** - At top, states architectural requirements
+1. **Critical Rules section** - At top, states architectural requirements (once — referenced, not repeated)
 2. **Agents table with Source** - Lists all agents with source (builtin/shared)
-3. **Todo List Requirements** - MANDATORY section with explicit rules
-4. **Input Conditions** - Every step with checkbox format
-5. **Pre-Step Validation** - "STOP if" language
-6. **Post-Step Validation** - Checkbox criteria
-7. **Quality Gate** - Retry logic (max 3) and escalation
+3. **Progress Tracking** - Stated for multi-phase workflows
+4. **Input Conditions** - Steps that consume prior outputs use checkbox format
+5. **Pre-Step Validation** - "STOP if" language before irreversible actions
+6. **Post-Step Validation** - Checkbox criteria on irreversible steps
+7. **Quality Gate** - Retry logic (max 3) and escalation on irreversible steps
 8. **Anti-Patterns** - Architectural violations listed first
 
 ---

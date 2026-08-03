@@ -26,11 +26,11 @@ description: |
 # argument-hint: <file>   # Hint text for slash command arguments
 # disable-model-invocation: false  # Prevent auto-triggering; slash only
 
-# OPTIONAL: Opus 4.7 effort level (per https://platform.claude.com/docs/en/build-with-claude/effort)
-# effort: xhigh           # Recommended for orchestrator skills (default for Claude Code)
-# effort: high            # Cost-balanced for substantive workflows
-# effort: medium          # Cost-sensitive routine work
+# OPTIONAL: effort level (per https://platform.claude.com/docs/en/build-with-claude/effort; Claude 5 calibration)
+# effort: high            # Recommended for orchestrator skills
+# effort: medium          # Routine workflows
 # effort: low             # Scoped one-shot subagents
+# (omit to inherit session effort; xhigh/max reserved for frontier problems)
 
 # OPTIONAL: Model override
 # model: opus             # Recommended for orchestrators emitting fragile output
@@ -43,13 +43,14 @@ description: |
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to agents (builtin or shared)
+- Delegates substantial tasks to agents (builtin or shared); small glue work runs inline
 - EVERY step has input conditions (BLOCKING)
-- Validates where it matters — after irreversible work (file writes, agent file creation, breaking changes), not after exploratory steps. Opus 4.7 self-verifies; over-validating wastes tokens.
+- Validates where it matters — after irreversible work (file writes, agent file creation, breaking changes), not after exploratory steps. The model self-verifies; over-validating wastes tokens.
 - Quality gates apply on irreversible steps (max 3 retries, then escalate)
-- Todo lists ALWAYS created and maintained
+- Multi-phase operations track progress (todo list or equivalent)
 - MUST NOT reference other skills or external agents
-- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7 returns 400 error)
+- MUST NOT use `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models
+- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier
 
 ## Requirements Gathering
 
@@ -67,21 +68,17 @@ When per-subagent overrides apply, include Effort and Model columns. Drop them w
 
 | Agent | Purpose | Source | Effort | Model | Used In |
 |-------|---------|--------|--------|-------|---------|
-| `[agent-1]` | [Single responsibility] | builtin/shared | xhigh | opus | Step 1 |
-| `[agent-2]` | [Single responsibility] | builtin/shared | medium | sonnet | Step 2 |
+| `[agent-1]` | [Single responsibility] | builtin/shared | high | opus | Step 1 |
+| `[agent-2]` | [Single responsibility] | builtin/shared | low | sonnet | Step 2 |
 
 **Effort/Model selection** (per `templates/shared-agent-template.md` Model Selection Guide):
-- Orchestrator/file-creator/refactorer/reviewer roles → `opus`, `xhigh`
-- Validator/researcher → `sonnet`, `medium` or `high`
-- Format-applier/classifier → `sonnet`/`haiku`, `low`
+- Orchestrator/reviewer roles → `opus`, `high`
+- File-creator/refactorer/researcher → `opus` or `sonnet`, `medium`
+- Validator/format-applier/classifier → `sonnet`/`haiku`, `low`
 
-## Todo List Requirements
+## Progress Tracking
 
-ALWAYS at workflow start:
-1. Create todo list with ALL steps
-2. Mark first step as in_progress
-
-Update todo IMMEDIATELY after each step.
+Multi-phase operations create a todo list at start with the operation's steps and update status at step boundaries. Short single-pass operations may skip tracking.
 
 ---
 
@@ -175,7 +172,7 @@ If ANY validation fails: retry (max 3) or escalate.
 
 ### Parallel fan-out (when applicable)
 
-When a step processes independent items, **spawn parallel subagents — one per item — in the same turn**, not sequentially. Opus 4.7 defaults to sequential delegation; explicit fan-out language is required.
+When a step processes genuinely independent, sizeable items (per-file reviews, per-dimension audits), **spawn parallel subagents — one per item — in the same turn**. Reserve this for work where each item is substantial: Claude 5 models delegate readily by default, and mandated fan-out on small or sequential steps wastes tokens and fragments context (checklist 12.4).
 
 Example wording for the workflow step:
 
@@ -188,7 +185,7 @@ If this skill is reviewer-shaped (audits, validates, scores existing artifacts):
 1. **Enumerate all findings first** — every issue, every severity, every category. Do not apply severity filters at find-time.
 2. **Filter into pass/warn/fail buckets in a second pass** using documented thresholds.
 
-Why: community-observed pattern — Opus 4.7 follows "report only critical issues" instructions literally and may silently drop mid-severity findings if filtered at discovery. Decoupling preserves the long tail.
+Why: community-observed pattern — Opus 4.7+ and Claude 5 models follow "report only critical issues" instructions literally and may silently drop mid-severity findings if filtered at discovery. Decoupling preserves the long tail.
 
 **Additive curation is OK** ("Quick Wins: top 3" presented alongside the full Fix list). **Exclusionary filtering is the anti-pattern** ("Output: only critical issues").
 
@@ -235,11 +232,12 @@ Why: community-observed pattern — Opus 4.7 follows "report only critical issue
 - ❌ Skipping input condition validation on irreversible steps
 - ❌ No quality gates on irreversible steps
 
-### Opus 4.7 (CRITICAL)
-- ❌ Using `temperature` / `top_p` / `top_k` (returns 400 error on Opus 4.7)
-- ❌ Using fixed `thinking: {budget_tokens: N}` (removed; use `{type: adaptive}` + `effort`)
-- ❌ "Always verify before returning" prose on routine steps (4.7 self-verifies)
-- ❌ Implicit fan-out ("review all files") — spell out parallel explicitly
+### Model patterns (CRITICAL)
+- ❌ Using `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later)
+- ❌ Using fixed `thinking: {budget_tokens: N}` on Claude 5 models (use `{type: adaptive}` + `effort`; Haiku 4.5 exempt)
+- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — Claude 5 `reasoning_extraction` refusal classifier
+- ❌ "Always verify before returning" prose on routine steps (the model self-verifies)
+- ❌ Over-prescribed fan-out — mandated subagent spawning on small/sequential work
 - ❌ Filter-at-find-time ("report only critical") in reviewer skills — enumerate first
 
 ### Workflow
@@ -254,8 +252,8 @@ Why: community-observed pattern — Opus 4.7 follows "report only critical issue
 |--------|-------|
 | Agents | [List agent names] |
 | Steps | [Number of steps] |
-| Max retries | 3 per step |
-| Quality gates | After every step |
+| Max retries | 3 per irreversible step |
+| Quality gates | On irreversible steps |
 ```
 
 ---
@@ -265,7 +263,7 @@ Why: community-observed pattern — Opus 4.7 follows "report only critical issue
 ### Required Sections
 1. **Critical Rules** - Architectural compliance
 2. **Dedicated Agents** - List all agents
-3. **Todo List Requirements** - Progress tracking
+3. **Progress Tracking** - How multi-phase operations surface progress
 4. **When This Skill Applies** - Discovery triggers
 5. **Workflow** - Steps with validation
 6. **Examples** - At least 2 with input/output
@@ -290,7 +288,7 @@ Delegate to agent
 Retry (max 3) or escalate
 ```
 
-**Exploratory steps** (discovery, matching, design, research — operations Opus 4.7 self-verifies and that produce findings, not state):
+**Exploratory steps** (discovery, matching, design, research — operations the model self-verifies and that produce findings, not state):
 ```
 #### Input Conditions
 [Checkboxes - BLOCKING]
@@ -302,7 +300,7 @@ Delegate to agent; agent returns findings
 Orchestrator decides whether to retry based on findings quality.
 ```
 
-The split avoids token-wasting verify ceremony on steps that don't need it (per Anthropic's Opus 4.7 migration guide).
+The split avoids token-wasting verify ceremony on steps that don't need it (per Anthropic's migration guidance; on Claude 5, verify mandates cause over-verification).
 
 ### File References
 For skill templates and guides, use relative paths with forward slashes:

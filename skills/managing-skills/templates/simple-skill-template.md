@@ -17,12 +17,13 @@ description: |
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to agents (builtin or shared)
+- Delegates substantial tasks to agents (builtin or shared); small glue work runs inline
 - EVERY step has input conditions (BLOCKING)
 - Validates post-step on irreversible work only (file writes, breaking changes)
 - Quality gates apply to irreversible steps (max 3 retries)
-- Todo lists ALWAYS required
-- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7 returns 400)
+- Multi-step runs track progress (todo list or equivalent)
+- MUST NOT use `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models
+- MUST NOT instruct the model to surface its reasoning (Claude 5 `reasoning_extraction` refusal classifier)
 
 ## Requirements Gathering
 
@@ -34,12 +35,11 @@ Optional Effort and Model columns — include when overrides apply, omit if all 
 
 | Agent | Purpose | Source | Effort | Model | Used In |
 |-------|---------|--------|--------|-------|---------|
-| `[agent-name]` | [Single responsibility] | builtin/shared | medium | sonnet | Step 1 |
+| `[agent-name]` | [Single responsibility] | builtin/shared | low | sonnet | Step 1 |
 
-## Todo List Requirements
+## Progress Tracking
 
-ALWAYS at start: Create todo list, mark first step in_progress.
-Update IMMEDIATELY after each step.
+Multi-step runs create a todo list at start and update status at step boundaries.
 
 ---
 
@@ -126,9 +126,9 @@ Use for skills that:
 **Note:** Even simple skills MUST:
 - Use agents from builtin or shared sources only
 - Include input conditions per step
-- Include post-step validation
-- Use quality gates
-- Create todo lists
+- Include post-step validation on irreversible steps
+- Use quality gates on irreversible steps
+- Track progress on multi-step runs
 - Include Source column in agents table
 
 ## Example: Completed Simple Skill
@@ -155,9 +155,9 @@ This skill follows orchestrator architecture:
 |-------|---------|--------|---------|
 | `format-json` | Format JSON with consistent indentation | shared | Step 1, 2 |
 
-## Todo List Requirements
+## Progress Tracking
 
-ALWAYS create todo list at start. Update after each step.
+Create a todo list at start of multi-step runs; update at step boundaries.
 
 ---
 
@@ -236,6 +236,6 @@ If fails: retry (max 3) or escalate.
 - ❌ Putting agents in skill directories (use shared: agents/)
 - ❌ Formatting without validation
 - ❌ No quality gate on output
-- ❌ Missing todo tracking
+- ❌ No progress tracking on multi-step runs
 - ❌ Missing Source column in agents table
 ```

@@ -160,27 +160,14 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All significant gaps have corresponding questions
-- [ ] Each question has 2-4 options with one recommended
-- [ ] Questions are ordered by dependency
-- [ ] Question format matches AskUserQuestion schema
+- [ ] User request analyzed (clear vs unclear items); operation type identified (CREATE or UPDATE); complexity assessed
+- [ ] All significant gaps have corresponding questions, ordered by dependency
+- [ ] Each question has 2-4 options with one recommended, formatted for the AskUserQuestion schema; batches defined if more than 4 questions
 - [ ] Extracted requirements capture what's already clear
-- [ ] Model recommendations justified (haiku default, sonnet/opus for complexity)
+- [ ] Model recommendations justified with cost/performance rationale (haiku default, sonnet/opus for complexity)
 
 On failure: Log which criteria failed, return partial state with issues.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] User request analyzed for clear vs unclear items
-- [ ] Operation type identified (CREATE or UPDATE)
-- [ ] Complexity assessed based on gaps
-- [ ] Questions generated for each gap
-- [ ] Each question has recommended option marked
-- [ ] Questions formatted for AskUserQuestion tool
-- [ ] Batches defined if more than 4 questions
-- [ ] Model selection questions include cost/performance rationale
-</completion_checklist>
 
 <examples>
 ### Example 1: CREATE operation - some gaps

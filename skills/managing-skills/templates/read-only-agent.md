@@ -109,15 +109,15 @@ Read-only agents use minimal tools:
 
 ---
 
-## Model and effort selection (Opus 4.7)
+## Model and effort selection (Claude 5 calibration)
 
 | Agent purpose | Model | Effort |
 |---------------|-------|--------|
-| Code reviewer / auditor (deep analysis) | `opus` | `xhigh` |
-| Validator (checklist scan) | `sonnet` | `medium` |
-| Codebase explorer (fast searches) | `sonnet` or `haiku` | `low` or `medium` |
+| Code reviewer / auditor (deep analysis) | `opus` | `high` |
+| Validator (checklist scan) | `sonnet` | `low` |
+| Codebase explorer (fast searches) | `sonnet` or `haiku` | `low` |
 
-**Find-vs-filter pattern (REQUIRED for reviewer-shaped read-only agents):** enumerate ALL findings first, then categorize/filter in a second pass. Opus 4.7 follows "report only critical issues" instructions literally and may silently drop mid-severity findings if filtered at discovery.
+**Find-vs-filter pattern (REQUIRED for reviewer-shaped read-only agents):** enumerate ALL findings first, then categorize/filter in a second pass. Opus 4.7+ and Claude 5 models follow "report only critical issues" instructions literally and may silently drop mid-severity findings if filtered at discovery.
 
 ```markdown
 Step 1: Find all findings (no severity filter at this step)
@@ -125,7 +125,7 @@ Step 2: Categorize each finding (critical / high / medium / low)
 Step 3: Output ALL findings, ordered by severity
 ```
 
-**Anti-pattern**: skipping Step 1 and going straight to "find only critical issues" — this is filter-at-find-time and 4.7 may silently drop valid findings.
+**Anti-pattern**: skipping Step 1 and going straight to "find only critical issues" — this is filter-at-find-time and the model may silently drop valid findings.
 
 ---
 
