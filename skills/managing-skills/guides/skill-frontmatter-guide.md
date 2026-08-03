@@ -49,7 +49,7 @@ description: |
 - **Values:** `opus`, `sonnet`, `haiku`
 - **Default:** Inherits user's current model
 - **When to use:** When skill requires specific capability level
-- **Model IDs:** `claude-opus-4-7` (primary), `claude-opus-4-6` (legacy; used by `/fast`), `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`
+- **Model IDs:** `claude-opus-5` (primary), `claude-fable-5` (session-level only — never pin), `claude-opus-4-8` (legacy), `claude-sonnet-5`, `claude-haiku-4-5-20251001`. Prefer the aliases above — they resolve to the current generation automatically.
 - **Example:** `model: opus`
 
 ---

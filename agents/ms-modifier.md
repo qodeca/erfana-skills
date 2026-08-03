@@ -3,7 +3,7 @@ name: ms-modifier
 description: MUST BE USED to apply modifications to existing skill safely with backup and validation. Use when updating, fixing, refactoring, or modernizing skills.
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: opus
-effort: xhigh
+effort: medium
 capabilities: [file-editing, validation, backup-management]
 ---
 
@@ -22,7 +22,7 @@ Apply modifications to existing skill safely with backup and validation.
 |-------|------|----------|------------|
 | skill_path | string | Yes | Path to skill directory to modify |
 | changes | array | Yes | List of changes to apply |
-| change_type | string | Yes | bug-fix / enhancement / refactor / breaking / agent-swap / **modernize** (added v4.2.0 for Opus 4.7 pattern application) |
+| change_type | string | Yes | bug-fix / enhancement / refactor / breaking / agent-swap / **modernize** (added v4.2.0; applies the current model-pattern set per `guides/claude-5-patterns.md`) |
 | skip_backup | boolean | No | Skip backup (default: false, NOT recommended) |
 | agent_changes | object | No | Agent source changes (swap shared↔builtin) |
 | modernization_findings | array | No | Required when change_type=modernize. Output of ms-reviewer modernization_findings array. Drives per-pattern preview-diff. |
@@ -72,7 +72,7 @@ Apply modifications to existing skill safely with backup and validation.
 
    **For change_type=modernize:** read `guides/skill-modernization-guide.md` first. For each modernization_findings entry:
    - Generate per-pattern diff preview
-   - Return `needs_user_input` with the diff and the rationale (per Anthropic 4.7 migration guide where applicable)
+   - Return `needs_user_input` with the diff and the rationale (per Anthropic migration guidance where applicable)
    - On user approval, apply the diff
    - Track applied vs declined per pattern in output
    Modernization is additive — no existing field is removed without explicit user approval.
@@ -85,7 +85,7 @@ Apply modifications to existing skill safely with backup and validation.
    **For change_type=modernize: confirm Section 12 score IMPROVED (or stayed same; never regressed)**
 
 7. Handle validation failure
-   If score dropped significantly OR critical items failed (Section 1, Section 12.7 deprecated APIs):
+   If score dropped significantly OR critical items failed (Section 1, Section 12.7 deprecated APIs / reasoning-display):
    `Bash cp -r skill-name.backup.* skill-name`
    Report rollback status
 
@@ -210,29 +210,14 @@ Adapt:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Backup created (unless explicitly skipped)
-- [ ] All specified changes applied
-- [ ] Agent source changes applied correctly (if any)
-- [ ] All agent references are valid
-- [ ] Post-change validation passes
-- [ ] No unintended modifications
-- [ ] Skill still functional
+- [ ] Backup created (or explicitly skipped with warning); rollback path confirmed available
+- [ ] All specified changes applied; no unintended modifications
+- [ ] Agent swaps completed with reference updates; Agents table Source column updated (if agent changes)
+- [ ] Post-modification validation passes; no critical regressions (score drop <10 points)
+- [ ] All modified files documented in output; change type correctly reflected
 
 On failure: Attempt automatic rollback, return error with details.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Backup created successfully (or explicitly skipped with warning)
-- [ ] All specified changes applied
-- [ ] Agent swaps completed with reference updates
-- [ ] Agents table Source column updated (if agent changes)
-- [ ] Post-modification validation completed
-- [ ] No critical regressions (score drop <10 points)
-- [ ] Rollback path confirmed available
-- [ ] All modified files documented in output
-- [ ] Change type correctly reflected in modifications
-</completion_checklist>
 
 <examples>
 ### Example 1: Simple bug fix

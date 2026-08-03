@@ -1,10 +1,16 @@
 ---
 name: managing-skills
-description: Create, review, modify, and modernize Claude Code skills following Anthropic best practices. Full lifecycle management including creation workflows, validation, updates, and Opus 4.7 pattern application. Use when creating new skills, reviewing existing skills, updating skill content, applying 4.7 patterns, or asking "how do I create/manage a skill".
+description: Create, review, modify, and modernize Claude Code skills following Anthropic best practices. Full lifecycle management including creation workflows, validation, updates, and Claude 5 pattern application. Use when creating new skills, reviewing existing skills, updating skill content, applying Claude 5 patterns, or asking "how do I create/manage a skill".
 when_to_use: |
-  Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply 4.7 patterns", "update for opus 4.7", "skill lifecycle".
+  Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns", "Claude 5 refresh", "skill lifecycle".
 model: opus
-effort: xhigh
+effort: high
+hooks:
+  Stop:
+    - hooks:
+        - type: command
+          command: bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" ../skills/managing-skills/hooks/ms-grill-guard
+          timeout: 5
 ---
 
 # Managing Skills
@@ -18,9 +24,9 @@ Comprehensive lifecycle management for Claude Code skills: creation, review, and
 - **Create:** Run Steps 0→1→1.5→2→3→4→5 (see `guides/creating-skills.md`)
 - **Review:** Delegate to `ms-reviewer` agent
 - **Modify:** Delegate to `ms-modifier` agent
-- **Modernize** (added v4.2.0): Apply Opus 4.7 patterns to existing skill — `ms-reviewer` (deep) → user approves → `ms-modifier` (`change_type: modernize`) → `ms-validator`. See `guides/skill-modernization-guide.md`.
+- **Modernize** (added v4.2.0): Apply Claude 5 patterns (`guides/claude-5-patterns.md`) to existing skill — `ms-reviewer` (deep) → user approves → `ms-modifier` (`change_type: modernize`) → `ms-validator`. See `guides/skill-modernization-guide.md`.
 - **Agents:** Only use builtin (Explore, Plan) or shared (agents/)
-- **Key rules:** Orchestrate don't execute, validate where it matters, use todos
+- **Key rules:** Orchestrate don't execute, validate where it matters, track progress on multi-phase operations
 - **Pass threshold:** Pre-release ≥66/70 (orchestrator), ≥64/68 (focused-reviewer), or ≥63/66.5 (focused). Security ≥87/93
 
 ---
@@ -33,14 +39,14 @@ Comprehensive lifecycle management for Claude Code skills: creation, review, and
 2. Skills MAY use agents from two sources: **builtin** or **shared**
 3. Skills SHOULD prefer builtin agents when match ≥80% (user confirms)
 4. Skill MUST act as orchestrator, NOT executor
-5. ALL tasks MUST be delegated to agents (any source)
+5. Substantial tasks (code reading, file writing, research, analysis) are delegated to agents — delegation preserves orchestrator context and enables parallelism. Small glue work (assembling a path, relaying an answer, a one-line status decision) runs inline; spawning an agent for it costs more than it saves (checklist 12.4)
 6. Each agent MUST follow Single Responsibility Principle
 7. Skill MUST have clearly defined workflow with logical steps
-8. EVERY step MUST have input conditions verified BEFORE proceeding
-9. EVERY step that produces irreversible side effects (file write, agent file creation, breaking change) MUST have post-step validation. Exploratory steps (discovery, matching, design) MAY skip validation if Opus 4.7 self-verification is sufficient — strip "verify before returning" rituals on routine work per Anthropic's 4.7 migration guide.
+8. Steps that consume prior-step outputs or precede irreversible side effects MUST verify their input conditions before proceeding; lightweight exploratory steps may proceed without ritual pre-checks
+9. EVERY step that produces irreversible side effects (file write, agent file creation, breaking change) MUST have post-step validation. Exploratory steps (discovery, matching, design) MAY skip validation — the model self-verifies routine work (default on Opus 4.7+ and the Claude 5 family); strip "verify before returning" rituals per Anthropic's migration guidance.
 10. Steps with irreversible side effects retry up to 3 times on validation failure. Exploratory steps return findings on first attempt; orchestrator decides retry.
 11. Outputs from irreversible steps go through quality gates
-12. Skill MUST ALWAYS create todo lists for progress tracking
+12. Multi-phase operations track progress (todo list or equivalent), updated at phase boundaries; short single-pass operations may skip tracking
 13. **ALL shared agents SHOULD prefer XML structure** (see `templates/agent-template.md`)
 14. **Agents table MUST include Source column** (builtin/shared)
 15. **ALL agents MUST declare `capabilities` in frontmatter** (⛔ BLOCKING - required for discovery)
@@ -48,8 +54,9 @@ Comprehensive lifecycle management for Claude Code skills: creation, review, and
 17. **Skills MUST define Q&A requirements gathering** (⛔ BLOCKING - see `guides/qa-protocol.md`)
 18. **Spawned agents CANNOT spawn other agents** (Task tool unavailable to subagents – prevents infinite nesting)
 19. **Skills SHOULD comply with the Agent Skills open standard** (agentskills.io) – advisory, not blocking. Key conventions: standard frontmatter schema (`name`, `description`, `context`, `model`, `allowed-tools`), `--add-dir` auto-loading, and portable skill definitions
-20. **Skills MUST NOT use deprecated APIs** (added v4.2.0): no `temperature` / `top_p` / `top_k` / fixed `thinking: {budget_tokens: N}` — Opus 4.7 returns 400 error. Use `{type: "adaptive"}` + `effort` field instead. ⛔ BLOCKING (Section 12.7 of pre-release-checklist).
-21. **Skill descriptions follow 4.7 patterns** (added v4.2.0): third-person voice (no "I can help" / "You can use") — **Anthropic-required** per skill-creator/SKILL.md (pre-release-checklist item 12.1); specific quoted activation phrases in `when_to_use` — Anthropic requires "specific triggers"; **≥3 phrases is plugin convention** for activation reliability (item 12.2); no filler word repetition ("comprehensive"/"thorough"/"detailed"); combined description+when_to_use ≤1,536 chars (Anthropic-documented Claude Code truncation, item 7.4).
+20. **Skills MUST NOT use deprecated APIs** (added v4.2.0): no `temperature` / `top_p` / `top_k` (400 error on Claude Opus 4.7 and later, per Anthropic's parameter-deprecation table) and no fixed `thinking: {budget_tokens: N}` on Claude 5 models (unsupported on Fable 5 / Opus 5 / Sonnet 5; Haiku 4.5 still supports it). Use `{type: "adaptive"}` + `effort` field instead. ⛔ BLOCKING (Section 12.7 of pre-release-checklist).
+21. **Skill descriptions follow the model-pattern rules** (added v4.2.0): third-person voice (no "I can help" / "You can use") — **Anthropic-required** per skill-creator/SKILL.md (pre-release-checklist item 12.1); specific quoted activation phrases in `when_to_use` — Anthropic requires "specific triggers"; **≥3 phrases is plugin convention** for activation reliability (item 12.2); no filler word repetition ("comprehensive"/"thorough"/"detailed"); combined description+when_to_use ≤1,536 chars (Anthropic-documented Claude Code truncation, item 7.4).
+22. **Skills and agent prose MUST NOT instruct a model to surface its internal reasoning** (added v6.3.0): no `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, no `thinking.display: visible` config — these trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (`stop_reason: "refusal"`; where fallback is configured, requests re-route to Claude Opus 4.8). Request evidence in structured output instead. Author-filled `<critical_thinking>` blocks are exempt. ⛔ BLOCKING (Section 12.7; see `guides/claude-5-patterns.md` §3).
 
 ---
 
@@ -92,6 +99,7 @@ Claude Code 2.1 introduces new frontmatter fields and features for skills:
 | User questions (AskUserQuestion) | ✅ ONLY | ❌ CANNOT |
 | Todo management (TodoWrite) | ✅ OK | ❌ N/A |
 | Routing decisions | ✅ OK | ❌ N/A |
+| Small glue work (assemble a path, relay an answer) | ✅ OK (Rule 5) | ❌ overhead |
 
 ### User input pattern (agents cannot ask directly)
 
@@ -127,28 +135,40 @@ When agents need user input, they return `needs_user_input`:
 
 ## Agents
 
-Per-subagent Effort and Model overrides (added v4.2.0 per Opus 4.7 best practices). Routine validators on `sonnet`+`medium` are ~10x cheaper than orchestrators on `opus`+`xhigh`; the savings compound across long workflows.
+Per-subagent Effort and Model overrides (added v4.2.0; recalibrated v6.3.0 per Claude 5 guidance — one step cooler, see `guides/claude-5-patterns.md` §4). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
 
 | Agent | Purpose | Source | Effort | Model | Used In |
 |-------|---------|--------|--------|-------|---------|
-| `ms-requirements-gatherer` | Gather business requirements via questionnaire | shared | medium | sonnet | Create: Step 0 |
-| `ms-requirements-validator` | Validate requirements completeness and consistency | shared | medium | sonnet | Create: Step 1 |
-| `ms-agent-discoverer` | Discover available builtin/shared agents | shared | low | sonnet | Create: Step 1.5 |
-| `ms-agent-matcher` | Match requirements to available agents | shared | medium | sonnet | Create: Step 1.5 |
-| `ms-designer` | Design skill structure based on requirements | shared | high | opus | Create: Step 2 |
-| `ms-creator` | Create skill files following templates | shared | xhigh | opus | Create: Step 3 |
-| `ms-example-adder` | Add usage examples to skill | shared | low | sonnet | Create: Step 4 |
-| `ms-validator` | Validate skill against checklists | shared | medium | sonnet | Create: Step 5, Modernize: Step 4 |
-| `ms-reviewer` | Audit existing skill for quality | shared | xhigh | opus | Review, Modernize: Step 1 |
-| `ms-modifier` | Apply modifications safely with backup | shared | xhigh | opus | Modify, Modernize: Step 3 |
+| `grill-planner` | Plan coverage-map requirements interview | shared | medium | sonnet | Create: Step 0; Modify/Review/Modernize gate |
+| `ms-requirements-validator` | Validate requirements completeness and consistency | shared | low | sonnet | Create: Step 1 |
+| `ms-agent-discoverer` | Discover available builtin/shared agents | shared | medium | sonnet | Create: Step 1.5 |
+| `ms-agent-matcher` | Match requirements to available agents | shared | low | sonnet | Create: Step 1.5 |
+| `ms-designer` | Design skill structure based on requirements | shared | medium | opus | Create: Step 2 |
+| `ms-creator` | Create skill files following templates | shared | medium | opus | Create: Step 3 |
+| `ms-example-adder` | Add usage examples to skill | shared | medium | opus | Create: Step 4 |
+| `ms-validator` | Validate skill against checklists | shared | low | sonnet | Create: Step 5, Modernize: Step 4 |
+| `ms-reviewer` | Audit existing skill for quality | shared | high | opus | Review, Modernize: Step 1 |
+| `ms-modifier` | Apply modifications safely with backup | shared | medium | opus | Modify, Modernize: Step 3 |
 
 ---
 
-## Todo List Requirements
+## Requirements interrogation
 
-**MANDATORY - No exceptions.**
+Requirements enter every operation through a coverage-map interview. The loop protocol is static prose in `references/interview-protocol.md`; the dimensions live in `references/interview-taxonomy.md`; `grill-planner` returns the per-run data (map, seeds, question bank, budget).
 
-### At Operation Start
+- **Create** always interviews: delegate to `grill-planner` (`operation: "create"`, `taxonomy_path: references/interview-taxonomy.md`), then run the returned plan per the protocol.
+- **Modify / Modernize** gate first via `AskUserQuestion`: "Do you have particular ideas or reasons behind this change?" — yes → grill-planner with the matching operation; no → proceed on the existing path.
+- **Review** gates with: "Any session observations, friction points, or particular ideas to focus this review?" — any yes (friction alone counts) → grill-planner (`operation: "review"`). The `usage_feedback` answer reaches `ms-reviewer` either way.
+- After the interview, merge `seed_requirements` with answers by `maps_to` (orchestrator glue work, Rule 5) and pass the merged object onward. The open-interview marker `<!-- erfana:ms-grill-open -->` is governed by the protocol's Sentinel section — quoted here for symmetry, emitted only inside open interviews.
+- Non-interactive runs: pass `non_interactive: true` only on an explicit signal (request says "non-interactive" / "no questions", a declared-non-interactive command context, or a failed AskUserQuestion call). Default is interactive — never guessed. On `non_interactive_fail`, stop and name the `missing` fields.
+- grill-planner `needs_user_input` (e.g. `ambiguous_target`) follows the standard pattern in "User input pattern" above.
+
+---
+
+## Progress Tracking
+
+All four operations (Create, Review, Modify, Modernize) are multi-phase — create a todo list at operation start with the operation's steps, and update status at step boundaries (Rule 12):
+
 ```
 TodoWrite([
   {content: "Step description", status: "in_progress", activeForm: "Doing step"},
@@ -157,20 +177,17 @@ TodoWrite([
 ])
 ```
 
-### For EVERY Step
-1. Mark step `in_progress` BEFORE starting
-2. Execute step with agent delegation
-3. Mark step `completed` IMMEDIATELY after quality gate passes
+Mark irreversible steps `completed` only after their quality gate passes.
 
 ---
 
 ## Operation: Create
 
-**MANDATORY: Create todo list with Steps 0, 1, 1.5, 2, 3, 4, 5 before starting.**
+Multi-phase operation — create a todo list with Steps 0, 1, 1.5, 2, 3, 4, 5 (Rule 12).
 
 | Step | Agent | Purpose |
 |------|-------|---------|
-| 0 | `ms-requirements-gatherer` | Gather requirements (orchestrator asks returned questions) |
+| 0 | `grill-planner` | Plan the requirements interview; orchestrator runs it per `references/interview-protocol.md` and merges answers by `maps_to` |
 | 1 | `ms-requirements-validator` | Validate completeness |
 | 1.5 | `ms-agent-discoverer` + `ms-agent-matcher` | Find and match agents (parallel — see fan-out note below) |
 | 2 | `ms-designer` | Design skill structure |
@@ -178,7 +195,7 @@ TodoWrite([
 | 4 | `ms-example-adder` | Add usage examples |
 | 5 | `ms-validator` | Validate against shape-aware threshold (orchestrator ≥66/70, focused-reviewer ≥64/68, focused ≥63/66.5; ms-validator Step 1a derives shape) + security ≥87/93 + Section 12.7 deprecated APIs MUST pass (BLOCKING) |
 
-**Step 1.5 fan-out (added v4.2.0):** ms-agent-discoverer and ms-agent-matcher run in parallel — orchestrator spawns both as concurrent Task calls in the same turn, then waits on both. They have no inter-dependencies. Opus 4.7 defaults to sequential delegation; explicit fan-out is required to enable concurrency.
+**Step 1.5 fan-out (added v4.2.0; recalibrated v6.3.0):** ms-agent-discoverer and ms-agent-matcher run in parallel — orchestrator spawns both as concurrent Task calls in the same turn, then waits on both. They have no inter-dependencies and each is a substantial read, so this fan-out is genuinely independent, sizeable work (checklist 12.4).
 
 **Handle needs_user_input:** When any agent returns `status: "needs_user_input"`, orchestrator uses `AskUserQuestion` with the returned question, then passes the answer back.
 
@@ -188,14 +205,11 @@ TodoWrite([
 
 ## Operation: Review
 
-**MANDATORY: Create todo list with Review steps before starting.**
+Multi-phase operation — create a todo list with the Review steps (Rule 12).
 
-### Optional: Usage feedback
+### Gate: review interrogation
 
-Before delegating to `ms-reviewer`, the orchestrator asks:
-> "Do you have session observations or friction points to incorporate?"
-
-If feedback provided, pass it to `ms-reviewer` as `usage_feedback` parameter. The reviewer maps each point to:
+Before delegating to `ms-reviewer`, the orchestrator asks the Review gate question (see "Requirements interrogation"). On any yes, the grill-planner interview captures depth, friction, and focus areas; the merged `usage_feedback` value passes to `ms-reviewer` as its `usage_feedback` parameter. The reviewer maps each friction point to:
 - **Specific section/step** in the skill where the friction occurred
 - **Classification:** missing-step | inadequate-step | missing-agent | missing-integration
 - **Proposed modification** with effort estimate (Small/Medium/Large)
@@ -214,7 +228,9 @@ This captures real-world workflow gaps that checklist-based review alone cannot 
 
 ## Operation: Modify
 
-**MANDATORY: Create todo list with Modify steps before starting.**
+Multi-phase operation — create a todo list with the Modify steps (Rule 12).
+
+**Gate first:** ask the Modify gate question (see "Requirements interrogation"). On yes, run the grill-planner interview (`operation: "modify"`) and pass the merged object to `ms-modifier` as change context; on no, proceed directly.
 
 | Agent | Task | Quality Gate |
 |-------|------|--------------|
@@ -230,12 +246,13 @@ This captures real-world workflow gaps that checklist-based review alone cannot 
 
 ## Operation: Modernize (added v4.2.0)
 
-**MANDATORY: Create todo list with Modernize steps before starting.**
+Multi-phase operation — create a todo list with the Modernize steps (Rule 12).
 
-**When to use:** apply Opus 4.7 patterns to an existing skill written under earlier conventions. Trigger phrases: "modernize <skill>", "apply 4.7 patterns to <skill>", "update <skill> for opus 4.7".
+**When to use:** apply Claude 5 patterns to an existing skill written under earlier conventions. Trigger phrases: "modernize <skill>", "apply Claude 5 patterns to <skill>", "refresh <skill> for Claude 5".
 
 | Step | Agent | Purpose |
 |------|-------|---------|
+| 0 | Orchestrator | **Gate:** Modernize gate question (see "Requirements interrogation"); on yes, grill-planner interview (`operation: "modernize"`) — merged object feeds Step 1 as `modernization_intent` |
 | 1 | `ms-reviewer` (deep mode) | Audit skill against Section 12 patterns; emit P0-P3 modernization findings |
 | 1a | Orchestrator | **Pre-flight: nested-agents check** (see below) |
 | 2 | Orchestrator | Present findings to user via `AskUserQuestion` with **batching protocol** (see below) |
@@ -289,7 +306,7 @@ Output to user must surface: "N total findings; X auto-applied (P0); Y surfaced 
 
 **Handle needs_user_input:** ms-modifier returns confirmation request for any breaking change (e.g. removing mandatory verify step that downstream consumers depend on). Orchestrator presents per-pattern preview-diff via `AskUserQuestion` before commit.
 
-**Acceptance:** Section 12 score IMPROVES (or stays same; never regresses). Section 12.7 (deprecated APIs) MUST pass after modernization (BLOCKING — runtime 400 error on Opus 4.7).
+**Acceptance:** Section 12 score IMPROVES (or stays same; never regresses). Section 12.7 (deprecated APIs + reasoning-display) MUST pass after modernization (BLOCKING).
 
 **For detailed modernization patterns, see `guides/skill-modernization-guide.md`.**
 
@@ -304,31 +321,36 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 ### Example 1: New shared agent created
 
 **User:** "Create skill for formatting JSON"
+→ Step 0: grill-planner interview (4 questions, map closed)
 → Agents: `format-json` (shared, new) | Validation: PASS (66/70)
 
 ### Example 2: Builtin agents only (100% match)
 
 **User:** "Create skill for exploring and planning features"
+→ Step 0: grill-planner interview (confirmation mode, 2 questions)
 → Agents: `Explore`, `Plan` (both builtin) | PASS (66/70)
 
 ### Example 3: Mixed builtin and shared
 
 **User:** "Create skill for researching and validating"
+→ Step 0: grill-planner interview (6 questions, map closed)
 → Agents: `Explore` (builtin), `validate-sources` (shared, new) | PASS (66/70)
 
 ### Example 4: Validation failure
 
 **User:** "Create skill that calls data-processor skill"
+→ Step 0: grill-planner interview (map closed)
 → ⛔ STOPS: Skill references violate Rule #1
 
 ### Example 5: Modernize existing skill (added v4.2.0)
 
-**User:** "Modernize design-review for Opus 4.7"
+**User:** "Apply Claude 5 patterns to design-review"
+→ Step 0: gate answered yes → grill-planner interview (intent: pattern refresh; scope: whole skill)
 → Step 1: ms-reviewer deep mode runs Section 12 sweep, finds: 12.4 N/A (single-threaded), 12.5 N/A (no agents), all others PASS
 → Step 2: orchestrator presents findings to user — only minor P3 polish items
 → Step 3: ms-modifier applies (or skips if N/A dominates)
 → Step 4: ms-validator confirms Section 12 score 6.0/6.0 (focused-reviewer max)
-→ PASS (already 4.7-shaped; modernization minimal)
+→ PASS (already pattern-compliant; modernization minimal)
 
 **For more examples, see `examples/examples.md`.**
 
@@ -337,9 +359,9 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 ## Guardrails for Opus Compliance
 
 - **Blocking language for unambiguous safety/correctness constraints:** "MUST NOT", "STOP if...". Per Anthropic skill-creator: ALL-CAPS imperatives ("ALWAYS", "NEVER", "CANNOT") are a **yellow flag** — use sparingly. Prefer reasoned explanation when the *why* is non-obvious. Reserve absolute imperatives for runtime-blocking concerns (deprecated APIs, recursion, file overwrites).
-- **Numbered steps:** Gate after every step, no skipping
-- **Checkboxes:** ALL must be checked, "STOP" if unchecked
-- **Repetition:** Critical rules at top, restated in operations
+- **Numbered steps:** Gate irreversible steps; exploratory steps flow without ritual gates (Rule 9)
+- **Checkboxes:** Used on irreversible-step validation; "STOP" only where proceeding would cause harm
+- **Rules stated once:** Critical rules live in the block at top; operations reference rule numbers instead of restating them (repetition creates conflicting voices when copies drift)
 
 ---
 
@@ -353,13 +375,14 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 - Missing Source column in agents table
 - **Any file over 500 lines** (split or compact required)
 - **Missing Q&A/requirements gathering** (must define when/how to gather)
-- **Using deprecated APIs** (`temperature`/`top_p`/`top_k`/fixed `budget_tokens`) — runtime 400 error on Opus 4.7 (Section 12.7)
+- **Using deprecated APIs** (`temperature`/`top_p`/`top_k`/fixed `budget_tokens`) — runtime 400 error on Opus 4.7+ (Section 12.7)
+- **Reasoning-display instructions** (`show your reasoning`, `thinking.display: visible`) — trip the Claude 5 `reasoning_extraction` refusal classifier (Rule 22, Section 12.7)
 
 **High Priority:**
 - First-person descriptions ("I can help" / "You can use")
 - Vague triggers — at least one specific quoted activation phrase per operation (≥3 total is plugin convention for activation reliability)
-- "Always verify before returning" mandates on routine steps (Anthropic 4.7 anti-pattern)
-- Implicit fan-out ("review all files") — spell out parallel mechanic
+- "Always verify before returning" mandates on routine steps (causes over-verification on Claude 5)
+- Over-prescribed fan-out — mandated subagent spawning on small or sequential work (checklist 12.4; reserve fan-out for genuinely independent, sizeable items)
 - Filter-at-find-time in reviewer skills — enumerate first, filter in second pass
 - No examples
 - Skipping agent discovery/matching (Step 1.5)
@@ -382,12 +405,14 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
   - `guides/agent-implementation-patterns.md` - Tool patterns, optimization, testing
 
 ### Operations
+- `references/interview-protocol.md` - Static coverage-map interview loop (sentinel, waivers, post-closure policy)
+- `references/interview-taxonomy.md` - Per-operation interview dimensions consumed by `grill-planner`
 - `guides/reviewing-skills.md` - Review workflow and criteria
 - `guides/modifying-skills.md` - Modification patterns and safety
-- `guides/skill-modernization-guide.md` - **Modernize operation playbook** (added v4.2.0): per-pattern remediation for Opus 4.7
+- `guides/skill-modernization-guide.md` - **Modernize operation playbook** (added v4.2.0): per-pattern remediation, includes architecture migration
 
-### Opus 4.7 patterns (added v4.2.0)
-- `guides/opus-4-7-patterns.md` - 13-section reference for Opus 4.7 best practices (effort scale, description shape, deprecated APIs, fan-out, find-vs-filter, cache-friendliness, more)
+### Model patterns
+- `guides/claude-5-patterns.md` - **Current pattern reference** (added v6.3.0): Claude 5 family, reasoning-display hazard, effort recalibration, delegation calibration, prescriptiveness diet, cache-friendliness, skill granularity
 - `guides/embedded-prompts-guide.md` - Three-tier mental model: when to use plugin-root agents vs skill-internal prompts vs reference docs
 
 ### Reference (Consult As Needed)
@@ -396,7 +421,8 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 |----------|-------|
 | **Templates** | `templates/focused-skill-template.md` (NEW v4.2.0 — design-* parity), `templates/skill-md-template.md`, `templates/simple-skill-template.md`, `templates/multi-tool-skill-template.md`, `templates/agent-template.md`, `templates/questionnaire-template.md`, `templates/reference-template.md`, `templates/shared-agent-template.md`, `templates/phase-requirements-template.md` |
 | **Agent Templates** | `templates/read-only-agent.md`, `templates/code-writer-agent.md`, `templates/research-agent.md` |
-| **Guides** | `guides/orchestration-patterns.md`, `guides/cross-model-guide.md`, `guides/anti-patterns.md`, `guides/migration-guide.md`, `guides/edge-cases.md`, `guides/qa-protocol.md`, `guides/shared-agents-guide.md`, `guides/progressive-disclosure.md`, `guides/orchestration-advanced.md`, `guides/skill-frontmatter-guide.md` |
+| **Guides** | `guides/orchestration-patterns.md`, `guides/cross-model-guide.md`, `guides/anti-patterns.md`, `guides/edge-cases.md`, `guides/qa-protocol.md`, `guides/shared-agents-guide.md`, `guides/progressive-disclosure.md`, `guides/orchestration-advanced.md`, `guides/skill-frontmatter-guide.md` |
 | **Validation** | `validation/pre-release-checklist.md`, `validation/security-checklist.md`, `validation/review-checklist.md`, `validation/agent-pre-release-checklist.md`, `validation/agent-security-checklist.md` |
+| **Hooks** | `hooks/ms-grill-guard.sh` + `hooks/ms-grill-guard.ps1` – Stop-hook backstop for the open-interview sentinel (see `references/interview-protocol.md`, Sentinel section) |
 | **Examples** | `examples/examples.md` (index), `examples/examples-simple.md`, `examples/examples-medium.md`, `examples/examples-complex.md`, `examples/examples-agents.md`, `examples/examples-creating-agents.md`, `examples/examples-cc21-capabilities.md` |
 | **Resources** | `resources.md` |

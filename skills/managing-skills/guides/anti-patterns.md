@@ -84,9 +84,9 @@ Task: Validate input file structure
 
 **Bad:** Workflow step with prose description only, no input conditions or validation.
 
-**Good:** Every step has: Input Conditions (checkboxes), Pre-Step Validation (STOP if), Execution (delegate to agent), Post-Step Validation, Quality Gate (retry/escalate).
+**Good:** Every step states its Input Conditions; steps with irreversible side effects (file writes, agent creation, breaking changes) additionally carry Pre-Step Validation (STOP if), Post-Step Validation, and a Quality Gate (retry/escalate). Exploratory steps stay lightweight — the model self-verifies routine work.
 
-**Why:** Consistent structure ensures reliability and enables proper validation.
+**Why:** Structure where it matters ensures reliability without the over-verification that blanket per-step rituals cause on Claude 5 models (checklist 12.3).
 
 ---
 
@@ -243,7 +243,7 @@ See `templates/output-format.md`
 
 ## Process Anti-Patterns
 
-### 13. Skipping Requirements Gathering
+### 13. Skipping the requirements interview
 
 **Bad:**
 ```
@@ -254,8 +254,9 @@ Assistant: [immediately starts creating]
 **Good:**
 ```
 User: Make me a skill
-Assistant: I'll help you create a skill. Let me gather some requirements first...
-[presents questionnaire]
+Assistant: Starting the requirements interview...
+Map: problem[~] triggers[ ] tools[ ] non-goals[ ]
+[asks one question via AskUserQuestion]
 ```
 
 **Why:** Skipping requirements leads to misaligned skills.
@@ -272,7 +273,7 @@ Assistant: I'll help you create a skill. Let me gather some requirements first..
 **Good:**
 ```
 TodoWrite([
-  {content: "Gather requirements", status: "in_progress"},
+  {content: "Run requirements interview", status: "in_progress"},
   {content: "Design skill", status: "pending"},
   ...
 ])

@@ -46,43 +46,44 @@ model: sonnet
 
 ---
 
-## Model and effort selection (Opus 4.7 best practices)
+## Model and effort selection (Claude 5 guidance)
 
-Per Anthropic's published 4.7 guidance: per-subagent `model` and `effort` overrides are the right way to control cost without sacrificing quality. Most validators run cheaper than orchestrators; saving an Opus call on a routine checklist scan is real money.
+Per-subagent `model` and `effort` overrides are the right way to control cost without sacrificing quality. Most validators run cheaper than orchestrators; saving an Opus call on a routine checklist scan is real money. This table is the canonical role→model/effort mapping (mirrored in ms-designer and agent-pre-release-checklist items 13.1/13.2); Claude 5 models at `low`/`medium` often match prior-generation `xhigh`, so targets run one step cooler than the 4.7-era table.
 
 | Agent role | Recommended model | Recommended effort |
 |-----------|-------------------|--------------------|
-| Orchestrator (drives multi-step workflow) | opus | xhigh |
-| File creator (writes new code/docs) | opus | xhigh |
-| Refactorer (changes existing code with safety) | opus | high |
-| Reviewer / auditor (deep analysis) | opus | xhigh |
-| Validator (checklist-driven) | sonnet | medium |
+| Orchestrator (drives multi-step workflow) | opus | high |
+| File creator (writes new code/docs) | opus | medium |
+| Architect / designer (produces designs, not files) | opus | medium |
+| Refactorer (changes existing code with safety) | opus | medium |
+| Reviewer / auditor (deep analysis) | opus | high |
+| Validator (checklist-driven) | sonnet | low |
 | Format-applier (mechanical) | sonnet | low |
-| Researcher (web search + synthesize) | sonnet | high |
+| Researcher (web search + synthesize) | sonnet | medium |
 | Classifier / router | haiku | low |
 
-**Effort scale rule (per Anthropic effort docs):**
-- `low` — scoped one-shot (classification, extraction, formatting)
-- `medium` — cost-sensitive routine validation
-- `high` — substantive investigation, balanced
-- `xhigh` — Anthropic's recommended starting point for coding/agentic work
-- `max` — reserve for genuinely frontier problems (overthinks structured output)
+**Effort scale rule (per Anthropic effort docs, Claude 5 calibration):**
+- `low` — validators, format-appliers, classifiers, scoped one-shot jobs
+- `medium` — routine file creation, refactoring, research
+- `high` — orchestrators, reviewers, ambiguous investigation
+- `xhigh` / `max` — genuinely frontier problems only; can over-plan and refactor unrequested (pair with scope fences)
 
-**Default for Claude Code is `xhigh`.** Override via `effort:` field only when role-driven choice differs.
+Omitting `effort` is valid — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents declare it explicitly so role intent is auditable (checklist 13.1). Never pin `model: fable` — inherit the session model for frontier work.
 
 ---
 
-## Opus 4.7 deprecated patterns — DO NOT USE
+## Deprecated patterns — DO NOT USE
 
-These cause runtime 400 errors or silently degrade behavior on Opus 4.7:
+These cause runtime errors or silently degrade behavior on Opus 4.7+ and the Claude 5 family:
 
-- ❌ `temperature` / `top_p` / `top_k` — return 400 error on Opus 4.7 (per Anthropic migration guide)
-- ❌ `thinking: {type: "enabled", budget_tokens: N}` — fixed budgets removed; use `{type: "adaptive"}` + `effort` field
-- ❌ "Always verify / double-check before returning" prose on routine steps — 4.7 self-verifies; this scaffolding wastes tokens
-- ❌ Implicit fan-out ("review all files") — 4.7 picks one and goes deep; spell out parallel explicitly with phrasing like "spawn parallel subagents — one per item — in same turn"
-- ❌ Filter-at-find-time ("report only critical issues") — 4.7 follows this literally and may silently drop mid-severity findings; decouple find from filter
+- ❌ `temperature` / `top_p` / `top_k` — 400 error on Claude Opus 4.7 and later (per Anthropic's parameter-deprecation table)
+- ❌ `thinking: {type: "enabled", budget_tokens: N}` on Claude 5 models — unsupported on Fable 5 / Opus 5 / Sonnet 5 (Haiku 4.5 still supports it); use `{type: "adaptive"}` + `effort` field
+- ❌ "Always verify / double-check before returning" prose on routine steps — the model self-verifies; on Claude 5 this scaffolding causes over-verification and wastes tokens
+- ❌ Over-prescribed fan-out ("ALWAYS spawn parallel subagents") — Claude 5 delegates readily by default; reserve fan-out prose for genuinely independent, sizeable items and run small glue work inline
+- ❌ Filter-at-find-time ("report only critical issues") — followed literally; mid-severity findings silently dropped; decouple find from filter
+- ❌ Reasoning-display instructions (`show your reasoning`, `reproduce your thinking`, `thinking.display: visible`) — trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (re-routes to Opus 4.8 where fallback is configured); request evidence in structured output instead (author-filled `<critical_thinking>` blocks are exempt)
 
-**Adaptive thinking is OFF by default on Opus 4.7.** To enable, explicitly set `thinking: {type: "adaptive"}` in agent config (not in frontmatter).
+**Adaptive thinking is always on for Claude Fable 5 and cannot be disabled**; on Opus-tier models use `thinking: {type: "adaptive"}` in agent config (not in frontmatter) when enabling it explicitly.
 
 ### Capabilities Vocabulary
 

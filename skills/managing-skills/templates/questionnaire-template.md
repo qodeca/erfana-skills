@@ -1,6 +1,6 @@
-# Questionnaire Template
+# Question Format Template
 
-Standard format for requirements gathering questionnaires.
+Standard option-table format for individual interview questions. The orchestrator asks one question per `AskUserQuestion` call – see `references/interview-protocol.md` for the loop; the "Full Questionnaire" sections below serve as the wrap-up read-back / requirements-ledger format, not a batched delivery shape.
 
 ---
 

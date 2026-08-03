@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## Two domains, one plugin (v4.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a **design + orchestration toolkit** by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. The marketplace identity stays primarily design (`category: design`), but the discovery surface now spans two flow-bearing tracks (design, orchestration) plus two single-skill branches: a process branch added in v4.2.3 (`grill-me`) and a verification branch added in v4.2.7 (`fact-checking`).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a **design + orchestration toolkit** by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0; post-6.3.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. The marketplace identity stays primarily design (`category: design`), but the discovery surface now spans two flow-bearing tracks (design, orchestration) plus two single-skill branches: a process branch added in v4.2.3 (`grill-me`) and a verification branch added in v4.2.7 (`fact-checking`).
 
 | Domain | Concern | Brand-system layer |
 |---|---|---|
@@ -36,7 +36,7 @@ The v1 plugin shipped a single 800-line `erfana:design` skill that bundled six u
 | `erfana:managing-articles` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
 | `erfana:managing-issues` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2) |
 | `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Ships 11 internal validation agents. |
-| `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Opus 4.7 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator. Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
+| `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (post-6.3.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the skill-scoped `ms-grill-guard` Stop hook. Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
 
 ### Process skills (1, v4.2.3+)
@@ -76,7 +76,7 @@ erfana-skills/
 │   ├── managing-articles/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
 │   ├── managing-issues/     ← phases/, operations/, reference/, templates/, validation/
 │   ├── managing-reports/    ← ships 11 internal validation agents; reference/, templates/
-│   ├── managing-skills/     ← guides/, templates/, validation/, examples/
+│   ├── managing-skills/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy), hooks/ (ms-grill-guard)
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ + skill-scoped hooks/ (v6.2.0+)
 │   ├── using-erfana/        ← bootstrap meta-router
@@ -90,7 +90,7 @@ erfana-skills/
 ├── hooks/                   ← four safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+)
 ├── commands/                ← slash commands (v4.1+: doc-update; v4.2.5+: project-status; v4.2.6+: session-status; v4.2.11+: lens-review; v4.2.14+: explain-issue)
 ├── scripts/                 ← run-all-gates.sh, gate-12-brand-manifests.sh, gate-14-hooks.sh, gate-16-hook-fixtures.sh, ...
-├── tests/                   ← maintainer test fixtures (v4.2.9+ adds tests/hooks/verify-completion/*.json)
+├── tests/                   ← maintainer test fixtures (v4.2.9+ adds tests/hooks/verify-completion/*.json; v6.2.0+ tests/hooks/grill-guard/; post-6.3.0 tests/hooks/ms-grill-guard/)
 └── docs/
     ├── architecture.md      ← this document
     ├── verification-gates.md← index for the 17 gates
@@ -119,7 +119,7 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Two layered shared resources
 
-- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **`skills/design-shared/` bundle** – design-only shared content. Not a skill (no SKILL.md). Invisible to auto-discovery. Deduplicates content design sub-skills would otherwise copy. Orchestration skills do NOT consume `design-shared/`.
 
 ### Per-skill nested agents
@@ -134,7 +134,7 @@ Three orchestration skills ship internal agents under `<skill>/agents/` that are
 - The **orchestrator** (the skill running in the main conversation) asks those questions via `AskUserQuestion`, batching at most 4 per call, then passes the answers back to the agent or carries them forward.
 - A **skipped answer is valid** — record it and proceed; never loop re-asking the same question.
 
-Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `managing-issues` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `managing-articles/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
+Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `managing-issues` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13), `grill-planner` (plans the whole interview, never asks; post-6.3.0 – supersedes the retired `ms-requirements-gatherer`, whose four CREATE requirement keys it preserves via `references/interview-taxonomy.md`). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `managing-articles/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
 
 ### Where new content goes – the rule
 
@@ -294,8 +294,8 @@ The shared skeleton applies to both domains; the differences (which references t
 5. **Add agents (orchestration only, optional)**:
    - Plugin-root agents → `agents/<prefix-name>.md` (use a unique team prefix to avoid generic-name collisions; see `SECURITY.md > Known limitations`).
    - Skill-internal agents → `skills/<name>/agents/<agent-name>.md`. Discovery is unverified for nested location; prefer plugin-root unless agents are tightly coupled to one skill's lifecycle.
-   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, in `skills/managing-skills/templates/shared-agent-template.md`). Routine validators on `sonnet`+`medium` are ~10x cheaper than orchestrators on `opus`+`xhigh`.
-   - **Never** declare `temperature`, `top_p`, `top_k`, or fixed `thinking: {budget_tokens: N}` in agent code (Gate 2 + Section 13.3/13.4 BLOCKING — Opus 4.7 returns 400 error per Anthropic migration guide).
+   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/managing-skills/templates/shared-agent-template.md`). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
+   - **Never** declare `temperature`, `top_p`, `top_k` (400 error on Claude Opus 4.7 and later per Anthropic's parameter-deprecation table) or fixed `thinking: {budget_tokens: N}` on Claude 5 models (Haiku 4.5 exempt) in agent code (Gate 2 + Section 13.3/13.4 BLOCKING).
 6. **Update `skills/using-erfana/SKILL.md`** – add a row to the appropriate sub-table (Design or Orchestration) and to the Decision Flow.
 7. **Update `README.md`** – add a row to the appropriate skills sub-table at the top.
 8. **Update `CHANGELOG.md`** – entry under the next release describing the addition.
@@ -314,7 +314,7 @@ Note on agents: v4.0.0 added `agents/` (75 shared at the time; 76 since v4.2.2 a
 ## See also
 
 - [`CLAUDE.md`](../CLAUDE.md) – repository layout table, hard constraints, release process
-- [`verification-gates.md`](verification-gates.md) – index for the 17 gates (16 hard + 1 soft); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Opus 4.7 patterns, v4.0+ extended v4.2.0+), Gate 7 (cross-references across skills + agents + brand prose), Gate 12 (brand-manifest validation incl. RULES.md ↔ CLAUDE.md symmetry), Gate 13 (brandbook hex coverage), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+)
+- [`verification-gates.md`](verification-gates.md) – index for the 17 gates (16 hard + 1 soft); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents + brand prose), Gate 12 (brand-manifest validation incl. RULES.md ↔ CLAUDE.md symmetry), Gate 13 (brandbook hex coverage), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+)
 - [`modernization-registry.md`](modernization-registry.md) – audit-trail of every skill that has been through the Modernize operation (v4.2.0+) – first pass, last pass, scope, score. Convention-enforced (not gated). Updated atomically with each Modernize pass.
 - [`known-caveats.md`](known-caveats.md) – accepted risks from the v4.0.0 scope widening, v4.1.0 hooks migration, and the 2026-05-17 v4.2.8 → v4.2.10 same-day release chain (generic-name agent collisions, unverified per-skill nested `agents/` discovery, skipped rc soaks – extended four times now, `~/.claude/` duplication, etc.). Extracted from CLAUDE.md to keep that file under the 40 KB recommended ceiling.
 - [`../skills/design-shared/brands/README.md`](../skills/design-shared/brands/README.md) – brand-system contract details, "adding a new brand" walkthrough

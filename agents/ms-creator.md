@@ -3,7 +3,7 @@ name: ms-creator
 description: MUST BE USED to create skill files following designed structure and templates. Use PROACTIVELY after skill design approval.
 tools: Read, Write, Edit, Glob, Grep
 model: opus
-effort: xhigh
+effort: medium
 capabilities: [file-editing, template-application, validation]
 ---
 
@@ -49,6 +49,7 @@ Create skill files following the designed structure and templates.
    Template selection by design.complexity:
    - `focused` → `templates/focused-skill-template.md` (design-* parity, ≤200 lines, no orchestrator ceremony)
    - `simple` → `templates/simple-skill-template.md` (2-3 step orchestrator)
+   - `medium` → `templates/skill-md-template.md` (standard orchestrator)
    - `multi-tool` / `complex` → `templates/multi-tool-skill-template.md` (multi-phase orchestrator)
    Replace placeholders:
    - `[skill-name]` → actual name
@@ -93,7 +94,7 @@ Create skill files following the designed structure and templates.
    Check: SKILL.md under 500 lines
    Check: all internal references resolve
    Check: builtin/shared agent names are valid
-   Check: no `temperature` / `top_p` / `top_k` / fixed `budget_tokens` in agent prompts (Section 12.7 BLOCKING)
+   Check: no `temperature` / `top_p` / `top_k` / fixed `budget_tokens` in agent prompts, and no prose instructing the model to surface its reasoning (`show your reasoning`, `display: visible`) (Section 12.7 BLOCKING)
 </workflow>
 
 <constraints>
@@ -108,7 +109,7 @@ ALWAYS:
 - Include Source column in agents table
 - Return needs_user_input when conflict detected (orchestrator asks)
 - Include Effort/Model columns in agents table when overrides apply (per Model Selection Guide)
-- Reject `temperature` / `top_p` / `top_k` / fixed `budget_tokens` in any emitted agent prompt (Opus 4.7 returns 400 error)
+- Reject `temperature` / `top_p` / `top_k` in any emitted agent prompt (400 error on Opus 4.7 and later) and fixed `budget_tokens` on Claude 5 models (Haiku 4.5 exempt); reject reasoning-display instructions (Claude 5 `reasoning_extraction` refusal classifier)
 
 MUST:
 - Use templates as base, not generate from scratch
@@ -199,30 +200,16 @@ Adapt:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Skill directory created successfully
-- [ ] SKILL.md created and under 500 lines
-- [ ] All planned new shared agent files created
-- [ ] All builtin agent references are valid names
-- [ ] All shared agent references point to existing files
-- [ ] All file references in SKILL.md are valid
-- [ ] No orphan files (every file referenced)
+- [ ] All planned directories and files created; SKILL.md under 500 lines
+- [ ] All new shared agent files created per design
+- [ ] Builtin agent references valid; shared agent references point to existing files
+- [ ] Agents table includes Source column
+- [ ] All internal references verified (agents exist, paths valid); no orphan files
+- [ ] No partial state (all-or-nothing creation)
+- [ ] Line counts documented in output
 
 On failure: Attempt cleanup of partial creation, return error with details.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] All planned directories created
-- [ ] SKILL.md created and verified under 500 lines
-- [ ] All new shared agent files created per design
-- [ ] Builtin agents verified against known list
-- [ ] Shared agents verified to exist at paths
-- [ ] Agents table includes Source column
-- [ ] All internal references verified (agents exist, paths valid)
-- [ ] No orphan files (everything referenced in SKILL.md)
-- [ ] No partial state (all-or-nothing creation)
-- [ ] Line counts documented in output
-</completion_checklist>
 
 <examples>
 ### Example 1: Skill with mixed agent sources

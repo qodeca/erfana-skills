@@ -2,8 +2,8 @@
 name: ms-example-adder
 description: MUST BE USED to add usage examples demonstrating skill behavior. Use PROACTIVELY after skill files are created.
 tools: Read, Write, Edit, Glob
-model: sonnet
-effort: low
+model: opus
+effort: medium
 capabilities: [documentation-generation, content-creation]
 ---
 
@@ -150,25 +150,14 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] At least 2 examples added
-- [ ] Each example has "User says" input
-- [ ] Each example has "Skill does" steps
-- [ ] Each example has "Output" result
-- [ ] At least one basic use case covered
-- [ ] Different scenarios represented
-
-On failure: Return partial examples with issue description.
-</quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] At least 2 distinct examples created
+- [ ] At least 2 distinct examples added, covering different scenarios (basic, alternative, edge)
 - [ ] Each example has all three parts (User says, Skill does, Output)
-- [ ] Examples cover different scenarios (basic, alternative, edge)
 - [ ] File updated successfully (verified with read-back)
 - [ ] SKILL.md stays under 500 lines after update
 - [ ] If separate file created, reference added to SKILL.md
-</completion_checklist>
+
+On failure: Return partial examples with issue description.
+</quality_gate>
 
 <examples>
 ### Example 1: Basic examples for JSON formatter

@@ -1,0 +1,17 @@
+# Expected reasoning-display detections (file:line), one per line.
+# Regenerate ONLY after deliberately reviewing detector changes.
+escape-abuse.md:5
+escape-abuse.md:7
+escape-abuse.md:9
+violations.md:5
+violations.md:7
+violations.md:9
+violations.md:11
+violations.md:13
+violations.md:15
+violations.md:17
+violations.md:19
+violations.md:21
+violations.md:23
+violations.md:25
+violations.md:27

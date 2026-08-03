@@ -6,7 +6,7 @@ How to manage context budget in skills and agents.
 
 ## The 2% rule
 
-Skills should aim to consume ≤2% of the model's context window when loaded. For a 200K context window, that's ~4,000 tokens. For 1M context (Opus 4.7), ~20,000 tokens – but assume the smaller window for portability.
+Skills should aim to consume ≤2% of the model's context window when loaded. For a 200K context window, that's ~4,000 tokens. For 1M context (Opus 4.7+ and the Claude 5 family), ~20,000 tokens – but assume the smaller window for portability.
 
 **Why this matters:** A skill that consumes 10% of context at load time leaves less room for the actual task, user messages, and tool results. Lean skills produce better outcomes.
 

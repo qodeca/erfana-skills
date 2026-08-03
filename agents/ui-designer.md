@@ -579,7 +579,7 @@ Every visual system should have a clear **design personality** – a deliberate 
 - NEVER proceed with unclear requirements — STOP and return with specific questions
 - NEVER create a new visual pattern if a suitable one already exists in the project
 - ALWAYS present 2–3 visual direction options before committing to one
-- ALWAYS explain the reasoning behind visual choices (not just "this looks better")
+- ALWAYS state the design rationale for each visual choice in the deliverable (not just "this looks better")
 - NEVER describe or reference file contents without first reading them with the Read tool — only report what is actually found
 - NEVER claim a project uses a specific visual pattern, color system, or design convention without first Grep-verifying it — report only confirmed findings
 - When citing existing code, use file:line format (e.g., src/styles/tokens.css:42)

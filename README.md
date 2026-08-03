@@ -44,7 +44,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | `erfana:managing-articles` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. | "write article", "research article", "publish article" |
 | `erfana:managing-issues` | Full GitHub-issue lifecycle: create issues, implement them through phased quality gates, and review code or PRs. Runs on `main`-default repos, stack-agnostic, with a skill-wide untrusted-data boundary and confirm-before-destructive git ops. See [`docs/architecture.md`](docs/architecture.md). | "create issue", "implement issue", "review code", "review PR" |
 | `erfana:managing-reports` | Professional consulting reports with Pyramid Principle, SCQA, Five Cs framework, sentence-case validation. 11 internal validation agents. | "create report", "review report", "validate report" |
-| `erfana:managing-skills` | Lifecycle management for Claude Code skills following Anthropic best practices. Includes the **Modernize operation** (v4.2.0+) that applies Opus 4.7 patterns to existing skills. | "create skill", "review skill", "modify skill", "modernize skill", "apply 4.7 patterns" |
+| `erfana:managing-skills` | Lifecycle management for Claude Code skills following Anthropic best practices. Includes the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills. Every operation opens with a coverage-map requirements interview – Create always interviews; Modify/Review/Modernize gate first and interview on yes. | "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns" |
 | `erfana:managing-specs` | 4-tier specification management: T1 issue, T2 spec, T3 lite, T4 standard. Delegates to plugin-root `spec-*` agents, with trust-boundary controls and a transactional single-writer registry (schema v3, auto-migrated on first touch). See [`docs/architecture.md`](docs/architecture.md). | "create spec", "validate spec", "T3 lite spec", "T4 standard" |
 
 ### Process skills
@@ -64,7 +64,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | Component | What it does |
 |---|---|
 | `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, dispatches design-vs-orchestration. Loads automatically. |
-| `agents/` (87 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), UI/UX (4), tech-domain (6), generic (9). |
+| `agents/` (87 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
 
@@ -81,6 +81,8 @@ All four are project-agnostic – no personal style preferences. They activate o
 
 **Cross-platform (v4.2.20+).** Each hook ships a `.sh` (macOS/Linux) and a `.ps1` (Windows) sibling, run through the `dispatch.sh` launcher so the safety net works on native Windows too (where Git Bash ships without `jq`). The mechanism and the one uncovered case (a Windows host with no Git Bash) are documented in [`docs/architecture.md`](docs/architecture.md).
 
+**Skill-scoped hooks.** Two skills additionally ship their own Stop hook, active only while that skill is loaded: `grill-me` (`grill-guard`, v6.2.0+) and `managing-skills` (`ms-grill-guard`). Each nudges once when an interview is still open (its open-marker sentinel present); they are declared in the skill's SKILL.md frontmatter, not in `hooks/hooks.json`, and are validated by Gate 16 fixtures plus a guard-drift check.
+
 ### Slash commands
 
 | Command | What it does |
@@ -91,9 +93,9 @@ All four are project-agnostic – no personal style preferences. They activate o
 | `/erfana:explain-issue` | Translates a single GitHub issue into a Product Owner / PM / BA brief (accepts a bare number, `#N`, or full URL). Pulls the issue, comments, linked PRs, and referenced files/specs to ground the translation, but stays purely descriptive – no suggested next step. Non-interactive, read-only. Full contract: [`commands/explain-issue.md`](commands/explain-issue.md). |
 | `/erfana:lens-review` | Researched multi-lens code review over any target – `/erfana:lens-review <path \| #PR \| "description"> [--lens a,b,c] [--out file.md]`. Fans out reviewers (up to 10, chosen at runtime), each grounded in cited best practices from the last ~12 months, then returns one severity-ranked, plain-language report (PM/PO-facing, with full technical detail kept for engineers). Manual trigger only; distinct from `/review` by its live research and any-target scope. Full contract: [`commands/lens-review.md`](commands/lens-review.md). |
 
-Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json`; commands from `commands/*.md`. Shared design content (workflow templates, content guidelines, asset bundle: 4 references / 37 SFX / 6 BGM / 24 showcases) lives in `skills/design-shared/`.
+Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json` and from `skills/<skill>/SKILL.md` `hooks:` frontmatter; commands from `commands/*.md`. Shared design content (workflow templates, content guidelines, asset bundle: 4 references / 37 SFX / 6 BGM / 24 showcases) lives in `skills/design-shared/`.
 
-> **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `mi-codebase-explorer`, `ma-designer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
+> **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `mi-codebase-explorer`, `ma-designer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
 
 ---
 
@@ -181,10 +183,10 @@ SSH-based marketplace URLs are not recommended (known Windows issue).
 If you turned on auto-update and need stability for a critical project, pin to a specific version:
 
 ```
-/plugin install erfana@erfana-skills@v6.0.1   # for example – pick the version you want
+/plugin install erfana@erfana-skills@v6.3.0   # for example – pick the version you want
 ```
 
-Replace `v6.0.1` with whichever release you want to lock to. A pinned version is never auto-updated. To upgrade later, run the same command with a newer tag and restart Claude Code.
+Replace `v6.3.0` with whichever release you want to lock to. A pinned version is never auto-updated. To upgrade later, run the same command with a newer tag and restart Claude Code.
 
 Use case: you are mid-flight on a deck, a new version drops, and you do not want trigger-phrase behavior to shift under you. Pin until you are done, then unpin (`/plugin install erfana@erfana-skills` without a `@vX.Y.Z` suffix).
 

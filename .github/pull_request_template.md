@@ -14,7 +14,7 @@
 
 ## Checklist
 
-- [ ] Branch is `feature/...` (not `main`).
+- [ ] Branch is `feature/...` cut from `develop`, and this PR targets `develop` (not `main`).
 - [ ] Commits follow Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`).
 - [ ] `bash scripts/run-all-gates.sh` passes locally (`=== ALL GATES PASSED ===`).
 - [ ] `claude plugin validate .` passes.

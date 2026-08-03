@@ -3,6 +3,149 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.4.0] - 2026-08-03
+
+### Added
+- managing-skills: **coverage-map requirements interrogation across all four
+  operations**. Create always interviews; Modify, Modernize, and Review open
+  with a gate question ("particular ideas or reasons?" / "observations,
+  friction, focus?") and interview on yes. New plugin-root shared agent
+  `grill-planner` (sonnet/medium, Read/Glob/Grep) plans once — coverage map,
+  seed requirements, AskUserQuestion-ready question bank, complexity-scaled
+  budget (3-5 / 6-9 / 10-15, advisory; the map owns closure) — and the
+  orchestrator runs the interview under the static
+  `references/interview-protocol.md`, with per-operation dimensions in
+  `references/interview-taxonomy.md` (two-class waivability: validator-hard
+  create keys never waivable; everything else waivable by explicit user
+  grant). Adaptive closure is the only escape valve — a complete request
+  (including "just do it") collapses to a 2-3 question read-back, never zero.
+  Non-interactive runs proceed or fail fast (named `missing` fields) on
+  explicit signal only. Sibling skills adopt by supplying their own taxonomy
+  and protocol files — the agent is consumer-agnostic (`taxonomy_path` input).
+- managing-skills: skill-scoped `ms-grill-guard` Stop hook (frontmatter
+  `hooks:`, second use of skill-scoped hooks after grill-me) — blocks one
+  stop attempt per turn whose last message still ends with
+  `<!-- erfana:ms-grill-open -->`, end-anchored after balanced-fence
+  stripping. Gate 16 gains the ms-grill fixture family (5 fixtures, total
+  20), the ms-grill sentinel family (4 files, symmetry total 14), and a
+  guard-drift check FAILing if `ms-grill-guard.sh` diverges from
+  `grill-guard.sh` beyond sentinel/reason/header. Accepted risks (wider
+  blast radius than grill-me, pending `.ps1` pwsh replay, rc-rollout
+  obligation inherited by the eventual release): `docs/known-caveats.md`.
+
+### Changed
+- managing-skills: Create Step 0 pipeline rewritten (grill-planner plan →
+  orchestrator-run interview → merge by `maps_to` → `ms-requirements-validator`,
+  whose contract is unchanged and Create-only — extra audit fields
+  `coverage_map`/ledger/waivers are ignored by design); `guides/qa-protocol.md`
+  skip conditions reconciled (skips = non-interactive or gate-answered-no;
+  "just do it" is confirmation mode, not a skip); depth table aligned to the
+  budget bands; `guides/quick-start.md` FAQ updated.
+
+### Removed
+- **BREAKING:** `agents/ms-requirements-gatherer.md` retired, superseded by
+  `grill-planner` (net shared-agent count unchanged at 87). Migration for
+  downstream consumers: the old agent's output (`extracted_requirements:
+  {clear_items, gaps}` + `questions[]`) is replaced by grill-planner's
+  `{coverage_map, seed_requirements, question_bank}`; the requirements keys
+  reaching `ms-requirements-validator` are unchanged (`problem_definition`,
+  `trigger_strategy`, `complexity_preference`, `tools`), so validator-side
+  integrations are unaffected. See `docs/architecture.md` (AskUserQuestion
+  convention section) for the replacement pointer.
+
+## [6.3.0] - 2026-08-03
+
+### Added
+- managing-skills: `guides/claude-5-patterns.md` — the current model-pattern
+  reference for the Claude 5 family (Opus 5, Fable 5): reasoning-display
+  hazard, effort recalibration (one step cooler), delegation calibration,
+  prescriptiveness diet, cache-friendliness and skill granularity (ported
+  from the retired 4.7 guide), what carries over from the 4.7 era. Grounded
+  in the Anthropic Fable 5 prompting guide, refusals-and-fallback doc, and
+  Claude 5 context-engineering post.
+- New Critical Architectural Rule 22 + checklist coverage (12.7 / 8.7 / 13.5):
+  skills and agent prose MUST NOT instruct a model to surface its internal
+  reasoning (`show your reasoning`, `thinking.display: visible`) — these trip
+  the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude
+  Opus 5 (`stop_reason: "refusal"`; re-routes to Opus 4.8 where fallback is
+  configured). Author-filled `<critical_thinking>` blocks are exempt.
+- Gate 2 reasoning-display detector (`scripts/_lib/gate2_detector.py`, shared
+  by the gate and its fixture runner): fence-aware, backtick-stripping,
+  `\b`-anchored negation escapes, explicit `gate2-allow` inline suppression
+  with stale-suppression WARN; sweep widened beyond SKILL.md and plugin-root
+  agents to nested agents, references, templates, guides, validation,
+  examples, and slash commands. Committed fixture suite
+  (`tests/gate-02-fixtures/`, 15 expected detections + 6 false-positive
+  regression files) hard-fails the gate on any detector drift. Plus a
+  `model:` presence WARN for ms-* agents (13.2 parity with 13.1) and
+  file-handling hygiene (explicit utf-8, per-file error reporting,
+  non-mapping frontmatter FAIL, absolute line numbers).
+
+### Changed
+- managing-skills Claude 5 refresh (research-driven audit, 2026-08-02, plus
+  full remediation of the follow-up 5-lens review's 31 findings, 2026-08-03):
+  - Checklist item 12.4 repurposed in place: "Explicit fan-out" (4.7-era,
+    premised on sequential-by-default delegation) becomes "Delegation
+    calibration" — Claude 5 models delegate readily; over-prescribed fan-out
+    is now the anti-pattern. Same number, weight, and N/A profile, so all
+    score totals (66.5/68.0/70.0) are unchanged. Section 12 retitled
+    "Claude 5 Model Patterns".
+  - Refusal/fallback story corrected to Anthropic's documented mechanism
+    across ~18 files: a classifier trip returns a visible
+    `stop_reason: "refusal"`; fallback to Opus 4.8 happens only where
+    configured (never "silently"), and the hazard applies to Opus 5 as well
+    as Fable 5. Deprecated-API rule split: `temperature`/`top_p`/`top_k`
+    return 400 on Claude Opus 4.7 and later; fixed `budget_tokens` is
+    unsupported on Claude 5 models with Haiku 4.5 explicitly exempt.
+  - Old-model reference removal per maintainer directive:
+    `guides/opus-4-7-patterns.md` deleted (model-agnostic §11/§18 ported into
+    `claude-5-patterns.md`, five citers repointed, rest preserved in git
+    history); ms-validator's `opus_4_7_findings` return field renamed to
+    `model_pattern_findings` (breaking for any external parser; no in-repo
+    consumer existed); "apply 4.7 patterns" triggers dropped from
+    managing-skills and the using-erfana router; "Opus 4.7 patterns" wording
+    replaced with "Claude 5 patterns" in plugin.json, README, architecture
+    doc, and the modernization registry; model lifecycle wording corrected
+    (Opus 4.8 Active, `claude-3-*` Retired, dateless API IDs are pinned
+    snapshots) and item 11.6's retired-ID list extended.
+  - ms-validator score contract repaired: skill-shape taxonomy made
+    exhaustive (a reviewer-shaped skill that delegates to agents is scored
+    as orchestrator — previously a 7-item list could be divided by a 6.0
+    max), unreachable decision-tree branch removed, both worked examples
+    recomputed to reachable arithmetic, stray "×1.5" Section 1 weight
+    removed. Agent checklist counts resynced to actual checkboxes
+    (Section 0: 28, Section 11: 16 after the gate merge, total 107).
+  - Role→model/effort tables recalibrated one step cooler in all three copies
+    (shared-agent-template, ms-designer, agent-pre-release-checklist
+    13.1/13.2) with a new Architect/designer row, and across the 10 ms-*
+    agents' frontmatter + SKILL.md Agents table (e.g. ms-reviewer
+    xhigh→high, ms-validator medium→low, ms-example-adder → opus/medium per
+    its file-creator role). `xhigh`/`max` are no longer role defaults.
+  - Prescriptiveness diet: Rules 5/8/12 softened (inline glue work allowed;
+    pre-step verification scoped to steps that need it; progress tracking
+    required for multi-phase operations instead of always), checklist
+    Section 4 reworded to "Progress Tracking" (count/weight-preserving),
+    double end-gates merged into one `<quality_gate>` per agent — including
+    the six pre-v6.3.0 `ma-*`/`mi-*` agents — and ALL-CAPS mandates trimmed
+    across SKILL.md, templates, and examples.
+  - `guides/cross-model-guide.md` rewritten for the Claude 5 model table
+    (claude-opus-5, claude-fable-5, claude-sonnet-5); "design for Haiku,
+    add more examples" advice replaced with direction-aware guidance;
+    stale model-ID lists fixed in skill-frontmatter-guide and templates.
+  - `guides/migration-guide.md` deleted (4.6-era; contradicted Rule 9 and
+    item 12.3 by mandating post-step validation on every step); surviving
+    orchestrator-migration shape folded into `skill-modernization-guide.md`.
+  - Hazard fixes flagged by the new detector: `agents/ui-designer.md`
+    "explain the reasoning behind visual choices" reworded to "state the
+    design rationale … in the deliverable".
+  - Stale "promote to hard-blocking in v4.3.0" promises removed from the
+    checklists, the gate script and its doc, CLAUDE.md, and past-tensed in
+    ROADMAP (never executed; Section 12 items 12.1-12.6 stay soft-blocking,
+    12.7 stays BLOCKING at checklist level; the fixture contract is the one
+    hard-failing piece). `docs/gates/02-frontmatter.md` no longer carries a
+    verbatim code copy (it drifted twice) — it now points at the script and
+    the shared detector module.
+
 ## [6.2.0] - 2026-07-22
 
 ### Changed

@@ -35,22 +35,56 @@ PYEOF
 echo "=== Gate 2 — YAML frontmatter (skills + agents) ==="
 python3 <<'PYEOF'
 import yaml, glob, os, sys, re
+sys.path.insert(0, 'scripts/_lib')
+from gate2_detector import scan as reasoning_display_scan
 ok = True
 
-# Opus 4.7 first-person voice patterns (Section 12.1)
+# First-person voice patterns (Section 12.1)
 FIRST_PERSON = re.compile(r"\b(I can help|You can use|I'll help|I will help)\b", re.IGNORECASE)
 
 # Quoted-phrase trigger detection (Section 12.2)
 QUOTED_PHRASE = re.compile(r'"[^"]{3,}"')
 
-# Skills: require name + description; description checks include 4.7 patterns (added v4.2.0).
-for fp in sorted(glob.glob('skills/*/SKILL.md')):
-    parts = open(fp).read().split('---')
+def read_text(fp):
+    """utf-8 read with explicit failure reporting (matches Gate 1's convention)."""
+    try:
+        with open(fp, encoding='utf-8') as fh:
+            return fh.read()
+    except OSError as e:
+        print(f'FAIL: {fp} unreadable: {e}')
+        return None
+
+def parse_frontmatter(fp, text):
+    """Return the frontmatter mapping, or None (with FAIL printed) when absent/invalid."""
+    parts = text.split('---')
     if len(parts) < 3:
         print(f'FAIL: {fp} has no YAML frontmatter')
+        return None
+    m = yaml.safe_load(parts[1])
+    if not isinstance(m, dict):
+        print(f'FAIL: {fp} frontmatter is not a YAML mapping')
+        return None
+    return m
+
+def report_reasoning_display(fp, text, section):
+    """Reasoning-display detection (Section 12.7 / 13.5, v6.3.0) via scripts/_lib/gate2_detector.py.
+    Scans the FULL file text, so reported line numbers are absolute."""
+    hits, stale = reasoning_display_scan(text)
+    for ln, snippet in hits:
+        print(f'WARN: {fp}:{ln} instructs reasoning display: "{snippet}" — trips the Claude 5 reasoning_extraction refusal classifier (Section {section})')
+    for ln in stale:
+        print(f'WARN: {fp}:{ln} stale gate2-allow comment (covers no reasoning-display match) — remove it')
+
+# Skills: require name + description; description checks include model patterns (added v4.2.0).
+for fp in sorted(glob.glob('skills/*/SKILL.md')):
+    text = read_text(fp)
+    if text is None:
         ok = False
         continue
-    m = yaml.safe_load(parts[1])
+    m = parse_frontmatter(fp, text)
+    if m is None:
+        ok = False
+        continue
     if 'name' not in m:
         print(f'FAIL: {fp} missing name field')
         ok = False
@@ -60,7 +94,7 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
     if 'description' in m and len(m['description']) > 500:
         print(f'WARN: {fp} description is {len(m["description"])} chars (>500); review for workflow language')
 
-    # 4.7 patterns (added v4.2.0; soft warnings — promote to hard in v4.3.0)
+    # Model patterns, Section 12 (added v4.2.0; soft warnings)
     desc = m.get('description', '')
     when = m.get('when_to_use', '') or ''
     combined_len = len(desc) + len(when)
@@ -79,10 +113,13 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
         if len(triggers) < 3:
             print(f'WARN: {fp} when_to_use has {len(triggers)} quoted trigger phrases (recommended ≥3, Section 12.2)')
 
+    # 12.7 (v6.3.0): reasoning-display instructions
+    report_reasoning_display(fp, text, '12.7')
+
     print(f'  {fp} → name={m.get("name", "?")}')
 
 # Agents: require name + description; invariant: name == filename basename.
-# Plus 4.7 patterns: warn if effort field missing on ms-* agents; warn if deprecated APIs declared.
+# Plus model patterns: warn if effort/model fields missing on ms-* agents; warn if deprecated APIs declared.
 # Detection: deprecated APIs as YAML-style keys at start of line (with optional indent), NOT mentions
 # inside backticks/code-references (e.g. "Grep -nE \"temperature:|...\"" in detection regexes).
 # Match: `temperature: 0.7` (line-start, key:value)
@@ -91,12 +128,14 @@ DEPRECATED_API = re.compile(r'^\s{0,4}(temperature|top_p|top_k|budget_tokens)\s*
 
 if os.path.isdir('agents'):
     for fp in sorted(glob.glob('agents/*.md')):
-        parts = open(fp).read().split('---')
-        if len(parts) < 3:
-            print(f'FAIL: {fp} has no YAML frontmatter')
+        text = read_text(fp)
+        if text is None:
             ok = False
             continue
-        m = yaml.safe_load(parts[1])
+        m = parse_frontmatter(fp, text)
+        if m is None:
+            ok = False
+            continue
         if 'name' not in m:
             print(f'FAIL: {fp} missing name field')
             ok = False
@@ -108,21 +147,89 @@ if os.path.isdir('agents'):
             print(f'FAIL: {fp} name "{m.get("name")}" does not match basename "{expected}"')
             ok = False
 
-        # 4.7 patterns for agents (added v4.2.0; soft warnings)
+        # Model patterns for agents (added v4.2.0; revised v6.3.0; soft warnings)
         # Item 13.1: effort field on ms-* agents
         if expected.startswith('ms-') and 'effort' not in m:
             print(f'WARN: {fp} missing `effort` field (Section 13.1; ms-* agents should declare per Model Selection Guide)')
 
+        # Item 13.2: model field on ms-* agents
+        if expected.startswith('ms-') and 'model' not in m:
+            print(f'WARN: {fp} missing `model` field (Section 13.2; ms-* agents should declare per Model Selection Guide)')
+
         # Item 13.4: deprecated APIs in agent body
-        body = ''.join(parts[2:]) if len(parts) >= 3 else ''
+        body = text.split('---', 2)[2] if text.count('---') >= 2 else text
         if DEPRECATED_API.search(body):
             match = DEPRECATED_API.search(body)
-            print(f'WARN: {fp} body contains deprecated API reference "{match.group(0)}" — Opus 4.7 returns 400 error (Section 13.3/13.4)')
+            print(f'WARN: {fp} body contains deprecated API reference "{match.group(0)}" — deprecated on Opus 4.7 and later / Claude 5 models (Section 13.3/13.4)')
+
+        # Item 13.5 (v6.3.0): reasoning-display instructions
+        report_reasoning_display(fp, text, '13.5')
 
         print(f'  {fp} → name={m.get("name", "?")}')
 
+# Widened reasoning-display sweep (v6.3.0): instructional prose beyond SKILL.md and plugin-root
+# agents — nested agents, references, templates, guides, validation, examples, slash commands.
+EXTRA_GLOBS = ['skills/*/agents/*.md', 'skills/*/references/*.md', 'skills/*/templates/*.md',
+               'skills/*/guides/*.md', 'skills/*/validation/*.md', 'skills/*/examples/*.md',
+               'commands/*.md']
+extra_files = sorted(set(fp for g in EXTRA_GLOBS for fp in glob.glob(g)))
+for fp in extra_files:
+    text = read_text(fp)
+    if text is None:
+        ok = False
+        continue
+    report_reasoning_display(fp, text, '12.7')
+print(f'  reasoning-display sweep covered {len(extra_files)} additional prose files')
+
 if not ok: sys.exit(1)
 print('PASS: all skill and agent frontmatters valid')
+PYEOF
+
+echo "=== Gate 2 — reasoning-display detector fixtures ==="
+python3 <<'PYEOF'
+import glob, os, sys
+sys.path.insert(0, 'scripts/_lib')
+from gate2_detector import scan
+
+ok = True
+FIXDIR = 'tests/gate-02-fixtures'
+if not os.path.isdir(FIXDIR):
+    print(f'FAIL: {FIXDIR} missing — detector fixtures are required')
+    sys.exit(1)
+
+# Valid fixtures: must produce zero hits and zero stale allows.
+for fp in sorted(glob.glob(f'{FIXDIR}/valid/*.md')):
+    with open(fp, encoding='utf-8') as fh:
+        hits, stale = scan(fh.read())
+    for ln, snippet in hits:
+        print(f'FAIL: false positive in {fp}:{ln}: "{snippet}"')
+        ok = False
+    for ln in stale:
+        print(f'FAIL: stale-allow misfire in {fp}:{ln}')
+        ok = False
+
+# Invalid fixtures: hits must equal the expected.txt manifest exactly (file:line per line).
+expected = set()
+with open(f'{FIXDIR}/invalid/expected.txt', encoding='utf-8') as fh:
+    for raw in fh:
+        raw = raw.strip()
+        if raw and not raw.startswith('#'):
+            expected.add(raw)
+actual = set()
+for fp in sorted(glob.glob(f'{FIXDIR}/invalid/*.md')):
+    with open(fp, encoding='utf-8') as fh:
+        hits, _stale = scan(fh.read())
+    for ln, _snippet in hits:
+        actual.add(f'{os.path.basename(fp)}:{ln}')
+for miss in sorted(expected - actual):
+    print(f'FAIL: expected detection missing (false negative): {miss}')
+    ok = False
+for extra in sorted(actual - expected):
+    print(f'FAIL: unexpected detection (not in manifest): {extra}')
+    ok = False
+
+if not ok: sys.exit(1)
+print(f'PASS: detector fixtures — {len(expected)} expected detections hit, no false positives')
 PYEOF
 
 echo "=== Gate 3 — JSON parse ==="

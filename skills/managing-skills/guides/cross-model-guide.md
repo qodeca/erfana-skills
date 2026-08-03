@@ -2,6 +2,8 @@
 
 Skills should work across different Claude models. This guide explains the differences and how to design for compatibility.
 
+**Last revised:** 2026-08-02 (v6.3.0 — Claude 5 family added; model table and effort guidance recalibrated. See `claude-5-patterns.md` for the full Claude 5 authoring pattern set.)
+
 ---
 
 ## Model Capabilities Overview
@@ -9,28 +11,23 @@ Skills should work across different Claude models. This guide explains the diffe
 | Model | Model ID | Strengths | Considerations |
 |-------|----------|-----------|----------------|
 | **Haiku 4.5** | `claude-haiku-4-5-20251001` | Fast, economical | Needs explicit instructions, simpler reasoning |
-| **Sonnet 4.6** | `claude-sonnet-4-6` | Balanced speed/capability | Good default target |
-| **Opus 4.6** | `claude-opus-4-6` | Advanced reasoning, agentic coding | Legacy; used by `/fast` |
-| **Opus 4.7** | `claude-opus-4-7` | Most capable; calibrates verbosity; literal instruction following; adaptive thinking only (no `budget_tokens`); 1:1 image coords; new tokenizer (1.0–1.35× tokens) | **Primary target**; Claude Code defaults to `xhigh` effort |
+| **Sonnet 5** | `claude-sonnet-5` | Balanced speed/capability | Good default for validators, researchers, format-appliers |
+| **Opus 4.8** | `claude-opus-4-8` | Previous Opus generation, still Active (retirement not sooner than 2027-05-28) | Configured-fallback target for Claude 5 refusals (`claude-5-patterns.md` §3) |
+| **Opus 5** | `claude-opus-5` | Current Opus; strong self-verification, first-shot correctness | **Primary target**; same pricing as Opus 4.8; runs the Claude 5 safety classifiers |
+| **Fable 5** | `claude-fable-5` | Mythos-class tier above Opus; long-horizon autonomy | Session-level only — **never pin in frontmatter**; runs the Claude 5 safety classifiers (see reasoning-display hazard, `claude-5-patterns.md` §3) |
 
-> **Note:** Always use the exact model IDs above in frontmatter `model` fields. Legacy IDs (e.g., `claude-3-*`, `claude-opus-4-0`) are deprecated. Opus 4.6 remains supported (used by `/fast`); Opus 4.7 is the primary target.
+> **Note:** frontmatter `model:` aliases (`opus`, `sonnet`, `haiku`, or `inherit`) are Claude Code short names that resolve to the current generation automatically — prefer them over exact IDs. API model IDs are different: from the 4.6 generation on, a dateless ID is a pinned snapshot, not an evergreen pointer. `claude-3-*` models are Retired (no longer callable); `claude-opus-4-0`, `claude-sonnet-4-0`, `claude-opus-4-20250514`, `claude-sonnet-4-20250514` were retired 2026-06-15. Exact IDs above are for API-level work and docs.
 
 ---
 
-## The "Haiku First" Strategy
+## Design for the smallest model you pin
 
-**Recommended approach:** Design and test your skill with Haiku in mind first.
+**The rule has two directions on Claude 5:**
 
-**Why?**
-- If it works with Haiku, it will definitely work with Sonnet and Opus
-- Forces you to write clear, explicit instructions
-- Prevents over-reliance on complex reasoning
+- **Downward (haiku/sonnet-pinned subagents):** explicit numbered steps, concrete examples, and output format templates still pay. If a validator runs on Haiku, write for Haiku.
+- **Upward (opus-tier and the session model):** the same explicitness becomes over-constraint. Claude 5 models follow prescriptive scaffolding literally — including steps wrong for the situation — and degrade when every behavior is enumerated. Give goal, rationale, boundaries, and a verification hook; skip the recipe. (See `claude-5-patterns.md` §6.)
 
-**How?**
-1. Write your skill
-2. Mentally simulate: "Would Haiku understand this?"
-3. If uncertain, add more explicit guidance
-4. Test with actual Haiku if available
+Practical test: for each instruction block, ask *which agent reads this?* Haiku-pinned → keep it explicit. Opus-tier → apply the litmus test "would a strong model behave worse without this line?"
 
 ---
 
@@ -39,17 +36,14 @@ Skills should work across different Claude models. This guide explains the diffe
 ### Claude Haiku 4.5 (`claude-haiku-4-5-20251001`)
 
 **Characteristics:**
-- Fastest response time
-- Most economical
-- Best for straightforward tasks
+- Fastest response time, most economical
+- Best for straightforward tasks (classification, routing, formatting)
 - May struggle with ambiguous instructions
 
 **Skill Design Tips:**
-- Be explicit about each step
+- Be explicit about each step; use numbered steps instead of prose
 - Avoid complex conditional logic
-- Use numbered steps instead of prose
-- Provide concrete examples
-- Specify exactly what output format to use
+- Provide concrete examples and exact output format
 
 **Example - Too Vague for Haiku:**
 ```markdown
@@ -65,52 +59,45 @@ Process the document appropriately based on its type.
 5. If unknown → report "Unsupported format: [extension]"
 ```
 
-### Claude Sonnet 4.6 (`claude-sonnet-4-6`)
+### Claude Sonnet 5 (`claude-sonnet-5`)
 
 **Characteristics:**
-- Balanced speed and capability
-- Good for most tasks
-- Handles moderate complexity well
-- Default choice for many use cases
+- Balanced speed and capability; handles moderate complexity and some ambiguity
+- The plugin's default pin for validators, researchers, and format-appliers
 
 **Skill Design Tips:**
-- Your default target
-- Can handle some ambiguity
-- Benefits from examples but doesn't require as many
-- Can follow more complex workflows
+- Benefits from examples but doesn't require many
+- Can follow more complex workflows without per-step hand-holding
 
 **Sonnet is the "goldilocks" model** – if your skill works well with Sonnet, you're in good shape.
 
-### Claude Opus 4.7 (`claude-opus-4-7`)
+### Claude 5 Opus tier (`claude-opus-5`; Fable 5 at session level)
 
 **Characteristics:**
-- Most capable generally available model; primary target
-- Calibrates response length to task complexity by default
-- **More literal instruction following**, especially at low/medium effort – does not silently generalize
-- Fewer tool calls and fewer subagents spawned by default (raise `effort` to increase)
-- More direct tone; less validation-forward phrasing; fewer emoji than 4.6
-- Built-in progress updates during long agentic traces – no scaffolding required
+- Strong self-verification: builds its own checks, catches faults during planning — verification *mandates* cause over-verification
+- **Literal instruction following** — does not silently generalize, and follows scaffolding exactly even when it's wrong for the situation
+- Delegates to subagents readily by default (the 4.7-era "explicit fan-out required" rule is inverted — see `claude-5-patterns.md` §5)
+- Both run the Claude 5 safety classifiers (`reasoning_extraction` among them) — no reasoning-display instructions, ever; a trip returns `stop_reason: "refusal"` and re-routes to Opus 4.8 where fallback is configured. Fable 5 additionally: thinking always on (cannot be disabled).
 
-**Breaking API changes vs 4.6** (Messages API only; Claude Code abstracts these):
-- `thinking: {type: "enabled", budget_tokens: N}` → **400 error**. Adaptive thinking only.
-- Adaptive thinking is **off by default** – set `thinking: {type: "adaptive"}` explicitly.
-- `temperature`, `top_p`, `top_k` non-default → **400 error**. Omit entirely.
-- Thinking content `omitted` by default (was `summarized`); opt in via `thinking.display: "summarized"`.
-- Assistant prefill returns 400 (carried from 4.6).
+**Breaking API changes** (Messages API; Claude Code abstracts these):
+- Fixed `thinking: {type: "enabled", budget_tokens: N}` → unsupported on Claude 5 models (Fable 5 / Opus 5 / Sonnet 5); Haiku 4.5 still supports it. Claude 5 is adaptive-thinking only.
+- `temperature`, `top_p`, `top_k` non-default → **400 error** on Claude Opus 4.7 and later. Omit entirely.
+- Fable 5: `thinking: {type: "disabled"}` not supported; use `effort: low` to reduce thinking depth.
 
-**Effort scale (4.7)**: `low → medium → high → xhigh → max`
-- Default for Claude Code v2.1.111+: `xhigh` (recommended for most coding/agentic use)
-- `high` for cost-sensitive intelligence-bound work
-- `medium` for short lookups
-- `max` reserved for hardest problems – prone to overthinking
+**Effort scale**: `low → medium → high → xhigh → max`
+- Claude 5 at `low`/`medium` often matches or exceeds prior-generation `xhigh`
+- `high` for orchestrators, reviewers, ambiguous investigation
+- `medium` for routine file creation, refactoring, research
+- `low` for validators and scoped one-shot jobs
+- `xhigh`/`max` reserved for genuinely frontier problems — can over-plan and refactor unrequested; pair with scope fences
 
 **Skill Design Tips:**
 - Prefer **positive examples** ("open with the decision") over pure prohibitions
-- **List concrete triggers** rather than rely on implicit generalization – 4.7 follows literally
-- Remove scaffolding for interim progress updates – 4.7 surfaces them automatically
-- Explicitly request parallelism when fanning across independent items
+- **List concrete triggers** rather than rely on implicit generalization — Claude 5 follows literally
+- State intent ("because...") — it measurably improves edge-case micro-decisions
+- Never instruct reasoning display; request evidence in structured output instead
 
-**Migration guidance**: see [Anthropic Opus 4.7 migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide#migrating-to-claude-opus-4-7) for the canonical checklist.
+**Migration guidance**: see the [Anthropic Fable 5 prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5) and `claude-5-patterns.md` §9 for the local checklist.
 
 ### When to target Opus specifically
 
@@ -126,9 +113,9 @@ Process the document appropriately based on its type.
 ### Level 1: Mental Simulation
 
 Ask yourself for each instruction:
-- "Would Haiku know what to do here?"
+- "Which model reads this — and is it explicit enough for the smallest one pinned here?"
 - "Is there any ambiguity?"
-- "Are the steps explicit enough?"
+- "Would the strongest model behave worse without this line?"
 
 ### Level 2: Explicit Test Cases
 
@@ -168,7 +155,15 @@ If possible, test with different models:
 
 **Cause:** Instructions rely on inference rather than explicit guidance.
 
-**Fix:** Add more explicit steps, examples, and output format specifications.
+**Fix:** Add explicit steps, examples, and output format specifications *to the haiku-pinned agent's prompt* — not to the whole skill.
+
+### Issue: Works on Sonnet, degrades on Opus 5 / Fable 5
+
+**Symptom:** The strongest model over-verifies, over-plans, or follows a step that is wrong for the situation.
+
+**Cause:** Prescriptive scaffolding written for weaker models — Claude 5 executes it literally.
+
+**Fix:** Apply the `claude-5-patterns.md` §6 diet: keep goal, boundaries, and verification hooks; cut the recipe.
 
 ### Issue: Inconsistent Output Format
 
@@ -210,17 +205,18 @@ Details: [if needed]
 
 | If Your Skill... | Add This |
 |------------------|----------|
-| Has complex logic | Explicit numbered steps |
-| Requires judgment | Concrete examples |
+| Pins haiku/sonnet subagents | Explicit numbered steps + examples in those agents |
+| Requires judgment | Intent ("because...") clauses, not more rules |
 | Produces output | Output format template |
 | Has multiple paths | Clear decision tree |
 | Can fail | Explicit error handling |
+| Runs on the session model | The §6 litmus test — cut lines a strong model doesn't need |
 
 ---
 
 ## Summary
 
-1. **Design for Haiku** - Explicit, step-by-step instructions
-2. **Test with Sonnet** - Your baseline for "good enough"
-3. **Verify with Opus** - Ensure it doesn't over-complicate
-4. **When in doubt** - Add more examples and explicit guidance
+1. **Write explicitness where the small models read it** — haiku/sonnet-pinned agent prompts
+2. **Test with Sonnet** — your baseline for "good enough"
+3. **Verify on Opus 5** — ensure the skill doesn't over-constrain a strong model
+4. **When in doubt** — explicit guidance for pinned small models; goal + boundaries for the rest

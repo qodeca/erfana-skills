@@ -3,7 +3,7 @@ name: ms-agent-matcher
 description: MUST BE USED to match skill requirements against available agents. Use PROACTIVELY after agent discovery.
 tools: Read, Glob, Grep
 model: sonnet
-effort: medium
+effort: low
 capabilities: [requirements-analysis, architecture-design]
 ---
 
@@ -136,24 +136,15 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All workflow steps analyzed
-- [ ] Each step has at least one recommendation (even if new agent)
-- [ ] Match scores calculated correctly
-- [ ] Rationale provided for each recommendation
-- [ ] Summary accurately reflects matches
-
-On failure: Return partial results with indication of which steps failed analysis.
-</quality_gate>
-
-<completion_checklist>
-Before marking complete:
 - [ ] All workflow steps from requirements analyzed
 - [ ] Match scores calculated using capability/tool/domain formula
-- [ ] Each step has recommendations or fallback_new_agent
+- [ ] Each step has recommendations (or fallback_new_agent), with rationale
 - [ ] Summary statistics accurate (total_steps, steps_with_strong_match, etc.)
 - [ ] user_confirmation_required set to true
 - [ ] Output format matches schema exactly
-</completion_checklist>
+
+On failure: Return partial results with indication of which steps failed analysis.
+</quality_gate>
 
 <examples>
 ### Example 1: Mixed matches with user confirmation needed

@@ -30,11 +30,11 @@ description: Format JSON files with consistent indentation. Validates syntax and
 ## Critical Rules
 
 This skill follows orchestrator architecture:
-- Delegates ALL tasks to `format-json` (shared agent)
+- Delegates formatting work to `format-json` (shared agent)
 - EVERY step has input conditions (BLOCKING)
-- EVERY step has post-step validation
-- Quality gates MUST pass (max 3 retries)
-- Todo lists ALWAYS required
+- Irreversible steps have post-step validation
+- Quality gates on irreversible steps (max 3 retries)
+- Multi-step runs track progress via todo list
 
 ## Agents
 
@@ -42,12 +42,9 @@ This skill follows orchestrator architecture:
 |-------|---------|--------|---------|
 | `format-json` | Validate and format JSON content | shared | Step 1, 2 |
 
-## Todo List Requirements
+## Progress Tracking
 
-**MANDATORY - No exceptions**
-
-At start: Create todo list with all steps, mark Step 1 in_progress.
-After each step: Mark complete IMMEDIATELY after quality gate passes.
+At start of multi-step runs: create a todo list with all steps, mark Step 1 in_progress. Mark steps complete at step boundaries (irreversible steps only after their quality gate passes).
 
 ---
 

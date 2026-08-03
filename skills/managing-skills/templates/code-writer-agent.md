@@ -106,19 +106,19 @@ Code writers require write access:
 
 ---
 
-## Model and effort selection (Opus 4.7)
+## Model and effort selection (Claude 5 calibration)
 
 Code writers are file-creators / refactorers. Per the Model Selection Guide in `shared-agent-template.md`:
 
 | Complexity | Model | Effort |
 |------------|-------|--------|
-| Simple fixes, typos | `sonnet` | `medium` |
-| Feature implementation | `opus` | `xhigh` |
+| Simple fixes, typos | `sonnet` | `low` |
+| Feature implementation | `opus` | `medium` |
 | Complex refactoring with safety | `opus` | `high` (don't use `max` — overthinks structured output) |
 
 **Frontmatter**: code writers SHOULD set both `model` and `effort` explicitly. Do not rely on session inheritance for irreversible-write agents.
 
-**Deprecated APIs (cause 400 error on Opus 4.7)**: do not use `temperature`, `top_p`, `top_k`, or fixed `budget_tokens`.
+**Deprecated APIs**: do not use `temperature`, `top_p`, `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models (Haiku 4.5 exempt). Do not instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier.
 
 ---
 

@@ -1,0 +1,4 @@
+{
+  "stop_hook_active": false,
+  "last_assistant_message": "Map: account[x] goals[x] stakeholders[x] assumptions[x] failure[x] reversibility[x] metrics[x] meta[x]\n\nYou confirmed the read-back, so here are the locked decisions:\n1. OIDC as the sole protocol with a SAML bridge.\n2. Dual-validation session window instead of hard cutover.\n3. Gateway proxy on the existing pinned domain for mobile.\nHanding off to erfana:managing-specs."
+}

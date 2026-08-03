@@ -284,34 +284,15 @@ Adapt:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Name follows kebab-case convention (lowercase, hyphens only)
-- [ ] Name is ≤64 characters
-- [ ] Description is trigger-shaped (prose "Use proactively…/Use when…" clause or opening line + 2-4 `<example>` blocks)
-- [ ] Description is third-person or imperative (no "I can help...", no "You can use...")
-- [ ] Description is ≤1024 characters
-- [ ] Model recommendation provided with justification
-- [ ] Conflict check performed (existing agents searched)
-- [ ] If conflicts found, variants suggested
-- [ ] If similar agents found, cited for consistency
+- [ ] All inputs validated; existing agents researched for conflicts and patterns
+- [ ] Name generated in kebab-case (lowercase, hyphens only, ≤64 characters)
+- [ ] Description is trigger-shaped (prose "Use proactively…/Use when…" clause or opening line + 2-4 `<example>` blocks), third-person or imperative (no "I can help...", no "You can use..."), ≤1024 characters
+- [ ] Model recommendation provided with justification based on complexity analysis
+- [ ] If conflicts found, variants suggested; if similar agents found, cited for consistency
 - [ ] Returning needs_user_input for model selection (orchestrator must ask)
 
 On failure: Return error with specific validation issues and suggested corrections.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] All inputs validated
-- [ ] Existing agents researched for conflicts and patterns
-- [ ] Agent name generated in kebab-case
-- [ ] Name validated (lowercase, hyphens, ≤64 chars)
-- [ ] Description composed as trigger-shaped (prose "Use proactively…/Use when…" clause or 2-4 `<example>` blocks)
-- [ ] Description validated (third-person/imperative, ≤2048 chars, has a trigger signal)
-- [ ] Model recommended based on complexity analysis
-- [ ] Naming conflicts checked
-- [ ] Similar agents identified for consistency
-- [ ] All validation criteria passed
-- [ ] Returning needs_user_input for user to select model
-</completion_checklist>
 
 <examples>
 ### Example 1: CREATE with auto-delegation

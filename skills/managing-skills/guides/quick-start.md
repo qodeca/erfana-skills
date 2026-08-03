@@ -123,7 +123,7 @@ See `templates/agent-template.md` for complete template with all optional tags.
 ### Quick Steps
 
 1. **Invoke skill:** `use managing-skills` or describe your need
-2. **Answer questionnaire:** Provide requirements (problem, triggers, tools)
+2. **Answer the interview:** A coverage-map interview gathers requirements (problem, triggers, tools, non-goals)
 3. **Review design:** Confirm name, structure, complexity
 4. **Files created:** Skill directory with SKILL.md and agents
 5. **Validate:** Automatic checklist validation
@@ -134,7 +134,7 @@ See `templates/agent-template.md` for complete template with all optional tags.
 User: Create a skill for formatting JSON files
 
 managing-skills:
-1. Gathers requirements via questionnaire
+1. Runs the requirements interview (grill-planner plans it; complete requests get a 2-3 question read-back)
 2. Designs: name=formatting-json, complexity=simple
 3. Creates: SKILL.md (uses shared agent at agents/)
 4. Validates against checklists
@@ -154,9 +154,10 @@ managing-skills:
 ### Quick Steps
 
 1. **Invoke:** `Review my [skill-name] skill`
-2. **Choose depth:** quick (5min) / standard (30min) / deep (1-2hr)
-3. **Get report:** Score, findings, action items
-4. **Act on recommendations**
+2. **Answer the gate:** "Any session observations, friction points, or particular ideas to focus this review?" – yes runs a scoped interview
+3. **Choose depth:** quick (5min) / standard (30min) / deep (1-2hr) – resolved by the interview when it ran
+4. **Get report:** Score, findings, action items
+5. **Act on recommendations**
 
 ### Example
 
@@ -184,10 +185,11 @@ managing-skills:
 ### Quick Steps
 
 1. **Invoke:** `Modify my [skill-name] skill to [change]`
-2. **Backup created:** Automatic (unless skipped)
-3. **Changes applied:** Targeted modifications
-4. **Validation:** Before/after comparison
-5. **Rollback available:** If validation fails
+2. **Answer the gate:** "Do you have particular ideas or reasons behind this change?" – yes runs a scoped interview capturing intent
+3. **Backup created:** Automatic (unless skipped)
+4. **Changes applied:** Targeted modifications
+5. **Validation:** Before/after comparison
+6. **Rollback available:** If validation fails
 
 ### Example
 
@@ -227,11 +229,11 @@ managing-skills:
 
 ### What if I'm not sure about requirements?
 
-The skill will ask clarifying questions through a questionnaire. You don't need to know everything upfront.
+The skill runs a coverage-map interview — one question at a time, with a recommended answer per question. You don't need to know everything upfront.
 
-### Can I skip the questionnaire?
+### Can I skip the interview?
 
-If your request is specific and complete, the skill proceeds directly. Questionnaire only appears when clarification is needed.
+Not entirely — Create always interviews, but a specific and complete request collapses to a 2-3 question read-back (confirmation mode). Modify, Review, and Modernize only interview when you answer their opening gate question with a yes. Non-required areas can be waived when you say so.
 
 ### What happens if validation fails?
 

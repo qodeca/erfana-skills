@@ -3,7 +3,7 @@ name: ms-reviewer
 description: MUST BE USED to audit existing skill for quality, compliance, and health. Use when reviewing skills or conducting health checks.
 tools: Read, Glob, Grep
 model: opus
-effort: xhigh
+effort: high
 capabilities: [quality-assessment, architecture-review, anti-pattern-detection]
 ---
 
@@ -41,16 +41,17 @@ Audit existing skill for quality, compliance, and health.
    `Glob {skill_path}/**/*.md`
    Check: File organization correct, line counts appropriate, references valid
 
-4. Review content (standard+) — include Opus 4.7 anti-pattern sweep
+4. Review content (standard+) — include Claude 5 model-pattern sweep
    Check: Workflow clear, examples present, anti-patterns documented
-   **Opus 4.7 anti-pattern detection (added v4.2.0; reference: `guides/opus-4-7-patterns.md`):**
-   - 12.1 voice: `Grep -nE "I can help|I'll help|You can use" {skill_path}/SKILL.md` → for EACH match, READ ±3 lines of context. If context contains rule-definition markers (`MUST NOT`, `forbidden`, `anti-pattern`, `don't use`, `no first-person`, `(no "I can help`, listed under `## Anti-Patterns`, listed under `**High Priority:**`), mark as N/A (rule definition explicitly forbidding the phrase). Otherwise flag as P1. Goal: avoid every Modernize self-run on managing-skills surfacing false-positives on its own rule definitions (lines 52, 312 of managing-skills/SKILL.md).
+   **Model-pattern detection (added v4.2.0; revised v6.3.0; reference: `guides/claude-5-patterns.md`):**
+   - 12.1 voice: `Grep -nE "I can help|I'll help|You can use" {skill_path}/SKILL.md` → for EACH match, READ ±3 lines of context. If context contains rule-definition markers (`MUST NOT`, `forbidden`, `anti-pattern`, `don't use`, `no first-person`, `(no "I can help`, listed under `## Anti-Patterns`, listed under `**High Priority:**`), mark as N/A (rule definition explicitly forbidding the phrase). Otherwise flag as P1. Goal: avoid every Modernize self-run on managing-skills surfacing false-positives on its own rule definitions (the Critical Architectural Rules block and the Anti-Patterns Summary both quote the banned phrases).
    - 12.2 triggers: count quoted phrases in `when_to_use:` block; <3 → flag as P2
    - 12.3 verify scaffolding: `Grep -nE "always verify|double-check before returning|EVERY step.*validation" {skill_path}/SKILL.md` → flag matches as P1 with fix: "strip on routine steps; keep on irreversible only"
-   - 12.4 implicit fan-out: `Grep -nE "all files|each item|every step" {skill_path}/SKILL.md` → semantic check (does context describe parallel mechanic?); flag implicit ones as P2
+   - 12.4 delegation calibration: `Grep -nE "spawn parallel|ALWAYS.*subagent|fan-out|delegate ALL" {skill_path}/SKILL.md` → semantic check per match: is fan-out reserved for genuinely independent, sizeable items (PASSES), or mandated on small/sequential work or as a blanket rule (P2 fail, fix: "run small glue work inline; reserve fan-out for independent sizeable items")? Missing fan-out prose is NOT a finding — Claude 5 delegates readily by default.
    - 12.5 missing per-subagent overrides: read Agents table; if ≥2 agents and no Effort/Model columns, flag as P3
    - 12.6 find-vs-filter: `Grep -nE "report only|filter to|only the.*critical|only the top" {skill_path}/SKILL.md` → for each match, READ 3 lines before AND after to determine: is enumeration complete BEFORE filter (additive curation, PASSES) or does filter replace enumeration (exclusionary, P2 fail)?
    - 12.7 deprecated APIs: `Grep -nE "temperature:|top_p:|top_k:|budget_tokens:" {skill_path}/SKILL.md {referenced_agents}/*.md` → flag matches as P0 (BLOCKING — runtime 400 error)
+   - 12.7 reasoning-display: `Grep -nEi "show (your|the) (reasoning|thinking)|reproduce your (reasoning|thinking)|explain your chain of thought|display: *visible" {skill_path}/*.md {referenced_agents}/*.md` → for EACH match, READ ±3 lines: rule definitions, detection regexes, and backtick-quoted phrases are N/A; author-filled `<critical_thinking>` blocks are exempt. Genuine instructions to the model → flag as P0 (BLOCKING — trips the Claude 5 `reasoning_extraction` refusal classifier; re-routes to Opus 4.8 where fallback is configured)
 
 5. Review agent references (standard+)
    Check: All referenced agents exist (builtin or shared), single responsibility
@@ -157,27 +158,14 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All relevant checklist items evaluated
+- [ ] All areas in scope reviewed (metadata, structure, content, agents, workflow)
 - [ ] Findings properly categorized (passed/warning/failed)
-- [ ] Action items are specific and actionable
-- [ ] Priority assigned to each action item
-- [ ] Status reflects actual findings
+- [ ] Action items are specific and actionable, each with priority and effort estimate
+- [ ] Score calculated and status reflects actual findings
+- [ ] Next review date recommended
 
 On failure: Return partial review with explanation of incomplete areas.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Review scope determined (quick/standard/deep)
-- [ ] Metadata reviewed (frontmatter, name, description)
-- [ ] Structure reviewed (files, line counts, references)
-- [ ] Content reviewed (workflow, examples, anti-patterns)
-- [ ] Agent references reviewed (existence, validity)
-- [ ] Score calculated based on findings
-- [ ] Status determined (healthy/minor-issues/needs-attention/critical)
-- [ ] Action items generated with priorities and effort estimates
-- [ ] Next review date recommended
-</completion_checklist>
 
 <examples>
 ### Example 1: Healthy skill
@@ -258,8 +246,8 @@ Before marking complete:
         "id": "ACT-002",
         "priority": "P1",
         "category": "workflow",
-        "finding": "Missing quality gates in Steps 2-4",
-        "action": "Add quality gate section to each step",
+        "finding": "Missing quality gate on the file-write step (Step 4)",
+        "action": "Add quality gate with retry logic to the irreversible step",
         "file": "SKILL.md:45",
         "effort": "medium"
       }

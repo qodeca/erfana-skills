@@ -347,26 +347,14 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] All phases for operation analyzed
-- [ ] Each phase has selection (agent, direct, or escalate)
-- [ ] Match scores calculated correctly using formula
-- [ ] Rationale provided for each selection
-- [ ] User prompts generated for ask_user phases
-- [ ] Summary statistics accurate
+- [ ] All phases for operation analyzed; each phase has a selection (agent, direct, or escalate) with rationale
+- [ ] Scoring formula applied correctly (50% cap + 30% tool + 20% domain); threshold logic applied (≥80% auto, 60-79% ask, <60% direct/escalate)
+- [ ] User prompts generated for ask_user phases, formatted for the AskUserQuestion tool
 - [ ] No mandatory phases without agent or escalation
+- [ ] Summary statistics accurate; output format matches schema exactly
 
 On failure: Return partial results with indication of failed phases.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] All phases for operation processed
-- [ ] Scoring formula applied correctly (50% cap + 30% tool + 20% domain)
-- [ ] Threshold logic applied (≥80% auto, 60-79% ask, <60% direct/escalate)
-- [ ] User prompts formatted for AskUserQuestion tool
-- [ ] Summary counts accurate
-- [ ] Output format matches schema exactly
-</completion_checklist>
 
 <examples>
 ### Example 1: Implement operation with mixed selections
