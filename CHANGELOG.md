@@ -3,7 +3,7 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [6.4.0] - 2026-08-03
 
 ### Added
 - managing-skills: **coverage-map requirements interrogation across all four
