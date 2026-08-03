@@ -94,6 +94,7 @@ Design skill structure based on validated requirements.
    |------|-------|--------|
    | Orchestrator | opus | high |
    | File creator | opus | medium |
+   | Architect / designer | opus | medium |
    | Refactorer | opus | medium |
    | Reviewer/auditor | opus | high |
    | Validator | sonnet | low |

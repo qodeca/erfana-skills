@@ -1,8 +1,8 @@
 ---
 name: managing-skills
-description: Create, review, modify, and modernize Claude Code skills following Anthropic best practices. Full lifecycle management including creation workflows, validation, updates, and model-pattern application (Claude 5, legacy Opus 4.7). Use when creating new skills, reviewing existing skills, updating skill content, applying Claude 5 or 4.7 patterns, or asking "how do I create/manage a skill".
+description: Create, review, modify, and modernize Claude Code skills following Anthropic best practices. Full lifecycle management including creation workflows, validation, updates, and Claude 5 pattern application. Use when creating new skills, reviewing existing skills, updating skill content, applying Claude 5 patterns, or asking "how do I create/manage a skill".
 when_to_use: |
-  Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns", "Claude 5 refresh", "apply 4.7 patterns", "update for opus 4.7", "skill lifecycle".
+  Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns", "Claude 5 refresh", "skill lifecycle".
 model: opus
 effort: high
 ---
@@ -48,9 +48,9 @@ Comprehensive lifecycle management for Claude Code skills: creation, review, and
 17. **Skills MUST define Q&A requirements gathering** (⛔ BLOCKING - see `guides/qa-protocol.md`)
 18. **Spawned agents CANNOT spawn other agents** (Task tool unavailable to subagents – prevents infinite nesting)
 19. **Skills SHOULD comply with the Agent Skills open standard** (agentskills.io) – advisory, not blocking. Key conventions: standard frontmatter schema (`name`, `description`, `context`, `model`, `allowed-tools`), `--add-dir` auto-loading, and portable skill definitions
-20. **Skills MUST NOT use deprecated APIs** (added v4.2.0): no `temperature` / `top_p` / `top_k` / fixed `thinking: {budget_tokens: N}` — Opus 4.7+ returns 400 error. Use `{type: "adaptive"}` + `effort` field instead. ⛔ BLOCKING (Section 12.7 of pre-release-checklist).
+20. **Skills MUST NOT use deprecated APIs** (added v4.2.0): no `temperature` / `top_p` / `top_k` (400 error on Claude Opus 4.7 and later, per Anthropic's parameter-deprecation table) and no fixed `thinking: {budget_tokens: N}` on Claude 5 models (unsupported on Fable 5 / Opus 5 / Sonnet 5; Haiku 4.5 still supports it). Use `{type: "adaptive"}` + `effort` field instead. ⛔ BLOCKING (Section 12.7 of pre-release-checklist).
 21. **Skill descriptions follow the model-pattern rules** (added v4.2.0): third-person voice (no "I can help" / "You can use") — **Anthropic-required** per skill-creator/SKILL.md (pre-release-checklist item 12.1); specific quoted activation phrases in `when_to_use` — Anthropic requires "specific triggers"; **≥3 phrases is plugin convention** for activation reliability (item 12.2); no filler word repetition ("comprehensive"/"thorough"/"detailed"); combined description+when_to_use ≤1,536 chars (Anthropic-documented Claude Code truncation, item 7.4).
-22. **Skills and agent prose MUST NOT instruct a model to surface its internal reasoning** (added v6.3.0): no `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, no `thinking.display: visible` config — on Claude Fable 5 these trip the `reasoning_extraction` safety classifier and silently downgrade the session to Opus 4.8. Request evidence in structured output instead. Author-filled `<critical_thinking>` blocks are exempt. ⛔ BLOCKING (Section 12.7; see `guides/claude-5-patterns.md` §3).
+22. **Skills and agent prose MUST NOT instruct a model to surface its internal reasoning** (added v6.3.0): no `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, no `thinking.display: visible` config — these trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (`stop_reason: "refusal"`; where fallback is configured, requests re-route to Claude Opus 4.8). Request evidence in structured output instead. Author-filled `<critical_thinking>` blocks are exempt. ⛔ BLOCKING (Section 12.7; see `guides/claude-5-patterns.md` §3).
 
 ---
 
@@ -135,11 +135,11 @@ Per-subagent Effort and Model overrides (added v4.2.0; recalibrated v6.3.0 per C
 |-------|---------|--------|--------|-------|---------|
 | `ms-requirements-gatherer` | Gather business requirements via questionnaire | shared | low | sonnet | Create: Step 0 |
 | `ms-requirements-validator` | Validate requirements completeness and consistency | shared | low | sonnet | Create: Step 1 |
-| `ms-agent-discoverer` | Discover available builtin/shared agents | shared | low | sonnet | Create: Step 1.5 |
+| `ms-agent-discoverer` | Discover available builtin/shared agents | shared | medium | sonnet | Create: Step 1.5 |
 | `ms-agent-matcher` | Match requirements to available agents | shared | low | sonnet | Create: Step 1.5 |
 | `ms-designer` | Design skill structure based on requirements | shared | medium | opus | Create: Step 2 |
 | `ms-creator` | Create skill files following templates | shared | medium | opus | Create: Step 3 |
-| `ms-example-adder` | Add usage examples to skill | shared | low | sonnet | Create: Step 4 |
+| `ms-example-adder` | Add usage examples to skill | shared | medium | opus | Create: Step 4 |
 | `ms-validator` | Validate skill against checklists | shared | low | sonnet | Create: Step 5, Modernize: Step 4 |
 | `ms-reviewer` | Audit existing skill for quality | shared | high | opus | Review, Modernize: Step 1 |
 | `ms-modifier` | Apply modifications safely with backup | shared | medium | opus | Modify, Modernize: Step 3 |
@@ -230,7 +230,7 @@ Multi-phase operation — create a todo list with the Modify steps (Rule 12).
 
 Multi-phase operation — create a todo list with the Modernize steps (Rule 12).
 
-**When to use:** apply Claude 5 patterns to an existing skill written under earlier conventions (including 4.7-era skills). Trigger phrases: "modernize <skill>", "apply Claude 5 patterns to <skill>", "apply 4.7 patterns to <skill>", "update <skill> for opus 4.7".
+**When to use:** apply Claude 5 patterns to an existing skill written under earlier conventions. Trigger phrases: "modernize <skill>", "apply Claude 5 patterns to <skill>", "refresh <skill> for Claude 5".
 
 | Step | Agent | Purpose |
 |------|-------|---------|
@@ -352,7 +352,7 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 - **Any file over 500 lines** (split or compact required)
 - **Missing Q&A/requirements gathering** (must define when/how to gather)
 - **Using deprecated APIs** (`temperature`/`top_p`/`top_k`/fixed `budget_tokens`) — runtime 400 error on Opus 4.7+ (Section 12.7)
-- **Reasoning-display instructions** (`show your reasoning`, `thinking.display: visible`) — silent Fable 5 → Opus 4.8 fallback (Rule 22, Section 12.7)
+- **Reasoning-display instructions** (`show your reasoning`, `thinking.display: visible`) — trip the Claude 5 `reasoning_extraction` refusal classifier (Rule 22, Section 12.7)
 
 **High Priority:**
 - First-person descriptions ("I can help" / "You can use")
@@ -386,8 +386,7 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 - `guides/skill-modernization-guide.md` - **Modernize operation playbook** (added v4.2.0): per-pattern remediation, includes architecture migration
 
 ### Model patterns
-- `guides/claude-5-patterns.md` - **Current pattern reference** (added v6.3.0): Claude 5 family, reasoning-display hazard, effort recalibration, delegation calibration, prescriptiveness diet
-- `guides/opus-4-7-patterns.md` - Historical 4.7-era reference (superseded; 18 sections, kept for Section 12 provenance)
+- `guides/claude-5-patterns.md` - **Current pattern reference** (added v6.3.0): Claude 5 family, reasoning-display hazard, effort recalibration, delegation calibration, prescriptiveness diet, cache-friendliness, skill granularity
 - `guides/embedded-prompts-guide.md` - Three-tier mental model: when to use plugin-root agents vs skill-internal prompts vs reference docs
 
 ### Reference (Consult As Needed)

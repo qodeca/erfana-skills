@@ -243,33 +243,16 @@ Return exactly:
 
 <quality_gate>
 Before returning, ALL must be true:
-- [ ] Agent file read and parsed successfully
-- [ ] All pre-release checklist sections evaluated (none skipped)
-- [ ] All security checklist sections evaluated (none skipped)
-- [ ] Scores calculated using weighted formula with severity weights
-- [ ] Every failure includes actionable fix description
-- [ ] Recommendations sorted by priority (P0 → P1 → P2 → P3)
-- [ ] agent_info section populated with all verification results
+- [ ] Agent file read and YAML parsed successfully
+- [ ] Pre-release and security checklists fully evaluated (none skipped)
+- [ ] Critical thinking section verified (REQUIRED); filename vs name field, description trigger phrase, and explicit tools listing checked
+- [ ] Scores calculated using weighted formula with severity weights; risk score calculated using security formula
+- [ ] Every failure includes actionable fix description with file:line; recommendations sorted by priority (P0 → P1 → P2 → P3)
+- [ ] agent_info populated with all verification results; `passed` boolean correctly reflects validation result
 - [ ] Output matches exact JSON schema
 
 On failure: Log which criteria failed, return structured error with partial results if available.
 </quality_gate>
-
-<completion_checklist>
-Before marking complete:
-- [ ] Agent file read and YAML parsed
-- [ ] Pre-release checklist fully evaluated (11 sections)
-- [ ] Security checklist fully evaluated (8 sections)
-- [ ] Scores calculated using weighted formula (severity weights from checklist files)
-- [ ] Critical thinking section verified (REQUIRED)
-- [ ] Filename vs name field checked
-- [ ] Description trigger phrase checked
-- [ ] Tools explicit listing checked
-- [ ] All failures have actionable fix descriptions with file:line
-- [ ] passed boolean correctly reflects validation result
-- [ ] Risk score calculated using security formula
-- [ ] Output format matches schema exactly
-</completion_checklist>
 
 <examples>
 ### Example 1: Passing agent

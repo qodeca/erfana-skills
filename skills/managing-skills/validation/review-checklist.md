@@ -47,7 +47,7 @@ Use for periodic health checks.
 
 ### Claude 5 model patterns (added 2026-05-09, revised 2026-08-02)
 
-- [ ] No deprecated APIs (no `temperature`/`top_p`/`top_k`/fixed `budget_tokens` — runtime 400 error on Opus 4.7+) and no reasoning-display instructions (`show your reasoning`, `thinking.display: visible` — silent Fable 5 → Opus 4.8 fallback)
+- [ ] No deprecated APIs (no `temperature`/`top_p`/`top_k` — 400 error on Opus 4.7 and later; no fixed `budget_tokens` on Claude 5 models, Haiku 4.5 exempt) and no reasoning-display instructions (`show your reasoning`, `thinking.display: visible` — Claude 5 `reasoning_extraction` refusal classifier)
 
 ### Quick Score
 
@@ -137,7 +137,7 @@ Mirrors Section 12 of pre-release-checklist.md. N/A handling: items 8.4 and 8.5 
 - [ ] **8.4 Delegation calibration:** Fan-out reserved for genuinely independent, sizeable items; no mandated spawning on small or sequential work (or N/A for single-threaded skills)
 - [ ] **8.5 Per-subagent overrides:** Agents table has Effort/Model columns when applicable (or N/A for skills with no agents)
 - [ ] **8.6 Find-vs-filter decoupled:** Reviewer skills enumerate findings before filtering (or N/A for non-reviewers). **Detection note:** semantic check, not regex — additive curation passes; exclusionary filtering fails.
-- [ ] **8.7 No deprecated APIs or reasoning-display:** No `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (runtime 400 error on Opus 4.7+). No prose instructing the model to surface internal reasoning (`show your reasoning`, `thinking.display: visible`) — trips the `reasoning_extraction` classifier on Fable 5. Author-filled `<critical_thinking>` blocks exempt.
+- [ ] **8.7 No deprecated APIs or reasoning-display:** No `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later); no fixed `budget_tokens` on Claude 5 models (Haiku 4.5 exempt). No prose instructing the model to surface internal reasoning (`show your reasoning`, `thinking.display: visible`) — trips the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5. Author-filled `<critical_thinking>` blocks exempt.
 
 ### Full Score
 

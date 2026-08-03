@@ -118,7 +118,7 @@ ms-validator's N/A handling means focused skills can score 4.5/4.5 (full applica
 
 ## Cache trade-off
 
-Focused skills typically run 60-200 lines (~1,000-3,000 tokens), which is **below the 4,096-token cache floor** (`guides/opus-4-7-patterns.md` §11). The SKILL.md body itself does not cache; reference content (under `references/`) can if it exceeds the floor.
+Focused skills typically run 60-200 lines (~1,000-3,000 tokens), which is **below the 4,096-token cache floor** (`guides/claude-5-patterns.md` §10). The SKILL.md body itself does not cache; reference content (under `references/`) can if it exceeds the floor.
 
 **Acceptable for artifact-driven skills** — output is the value, not the prompt template. No action needed.
 

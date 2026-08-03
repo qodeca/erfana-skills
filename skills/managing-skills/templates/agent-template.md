@@ -80,14 +80,14 @@ capabilities: [code-search, code-analysis, architecture-review]
 - ❌ **No AskUserQuestion** - Silently filtered; gather requirements before delegation
 - ❌ **Never omit tools** - Omitting inherits ALL tools (security risk)
 
-**Deprecated APIs (return 400 error on Opus 4.7+):**
+**Deprecated APIs:**
 
-- ❌ **`temperature` / `top_p` / `top_k`** - Per Anthropic migration guide, returns 400
-- ❌ **`thinking: {type: "enabled", budget_tokens: N}`** - Fixed budgets removed; use `{type: "adaptive"}` + `effort` field
+- ❌ **`temperature` / `top_p` / `top_k`** - 400 error on Claude Opus 4.7 and later, per Anthropic's parameter-deprecation table
+- ❌ **`thinking: {type: "enabled", budget_tokens: N}` on Claude 5 models** - unsupported on Fable 5 / Opus 5 / Sonnet 5 (Haiku 4.5 still supports it); use `{type: "adaptive"}` + `effort` field
 
-**Prose anti-patterns (silently degrade behavior on Claude 5):**
+**Prose anti-patterns (degrade behavior on Claude 5):**
 
-- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — trip the Fable 5 `reasoning_extraction` classifier, silent fallback to Opus 4.8
+- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (re-routes to Opus 4.8 where fallback is configured)
 - ❌ "Always verify / double-check before returning" on routine steps — the model self-verifies; the mandate causes over-verification
 - ❌ Over-prescribed fan-out — Claude 5 delegates readily; reserve fan-out for genuinely independent, sizeable items
 - ❌ Filter-at-find-time in reviewer agents — enumerate findings first, filter in second pass

@@ -118,7 +118,7 @@ Code writers are file-creators / refactorers. Per the Model Selection Guide in `
 
 **Frontmatter**: code writers SHOULD set both `model` and `effort` explicitly. Do not rely on session inheritance for irreversible-write agents.
 
-**Deprecated APIs (cause 400 error on Opus 4.7+)**: do not use `temperature`, `top_p`, `top_k`, or fixed `budget_tokens`. Do not instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — silent Fable 5 → Opus 4.8 fallback.
+**Deprecated APIs**: do not use `temperature`, `top_p`, `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models (Haiku 4.5 exempt). Do not instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier.
 
 ---
 

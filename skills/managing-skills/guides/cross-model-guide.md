@@ -12,11 +12,11 @@ Skills should work across different Claude models. This guide explains the diffe
 |-------|----------|-----------|----------------|
 | **Haiku 4.5** | `claude-haiku-4-5-20251001` | Fast, economical | Needs explicit instructions, simpler reasoning |
 | **Sonnet 5** | `claude-sonnet-5` | Balanced speed/capability | Good default for validators, researchers, format-appliers |
-| **Opus 4.8** | `claude-opus-4-8` | Previous Opus generation | Legacy; Fable 5's silent-fallback target when its classifiers trip |
-| **Opus 5** | `claude-opus-5` | Current Opus; strong self-verification, first-shot correctness | **Primary target**; same pricing as Opus 4.8 |
-| **Fable 5** | `claude-fable-5` | Mythos-class tier above Opus; long-horizon autonomy | Session-level only — **never pin in frontmatter**; extra safety classifiers (see reasoning-display hazard, `claude-5-patterns.md` §3) |
+| **Opus 4.8** | `claude-opus-4-8` | Previous Opus generation, still Active (retirement not sooner than 2027-05-28) | Configured-fallback target for Claude 5 refusals (`claude-5-patterns.md` §3) |
+| **Opus 5** | `claude-opus-5` | Current Opus; strong self-verification, first-shot correctness | **Primary target**; same pricing as Opus 4.8; runs the Claude 5 safety classifiers |
+| **Fable 5** | `claude-fable-5` | Mythos-class tier above Opus; long-horizon autonomy | Session-level only — **never pin in frontmatter**; runs the Claude 5 safety classifiers (see reasoning-display hazard, `claude-5-patterns.md` §3) |
 
-> **Note:** frontmatter `model:` fields use the aliases `opus`, `sonnet`, `haiku` (or `inherit`) — aliases resolve to the current generation automatically, so prefer them over exact IDs. Legacy IDs (`claude-3-*`, `claude-opus-4-0`) are deprecated. Exact IDs above are for API-level work and docs.
+> **Note:** frontmatter `model:` aliases (`opus`, `sonnet`, `haiku`, or `inherit`) are Claude Code short names that resolve to the current generation automatically — prefer them over exact IDs. API model IDs are different: from the 4.6 generation on, a dateless ID is a pinned snapshot, not an evergreen pointer. `claude-3-*` models are Retired (no longer callable); `claude-opus-4-0`, `claude-sonnet-4-0`, `claude-opus-4-20250514`, `claude-sonnet-4-20250514` were retired 2026-06-15. Exact IDs above are for API-level work and docs.
 
 ---
 
@@ -77,11 +77,11 @@ Process the document appropriately based on its type.
 - Strong self-verification: builds its own checks, catches faults during planning — verification *mandates* cause over-verification
 - **Literal instruction following** — does not silently generalize, and follows scaffolding exactly even when it's wrong for the situation
 - Delegates to subagents readily by default (the 4.7-era "explicit fan-out required" rule is inverted — see `claude-5-patterns.md` §5)
-- Fable 5 additionally: thinking always on (cannot be disabled), `reasoning_extraction` classifier — no reasoning-display instructions, ever
+- Both run the Claude 5 safety classifiers (`reasoning_extraction` among them) — no reasoning-display instructions, ever; a trip returns `stop_reason: "refusal"` and re-routes to Opus 4.8 where fallback is configured. Fable 5 additionally: thinking always on (cannot be disabled).
 
 **Breaking API changes** (Messages API; Claude Code abstracts these):
-- `thinking: {type: "enabled", budget_tokens: N}` → **400 error** on Opus 4.7+. Adaptive thinking only.
-- `temperature`, `top_p`, `top_k` non-default → **400 error**. Omit entirely.
+- Fixed `thinking: {type: "enabled", budget_tokens: N}` → unsupported on Claude 5 models (Fable 5 / Opus 5 / Sonnet 5); Haiku 4.5 still supports it. Claude 5 is adaptive-thinking only.
+- `temperature`, `top_p`, `top_k` non-default → **400 error** on Claude Opus 4.7 and later. Omit entirely.
 - Fable 5: `thinking: {type: "disabled"}` not supported; use `effort: low` to reduce thinking depth.
 
 **Effort scale**: `low → medium → high → xhigh → max`

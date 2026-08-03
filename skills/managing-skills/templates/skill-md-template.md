@@ -49,8 +49,8 @@ This skill follows orchestrator architecture:
 - Quality gates apply on irreversible steps (max 3 retries, then escalate)
 - Multi-phase operations track progress (todo list or equivalent)
 - MUST NOT reference other skills or external agents
-- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7+ returns 400 error)
-- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — silent Fable 5 → Opus 4.8 fallback
+- MUST NOT use `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models
+- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier
 
 ## Requirements Gathering
 
@@ -233,9 +233,9 @@ Why: community-observed pattern — Opus 4.7+ and Claude 5 models follow "report
 - ❌ No quality gates on irreversible steps
 
 ### Model patterns (CRITICAL)
-- ❌ Using `temperature` / `top_p` / `top_k` (returns 400 error on Opus 4.7+)
-- ❌ Using fixed `thinking: {budget_tokens: N}` (removed; use `{type: adaptive}` + `effort`)
-- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — silent Fable 5 → Opus 4.8 fallback
+- ❌ Using `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later)
+- ❌ Using fixed `thinking: {budget_tokens: N}` on Claude 5 models (use `{type: adaptive}` + `effort`; Haiku 4.5 exempt)
+- ❌ Reasoning-display instructions (`show your reasoning`, `display: visible`) — Claude 5 `reasoning_extraction` refusal classifier
 - ❌ "Always verify before returning" prose on routine steps (the model self-verifies)
 - ❌ Over-prescribed fan-out — mandated subagent spawning on small/sequential work
 - ❌ Filter-at-find-time ("report only critical") in reviewer skills — enumerate first

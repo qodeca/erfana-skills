@@ -24,8 +24,8 @@ This skill follows orchestrator architecture:
 - Quality gates apply on irreversible steps (max 3 retries, then escalate)
 - Multi-phase operations track progress (todo list or equivalent)
 - MUST NOT reference other skills or external agents
-- MUST NOT use `temperature` / `top_p` / `top_k` / fixed `budget_tokens` (Opus 4.7+ returns 400 error)
-- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — silent Fable 5 → Opus 4.8 fallback
+- MUST NOT use `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models
+- MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier
 
 ## Requirements Gathering (Phase 0)
 

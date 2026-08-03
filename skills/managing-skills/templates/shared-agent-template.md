@@ -54,6 +54,7 @@ Per-subagent `model` and `effort` overrides are the right way to control cost wi
 |-----------|-------------------|--------------------|
 | Orchestrator (drives multi-step workflow) | opus | high |
 | File creator (writes new code/docs) | opus | medium |
+| Architect / designer (produces designs, not files) | opus | medium |
 | Refactorer (changes existing code with safety) | opus | medium |
 | Reviewer / auditor (deep analysis) | opus | high |
 | Validator (checklist-driven) | sonnet | low |
@@ -75,12 +76,12 @@ Omitting `effort` is valid — the agent inherits the session effort and adaptiv
 
 These cause runtime errors or silently degrade behavior on Opus 4.7+ and the Claude 5 family:
 
-- ❌ `temperature` / `top_p` / `top_k` — return 400 error (per Anthropic migration guide)
-- ❌ `thinking: {type: "enabled", budget_tokens: N}` — fixed budgets removed; use `{type: "adaptive"}` + `effort` field
+- ❌ `temperature` / `top_p` / `top_k` — 400 error on Claude Opus 4.7 and later (per Anthropic's parameter-deprecation table)
+- ❌ `thinking: {type: "enabled", budget_tokens: N}` on Claude 5 models — unsupported on Fable 5 / Opus 5 / Sonnet 5 (Haiku 4.5 still supports it); use `{type: "adaptive"}` + `effort` field
 - ❌ "Always verify / double-check before returning" prose on routine steps — the model self-verifies; on Claude 5 this scaffolding causes over-verification and wastes tokens
 - ❌ Over-prescribed fan-out ("ALWAYS spawn parallel subagents") — Claude 5 delegates readily by default; reserve fan-out prose for genuinely independent, sizeable items and run small glue work inline
 - ❌ Filter-at-find-time ("report only critical issues") — followed literally; mid-severity findings silently dropped; decouple find from filter
-- ❌ Reasoning-display instructions (`show your reasoning`, `reproduce your thinking`, `thinking.display: visible`) — trip the `reasoning_extraction` classifier on Claude Fable 5 and silently fall back to Opus 4.8; request evidence in structured output instead (author-filled `<critical_thinking>` blocks are exempt)
+- ❌ Reasoning-display instructions (`show your reasoning`, `reproduce your thinking`, `thinking.display: visible`) — trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (re-routes to Opus 4.8 where fallback is configured); request evidence in structured output instead (author-filled `<critical_thinking>` blocks are exempt)
 
 **Adaptive thinking is always on for Claude Fable 5 and cannot be disabled**; on Opus-tier models use `thinking: {type: "adaptive"}` in agent config (not in frontmatter) when enabling it explicitly.
 

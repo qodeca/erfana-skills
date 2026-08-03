@@ -109,7 +109,7 @@ ALWAYS:
 - Include Source column in agents table
 - Return needs_user_input when conflict detected (orchestrator asks)
 - Include Effort/Model columns in agents table when overrides apply (per Model Selection Guide)
-- Reject `temperature` / `top_p` / `top_k` / fixed `budget_tokens` in any emitted agent prompt (Opus 4.7+ returns 400 error); reject reasoning-display instructions (silent Fable 5 → Opus 4.8 fallback)
+- Reject `temperature` / `top_p` / `top_k` in any emitted agent prompt (400 error on Opus 4.7 and later) and fixed `budget_tokens` on Claude 5 models (Haiku 4.5 exempt); reject reasoning-display instructions (Claude 5 `reasoning_extraction` refusal classifier)
 
 MUST:
 - Use templates as base, not generate from scratch

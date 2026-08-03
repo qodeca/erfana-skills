@@ -247,7 +247,7 @@ Task: Run pre-release and security checklists
   - Focused skill: ≥63/66.5
 - [ ] Security score ≥87/93
 - [ ] No critical failures
-- [ ] Section 12.7 (deprecated APIs + reasoning-display) MUST pass (BLOCKING — runtime 400 error on Opus 4.7+; silent Fable 5 → Opus 4.8 fallback)
+- [ ] Section 12.7 (deprecated APIs + reasoning-display) MUST pass (BLOCKING — runtime 400 error on Opus 4.7 and later; Claude 5 `reasoning_extraction` refusal classifier)
 
 ### Quality Gate
 If validation fails: report issues, recommend fixes.

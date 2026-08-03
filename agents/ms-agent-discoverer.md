@@ -3,7 +3,7 @@ name: ms-agent-discoverer
 description: MUST BE USED to discover available agents (builtin, shared) for skill design. Use PROACTIVELY during skill creation.
 tools: Read, Glob, Grep
 model: sonnet
-effort: low
+effort: medium
 capabilities: [file-search, codebase-exploration, documentation-lookup]
 ---
 

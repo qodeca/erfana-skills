@@ -2,8 +2,8 @@
 name: ms-example-adder
 description: MUST BE USED to add usage examples demonstrating skill behavior. Use PROACTIVELY after skill files are created.
 tools: Read, Write, Edit, Glob
-model: sonnet
-effort: low
+model: opus
+effort: medium
 capabilities: [documentation-generation, content-creation]
 ---
 

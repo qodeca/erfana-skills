@@ -18,7 +18,7 @@ The same model-pattern set is tracked in three places with intentionally-differe
 | Delegation calibration | 12.4 | 8.4 | (skills only) |
 | Per-subagent overrides | 12.5 | 8.5 | (skills only) |
 | Find-vs-filter decoupled | 12.6 | 8.6 | (skills only) |
-| Deprecated APIs + reasoning-display | 12.7 (BLOCKING) | 8.7 (CRITICAL) | 13.3 + 13.4 (BLOCKING) |
+| Deprecated APIs + reasoning-display | 12.7 (BLOCKING) | 8.7 (CRITICAL) | 13.3 + 13.4 (BLOCKING); reasoning-display in 13.5 |
 | Effort field present | (n/a — skills inherit from agents) | (n/a) | 13.1 |
 | Model field present | (n/a) | (n/a) | 13.2 |
 
@@ -163,7 +163,7 @@ The same model-pattern set is tracked in three places with intentionally-differe
 - [ ] **11.3 Context field valid:** `context` field is `fork` or `shared` (not other values)
 - [ ] **11.4 Allowed-tools valid:** `allowed-tools` lists only valid tool names
 - [ ] **11.5 Progressive disclosure:** Progressive disclosure followed – SKILL.md ≤2% context budget
-- [ ] **11.6 No legacy model IDs:** Correct model IDs used (no legacy `claude-3-*` or `claude-opus-4-0`)
+- [ ] **11.6 No retired model IDs:** Correct model IDs used — none of the retired `claude-3-*`, `claude-opus-4-0`, `claude-sonnet-4-0`, `claude-opus-4-20250514`, `claude-sonnet-4-20250514`; prefer the `opus`/`sonnet`/`haiku` aliases
 
 **Section 11 Score:** ____ / 6
 
@@ -181,7 +181,7 @@ The same model-pattern set is tracked in three places with intentionally-differe
 - [ ] **12.4 Delegation calibration:** Delegation prose is proportionate. Parallel fan-out is reserved for genuinely independent, sizeable work items; the skill does NOT mandate spawning subagents for small or inherently sequential steps. Claude 5 models delegate readily by default — over-prescribed fan-out ("always spawn parallel subagents") wastes tokens and fragments context. Explicit fan-out language remains appropriate where items are truly independent (e.g. per-file reviews, per-dimension audits). [weight: 1.0, severity: High]
 - [ ] **12.5 Per-subagent overrides:** Agents table includes Effort and Model columns when overrides apply (or note explicitly that all inherit). [weight: 1.0, severity: Medium]
 - [ ] **12.6 Find-vs-filter decoupled:** Any reviewer-shaped skill enumerates findings before filtering. *Community-observed pattern (not Anthropic-documented):* Opus 4.7+ and Claude 5 models follow "report only critical" instructions literally; mid-severity findings may be silently dropped if filtered at find-time. Decoupling preserves the long tail. **Detection note:** semantic check required, not pure regex — additive curation ("Quick Wins: top 3" after a complete enumeration) PASSES; exclusionary filtering ("Output: top 3 critical only") FAILS. [weight: 1.5, severity: High]
-- [ ] **12.7 No deprecated config or reasoning-display instructions:** No `thinking: {type: "enabled", budget_tokens: N}` in agent prompts (use `{type: "adaptive"}` + effort). No `temperature`, `top_p`, `top_k` in agent code (Anthropic-documented 400 error on Opus 4.7+). No prose instructing a model to surface its internal reasoning — phrases like `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, or config like `thinking.display: visible` — because on Claude Fable 5 these trip the `reasoning_extraction` safety classifier and silently fall back to Opus 4.8. Safe alternative: request evidence and justification in the structured *output* ("cite the file and line that drove the decision"). Author-filled `<critical_thinking>` design blocks in agent files are exempt (static authored content, not runtime instructions). [weight: 1.0, severity: High]
+- [ ] **12.7 No deprecated config or reasoning-display instructions:** No fixed `thinking: {type: "enabled", budget_tokens: N}` in Claude-5-model agent prompts (unsupported on Fable 5 / Opus 5 / Sonnet 5; Haiku 4.5 still supports it — use `{type: "adaptive"}` + effort on Claude 5 models). No `temperature`, `top_p`, `top_k` in agent code (Anthropic-documented 400 error on Claude Opus 4.7 and later). No prose instructing a model to surface its internal reasoning — phrases like `show your reasoning`, `reproduce your thinking`, `explain your chain of thought`, or config like `thinking.display: visible` — because these trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (`stop_reason: "refusal"`; where fallback is configured, requests re-route to Claude Opus 4.8). Safe alternative: request evidence and justification in the structured *output* ("cite the file and line that drove the decision"). Author-filled `<critical_thinking>` design blocks in agent files are exempt (static authored content, not runtime instructions). [weight: 1.0, severity: High]
 
 ### N/A handling (added per Phase 0 pilot finding 1)
 
@@ -201,7 +201,7 @@ Items 12.4 and 12.5 are valid-but-N/A for focused single-purpose skills (no para
 
 - **Focused** (no fan-out, no agents, not a reviewer): 4.5 (items 12.1+12.2+12.3+12.7 = 1.0+1.0+1.5+1.0 = 4.5)
 - **Focused-reviewer** (no fan-out, no agents, IS a reviewer): 6.0 (4.5 + 12.6 = 6.0)
-- **Orchestrator** (full applicability — all 7 items): 8.0 (1.0+1.0+1.5+1.0+1.0+1.5+1.0 = 8.0)
+- **Orchestrator** (full applicability — all 7 items): 8.0 (1.0+1.0+1.5+1.0+1.0+1.5+1.0 = 8.0). A reviewer-shaped skill that delegates to agents is scored as orchestrator — the shape is decided by delegation, not by reviewer-ness.
 - **Pass threshold:** ≥95% of applicable items, conservatively rounded down. Concrete: focused 63/66.5 (94.7%), focused-reviewer 64/68 (94.1%), orchestrator 66/70 (94.3%).
 
 ms-validator determines `skill_shape` per its workflow Step 1a decision tree before evaluating Section 12.
@@ -250,7 +250,7 @@ Regardless of total score, **FAIL** if ANY of these:
 - Item 3.3 (Blocking conditions) fails
 - Item 4.1 (Progress tracking stated) fails
 - **Item 5.1 (Trigger conditions for Q&A) fails**
-- **Item 12.7 (Deprecated APIs + reasoning-display) fails** — deprecated APIs cause runtime 400 errors on Opus 4.7+; reasoning-display instructions silently downgrade Fable 5 sessions to Opus 4.8
+- **Item 12.7 (Deprecated APIs + reasoning-display) fails** — deprecated APIs cause runtime 400 errors on Opus 4.7 and later; reasoning-display instructions trip the Claude 5 `reasoning_extraction` refusal classifier
 
 **Section 12 soft-blocking caveat:** items 12.1-12.6 individual failures warn but do not block release. The total Section 12 score still contributes to the overall threshold.
 
@@ -278,7 +278,7 @@ These items MUST pass regardless of total score:
 - 9.3 Examples included
 
 ### Claude 5 model patterns (added 2026-05-09, revised 2026-08-02)
-- 12.7 No deprecated APIs (runtime 400 error on Opus 4.7+) and no reasoning-display instructions (silent Fable 5 → Opus 4.8 fallback)
+- 12.7 No deprecated APIs (runtime 400 error on Opus 4.7 and later) and no reasoning-display instructions (Claude 5 `reasoning_extraction` refusal classifier)
 
 ---
 
@@ -301,8 +301,8 @@ These items MUST pass regardless of total score:
 | Always-verify scaffolding | 12.3 | Strip "verify before returning" rituals; keep only on irreversible steps |
 | Over-prescribed fan-out | 12.4 | Reserve parallel fan-out for genuinely independent, sizeable items; drop mandated spawning on small or sequential work |
 | Filter at find-time | 12.6 | Enumerate ALL findings first, filter in second pass |
-| `temperature` / `top_p` / `top_k` | 12.7 | Remove (causes 400 error on Opus 4.7+) |
-| Fixed `budget_tokens` | 12.7 | Replace with `{type: "adaptive"}` + `effort` field |
+| `temperature` / `top_p` / `top_k` | 12.7 | Remove (causes 400 error on Opus 4.7 and later) |
+| Fixed `budget_tokens` on a Claude 5 model | 12.7 | Replace with `{type: "adaptive"}` + `effort` field (Haiku 4.5 exempt) |
 | Reasoning-display instruction | 12.7 | Remove `show your reasoning` / `display: visible` prose; request evidence in structured output instead |
 
 ---

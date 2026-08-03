@@ -36,15 +36,14 @@ Validate skill against all checklists and quality standards.
    Decision tree (apply IN ORDER, stop on first match):
 
    1. Read SKILL.md body. Does it contain an `## Agents` table or list of agents?
-      - **No** → `skill_shape = "focused"` (Section 12 applicable items: 12.1, 12.2, 12.3, 12.7 + 12.6 if reviewer-shaped). Effective max: 4.5 (or 6.0 for focused-reviewer).
-      - **Yes** → continue to step 2.
-   2. Is the skill reviewer-shaped? Indicators (any one suffices):
+      - **Yes** → `skill_shape = "orchestrator"` (Section 12 applicable: ALL 7 items 12.1-12.7). Effective max: 8.0. A reviewer-shaped skill that delegates to agents is scored as orchestrator — full applicability, including 12.6.
+      - **No** → continue to step 2.
+   2. Is the agent-less skill reviewer-shaped? Indicators (any one suffices):
       - Skill description contains "review", "audit", "score", "critique", "validate", "evaluate"
       - Skill body has `Operation: Review` or section labelled "Review" / "Audit"
       - Skill body produces severity-tagged findings as primary output
-      - **Yes + has agents** → `skill_shape = "focused-reviewer"` (Section 12 applicable: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7). Effective max: 6.0.
-      - **Yes + no agents** → already classified as `focused` above, but re-tag as `focused-reviewer` (Section 12 applicable: 12.1, 12.2, 12.3, 12.6, 12.7). Effective max: 6.0.
-   3. Otherwise (has agents, not reviewer-shaped) → `skill_shape = "orchestrator"` (Section 12 applicable: ALL 7 items 12.1-12.7). Effective max: 8.0.
+      - **Yes** → `skill_shape = "focused-reviewer"` (Section 12 applicable: 12.1, 12.2, 12.3, 12.6, 12.7). Effective max: 6.0.
+      - **No** → `skill_shape = "focused"` (Section 12 applicable: 12.1, 12.2, 12.3, 12.7). Effective max: 4.5.
 
    Set `applicable_max` per shape:
    - `focused` (no fan-out, no agents, not reviewer): pre-release total = 62 + 4.5 = 66.5; pass = 63/66.5 (≥94.7%)
@@ -54,7 +53,7 @@ Validate skill against all checklists and quality standards.
    Document the chosen shape in output: `data.skill_shape` and `data.skill_shape_evidence` (cite the SKILL.md feature that drove the decision — e.g. "no Agents table" or "Operation: Review section + audit-shaped output").
 
 2. Run pre-release checklist (find phase: enumerate ALL findings, do not filter)
-   - Section 1: Architectural compliance (×1.5 weight) ⛔ CRITICAL
+   - Section 1: Architectural compliance (all 8 items must pass — CRITICAL, unweighted) ⛔
    - Section 2: Agent design
    - Section 3: Workflow validation
    - Section 4: Progress tracking
@@ -72,7 +71,7 @@ Validate skill against all checklists and quality standards.
      - 12.4 delegation calibration — fan-out reserved for genuinely independent, sizeable items; FAIL if fan-out is mandated on small/sequential work. N/A for single-threaded skills (mark N/A, do not score 0)
      - 12.5 per-subagent overrides — N/A for skills with no agents (mark N/A); for orchestrator + focused-reviewer skills, REQUIRED check that SKILL.md table claims match agent file frontmatter (see Step 2.5 below — added v4.2.2 to close the meta-finding from the 3-reviewer audit pass that two reviewers caught independently)
      - 12.6 find-vs-filter decoupled — required for reviewer-shaped skills, N/A otherwise. **Detection note: semantic check, not regex.** "Quick Wins: top 3" alongside complete enumeration is additive curation (PASSES); "Output: top 3 critical only" is exclusionary filtering (FAILS).
-     - 12.7 no deprecated APIs / no reasoning-display instructions — required (BLOCKING — deprecated params 400 on Opus 4.7+; `show your reasoning` / `thinking.display: visible` prose silently downgrades Fable 5 to Opus 4.8. Skip matches inside backticks/rule definitions; author-filled `<critical_thinking>` blocks exempt)
+     - 12.7 no deprecated APIs / no reasoning-display instructions — required (BLOCKING — `temperature`/`top_p`/`top_k` 400 on Opus 4.7 and later; fixed `budget_tokens` unsupported on Claude 5 models, Haiku 4.5 exempt; `show your reasoning` / `thinking.display: visible` prose trips the Claude 5 `reasoning_extraction` refusal classifier, re-routing to Opus 4.8 where fallback is configured. Skip matches inside backticks/rule definitions; author-filled `<critical_thinking>` blocks exempt)
    Store all findings in `all_findings` array (no filtering yet).
 
 2.5. Cross-validate Section 12.5 (per-subagent overrides) — agent-file grep
@@ -94,7 +93,7 @@ Validate skill against all checklists and quality standards.
           the agent file declares).
      5. Aggregate per-skill: 12.5 PASSES only if every agent row matches its agent
         file. Any mismatch → 12.5 FAIL with the list of mismatches in
-        `opus_4_7_findings[12.5].mismatches`.
+        `model_pattern_findings[12.5].mismatches`.
 
    Rationale: SKILL.md table claims must match agent file ground truth.
    Aspirational claims that don't match runtime declarations cause silent skill-wide
@@ -172,7 +171,7 @@ Adapt:
 </critical_thinking>
 
 <output>
-Return exactly (additive schema — old fields preserved; the `opus_4_7_findings` field name is historical and kept for contract stability, it carries Section 12 "Claude 5 model patterns" findings):
+Return exactly (additive schema — old fields preserved; the `model_pattern_findings` field name is historical and kept for contract stability, it carries Section 12 "Claude 5 model patterns" findings):
 {
   "status": "completed",
   "data": {
@@ -194,7 +193,7 @@ Return exactly (additive schema — old fields preserved; the `opus_4_7_findings
     "all_findings": [
       {"section": string, "item": string, "severity": "critical" | "high" | "medium" | "low", "location": string, "fix": string}
     ],
-    "opus_4_7_findings": [
+    "model_pattern_findings": [
       {"section": "12.1" | "12.2" | "12.3" | "12.4" | "12.5" | "12.6" | "12.7", "applicable": "yes" | "no" | "na", "passed": boolean, "fix": string, "mismatches": [{"agent_name": string, "skill_md_claim": {"model": string, "effort": string}, "agent_file_actual": {"model": string, "effort": string}, "agent_file_path": string}]}
     ],
     "failures": [
@@ -238,10 +237,10 @@ On failure: Log which criteria failed, return structured error.
     "skill_shape": "focused",
     "skill_shape_evidence": "no Agents table in SKILL.md; single-purpose JSON formatter",
     "pre_release_score": {
-      "total": 65,
+      "total": 65.5,
       "max": 70,
       "applicable_max": 66.5,
-      "percentage": 97.7,
+      "percentage": 98.5,
       "by_section": {
         "architecture": "8/8",
         "agent_design": "6/6",
@@ -258,7 +257,7 @@ On failure: Log which criteria failed, return structured error.
     "all_findings": [
       {"section": "9.4", "item": "Examples realistic", "severity": "low", "location": "SKILL.md:78", "fix": "Consider adding edge case example"}
     ],
-    "opus_4_7_findings": [
+    "model_pattern_findings": [
       {"section": "12.1", "item": "Description voice", "applicable": "yes", "passed": true, "fix": null},
       {"section": "12.2", "item": "Description triggers", "applicable": "yes", "passed": true, "fix": null},
       {"section": "12.3", "item": "Verify scaffolding", "applicable": "yes", "passed": true, "fix": null},
@@ -293,14 +292,14 @@ On failure: Log which criteria failed, return structured error.
     "skill_shape": "orchestrator",
     "skill_shape_evidence": "Agents table present with 4 agents; non-reviewer purpose",
     "pre_release_score": {
-      "total": 41,
+      "total": 41.5,
       "max": 70,
       "applicable_max": 70,
-      "percentage": 58.6,
+      "percentage": 59.3,
       "critical_failures": true,
       "by_section": {
         "architecture": "5/8 (3 critical fails)",
-        "section_12": "5.5/8.0 (12.3 + 12.4 failed)"
+        "section_12": "4.5/8.0 (12.3, 12.4, 12.5 failed)"
       }
     },
     "security_score": {
@@ -312,22 +311,24 @@ On failure: Log which criteria failed, return structured error.
       {"section": "1.5", "item": "Input conditions per step", "severity": "critical", "location": "SKILL.md:42", "fix": "Add input conditions to each workflow step"},
       {"section": "1.7", "item": "Post-step validation", "severity": "critical", "location": "SKILL.md:42", "fix": "Add validation after irreversible-side-effect steps"},
       {"section": "12.3", "item": "Verify scaffolding cleanup", "severity": "high", "location": "SKILL.md:31", "fix": "Strip 'always verify before returning' on routine steps; keep on file-write steps only"},
-      {"section": "12.4", "item": "Delegation calibration", "severity": "high", "location": "SKILL.md:88", "fix": "Step 4 mandates 'spawn parallel subagents' for three one-line edits; run small sequential fixes inline, reserve fan-out for independent sizeable items"}
+      {"section": "12.4", "item": "Delegation calibration", "severity": "high", "location": "SKILL.md:88", "fix": "Step 4 mandates 'spawn parallel subagents' for three one-line edits; run small sequential fixes inline, reserve fan-out for independent sizeable items"},
+      {"section": "12.5", "item": "Per-subagent overrides", "severity": "high", "location": "SKILL.md:24", "fix": "SKILL.md table claim diverges from agent file frontmatter (see model_pattern_findings mismatches)"}
     ],
-    "opus_4_7_findings": [
+    "model_pattern_findings": [
       {"section": "12.1", "item": "Description voice", "applicable": "yes", "passed": true, "fix": null},
       {"section": "12.2", "item": "Description triggers", "applicable": "yes", "passed": true, "fix": null},
       {"section": "12.3", "item": "Verify scaffolding", "applicable": "yes", "passed": false, "fix": "Strip 'always verify before returning' on routine steps"},
       {"section": "12.4", "item": "Delegation calibration", "applicable": "yes", "passed": false, "fix": "Drop mandated fan-out on small sequential fixes; reserve parallel subagents for independent sizeable items"},
       {"section": "12.5", "item": "Per-subagent overrides", "applicable": "yes", "passed": false, "fix": "SKILL.md table claims `mi-agent-discoverer = sonnet` but agent file declares `model: opus`. Reconcile by either (a) bumping the agent file to sonnet to match the cost-savings claim, or (b) updating SKILL.md to admit opus.", "mismatches": [{"agent_name": "mi-agent-discoverer", "skill_md_claim": {"model": "sonnet", "effort": "low"}, "agent_file_actual": {"model": "opus", "effort": "low"}, "agent_file_path": "agents/mi-agent-discoverer.md:6"}]},
-      {"section": "12.6", "item": "Find-vs-filter", "applicable": "na", "passed": true, "fix": "N/A — not reviewer-shaped"},
+      {"section": "12.6", "item": "Find-vs-filter", "applicable": "yes", "passed": true, "fix": null},
       {"section": "12.7", "item": "No deprecated APIs / reasoning-display", "applicable": "yes", "passed": true, "fix": null}
     ],
     "failures": [
       {"section": "Architecture", "item": "Missing input conditions", "severity": "critical", "fix": "Add input conditions to each workflow step"},
       {"section": "Architecture", "item": "Missing post-step validation on irreversible steps", "severity": "critical", "fix": "Add validation after file writes"},
       {"section": "Section 12.3", "item": "Verify scaffolding not cleaned up", "severity": "high", "fix": "Strip 'always verify before returning' rituals"},
-      {"section": "Section 12.4", "item": "Over-prescribed fan-out", "severity": "high", "fix": "Reserve parallel subagents for independent sizeable items"}
+      {"section": "Section 12.4", "item": "Over-prescribed fan-out", "severity": "high", "fix": "Reserve parallel subagents for independent sizeable items"},
+      {"section": "Section 12.5", "item": "SKILL.md table vs agent-file drift", "severity": "high", "fix": "Reconcile the mi-agent-discoverer model claim (see mismatches)"}
     ],
     "warnings": [],
     "recommendations": [
@@ -368,7 +369,7 @@ On failure: Log which criteria failed, return structured error.
       "sections_checked": ["isolation", "secrets"]
     },
     "all_findings": [],
-    "opus_4_7_findings": [
+    "model_pattern_findings": [
       {"section": "12.7", "item": "No deprecated APIs / reasoning-display", "applicable": "yes", "passed": true, "fix": null}
     ],
     "failures": [],

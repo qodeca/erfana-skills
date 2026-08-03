@@ -29,7 +29,7 @@ Apply each pattern from `pre-release-checklist.md` Section 12. For each: locate,
 | 12.4 | Delegation calibration | Workflow steps with fan-out or delegation prose | Apply if fan-out is mandated on small/sequential work, or "spawn parallel subagents" appears as a blanket rule |
 | 12.5 | Per-subagent overrides | Agents table | Apply if Effort/Model columns absent and ≥2 agents in skill |
 | 12.6 | Find-vs-filter decoupled | Output structure (reviewer skills) | Apply if "report only critical" / "filter to top N" found at find-time |
-| 12.7 | No deprecated APIs / reasoning-display | Search skill body AND agent prompts referenced by skill | Apply (BLOCKING) if `temperature` / `top_p` / `top_k` / fixed `budget_tokens` found, or prose instructs the model to surface its reasoning |
+| 12.7 | No deprecated APIs / reasoning-display | Search skill body AND agent prompts referenced by skill | Apply (BLOCKING) if `temperature` / `top_p` / `top_k` / fixed `budget_tokens` found, or reasoning-display prose found (`show your reasoning`-class; see 12.7) |
 
 ---
 
@@ -219,7 +219,7 @@ grep -nE "temperature|top_p|top_k|budget_tokens" skills/<name>/SKILL.md agents/<
 grep -nEi "show (your|the) (reasoning|thinking)|reproduce your (reasoning|thinking)|chain of thought|display: *visible" skills/<name>/*.md
 ```
 
-**Hard rule:** if found, FAIL the modernization until removed. Deprecated params cause runtime 400 errors on Opus 4.7+; reasoning-display instructions trip the `reasoning_extraction` classifier on Claude Fable 5 and silently downgrade the session to Opus 4.8. (Skip matches that are rule definitions or detection regexes quoting the phrases in backticks; author-filled `<critical_thinking>` blocks are exempt.)
+**Hard rule:** if found, FAIL the modernization until removed. `temperature`/`top_p`/`top_k` cause runtime 400 errors on Claude Opus 4.7 and later; fixed `budget_tokens` is unsupported on Claude 5 models (Haiku 4.5 exempt); reasoning-display instructions trip the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5, re-routing to Opus 4.8 where fallback is configured. (Skip matches that are rule definitions or detection regexes quoting the phrases in backticks; author-filled `<critical_thinking>` blocks are exempt.)
 
 **Anti-patterns:**
 ```yaml
