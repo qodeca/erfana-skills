@@ -60,9 +60,11 @@ Regular reviews ensure skills remain:
 
 ### Step 1: Preparation
 
+The orchestrator opens with the Review gate question ("Any session observations, friction points, or particular ideas to focus this review?"). On any yes, the grill-planner interview captures depth, friction, and focus areas (see SKILL.md "Requirements interrogation") — the friction answers feed `ms-reviewer` as `usage_feedback`, and the depth answer resolves the review type below.
+
 Before starting:
 - [ ] Identify skill to review
-- [ ] Determine review type needed
+- [ ] Determine review type needed (from the interview's `review_depth`, or directly when the gate was answered no)
 - [ ] Allocate appropriate time
 - [ ] Have checklists ready
 

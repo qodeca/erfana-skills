@@ -22,7 +22,7 @@ The Create operation follows 7 steps (including Step 1.5):
 
 | Step | Agent | Purpose |
 |------|-------|---------|
-| 0 | `ms-requirements-gatherer` | Gather requirements via Q&A |
+| 0 | `grill-planner` | Plan the requirements interview (orchestrator runs it) |
 | 1 | `ms-requirements-validator` | Validate completeness |
 | 1.5 | `ms-agent-discoverer` + `ms-agent-matcher` | Find and match agents |
 | 2 | `ms-designer` | Design skill structure |
@@ -32,40 +32,38 @@ The Create operation follows 7 steps (including Step 1.5):
 
 ---
 
-## Step 0: Gather Requirements
+## Step 0: Requirements Interview
+
+Create always interviews — a specific and complete request collapses to `confirmation` mode (2-3 read-back questions), never to zero.
 
 ### Input Conditions
 - [ ] User has made skill creation request
-- [ ] Request needs clarification (OR skip if complete)
 
-### Pre-Step Validation
-Skip to Step 1 if request is specific and complete.
+### Execution (Part A - Plan)
+Delegate to: `grill-planner`
+Task: `{operation: "create", user_request, taxonomy_path: "references/interview-taxonomy.md", non_interactive?}`
+Returns: `{run_mode, complexity, question_budget, coverage_map, seed_requirements, question_bank}`
 
-### Execution (Part A - Generate Questions)
-Delegate to: `ms-requirements-gatherer`
-Task: Analyze request, generate questions for unclear items
-Returns: `{questions: [...], extracted_requirements: {...}}`
+### Execution (Part B - Interview)
+Orchestrator runs the interview per `references/interview-protocol.md`: map line every message, one `AskUserQuestion` per question, laddering, user-granted waivers, sentinel discipline. Bank exhausted with required areas open → re-engage grill-planner with `mode: "replan"`.
 
-### Execution (Part B - Ask User)
-If questions returned:
-- Orchestrator uses `AskUserQuestion` with returned questions
-- Collect user answers
-- Merge answers with extracted_requirements
+### Execution (Part C - Merge)
+Merge `seed_requirements` with answers by `maps_to`; append `coverage_map`, ledger, and waivers as audit fields (the validator ignores unknown keys).
 
 ### Post-Step Validation
-- [ ] All required questions answered (or no questions needed)
-- [ ] No conflicting requirements
+- [ ] Coverage map closed (every area answered, seeded, or user-waived)
+- [ ] No conflicting requirements in the ledger
 - [ ] Complexity assessed
 
 ### Quality Gate
-If incomplete: generate follow-up questions (max 3 rounds). Then escalate.
+If Step 1 reports missing required fields: re-open once via `mode: "replan"` (fresh wrap-up). After that, escalate per `guides/qa-protocol.md`.
 
 ---
 
 ## Step 1: Validate Requirements
 
 ### Input Conditions
-- [ ] Requirements gathered (Step 0) OR provided directly
+- [ ] Interview closed and requirements merged (Step 0)
 - [ ] Operation type is "create"
 
 ### Pre-Step Validation
@@ -86,7 +84,7 @@ If agent returns `status: "needs_user_input"`:
 - [ ] Complexity determined
 
 ### Quality Gate
-If invalid: return to Step 0 for clarification.
+If invalid: return to Step 0 (single `replan` re-open, per the interview protocol's post-closure policy).
 
 ---
 
@@ -270,8 +268,8 @@ This pattern is required because agents cannot use AskUserQuestion directly.
 ## Quick Reference
 
 ```
-Step 0: Gather → ms-requirements-gatherer
-        ↓ (orchestrator asks if questions)
+Step 0: Interview plan → grill-planner
+        ↓ (orchestrator runs the interview per interview-protocol.md)
 Step 1: Validate → ms-requirements-validator
         ↓
 Step 1.5: Discover → ms-agent-discoverer
