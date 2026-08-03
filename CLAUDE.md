@@ -95,7 +95,7 @@ For every release:
 1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
 2. Bump `version` in `.claude-plugin/plugin.json` only (semver). `plugin.json` is the single source of truth – the marketplace entry carries no `version` (Claude Code resolves `plugin.json` `version` first per the [version-resolution order](https://code.claude.com/docs/en/plugin-marketplaces), so a duplicate in `marketplace.json` would only mask it).
 3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent.
-4. Add an entry to `CHANGELOG.md` (Keep a Changelog format).
+4. Add an entry to `CHANGELOG.md` (Keep a Changelog format). If an `## [Unreleased]` section exists (feature branches may accumulate one), promote it to `## [vX.Y.Z] - <date>` as part of the release.
 5. Commit (auto-signed via SSH) and let CI run.
 6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`).
 7. **Solo-maintainer flow**: GitHub disallows self-approval; use `gh pr merge <num> --admin --squash --delete-branch` (ruleset has a RepositoryRole bypass actor for admin; `--admin` also overrides the required CI checks, so confirm CI is green first). Bypass becomes unnecessary when a backup maintainer joins.

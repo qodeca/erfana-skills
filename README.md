@@ -64,7 +64,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | Component | What it does |
 |---|---|
 | `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, dispatches design-vs-orchestration. Loads automatically. |
-| `agents/` (87 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), UI/UX (4), tech-domain (6), generic (9). |
+| `agents/` (87 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
 
