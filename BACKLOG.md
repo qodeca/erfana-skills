@@ -72,7 +72,7 @@ These items are NOT scheduled but have explicit trigger conditions. v5.0.0 plan 
 
 - **MEDIUM-priority polish from v4.2.0 review (M-series).** Trigger: any future v4.2.x patch release. Status: M9 ms-validator example outputs, M10 Section 12.1 self-detection guard, M11 ms-reviewer "top 5" parenthetical, and M12 pre-release-checklist §1.7 phrasing all shipped within the v4.2.0 same-release window (rolled into PR #46 squash before tag). Two cosmetic items also landed in v4.2.0: creating-skills.md threshold prose, SKILL.md Operation: Create threshold listing. Entry retained for audit-trail (which review-lane finding maps to which fix); no further work pending.
 
-- **LOW-priority Anthropic-feature coverage in `opus-4-7-patterns.md` (L-series).** Trigger: any documentation refresh release. Items: memory tool, high-resolution image support, `display: "omitted"` thinking default, interleaved thinking automatic on Opus 4.7. All four Anthropic-published features shipped in v4.2.0 — sections 13-16 of the guide, total 17 sections.
+- **LOW-priority Anthropic-feature coverage in `opus-4-7-patterns.md` (L-series).** Trigger: any documentation refresh release. Items: memory tool, high-resolution image support, `display: "omitted"` thinking default, interleaved thinking automatic on Opus 4.7. All four Anthropic-published features shipped in v4.2.0 — sections 13-16 of the guide, 17 sections at the time. (The guide was retired in v6.3.0, superseded by `claude-5-patterns.md`; entry retained for audit-trail.)
 
 ## Deferred — concrete-trigger entries (added v4.2.13)
 

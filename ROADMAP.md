@@ -65,11 +65,11 @@ Bootstrap-first modernization of `managing-skills` for Opus 4.7 patterns. Non-ro
 | # | Task | Notes |
 |---|---|---|
 | O1 | Operation: Modernize in `managing-skills` | Applies Section 12 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator. Early-exit guard for skills with nested per-skill `agents/`. See `skills/managing-skills/SKILL.md` and `guides/skill-modernization-guide.md`. |
-| O2 | 3 new skill-internal guides under `managing-skills/guides/` | `opus-4-7-patterns.md` (17 sections, all Anthropic-cited), `embedded-prompts-guide.md` (three-tier mental model), `skill-modernization-guide.md` (per-pattern playbook). |
+| O2 | 3 new skill-internal guides under `managing-skills/guides/` | `opus-4-7-patterns.md` (17 sections at v4.2.0, grew to 18; retired in v6.3.0 — superseded by `claude-5-patterns.md`), `embedded-prompts-guide.md` (three-tier mental model), `skill-modernization-guide.md` (per-pattern playbook). |
 | O3 | `focused-skill-template.md` for design-* parity | Single-purpose skills with one output type, references-heavy. Reference shapes: `design-prototype/SKILL.md` (65 lines), `design-review/SKILL.md` (64 lines). |
 | O4 | Section 12 of pre-release-checklist (7 items, weight 8.0) | Skill-shape-aware applicable_max with N/A handling for focused skills. 12.7 (deprecated APIs) hard-blocking via Gate 2 + 13.3/13.4. |
 | O5 | Per-agent effort/model overrides on all 10 ms-* agents | Per Model Selection Guide. Routine validators on sonnet+medium are ~10x cheaper than orchestrators on opus+xhigh. |
-| O6 | Gate 2 extension for 4.7 patterns | First-person voice, 1,536-char combined, ≥3 quoted triggers, missing effort field on ms-* agents, deprecated APIs. Soft-blocking initially; hard-block in v4.3.0. |
+| O6 | Gate 2 extension for 4.7 patterns | First-person voice, 1,536-char combined, ≥3 quoted triggers, missing effort field on ms-* agents, deprecated APIs. Soft-blocking initially; the planned v4.3.0 hard-block was never executed — Section 12 checks remain WARN-level (12.7 blocking at checklist level; detector fixtures hard-fail since v6.3.0). |
 
 Reviewed by 4 independent post-implementation lanes (Anthropic-spec, solution coherence, ms-reviewer self-audit meta-test 96/100, dogfood usability). See `CHANGELOG.md` v4.2.0 for the full surface.
 
