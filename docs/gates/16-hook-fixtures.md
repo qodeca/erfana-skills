@@ -1,6 +1,6 @@
-# Gate 16 – hook fixtures + sentinel symmetry (v4.2.9+; explain family added v4.2.14+; grill family added v6.2.0+; ms-grill family added post-6.3.0)
+# Gate 16 – hook fixtures + sentinel symmetry (v4.2.9+; explain family added v4.2.14+; grill family added v6.2.0+; ms-grill family added v6.4.0)
 
-Validates the `verify-completion` Stop hook and the skill-scoped `grill-guard` and `ms-grill-guard` Stop hooks against a corpus of replay fixtures, and asserts that all four sentinel literals stay in sync across the files that emit them and the hook implementations that match them. v4.2.14+ extends the symmetry check from one family (status) to two (status plus explain). v4.2.20+ routes the fixtures through `dispatch.sh` so the gate exercises the OS-native implementation (`.sh` on macOS/Linux, `.ps1` on Windows) and adds `verify-completion.ps1` to the sentinel-symmetry lists. v6.2.0+ adds the `grill-guard` hook (declared in `skills/grill-me/SKILL.md` frontmatter, scripts under `skills/grill-me/hooks/`) with its own fixture family and the grill sentinel family. Post-6.3.0 adds the `ms-grill-guard` hook (managing-skills requirements interview, `skills/managing-skills/hooks/`) with its own fixture family, the ms-grill sentinel family, and a guard-drift check asserting the two skill-scoped guards share identical machinery.
+Validates the `verify-completion` Stop hook and the skill-scoped `grill-guard` and `ms-grill-guard` Stop hooks against a corpus of replay fixtures, and asserts that all four sentinel literals stay in sync across the files that emit them and the hook implementations that match them. v4.2.14+ extends the symmetry check from one family (status) to two (status plus explain). v4.2.20+ routes the fixtures through `dispatch.sh` so the gate exercises the OS-native implementation (`.sh` on macOS/Linux, `.ps1` on Windows) and adds `verify-completion.ps1` to the sentinel-symmetry lists. v6.2.0+ adds the `grill-guard` hook (declared in `skills/grill-me/SKILL.md` frontmatter, scripts under `skills/grill-me/hooks/`) with its own fixture family and the grill sentinel family. v6.4.0 adds the `ms-grill-guard` hook (managing-skills requirements interview, `skills/managing-skills/hooks/`) with its own fixture family, the ms-grill sentinel family, and a guard-drift check asserting the two skill-scoped guards share identical machinery.
 
 ## What it checks
 
@@ -31,17 +31,17 @@ Validates the `verify-completion` Stop hook and the skill-scoped `grill-guard` a
    | `open-inside-trailing-code-fence.json` | pass | marker inside a balanced trailing fence is stripped before matching |
    | `stop-hook-active.json` | pass | `stop_hook_active: true` skips the check unconditionally |
 
-   **ms-grill-guard replays** (post-6.3.0). The same five scenarios replay from `tests/hooks/ms-grill-guard/*.json` through `bash hooks/dispatch.sh ../skills/managing-skills/hooks/ms-grill-guard`, with the `<!-- erfana:ms-grill-open -->` literal.
+   **ms-grill-guard replays** (v6.4.0). The same five scenarios replay from `tests/hooks/ms-grill-guard/*.json` through `bash hooks/dispatch.sh ../skills/managing-skills/hooks/ms-grill-guard`, with the `<!-- erfana:ms-grill-open -->` literal.
 
-3. **Sentinel symmetry – four families** (v4.2.14+ two, v6.2.0+ three, post-6.3.0 four):
+3. **Sentinel symmetry – four families** (v4.2.14+ two, v6.2.0+ three, v6.4.0 four):
    - **Status family.** `<!-- erfana:status-template -->` must appear in `commands/project-status.md`, `commands/session-status.md`, `hooks/verify-completion.sh`, and `hooks/verify-completion.ps1` (v4.2.20+). If any one is missing, the status allowlist would silently break and every clean-tree status report would block.
    - **Explain family.** `<!-- erfana:explain-template -->` must appear in `commands/explain-issue.md`, `hooks/verify-completion.sh`, and `hooks/verify-completion.ps1` (v4.2.20+). Both implementations check the sentinel (bash `grep -qF`, PowerShell `.Contains`) – if either emitter or either implementation drifts, the corresponding family's reports block silently. Future `explain-*` siblings (e.g. `explain-pr`) reuse this sentinel and will be added to the explain family's symmetry list.
    - **Grill family** (v6.2.0+). `<!-- erfana:grill-open -->` must appear in `skills/grill-me/SKILL.md` (the emitter), `skills/grill-me/hooks/grill-guard.sh`, and `skills/grill-me/hooks/grill-guard.ps1` (the matchers). If the emitter drifts, the backstop never fires; if a matcher drifts, one platform silently loses the block.
-   - **Ms-grill family** (post-6.3.0). `<!-- erfana:ms-grill-open -->` must appear in `skills/managing-skills/SKILL.md` (invocation prose), `skills/managing-skills/references/interview-protocol.md` (the emitter's governing protocol), and `skills/managing-skills/hooks/ms-grill-guard.{sh,ps1}` (the matchers).
+   - **Ms-grill family** (v6.4.0). `<!-- erfana:ms-grill-open -->` must appear in `skills/managing-skills/SKILL.md` (invocation prose), `skills/managing-skills/references/interview-protocol.md` (the emitter's governing protocol), and `skills/managing-skills/hooks/ms-grill-guard.{sh,ps1}` (the matchers).
 
    All checks use `grep -qF` (no regex escaping required).
 
-4. **Guard-drift check** (post-6.3.0). `ms-grill-guard.sh` is a copy of `grill-guard.sh` differing only in header comments, the sentinel literal, and the block-reason JSON. The gate normalizes both (comments and reason stripped, sentinel unified) and FAILs on any remaining diff, so a fence-stripping or anchoring fix can never land in one guard family only.
+4. **Guard-drift check** (v6.4.0). `ms-grill-guard.sh` is a copy of `grill-guard.sh` differing only in header comments, the sentinel literal, and the block-reason JSON. The gate normalizes both (comments and reason stripped, sentinel unified) and FAILs on any remaining diff, so a fence-stripping or anchoring fix can never land in one guard family only.
 
    **Coverage note.** The fixture replay exercises only the OS-native implementation (`.sh` on macOS/Linux CI). The `.ps1` siblings are literal-checked here and PowerShell-parsed by Gate 14; behavioural `.ps1` replay requires a local `pwsh` run (documented in the release checklist) or a Windows runner.
 
@@ -99,7 +99,7 @@ If either sentinel literal ever changes:
 4. Update the four `tests/hooks/grill-guard/*.json` fixtures that embed the literal.
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.
 
-**Ms-grill family** (`<!-- erfana:ms-grill-open -->`, post-6.3.0):
+**Ms-grill family** (`<!-- erfana:ms-grill-open -->`, v6.4.0):
 
 1. Update the `MS_GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
 2. Update the marker literal in `skills/managing-skills/SKILL.md` ("Requirements interrogation") and `skills/managing-skills/references/interview-protocol.md` (Sentinel section).
