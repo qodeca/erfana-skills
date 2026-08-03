@@ -165,32 +165,32 @@ Before proceeding from requirements gathering:
 - [ ] User confirmed requirements summary
 - [ ] Decisions documented with rationale
 - [ ] Complexity level determined
-- [ ] Ready to proceed to Phase 1
+- [ ] Ready to proceed to Step 1
 
 ### Integration with Workflow
 
-Requirements gathering is **Phase 0** in the skill lifecycle:
+The requirements interview is **Step 0** in the Create workflow:
 
 ```
-Phase 0: Requirements Gathering (when unclear)
+Step 0: Requirements interview (always for Create; gated for Modify/Review/Modernize)
     ↓
-Phase 1: Understand the Need (validates requirements)
+Step 1: Validate Requirements (ms-requirements-validator)
     ↓
-Phase 2: Design the Skill
+Step 2: Design the Skill
     ↓
-Phase 3: Create Files
+Step 3: Create Files
     ↓
 ...
 ```
 
-Gathered requirements inform:
-- Phase 1 validation (confirms understanding)
-- Phase 2 design decisions (structure, complexity)
-- Phase 3 file creation (templates, agents)
+The merged requirements object informs:
+- Step 1 validation (confirms understanding)
+- Step 2 design decisions (structure, complexity)
+- Step 3 file creation (templates, agents)
 
 ---
 
-## When to Use Questionnaire Agent vs Direct Q&A
+## When to Use the Interview Planner vs Direct Q&A
 
 ### Use the Interview Planner (`grill-planner`)
 

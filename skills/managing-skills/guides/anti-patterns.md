@@ -243,7 +243,7 @@ See `templates/output-format.md`
 
 ## Process Anti-Patterns
 
-### 13. Skipping Requirements Gathering
+### 13. Skipping the requirements interview
 
 **Bad:**
 ```
@@ -254,8 +254,9 @@ Assistant: [immediately starts creating]
 **Good:**
 ```
 User: Make me a skill
-Assistant: I'll help you create a skill. Let me gather some requirements first...
-[presents questionnaire]
+Assistant: Starting the requirements interview...
+Map: problem[~] triggers[ ] tools[ ] non-goals[ ]
+[asks one question via AskUserQuestion]
 ```
 
 **Why:** Skipping requirements leads to misaligned skills.
@@ -272,7 +273,7 @@ Assistant: I'll help you create a skill. Let me gather some requirements first..
 **Good:**
 ```
 TodoWrite([
-  {content: "Gather requirements", status: "in_progress"},
+  {content: "Run requirements interview", status: "in_progress"},
   {content: "Design skill", status: "pending"},
   ...
 ])

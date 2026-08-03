@@ -154,9 +154,10 @@ managing-skills:
 ### Quick Steps
 
 1. **Invoke:** `Review my [skill-name] skill`
-2. **Choose depth:** quick (5min) / standard (30min) / deep (1-2hr)
-3. **Get report:** Score, findings, action items
-4. **Act on recommendations**
+2. **Answer the gate:** "Any session observations, friction points, or particular ideas to focus this review?" – yes runs a scoped interview
+3. **Choose depth:** quick (5min) / standard (30min) / deep (1-2hr) – resolved by the interview when it ran
+4. **Get report:** Score, findings, action items
+5. **Act on recommendations**
 
 ### Example
 
@@ -184,10 +185,11 @@ managing-skills:
 ### Quick Steps
 
 1. **Invoke:** `Modify my [skill-name] skill to [change]`
-2. **Backup created:** Automatic (unless skipped)
-3. **Changes applied:** Targeted modifications
-4. **Validation:** Before/after comparison
-5. **Rollback available:** If validation fails
+2. **Answer the gate:** "Do you have particular ideas or reasons behind this change?" – yes runs a scoped interview capturing intent
+3. **Backup created:** Automatic (unless skipped)
+4. **Changes applied:** Targeted modifications
+5. **Validation:** Before/after comparison
+6. **Rollback available:** If validation fails
 
 ### Example
 

@@ -27,15 +27,15 @@ This skill follows orchestrator architecture:
 - MUST NOT use `temperature` / `top_p` / `top_k` (400 error on Opus 4.7 and later) or fixed `budget_tokens` on Claude 5 models
 - MUST NOT instruct the model to surface its reasoning (`show your reasoning`, `display: visible`) — trips the Claude 5 `reasoning_extraction` refusal classifier
 
-## Requirements Gathering (Phase 0)
+## Requirements Gathering (Step 0)
 
 Before starting workflow, if request is unclear:
-1. Assess complexity (simple: 3-5 questions, medium: 5-8, complex: 8-12)
-2. Present questionnaires with options and **✓ recommended** choice
+1. Assess complexity (simple: 3-5 questions, medium: 6-9, complex: 10-15)
+2. Ask one question per `AskUserQuestion` call, options table with a **✓ recommended** choice first
 3. Collect ALL answers (no skipping)
 4. Document requirements before proceeding
 
-See `guides/requirements-gathering.md` and `templates/questionnaire-template.md`.
+See `guides/qa-protocol.md` and `templates/questionnaire-template.md`.
 
 ## Agents
 

@@ -18,6 +18,7 @@ CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR
 - Shared bundle: `skills/design-shared/` holds `assets/` (jsx, sfx, bgm, showcases), `demos/`, `scripts/`, cross-cutting `references/`, `test-prompts.json`. Design-only; orchestration skills do NOT consume it.
 - Brand bundles: `skills/design-shared/brands/<id>/` (manifest + DTCG tokens + per-library `INDEX.md` / `RULES.md`; validated by Gate 12).
 - Hooks: `hooks/hooks.json` + 4 safety hooks, each a `.sh` (macOS/Linux) + `.ps1` (Windows) pair routed through the `dispatch.sh` launcher (cross-platform, v4.2.20+; validated by Gate 14, v4.1+).
+- Skill-scoped hooks: `skills/<name>/hooks/*.{sh,ps1}` declared in that skill's SKILL.md `hooks:` frontmatter and dispatched via `dispatch.sh ../skills/<name>/hooks/<hook>` – `grill-me/grill-guard` (v6.2.0+) and `managing-skills/ms-grill-guard` (post-6.3.0), both Stop hooks validated by Gate 16 (fixtures + sentinel symmetry + guard-drift), not Gate 14.
 - Skill-specific references: `skills/<name>/references/*.md` (only for sub-skills that own dedicated references).
 
 ## Gate index
@@ -40,7 +41,7 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 12 | Brand manifests valid (schema-driven) | hard | [`gates/12-brand-manifests.md`](gates/12-brand-manifests.md) |
 | 13 | Brandbook hex coverage | **soft** | [`gates/13-brandbook-hex.md`](gates/13-brandbook-hex.md) |
 | 14 | Hooks valid (v4.1+; cross-platform sibling + launcher checks v4.2.20+) | hard | [`gates/14-hooks.md`](gates/14-hooks.md) |
-| 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+ to 6 checks; v4.2.2 extended `docs_to_scan` to 6 files) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
+| 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+; seven checks today; v4.2.2 extended `docs_to_scan` to 6 files) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
 | 16 | hook fixtures + sentinel symmetry: verify-completion + grill-guard + ms-grill-guard (v4.2.9+; OS-native replay via dispatch.sh v4.2.20+; grill family v6.2.0+; ms-grill family + guard-drift check post-6.3.0) | hard | [`gates/16-hook-fixtures.md`](gates/16-hook-fixtures.md) |
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email; active brand not the removed proprietary bundle) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
 

@@ -423,5 +423,6 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 | **Agent Templates** | `templates/read-only-agent.md`, `templates/code-writer-agent.md`, `templates/research-agent.md` |
 | **Guides** | `guides/orchestration-patterns.md`, `guides/cross-model-guide.md`, `guides/anti-patterns.md`, `guides/edge-cases.md`, `guides/qa-protocol.md`, `guides/shared-agents-guide.md`, `guides/progressive-disclosure.md`, `guides/orchestration-advanced.md`, `guides/skill-frontmatter-guide.md` |
 | **Validation** | `validation/pre-release-checklist.md`, `validation/security-checklist.md`, `validation/review-checklist.md`, `validation/agent-pre-release-checklist.md`, `validation/agent-security-checklist.md` |
+| **Hooks** | `hooks/ms-grill-guard.sh` + `hooks/ms-grill-guard.ps1` – Stop-hook backstop for the open-interview sentinel (see `references/interview-protocol.md`, Sentinel section) |
 | **Examples** | `examples/examples.md` (index), `examples/examples-simple.md`, `examples/examples-medium.md`, `examples/examples-complex.md`, `examples/examples-agents.md`, `examples/examples-creating-agents.md`, `examples/examples-cc21-capabilities.md` |
 | **Resources** | `resources.md` |

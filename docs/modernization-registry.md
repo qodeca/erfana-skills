@@ -14,6 +14,7 @@ This page is provenance, not status. It answers "when was skill X last modernize
 | [`erfana:managing-agents`](../skills/managing-agents/SKILL.md) | v4.2.4 (Modernize-operation output, 2026-05-14) | v4.3.1 (currency + security + trigger-contract refresh, 2026-05-30) | PASS | v4.2.4: 8 findings applied (F1 voice / F2 hybrid `when_to_use:` / F3 narrowed Rule #9 / F4 explicit fan-out / F5 Effort+Model columns / F6 filler strip / F10 bulk fan-out / F11 softened STOP) + `effort:` on all 7 ma-*.md. v4.3.1: 28-finding lens-review remediation (Task→Agent rename, `@agent-<name>`, `~/.claude/agents/`, 6 permission modes + plugin-ignored caveat, `mcpServers`/`disallowedTools`, both-trigger-forms contract, `<example>`-free description, checklist↔ma-validator count resync). |
 | [`erfana:fact-checking`](../skills/fact-checking/SKILL.md) | v4.2.7 (post-migration Modernize, 2026-05-16) | v4.6.0 (lens-review hardening, 2026-05-30) | PASS | v4.2.7: 3 Modernize findings (ACT-001 adaptive parallel batching for ≥50 claims / ACT-002 CAPS scaffolding demotion / ACT-003 anti-pattern phrasing); Section 12 12.4 FAIL → PASS; 68/70 → 70/70. v4.6.0: 23-finding researched 5-lens review + 2-round plan review – untrusted-content rule across orchestrator + 3 reading agents, lexical path screen, output screening before write, parallel-verification reconciliation by claim id (`completion_status`/`missing_claim_ids`, re-dispatch only failed chunks), content-anchored fix application, resource ceiling, doc-accuracy + hygiene. No Modernize-operation invocation (direct lens-review remediation). |
 | [`erfana:managing-reports`](../skills/managing-reports/SKILL.md) | v4.5.0 (lens-review hardening, 2026-05-30) | v4.5.0 | PASS | 23-finding researched 5-lens review + 3-blocker plan review. Flattened the impossible subagent-spawns-subagents REVIEW into a parallel-batch + inline `review-report` consolidator (dropped `Task`); all six validators blocking (PASS/FAIL; removed CONDITIONAL/quick/skip-override; score advisory); trust boundary across all 12 files; `maintain-report` shell removed (archive copy-only, path-safety); model/effort tiering; client de-identification; reference contradictions fixed. No Modernize-operation invocation (direct lens-review remediation); the v5.0.0 nested-agent cascade is still owed. |
+| [`erfana:managing-specs`](../skills/managing-specs/SKILL.md) | v5.0.0 (schema v3 + trust-boundary redesign, 2026-05-30) | v5.0.0 | PASS | Registry schema v3 (failed-tombstone, metadata.version) + trust-boundary hardening + transactional reserve/confirm/fail saga + single-writer registry + fault-classified retry; auto-migration v2->v3. All 16 gates green (pre-Gate-17 era). Direct redesign, not a Modernize-operation invocation. |
 
 ## Per-pass detail
 
@@ -130,9 +131,9 @@ This page is provenance, not status. It answers "when was skill X last modernize
 - **When reviewing a skill in a CI failure** – check whether it has a Modernize history that explains current patterns (e.g., `managing-issues` operation-scoped phase-requirements files reflect F1 from v4.2.1).
 - **When estimating the v5.0.0 sibling cascade** – every row in this table is a skill where cascade is unnecessary; every skill NOT in this table that is in scope for cascade still owes a Modernize pass.
 
-## Skills NOT yet modernized (as of v4.2.7)
+## Skills NOT yet modernized (as of v6.3.0)
 
-The Modernize operation has an early-exit guard for skills with nested `<skill>/agents/` directories (managing-articles, managing-reports). These require the v5.0.0 architectural cascade (nested-agent migration to plugin-root with disambiguating prefixes), not prose modernization. See `ROADMAP.md > Forward-looking — v5.0.0 sibling cascade` for the deferred work.
+The Modernize operation has an early-exit guard for skills with nested `<skill>/agents/` directories – today only `managing-reports` (`managing-articles` shed its nested agents in the v4.3.0 redesign). Nested-agent skills require the v5.0.0 architectural cascade (migration to plugin-root with disambiguating prefixes), not prose modernization. See `ROADMAP.md > Forward-looking — v5.0.0 sibling cascade` for the deferred work.
 
 Skills in scope for routine (prose-only) Modernize:
 
@@ -141,7 +142,6 @@ Skills in scope for routine (prose-only) Modernize:
 - `erfana:design-slides`
 - `erfana:design-motion`
 - `erfana:design-infographic`
-- `erfana:managing-specs`
 - `using-erfana`
 
 Skills in scope for v5.0.0 architectural cascade (NOT routine Modernize):
@@ -171,4 +171,3 @@ Every future Modernize pass MUST add or update a row here. Treat this as a Gate 
 - [`../CHANGELOG.md`](../CHANGELOG.md) – authoritative release narrative (v4.2.0 / v4.2.1 / v4.2.2 entries for the full context behind each pass).
 - [`../ROADMAP.md`](../ROADMAP.md) – v5.0.0 sibling-cascade plan for skills not yet modernized.
 - [`architecture.md`](architecture.md) – `managing-skills` row + Modernize-operation summary.
-| 2026-05-30 | managing-specs | 4.x -> 5.0.0 | registry schema v3 (failed-tombstone, metadata.version) + trust-boundary hardening + transactional reserve/confirm/fail saga + single-writer registry + fault-classified retry; auto-migration v2->v3 | claude-opus-4-8 | All 16 gates green |

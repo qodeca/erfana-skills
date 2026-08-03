@@ -60,7 +60,7 @@ If user request is unclear or missing key information, gather requirements FIRST
 - Include rationale for recommendations
 - NO skipping - all questions require explicit answers
 
-See `guides/requirements-gathering.md` and `templates/questionnaire-template.md`.
+See `guides/qa-protocol.md` and `templates/questionnaire-template.md`.
 
 ## Agents
 

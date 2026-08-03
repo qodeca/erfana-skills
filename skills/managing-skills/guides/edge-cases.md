@@ -75,13 +75,13 @@ Skills that transform or process files.
 
 ## By Agent Type
 
-### Requirements Gathering Agents
+### Requirements interview
 
 | Edge Case | Handling Strategy |
 |-----------|-------------------|
 | What if user provides conflicting requirements? | Flag conflict, ask for priority |
 | What if user says "I don't know"? | Provide recommendation, explain trade-offs |
-| What if user provides incomplete answers? | Note gaps, ask follow-up or proceed with defaults |
+| What if user provides incomplete answers? | Ladder the answer per `ladder_stems`; never default a `validator_hard` area – leave it open and name it in the map line |
 | What if user wants to change previous answer? | Allow revision, update all dependencies |
 | What if requirements exceed skill complexity? | Suggest splitting into multiple skills |
 
