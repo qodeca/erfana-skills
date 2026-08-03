@@ -26,6 +26,10 @@ Safe patterns for updating existing Claude Code skills.
 
 ## Safe Modification Workflow
 
+### Step 0: Intent Gate
+
+The orchestrator opens with the Modify gate question ("Do you have particular ideas or reasons behind this change?"). On yes, the grill-planner interview captures intent, change description, type, scope, and risk before anything is touched (see SKILL.md "Requirements interrogation"); the merged object becomes ms-modifier's change context. On no, proceed to Step 1.
+
 ### Step 1: Backup
 
 Always backup before modifying:

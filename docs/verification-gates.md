@@ -41,7 +41,7 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 13 | Brandbook hex coverage | **soft** | [`gates/13-brandbook-hex.md`](gates/13-brandbook-hex.md) |
 | 14 | Hooks valid (v4.1+; cross-platform sibling + launcher checks v4.2.20+) | hard | [`gates/14-hooks.md`](gates/14-hooks.md) |
 | 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+ to 6 checks; v4.2.2 extended `docs_to_scan` to 6 files) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
-| 16 | hook fixtures + sentinel symmetry: verify-completion + grill-guard (v4.2.9+; OS-native replay via dispatch.sh v4.2.20+; grill family v6.2.0+) | hard | [`gates/16-hook-fixtures.md`](gates/16-hook-fixtures.md) |
+| 16 | hook fixtures + sentinel symmetry: verify-completion + grill-guard + ms-grill-guard (v4.2.9+; OS-native replay via dispatch.sh v4.2.20+; grill family v6.2.0+; ms-grill family + guard-drift check post-6.3.0) | hard | [`gates/16-hook-fixtures.md`](gates/16-hook-fixtures.md) |
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email; active brand not the removed proprietary bundle) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
 
 Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 15, 17, 13 (hard gates first; hook-related gates 14 and 16 run consecutively; the soft Gate 13 trails so a `WARN` lands at the end of the output rather than mid-stream).

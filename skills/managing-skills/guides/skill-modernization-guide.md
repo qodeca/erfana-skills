@@ -8,6 +8,7 @@ Step-by-step playbook for applying Claude 5 patterns (`guides/claude-5-patterns.
 
 ## Pre-flight (before invoking Modernize)
 
+0. **Intent gate.** The orchestrator asks the Modernize gate question ("Do you have particular ideas or reasons behind this change?"). On yes, the grill-planner interview captures intent, scope, exclusions, and risk tolerance (see SKILL.md "Requirements interrogation"); the merged object reaches ms-reviewer deep mode as `modernization_intent`. On no, proceed with a whole-skill sweep.
 1. **Confirm target.** The skill exists, has a SKILL.md, and you have read access.
 2. **Read existing state:**
    - `skills/<name>/SKILL.md` (the orchestrator)

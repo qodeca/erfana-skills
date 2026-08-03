@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## Two domains, one plugin (v4.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a **design + orchestration toolkit** by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. The marketplace identity stays primarily design (`category: design`), but the discovery surface now spans two flow-bearing tracks (design, orchestration) plus two single-skill branches: a process branch added in v4.2.3 (`grill-me`) and a verification branch added in v4.2.7 (`fact-checking`).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a **design + orchestration toolkit** by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0; post-6.3.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. The marketplace identity stays primarily design (`category: design`), but the discovery surface now spans two flow-bearing tracks (design, orchestration) plus two single-skill branches: a process branch added in v4.2.3 (`grill-me`) and a verification branch added in v4.2.7 (`fact-checking`).
 
 | Domain | Concern | Brand-system layer |
 |---|---|---|
@@ -36,7 +36,7 @@ The v1 plugin shipped a single 800-line `erfana:design` skill that bundled six u
 | `erfana:managing-articles` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
 | `erfana:managing-issues` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2) |
 | `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Ships 11 internal validation agents. |
-| `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator. Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
+| `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (post-6.3.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the skill-scoped `ms-grill-guard` Stop hook. Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
 
 ### Process skills (1, v4.2.3+)
@@ -76,7 +76,7 @@ erfana-skills/
 │   ├── managing-articles/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
 │   ├── managing-issues/     ← phases/, operations/, reference/, templates/, validation/
 │   ├── managing-reports/    ← ships 11 internal validation agents; reference/, templates/
-│   ├── managing-skills/     ← guides/, templates/, validation/, examples/
+│   ├── managing-skills/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy), hooks/ (ms-grill-guard)
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ + skill-scoped hooks/ (v6.2.0+)
 │   ├── using-erfana/        ← bootstrap meta-router
@@ -90,7 +90,7 @@ erfana-skills/
 ├── hooks/                   ← four safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+)
 ├── commands/                ← slash commands (v4.1+: doc-update; v4.2.5+: project-status; v4.2.6+: session-status; v4.2.11+: lens-review; v4.2.14+: explain-issue)
 ├── scripts/                 ← run-all-gates.sh, gate-12-brand-manifests.sh, gate-14-hooks.sh, gate-16-hook-fixtures.sh, ...
-├── tests/                   ← maintainer test fixtures (v4.2.9+ adds tests/hooks/verify-completion/*.json)
+├── tests/                   ← maintainer test fixtures (v4.2.9+ adds tests/hooks/verify-completion/*.json; v6.2.0+ tests/hooks/grill-guard/; post-6.3.0 tests/hooks/ms-grill-guard/)
 └── docs/
     ├── architecture.md      ← this document
     ├── verification-gates.md← index for the 17 gates
@@ -119,7 +119,7 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Two layered shared resources
 
-- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (10), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **`skills/design-shared/` bundle** – design-only shared content. Not a skill (no SKILL.md). Invisible to auto-discovery. Deduplicates content design sub-skills would otherwise copy. Orchestration skills do NOT consume `design-shared/`.
 
 ### Per-skill nested agents
@@ -134,7 +134,7 @@ Three orchestration skills ship internal agents under `<skill>/agents/` that are
 - The **orchestrator** (the skill running in the main conversation) asks those questions via `AskUserQuestion`, batching at most 4 per call, then passes the answers back to the agent or carries them forward.
 - A **skipped answer is valid** — record it and proceed; never loop re-asking the same question.
 
-Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `managing-issues` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `managing-articles/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
+Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `managing-issues` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13), `grill-planner` (plans the whole interview, never asks; post-6.3.0 – supersedes the retired `ms-requirements-gatherer`, whose four CREATE requirement keys it preserves via `references/interview-taxonomy.md`). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `managing-articles/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
 
 ### Where new content goes – the rule
 

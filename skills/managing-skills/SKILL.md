@@ -5,6 +5,12 @@ when_to_use: |
   Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns", "Claude 5 refresh", "skill lifecycle".
 model: opus
 effort: high
+hooks:
+  Stop:
+    - hooks:
+        - type: command
+          command: bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" ../skills/managing-skills/hooks/ms-grill-guard
+          timeout: 5
 ---
 
 # Managing Skills
@@ -133,7 +139,7 @@ Per-subagent Effort and Model overrides (added v4.2.0; recalibrated v6.3.0 per C
 
 | Agent | Purpose | Source | Effort | Model | Used In |
 |-------|---------|--------|--------|-------|---------|
-| `ms-requirements-gatherer` | Gather business requirements via questionnaire | shared | low | sonnet | Create: Step 0 |
+| `grill-planner` | Plan coverage-map requirements interview | shared | medium | sonnet | Create: Step 0; Modify/Review/Modernize gate |
 | `ms-requirements-validator` | Validate requirements completeness and consistency | shared | low | sonnet | Create: Step 1 |
 | `ms-agent-discoverer` | Discover available builtin/shared agents | shared | medium | sonnet | Create: Step 1.5 |
 | `ms-agent-matcher` | Match requirements to available agents | shared | low | sonnet | Create: Step 1.5 |
@@ -143,6 +149,19 @@ Per-subagent Effort and Model overrides (added v4.2.0; recalibrated v6.3.0 per C
 | `ms-validator` | Validate skill against checklists | shared | low | sonnet | Create: Step 5, Modernize: Step 4 |
 | `ms-reviewer` | Audit existing skill for quality | shared | high | opus | Review, Modernize: Step 1 |
 | `ms-modifier` | Apply modifications safely with backup | shared | medium | opus | Modify, Modernize: Step 3 |
+
+---
+
+## Requirements interrogation
+
+Requirements enter every operation through a coverage-map interview. The loop protocol is static prose in `references/interview-protocol.md`; the dimensions live in `references/interview-taxonomy.md`; `grill-planner` returns the per-run data (map, seeds, question bank, budget).
+
+- **Create** always interviews: delegate to `grill-planner` (`operation: "create"`, `taxonomy_path: references/interview-taxonomy.md`), then run the returned plan per the protocol.
+- **Modify / Modernize** gate first via `AskUserQuestion`: "Do you have particular ideas or reasons behind this change?" — yes → grill-planner with the matching operation; no → proceed on the existing path.
+- **Review** gates with: "Any session observations, friction points, or particular ideas to focus this review?" — any yes (friction alone counts) → grill-planner (`operation: "review"`). The `usage_feedback` answer reaches `ms-reviewer` either way.
+- After the interview, merge `seed_requirements` with answers by `maps_to` (orchestrator glue work, Rule 5) and pass the merged object onward. The open-interview marker `<!-- erfana:ms-grill-open -->` is governed by the protocol's Sentinel section — quoted here for symmetry, emitted only inside open interviews.
+- Non-interactive runs: pass `non_interactive: true` only on an explicit signal (request says "non-interactive" / "no questions", a declared-non-interactive command context, or a failed AskUserQuestion call). Default is interactive — never guessed. On `non_interactive_fail`, stop and name the `missing` fields.
+- grill-planner `needs_user_input` (e.g. `ambiguous_target`) follows the standard pattern in "User input pattern" above.
 
 ---
 
@@ -168,7 +187,7 @@ Multi-phase operation — create a todo list with Steps 0, 1, 1.5, 2, 3, 4, 5 (R
 
 | Step | Agent | Purpose |
 |------|-------|---------|
-| 0 | `ms-requirements-gatherer` | Gather requirements (orchestrator asks returned questions) |
+| 0 | `grill-planner` | Plan the requirements interview; orchestrator runs it per `references/interview-protocol.md` and merges answers by `maps_to` |
 | 1 | `ms-requirements-validator` | Validate completeness |
 | 1.5 | `ms-agent-discoverer` + `ms-agent-matcher` | Find and match agents (parallel — see fan-out note below) |
 | 2 | `ms-designer` | Design skill structure |
@@ -188,12 +207,9 @@ Multi-phase operation — create a todo list with Steps 0, 1, 1.5, 2, 3, 4, 5 (R
 
 Multi-phase operation — create a todo list with the Review steps (Rule 12).
 
-### Optional: Usage feedback
+### Gate: review interrogation
 
-Before delegating to `ms-reviewer`, the orchestrator asks:
-> "Do you have session observations or friction points to incorporate?"
-
-If feedback provided, pass it to `ms-reviewer` as `usage_feedback` parameter. The reviewer maps each point to:
+Before delegating to `ms-reviewer`, the orchestrator asks the Review gate question (see "Requirements interrogation"). On any yes, the grill-planner interview captures depth, friction, and focus areas; the merged `usage_feedback` value passes to `ms-reviewer` as its `usage_feedback` parameter. The reviewer maps each friction point to:
 - **Specific section/step** in the skill where the friction occurred
 - **Classification:** missing-step | inadequate-step | missing-agent | missing-integration
 - **Proposed modification** with effort estimate (Small/Medium/Large)
@@ -213,6 +229,8 @@ This captures real-world workflow gaps that checklist-based review alone cannot 
 ## Operation: Modify
 
 Multi-phase operation — create a todo list with the Modify steps (Rule 12).
+
+**Gate first:** ask the Modify gate question (see "Requirements interrogation"). On yes, run the grill-planner interview (`operation: "modify"`) and pass the merged object to `ms-modifier` as change context; on no, proceed directly.
 
 | Agent | Task | Quality Gate |
 |-------|------|--------------|
@@ -234,6 +252,7 @@ Multi-phase operation — create a todo list with the Modernize steps (Rule 12).
 
 | Step | Agent | Purpose |
 |------|-------|---------|
+| 0 | Orchestrator | **Gate:** Modernize gate question (see "Requirements interrogation"); on yes, grill-planner interview (`operation: "modernize"`) — merged object feeds Step 1 as `modernization_intent` |
 | 1 | `ms-reviewer` (deep mode) | Audit skill against Section 12 patterns; emit P0-P3 modernization findings |
 | 1a | Orchestrator | **Pre-flight: nested-agents check** (see below) |
 | 2 | Orchestrator | Present findings to user via `AskUserQuestion` with **batching protocol** (see below) |
@@ -302,26 +321,31 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 ### Example 1: New shared agent created
 
 **User:** "Create skill for formatting JSON"
+→ Step 0: grill-planner interview (4 questions, map closed)
 → Agents: `format-json` (shared, new) | Validation: PASS (66/70)
 
 ### Example 2: Builtin agents only (100% match)
 
 **User:** "Create skill for exploring and planning features"
+→ Step 0: grill-planner interview (confirmation mode, 2 questions)
 → Agents: `Explore`, `Plan` (both builtin) | PASS (66/70)
 
 ### Example 3: Mixed builtin and shared
 
 **User:** "Create skill for researching and validating"
+→ Step 0: grill-planner interview (6 questions, map closed)
 → Agents: `Explore` (builtin), `validate-sources` (shared, new) | PASS (66/70)
 
 ### Example 4: Validation failure
 
 **User:** "Create skill that calls data-processor skill"
+→ Step 0: grill-planner interview (map closed)
 → ⛔ STOPS: Skill references violate Rule #1
 
 ### Example 5: Modernize existing skill (added v4.2.0)
 
 **User:** "Apply Claude 5 patterns to design-review"
+→ Step 0: gate answered yes → grill-planner interview (intent: pattern refresh; scope: whole skill)
 → Step 1: ms-reviewer deep mode runs Section 12 sweep, finds: 12.4 N/A (single-threaded), 12.5 N/A (no agents), all others PASS
 → Step 2: orchestrator presents findings to user — only minor P3 polish items
 → Step 3: ms-modifier applies (or skips if N/A dominates)
@@ -381,6 +405,8 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
   - `guides/agent-implementation-patterns.md` - Tool patterns, optimization, testing
 
 ### Operations
+- `references/interview-protocol.md` - Static coverage-map interview loop (sentinel, waivers, post-closure policy)
+- `references/interview-taxonomy.md` - Per-operation interview dimensions consumed by `grill-planner`
 - `guides/reviewing-skills.md` - Review workflow and criteria
 - `guides/modifying-skills.md` - Modification patterns and safety
 - `guides/skill-modernization-guide.md` - **Modernize operation playbook** (added v4.2.0): per-pattern remediation, includes architecture migration

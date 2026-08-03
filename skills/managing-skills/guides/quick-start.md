@@ -123,7 +123,7 @@ See `templates/agent-template.md` for complete template with all optional tags.
 ### Quick Steps
 
 1. **Invoke skill:** `use managing-skills` or describe your need
-2. **Answer questionnaire:** Provide requirements (problem, triggers, tools)
+2. **Answer the interview:** A coverage-map interview gathers requirements (problem, triggers, tools, non-goals)
 3. **Review design:** Confirm name, structure, complexity
 4. **Files created:** Skill directory with SKILL.md and agents
 5. **Validate:** Automatic checklist validation
@@ -134,7 +134,7 @@ See `templates/agent-template.md` for complete template with all optional tags.
 User: Create a skill for formatting JSON files
 
 managing-skills:
-1. Gathers requirements via questionnaire
+1. Runs the requirements interview (grill-planner plans it; complete requests get a 2-3 question read-back)
 2. Designs: name=formatting-json, complexity=simple
 3. Creates: SKILL.md (uses shared agent at agents/)
 4. Validates against checklists
@@ -227,11 +227,11 @@ managing-skills:
 
 ### What if I'm not sure about requirements?
 
-The skill will ask clarifying questions through a questionnaire. You don't need to know everything upfront.
+The skill runs a coverage-map interview — one question at a time, with a recommended answer per question. You don't need to know everything upfront.
 
-### Can I skip the questionnaire?
+### Can I skip the interview?
 
-If your request is specific and complete, the skill proceeds directly. Questionnaire only appears when clarification is needed.
+Not entirely — Create always interviews, but a specific and complete request collapses to a 2-3 question read-back (confirmation mode). Modify, Review, and Modernize only interview when you answer their opening gate question with a yes. Non-required areas can be waived when you say so.
 
 ### What happens if validation fails?
 

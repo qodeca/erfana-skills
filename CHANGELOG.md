@@ -3,6 +3,56 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- managing-skills: **coverage-map requirements interrogation across all four
+  operations**. Create always interviews; Modify, Modernize, and Review open
+  with a gate question ("particular ideas or reasons?" / "observations,
+  friction, focus?") and interview on yes. New plugin-root shared agent
+  `grill-planner` (sonnet/medium, Read/Glob/Grep) plans once — coverage map,
+  seed requirements, AskUserQuestion-ready question bank, complexity-scaled
+  budget (3-5 / 6-9 / 10-15, advisory; the map owns closure) — and the
+  orchestrator runs the interview under the static
+  `references/interview-protocol.md`, with per-operation dimensions in
+  `references/interview-taxonomy.md` (two-class waivability: validator-hard
+  create keys never waivable; everything else waivable by explicit user
+  grant). Adaptive closure is the only escape valve — a complete request
+  (including "just do it") collapses to a 2-3 question read-back, never zero.
+  Non-interactive runs proceed or fail fast (named `missing` fields) on
+  explicit signal only. Sibling skills adopt by supplying their own taxonomy
+  and protocol files — the agent is consumer-agnostic (`taxonomy_path` input).
+- managing-skills: skill-scoped `ms-grill-guard` Stop hook (frontmatter
+  `hooks:`, second use of skill-scoped hooks after grill-me) — blocks one
+  stop attempt per turn whose last message still ends with
+  `<!-- erfana:ms-grill-open -->`, end-anchored after balanced-fence
+  stripping. Gate 16 gains the ms-grill fixture family (5 fixtures, total
+  20), the ms-grill sentinel family (4 files, symmetry total 14), and a
+  guard-drift check FAILing if `ms-grill-guard.sh` diverges from
+  `grill-guard.sh` beyond sentinel/reason/header. Accepted risks (wider
+  blast radius than grill-me, pending `.ps1` pwsh replay, rc-rollout
+  obligation inherited by the eventual release): `docs/known-caveats.md`.
+
+### Changed
+- managing-skills: Create Step 0 pipeline rewritten (grill-planner plan →
+  orchestrator-run interview → merge by `maps_to` → `ms-requirements-validator`,
+  whose contract is unchanged and Create-only — extra audit fields
+  `coverage_map`/ledger/waivers are ignored by design); `guides/qa-protocol.md`
+  skip conditions reconciled (skips = non-interactive or gate-answered-no;
+  "just do it" is confirmation mode, not a skip); depth table aligned to the
+  budget bands; `guides/quick-start.md` FAQ updated.
+
+### Removed
+- **BREAKING:** `agents/ms-requirements-gatherer.md` retired, superseded by
+  `grill-planner` (net shared-agent count unchanged at 87). Migration for
+  downstream consumers: the old agent's output (`extracted_requirements:
+  {clear_items, gaps}` + `questions[]`) is replaced by grill-planner's
+  `{coverage_map, seed_requirements, question_bank}`; the requirements keys
+  reaching `ms-requirements-validator` are unchanged (`problem_definition`,
+  `trigger_strategy`, `complexity_preference`, `tools`), so validator-side
+  integrations are unaffected. See `docs/architecture.md` (AskUserQuestion
+  convention section) for the replacement pointer.
+
 ## [6.3.0] - 2026-08-03
 
 ### Added

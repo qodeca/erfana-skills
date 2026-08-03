@@ -1,6 +1,6 @@
 # Q&A Protocol Guide
 
-Standardized methodology for gathering requirements through questions, whether via questionnaire agents or direct `AskUserQuestion` tool usage.
+Standardized methodology for gathering requirements through questions — the coverage-map interview planned by `grill-planner` and run by the orchestrator (`references/interview-protocol.md`), plus direct `AskUserQuestion` usage for one-off decisions.
 
 ---
 
@@ -36,10 +36,12 @@ Adjust question depth based on request clarity:
 
 | Request Clarity | Questions Needed | Example |
 |-----------------|------------------|---------|
-| Very clear | 2-3 confirming | "Create a skill to format JSON with 2-space indent" |
-| Mostly clear | 4-5 clarifying | "Create a skill to format files" |
-| Vague | 6-8 exploring | "I need help with files" |
-| Unclear | Full questionnaire | "Make something useful" |
+| Very clear | 2-3 confirming (`confirmation` mode) | "Create a skill to format JSON with 2-space indent" |
+| Mostly clear | 3-5 (simple band) | "Create a skill to format files" |
+| Vague | 6-9 (medium band) | "I need help with files" |
+| Unclear / large surface | 10-15 (complex band) | "Make something useful" |
+
+Bands are advisory — the coverage map owns closure (see `references/interview-protocol.md`).
 
 
 ---
@@ -50,19 +52,16 @@ Adjust question depth based on request clarity:
 
 **Trigger Conditions**
 
-Gather requirements ONLY when:
-- User request is ambiguous (multiple valid interpretations)
-- Key information is missing (trigger, scope, tools, output)
-- Complexity cannot be determined from request alone
-- User explicitly asks for guidance or help deciding
+- Create: always — the interview runs on every creation; a specific and complete request collapses to `confirmation` mode (2-3 read-back questions), never to zero
+- Modify / Modernize / Review: when the operation gate ("particular ideas or reasons?" / "observations, friction, focus?") is answered yes
 
 **Skip Conditions**
 
-Do NOT gather requirements when:
-- Request is specific and complete
-- User provides all necessary details upfront
-- This is a well-defined, routine operation
-- User says "just do it" or similar
+The interview is skipped ONLY when:
+- Non-interactive context, on an explicit signal (the request says "non-interactive" / "no questions", or a declared-non-interactive command) — proceed if all required dimensions seed, else fail fast naming the `missing` fields
+- Modify / Modernize / Review gate answered "no" — the operation proceeds on its existing path
+
+"Just do it" is NOT a skip: it marks the request as complete, which means `confirmation` mode — the read-back still runs. Individual non-required dimensions may be waived, but only by the user, per the interview protocol.
 
 ### Question Depth by Complexity
 
@@ -193,10 +192,10 @@ Gathered requirements inform:
 
 ## When to Use Questionnaire Agent vs Direct Q&A
 
-### Use Questionnaire Agent (`gather-requirements`)
+### Use the Interview Planner (`grill-planner`)
 
-- **New skill creation** - Full requirements needed
-- **Major modifications** - Scope and impact unclear
+- **New skill creation** - Full coverage-map interview (always)
+- **Major modifications** - Gate answered yes; scope and impact unclear
 - **Complex operations** - Multiple decisions required
 - **User prefers guided process** - Step-by-step collection
 
@@ -415,10 +414,10 @@ Which would you prefer?
 
 ### In SKILL.md
 
-When skill uses questionnaire:
-- Reference `gather-requirements` agent
-- Define which questions are mandatory
-- Specify escalation to user if agent can't resolve
+When skill uses the interview:
+- Reference the `grill-planner` agent and `references/interview-protocol.md`
+- Define which dimensions are required (taxonomy requirement classes)
+- Specify escalation to user if the interview can't close the map
 
 ### In Agents
 
