@@ -3,7 +3,7 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [6.5.0] - 2026-08-04
 
 **Behaviour change for `managing-issues` Implement.** A run that previously
 narrated its checkpoints now stops at them. Existing users will see more
