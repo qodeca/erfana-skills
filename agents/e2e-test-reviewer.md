@@ -19,6 +19,7 @@ description: |
 tools: Read, Glob, Grep, WebSearch, WebFetch
 model: opus
 color: slate
+capabilities: [anti-pattern-detection, code-review, security-scanning, web-search]
 ---
 
 <context>
