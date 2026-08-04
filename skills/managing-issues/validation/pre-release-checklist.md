@@ -6,10 +6,10 @@ Validate skill integrity before deployment. Score threshold: **18/20 items**.
 
 ## Section 1: Phase integrity
 
-- [ ] All 13 phases present (0-12) in implement operation
+- [ ] All 13 phases present (0-12) in implement operation – sub-gates add gates, never phases
 - [ ] Phase numbering sequential with no gaps
 - [ ] Each phase has a corresponding file in `phases/`
-- [ ] Phase overview table in implement.md matches phase files
+- [ ] Phase overview table in implement.md matches phase files, including the sub-gate columns for Phases 4 and 11
 
 ## Section 2: Agent delegation compliance
 
@@ -20,9 +20,9 @@ Validate skill integrity before deployment. Score threshold: **18/20 items**.
 
 ## Section 3: Quality gate completeness
 
-- [ ] All 13 QG gates (QG-0 through QG-12) defined
-- [ ] QG-0, QG-7, QG-9 marked as non-overridable
-- [ ] Each QG has explicit pass/fail criteria
+- [ ] All 16 gates defined: 13 phase gates (QG-0 through QG-12) plus the 3 sub-gates QG-4a, QG-4b, QG-11a
+- [ ] QG-0, QG-7, QG-9 marked as non-overridable; the 3 sub-gates non-skippable once the run's `review_level` puts them in scope
+- [ ] Each gate has explicit pass/fail criteria – Automated gates a concrete exit-code predicate, Checkpoint and User-Approval gates an `AskUserQuestion` call, User-Run Review gates a returned report path
 - [ ] Retry logic (max 3) present in all phase files
 
 ## Section 4: Contract compliance

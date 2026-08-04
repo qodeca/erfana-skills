@@ -55,7 +55,7 @@ Agent tool:
   subagent_type: "ux-reviewer"
   prompt: |
     UX audit for issue #<number>: <title>
-    Changed files: <from git diff>
+    Changed files: <the working-tree change set - nothing is committed before Phase 12>
     UX specification: <from Phase 4 Step 1a, if available>
     Platform: <web/desktop/mobile>
     Depth: <standard|deep>

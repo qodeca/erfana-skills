@@ -126,7 +126,9 @@ This ensures Claude Code:
 **Good (when the repo uses the integration):**
 > Ready for @claude to implement.
 
-This is **conditional**: include the `@claude` marker only if the consuming repo runs Claude Code GitHub Actions. Omit it otherwise — it is harmless but pointless without the integration. Also set labels so the issue routes: a type label (`bug`/`enhancement`) plus `needs-triage`, and a priority (`P1`/`P2`/`P3`) when known.
+This is **conditional**: include the `@claude` marker only if the consuming repo runs Claude Code GitHub Actions. Omit it otherwise – it is harmless but pointless without the integration. Also set labels so the issue routes: a type label (`bug`/`enhancement`) plus `needs-triage`, and a priority (`P1`/`P2`/`P3`) when known.
+
+**What the marker does and does not start.** It triggers the consuming repo's own headless GitHub Actions workflow. It does **not** start this skill's Implement operation, which is **interactive-only**: that operation blocks on `AskUserQuestion` at several gates and, at QG-4a and QG-11a, ends its turn waiting for a human to run `/erfana:lens-review` and hand back a report path. A headless run would stall at the first of those with nobody to answer, so Phase 0 refuses a detected non-interactive session outright rather than starting work it cannot finish. The two paths are complementary, not alternatives: the marker is issue-routing metadata for a repo's own automation; `/erfana:managing-issues` implement is a human-in-the-loop workflow. See [../operations/implement.md](../operations/implement.md) "Interactive-only operation".
 
 ## Quick Checklist
 

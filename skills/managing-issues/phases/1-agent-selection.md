@@ -28,7 +28,7 @@ When `spec_maturity >= complete` OR issue labels clearly indicate domain, skip t
 | 2 | mi-requirements-analyzer |
 | 3 | mi-codebase-explorer |
 | 4 | mi-solution-designer |
-| 5 | software-developer + test-writer |
+| 5 | software-developer + test-writer (+ e2e-test-writer when e2e is enforced) |
 | 6 | architecture-reviewer |
 | 7 | security-auditor |
 | 8 | code-reviewer |
@@ -77,53 +77,53 @@ For each agent, extract from YAML frontmatter:
 **Agent tool:**
   subagent_type: `mi-agent-matcher`
 
-Score each available agent against each phase's requirements:
+Match each available agent against each phase's requirements **qualitatively** – see [../SKILL.md](../SKILL.md) "Selection algorithm". Do not compute or report a numeric match percentage; an LLM cannot derive a reproducible weighted score, so the number would be fabricated.
 
 ```
 Load phase requirements from reference/implement-phase-requirements.md
 
 For each phase in the current operation:
-  For each available agent:
-    capability_score = count(matching capabilities) / count(required capabilities)
-    tool_score = count(matching tools) / count(required tools)
-    domain_score = 1.0 if domain matches, else 0.0
-
-    total_score = (capability_score * 0.5) + (tool_score * 0.3) + (domain_score * 0.2)
+  For each available agent, classify coverage as:
+    full     – declared capabilities cover ALL required capabilities AND tools suffice
+    partial  – some but not all required capabilities covered
+    none     – no required capability covered
 ```
 
-**Scoring thresholds:**
-- ≥80% match → auto-select, inform user
-- 60-79% match → present options, user picks
-- <60% match → fallback to direct execution (if `allow_direct=true`) or escalate
+`mi-agent-matcher` returns a `score` field. Treat it as an **advisory ranking signal only** – useful for ordering candidates within the same coverage class. Never report it to the user as a confidence figure and never use it as a numeric gate threshold.
 
-### Step 3: Apply context-aware boosting
+**Selection rules (coverage-based):**
+- Full coverage → auto-select, inform user
+- Partial coverage → present the top candidates, user picks
+- No coverage → fallback to direct execution (if `allow_direct=true`) or escalate
 
-Adjust scores based on issue context:
+### Step 3: Apply context-aware preferences
 
-| Issue Label | Boost Agents | Boost Amount |
-|-------------|--------------|--------------|
-| `frontend` | react-developer, react-code-reviewer | +10% |
-| `backend` | nest-developer, nest-code-reviewer | +10% |
-| `security` | security-auditor, security-related agents | +15% |
-| `bug` | bug-investigator (Phase 2) | +10% |
-| `frontend`, `ui`, `ux`, `design`, `accessibility` | ux-designer (Phase 4), ux-reviewer (Phase 8) | +15% |
+Adjust candidate ordering based on issue context. These are tie-breakers within a coverage class, not numeric bonuses:
+
+| Issue Label | Prefer agents |
+|-------------|---------------|
+| `frontend` | react-developer, react-code-reviewer |
+| `backend` | nest-developer, nest-code-reviewer |
+| `security` | security-auditor, security-related agents |
+| `bug` | bug-investigator (Phase 2) |
+| `frontend`, `ui`, `ux`, `design`, `accessibility` | ux-designer (Phase 4), ux-reviewer (Phase 8) |
 
 ### Step 4: Present selection plan
 
-**If all phases have ≥80% matches:**
+**If every phase has a full-coverage match:**
 - Auto-select all agents
 - Inform user: "Agent selection complete. Using [agent list]."
 
-**If any phase has 60-79% match:**
+**If any phase has only partial coverage:**
 - Present options using AskUserQuestion:
   ```
   Phase N requires [capabilities]. Select agent:
-  Option 1: [agent name] (score%)
-  Option 2: [agent name] (score%)
+  Option 1: [agent name] – covers [capabilities], missing [capabilities]
+  Option 2: [agent name] – covers [capabilities], missing [capabilities]
   Option 3: Direct execution (if allowed)
   ```
 
-**If any phase has <60% match:**
+**If any phase has no coverage:**
 - Check if phase allows direct execution (`allow_direct: true`)
 - If yes: Fallback to orchestrator direct execution with warning
 - If no: Escalate to user with options:
@@ -153,9 +153,10 @@ AGENT_SELECTIONS = {
 | Artifact | Description |
 |----------|-------------|
 | Agent Catalog | All available agents with capabilities |
-| Selection Plan | Phase-to-agent assignments with scores |
-| User Confirmations | Decisions for edge cases (<80% matches) |
+| Selection Plan | Phase-to-agent assignments with coverage class and rationale |
+| User Confirmations | Decisions for edge cases (partial or no coverage) |
 | Cached Selections | Stored for subsequent phase execution |
+| Task List Advance | Phase 1 and `QG-1 quality gate` marked `completed`; Phase 2 `in_progress` with `QG-2 quality gate` appended – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -175,11 +176,12 @@ AGENT_SELECTIONS = {
 | Criterion | Check |
 |-----------|-------|
 | Discovery complete | All agent sources scanned |
-| Matching complete | All phases have scores calculated |
-| High matches auto-selected | ≥80% matches assigned automatically |
-| Edge cases resolved | <80% matches have user decision or fallback |
+| Matching complete | Every phase has a coverage classification (full / partial / none) |
+| Full-coverage matches auto-selected | Full-coverage phases assigned automatically |
+| Edge cases resolved | Partial- or no-coverage phases have a user decision or a declared fallback |
 | Selections stored | Cache ready for phase execution |
 | Mandatory phases covered | No mandatory phase without agent |
+| Task list advanced | `QG-1 quality gate` and `Phase 1: Agent Selection` `completed`, `Phase 2: Business Analysis` `in_progress`, `QG-2 quality gate` appended as `pending` |
 
 ### Result
 
@@ -209,29 +211,29 @@ Agent selection adapts to issue characteristics:
 
 ### Frontend Issues
 If issue has `frontend` label:
-- Boost react-developer for Phase 4 (Implementation)
-- Boost react-code-reviewer for Phase 7 (Quality Review)
+- Prefer react-developer for Phase 4 (Implementation)
+- Prefer react-code-reviewer for Phase 7 (Quality Review)
 
 ### Backend Issues
 If issue has `backend` label:
-- Boost nest-developer for Phase 4 (Implementation)
-- Boost nest-code-reviewer for Phase 7 (Quality Review)
+- Prefer nest-developer for Phase 4 (Implementation)
+- Prefer nest-code-reviewer for Phase 7 (Quality Review)
 
 ### Security Issues
 If issue has `security` label:
-- Boost security-auditor for Phase 7 (Security)
-- Require security scanning agent (≥80% match mandatory)
+- Prefer security-auditor for Phase 7 (Security)
+- Require a security scanning agent with full coverage of the phase's required capabilities (mandatory – no partial-coverage substitute)
 
 ### Bug Issues
 If issue has `bug` label:
 - Include bug-investigator in Phase 2 (Business Analysis)
-- Boost debugging-focused agents
+- Prefer debugging-focused agents
 
 ### UI/UX issues
 If issue has `frontend`, `ui`, `ux`, `design`, or `accessibility` label (or `has_ui_impact = true`):
-- Boost ux-designer for Phase 4 (Architecture – UX design specification)
-- Boost ux-reviewer for Phase 8 (Quality Review – UX audit)
-- Boost ux-reviewer for Review operation Phase 3 (Execute Review)
+- Prefer ux-designer for Phase 4 (Architecture – UX design specification)
+- Prefer ux-reviewer for Phase 8 (Quality Review – UX audit)
+- Prefer ux-reviewer for Review operation Phase 3 (Execute Review)
 
 ---
 
@@ -265,5 +267,9 @@ Even with `allow_direct: true`, agent delegation is PREFERRED:
 ## NEXT PHASE
 
 **QG-1 = PASS required to proceed to Phase 2: Business Analysis**
+
+**Task list:** on PASS, mark `QG-1 quality gate` then `Phase 1: Agent Selection` `completed`, set `Phase 2: Business Analysis` `in_progress`, and append `QG-2 quality gate` as `pending` ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-1=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-1 ≠ PASS. Do not proceed.**

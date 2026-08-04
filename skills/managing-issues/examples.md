@@ -9,7 +9,8 @@ Detailed examples showing workflows for each operation.
 | Operation | Examples | File |
 |-----------|----------|------|
 | **Create** | Bug report, Feature request | [examples/create.md](examples/create.md) |
-| **Implement** | Tier 1 trivial, Tier 2 standard, Spec-ready (Tier 2 + complete spec) | [examples/implement.md](examples/implement.md) |
+| **Implement** | Tier 1 trivial, Tier 2 standard | [examples/implement.md](examples/implement.md) |
+| **Implement (edge cases)** | Selection failure, retry exhaustion, post-UAT re-review, resume, spec-ready | [examples/implement-edge-cases.md](examples/implement-edge-cases.md) |
 | **Review** | Component, PR/Diff, Module, Compliance (spec audit) | [examples/review.md](examples/review.md) |
 | **Display** | Single (`show #N`), List (`list issues`), Search (`find issues with label X`) | [examples/display.md](examples/display.md) |
 
@@ -26,16 +27,19 @@ Detailed examples showing workflows for each operation.
 | QG-2: Business Analysis | 2 | Automated | Checkpoint | Yes |
 | QG-3: Discovery | 3 | Automated | Checkpoint | Yes |
 | QG-4: Architecture | 4 | User-Approval | User-Approval | Yes |
+| QG-4a: Design lens review | 4 | Skipped | User-Run Review (`full` / `design`) | **NO** (once in scope) |
+| QG-4b: Architecture acceptance | 4 | Skipped | User-Approval (`full` / `design`) | **NO** (once in scope) |
 | QG-5: Implementation | 5 | Automated | Automated | Yes |
 | QG-6: Architectural Review | 6 | Automated | Checkpoint | Yes |
 | QG-7: Security | 7 | Mandatory | Mandatory | **NO** |
 | QG-8: Quality Review | 8 | Automated | Checkpoint | Yes |
 | QG-9: Verification | 9 | Mandatory | Mandatory | **NO** |
 | QG-10: Documentation | 10 | Automated | Automated | Yes |
+| QG-11a: Implementation lens review | 11 | Skipped | User-Run Review (`full` only) | **NO** (once in scope) |
 | QG-11: UAT | 11 | Automated | User-Approval | Yes |
 | QG-12: Finalization | 12 | User-Approval | User-Approval | Yes |
 
-**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping.
+**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping. The table lists **13 phase gates plus 3 sub-gates**; the sub-gates run inside Phases 4 and 11 per the `review_level` chosen at QG-0 (Tier 2 is asked, default `full`; Tier 1 gets `none`) and add no phases. **User-Run Review** means the *user* runs `/erfana:lens-review` and returns the report path – the orchestrator never invokes it. Canonical definitions: [operations/implement.md](operations/implement.md).
 
 ### Create Operation Checkpoints
 

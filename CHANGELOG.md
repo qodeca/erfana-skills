@@ -3,6 +3,213 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+**Behaviour change for `managing-issues` Implement.** A run that previously
+narrated its checkpoints now stops at them. Existing users will see more
+blocking prompts, up to two turn-ending checkpoints that require them to run a
+slash command, and stricter test enforcement before a change can ship. Several
+things that were advisory are now blocking. **How much of the deep review a
+standard run pays for is now the user's choice**, taken once at the start of
+the run; a trivial run costs **four unconditional blocking stops end to end**
+(the Phase 2 requirements questionnaire, design approval, commit approval,
+branch decision), plus one each for a public repo (run-state consent), labels
+that do not pin the task type, and any blocking test category with no harness.
+A standard run at the default review level costs **14 unconditional stops**
+(12 prompts plus 2 turn-ending lens checkpoints) and **17 on the common
+default** of an unlabeled issue in a public repo with no e2e harness; Phase 11
+offers two further interactions, so a typical run lands at 18-19.
+
+### Added
+- managing-issues: **three deep-review sub-gates** inside the existing phases –
+  `QG-4a` (user-run `/erfana:lens-review` of the design), `QG-4b` (architecture
+  acceptance, runs on every pass including a clean review) and `QG-11a`
+  (user-run lens review of the whole change set, after every other gate and
+  before manual UAT). Gate count is now **13 phase gates plus 3 sub-gates**;
+  the phase count is unchanged at 13. Scope is decided once at QG-0 as
+  `review_level` – `full` (both lens checkpoints plus the design sign-off),
+  `design` (design review and sign-off only, no review of the finished change
+  set) or `none`. **Tier 2 is asked which**, defaulting to `full`; **Tier 1
+  gets `none` and is not asked at all** – a trivial run that wants the deep
+  review says so when it starts ("implement #42 with the full review").
+  Phase 12's terminal assertion treats a skip the chosen level excludes as
+  legitimate. On a resume the level is re-derived and the Tier 2 question is
+  re-asked rather than read back from the persisted block, so a forged block
+  cannot switch the sub-gates off. The orchestrator **never invokes**
+  `/erfana:lens-review` – it prints the command with a validated `--out` path
+  and ends the turn, because a skill invoking a skill re-enters skill-level
+  work and an open prompt would leave the user nowhere to type.
+- managing-issues: **risk-scaled test enforcement** at QG-5. QG-0 now resolves
+  `UNIT_TEST_CMD` / `INTEGRATION_TEST_CMD` / `E2E_TEST_CMD` (each a command or
+  the literal `absent`) and classifies `task_type`; QG-5 enforces the
+  categories the risk matrix requires for that task type, with e2e gated on
+  `has_ui_impact`. An enforced category with no harness is a **failure**, not
+  a free pass – the build / descope / accept decision is taken by the user at
+  QG-4 and merely enforced at QG-5. New agent on the roster: `e2e-test-writer`.
+- managing-issues: **run-state persistence and resume.** A run writes its state
+  to exactly one comment on the issue it is implementing, thereafter edited in
+  place. **On a public repo it is created only after an explicit consent
+  prompt** (the block is permanently public there); **on a private repo it is
+  written without a prompt**, announced in one line, and **never removed** – it
+  stays on the issue as the run's audit trail. This
+  is a deliberate, narrow carve-out to the skill's "never modify issues without
+  approval" rule: one comment per run, never a second, never an edit to the
+  body, title, labels or state. A persisted block is untrusted data: the
+  authorship filter is applied **in the fetch query**, so a comment by anyone
+  else is never ingested; the fetch paginates, so a busy issue cannot hide the
+  block; and acceptance additionally requires the run's branch, ancestor SHAs,
+  and a `base_branch` matching the one this session re-detected. QG-0, QG-7 and
+  QG-9 re-run unconditionally on every resume, and `base_branch`,
+  `review_level`, `test_harness_decisions`, the detected test commands and both
+  tree snapshots are re-derived or re-asked rather than read back – so every
+  field that decides a gate comes from this session. The resume point is
+  confirmed with the user first, in a prompt that names the branch and the plan
+  path. What a forged block can still do is waste work: name a valid-but-wrong
+  plan path, or pad `planned_files` with real repo paths.
+- managing-issues: **a standard run now writes a design document into the
+  repository and commits it.** When `review_level` puts QG-4a in scope and the
+  issue has no linked spec, QG-4a needs a concrete, tracked file to review, so
+  the designer agent writes the approved plan to `docs/design/design-issue-
+  <number>.md` – or to the **repository root** when the repo has no `docs/`
+  tree. That path joins `PLANNED_FILES`, so Phase 12 stages and commits it with
+  the change. This is a new visible artifact in the user's repository: the
+  resolved path is stated verbatim in the QG-4b presentation before it is
+  accepted, and a gitignored destination is a question (pick a path, use the
+  repo root, or skip the doc and record QG-4a as unrunnable) rather than a
+  failure. `$LENS_DIR` holds the lens-review `--out` report only and is never
+  committed.
+- managing-issues: `reference/run-state-resume.md` – the read side of the
+  run-state block (fetch query and its fetch-time author filter, field shapes,
+  the six acceptance rules, which fields are re-derived rather than read back,
+  reconstructible resume points, the `awaiting` pause, the resume
+  confirmation), split out of `post-review-tracking.md` to keep both under the
+  line cap.
+- managing-issues: `reference/progress-tracking.md` – canonical task-list
+  definitions and marking rules, hoisted out of SKILL.md. Every phase now
+  declares its task-list advance as an output artifact.
+
+### Changed
+- managing-issues: **eight existing gates - nine prompt sites - turned from
+  prose checkpoints into real blocking `AskUserQuestion` calls**,
+  tier-conditionally: QG-2, QG-3, QG-4, QG-6, QG-8, QG-9, QG-11 and QG-12,
+  where QG-12 carries two (the commit approval and the branch decision).
+  QG-4b is **not** in this count - it is a new gate, listed under Added above.
+  Printing a summary that ends in a bracketed option list is explicitly not a
+  gate. QG-4 and QG-12 call `AskUserQuestion`
+  on **all** tiers – they front the run's irreversible actions and are never
+  tier-exempt.
+- managing-issues: **QG-9's Definition-of-Done sign-off is Tier 2 only.** An
+  interim pass had it prompting on every tier, which the plan did not call for
+  and which contradicted the gate-type tables that list QG-9 as Mandatory on
+  both tiers. On Tier 1 the mandatory predicate (VERIFIED, every acceptance
+  criterion evidenced, tests and typecheck exit 0, spec compliance clean) is
+  the gate, with no prompt. The gate type is unchanged – the Tier 2 call is a
+  confirmation on top of a passing predicate, not a promotion to
+  User-Approval.
+- managing-issues: **Phase 12 asks about the branch once, not twice.** The
+  branch-handling question and the follow-up "retype the branch name" prompt
+  are merged into a single confirmation whose `Merge+Delete` option names the
+  branch it deletes, resolved before the question is asked. One deliberate
+  confirmation of a destructive action, rather than two.
+- managing-issues: **the four Tier-1 automated gates gained concrete
+  exit-code predicates** (QG-1, QG-5, QG-7, QG-10, plus Tier-1 predicates for
+  QG-2, QG-3, QG-6, QG-8, QG-11). Criteria with no honest machine check –
+  prior-art depth, pattern catalogues, SOLID assessments, coverage without a
+  reporter, edge-case testing – are now **labelled advisory** rather than left
+  in the middle state of being neither enforced nor declared advisory.
+- managing-issues: Phase 12 stages an **explicit planned file list** instead of
+  `git add -A`, which swept review reports and scratch files into commits, and
+  asserts every gate in scope is recorded PASS before committing.
+- managing-issues: **Phase 11 PRE-STEP scaffolding deliberately reinstated**
+  for QG-11a, reversing part of the v4.2.0 anti-ritual strip. QG-11a is a
+  user-run review checkpoint with a turn boundary in the middle, not a
+  checklist ritual, and it has nowhere else to sit if it must run after every
+  other gate.
+- managing-issues: the anti-ceremony guidance is **narrowed, not removed** – it
+  forbids per-micro-step ritual while phase-boundary outputs (the gate, its
+  `AskUserQuestion` call, declared artifacts, task-list advance) stay
+  mandatory on every phase and tier. `CLAUDE.md` "Things to avoid" carries the
+  matching carve-out so the project rule and the skill agree.
+- managing-issues: the Implement operation is documented as **interactive-only**
+  and Phase 0 refuses a detected CI/automation run before creating a branch.
+  The `@claude` auto-implement marker triggers a repo's own headless Actions
+  workflow and does not drive this operation.
+- managing-issues: agent-selection prose no longer quotes fabricated match
+  percentages (95% / 55% / "80% threshold"); coverage is qualitative
+  (`full` / `partial` / `none`), matching the selection algorithm.
+- managing-issues: the `--target` flag disappeared from the two
+  `/erfana:lens-review` invocations printed in `examples/implement.md`. There
+  is no such flag – `commands/lens-review.md` takes the target positionally,
+  as the phase files always did. Examples are what people copy.
+- managing-issues: `examples/implement.md` split. The two tier walkthroughs and
+  the gate-summary table stay; the five edge-case walkthroughs (selection
+  failure, retry exhaustion, post-UAT re-review, resume, spec-ready) move to
+  `examples/implement-edge-cases.md`. Both files sit well under the 500-line
+  cap; `examples.md` indexes both. The trivial walkthrough now shows the real
+  stop count and the QG-10 documentation gate passing on a recorded decision
+  rather than on an assumed markdown edit.
+- managing-issues: skill frontmatter corrected – the gate claim now reads
+  "13 phased quality gates plus 3 scoped deep-review sub-gates" (it said 13),
+  and states the Implement operation is interactive-only. Every existing
+  trigger phrase is unchanged.
+- `README.md`: the `erfana:managing-issues` row now says the Implement
+  operation is interactive-only and that it saves progress to one comment on
+  the issue (after asking on a public repo; without a prompt but announced in
+  one line, on a private one - matching the skill, which announces it).
+
+### Accepted risks
+
+- **Staged rollout skipped for a behaviour-changing release.** The repo's own
+  guidance asks for an rc soak when a release could regress skill behaviour or
+  trigger phrases, and this one changes both the number and the shape of the
+  stops a user hits. Overridden deliberately: the affected surface is one
+  skill's Implement operation, invoked manually, with no auto-discovery or
+  trigger-phrase change (`when_to_use` is byte-identical), and every gate,
+  hook and manifest check passes. **What actually backs this release: the
+  automated verification gates, `claude plugin validate`, and five rounds of
+  static review of the changed skill files. No end-to-end run of the Implement
+  operation has been performed at either tier - not Tier 1, not Tier 2 - and
+  none is planned before the tag.** The operation is therefore shipping
+  verified by inspection only; every claim about how a run behaves in practice
+  is unexercised. End-to-end runs at both tiers remain **outstanding** and are
+  the first thing to do post-tag. If the new stop shape misfires in the first
+  48h, tune in a patch release.
+- **Interaction cost is measured, not budgeted by a gate.** The stop counts
+  (4 unconditional on Tier 1; 11 / 13 / 14 unconditional on Tier 2 at `none` /
+  `design` / `full`, and 17 on the common Tier 2 default) are counted from the
+  phase files by hand. Nothing verifies them at CI time, so a future edit that
+  adds a prompt will not be caught the way a drifted count claim would be. An
+  earlier pass under-counted every figure by one because the Phase 2
+  requirements questionnaire, which blocks on both tiers, was missed.
+- **The private-repo state comment is written without asking.** A deliberate
+  choice: on a private repo the audience is already the repo's collaborators,
+  and a consent prompt there would spend a blocking stop for no privacy gain.
+  The comment is announced when created and never deleted, so it is visible
+  rather than silent – but a user who does not want any issue write on a
+  private repo has no prompt at which to decline.
+- **`review_level` and the missing-harness decisions are re-asked on every
+  resume.** Re-deriving rather than reading back is what stops a forged
+  run-state block from switching the sub-gates off or disarming the blocking
+  test matrix, and it is the reason those answers are not persisted as answers.
+  The cost is one extra stop for the review level each time a Tier 2 run is
+  resumed, plus one per blocking test category with no harness.
+- **A repository collaborator can still get text into a resumed run's
+  context.** The authorship filter now runs inside the fetch query, so a
+  comment from anyone else is never ingested – but a collaborator can edit the
+  authenticated user's own comment in place while the API still reports the
+  original author. Up to 80 shape-validated `key: value` lines from that
+  comment enter orchestrator context. The mitigation is shape validation,
+  known-keys-only and the fact that every gate-deciding field is re-derived,
+  not isolation; unlike the lens-report path, the orchestrator reads this text
+  itself.
+- **A resume no longer requires a clean tree, by design.** QG-0's clean-tree
+  check records the dirty paths instead of failing on a resume, because an
+  implementation interrupted mid-phase has uncommitted work by construction and
+  the old behaviour made the commonest resume impossible. Nothing then attests
+  that those paths came from this run – the Phase 12 pre-commit re-review,
+  which has no baseline on a resume and so re-reviews the whole change set from
+  the re-detected `BASE_BRANCH`, is what covers them.
+
 ## [6.4.0] - 2026-08-03
 
 ### Added

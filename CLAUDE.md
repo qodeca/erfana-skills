@@ -146,7 +146,7 @@ Most rules here are the negative form of a Hard constraint above; only non-dupli
 - Using SSH-based marketplace add in onboarding instructions (known Windows breakage).
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
 - Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
-- Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes).
+- Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).
 
 ## Repository workflow

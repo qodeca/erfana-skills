@@ -54,11 +54,12 @@ If ANY condition is not met → Use full re-review instead.
 
 ### Steps
 
-1. **Identify changed lines**
+1. **Identify changed lines** – against the recorded tree snapshot, not a commit range: nothing is committed before Phase 12, so `<sha>..HEAD` is empty here ([post-review-tracking](post-review-tracking.md), [../operations/implement.md](../operations/implement.md)). `$NOW_TREE` is a fresh snapshot taken with the recipe in those files.
    ```bash
-   git diff --stat <last_review_commit>..HEAD
-   git diff <last_review_commit>..HEAD
+   git diff --stat "<last_review_tree>" "$NOW_TREE"
+   git diff "<last_review_tree>" "$NOW_TREE"
    ```
+   With no recorded baseline (a resumed run), review the whole working-tree change set instead.
 
 2. **Verify scope**
    - Are changes only in files that were already reviewed?
@@ -76,7 +77,7 @@ If ANY condition is not met → Use full re-review instead.
    ```
 
 5. **Record result**
-   - PASS: Update `last_review_commit = HEAD`, proceed to commit
+   - PASS: Re-snapshot the working tree into `last_review_tree`, proceed to commit
    - FAIL: Escalate to appropriate review level
 
 ---

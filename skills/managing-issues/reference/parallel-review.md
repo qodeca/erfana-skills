@@ -25,7 +25,7 @@ Defines how to dispatch multiple review agents simultaneously and consolidate fi
 
 ## Dispatch protocol
 
-1. **Identify scope:** `git diff --stat` to list all changed files
+1. **Identify scope:** list the working-tree change set – `{ git diff --name-only; git diff --cached --name-only; git ls-files --others --exclude-standard; } | sort -u`. During an implement run nothing is committed before Phase 12, so a `<base>...HEAD` range would return nothing ([../operations/implement.md](../operations/implement.md))
 2. **Dispatch reviewers in parallel, respecting the concurrency cap.** The Task platform runs at most ~10 concurrent agents; keep an effective fan-out of **3–5 reviewers per batch**. If more reviewers are warranted than the cap allows, dispatch in batches and consolidate per batch — never assume an unbounded simultaneous fan-out.
 3. **Each reviewer receives a complete, self-contained payload** (subagents have no memory of the orchestrator's context — anything omitted is invisible to them). The mandatory dispatch payload is:
    - `changed_files`: explicit list of paths to review
@@ -55,6 +55,21 @@ Each reviewer returns findings as:
   reviewer: "code-reviewer" | "architecture-reviewer" | "security-auditor" | "test-writer"
 }
 ```
+
+---
+
+## Severity mapping for user-run lens reviews (QG-4a, QG-11a)
+
+QG-4a and QG-11a consume a `/erfana:lens-review` report, which uses reader-facing labels. Map them onto the ladder above before consolidating – there is no second scheme:
+
+| lens-review label | Underlying engineering severity | Ladder severity | Action class |
+|---|---|---|---|
+| Must-fix | `blocker` | critical | MUST FIX |
+| Should-fix | `major` | high | MUST FIX |
+| Nice-to-fix | `minor` | medium | SHOULD FIX |
+| Cosmetic | `nit` | low | TECH DEBT |
+
+Once mapped, the consolidation rules below apply unchanged. At QG-4a and QG-11a every MUST FIX finding is resolved before the gate passes – those gates have no skip option.
 
 ---
 

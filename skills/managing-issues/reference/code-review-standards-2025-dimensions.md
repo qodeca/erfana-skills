@@ -56,7 +56,7 @@ Continuation of [code-review-standards-2025.md](code-review-standards-2025.md).
 | 16-20 | High | Consider split |
 | 21+ | Very High | MUST refactor |
 
-**Threshold:** Maximum 15 per function (Tier 2), 20 (Tier 1)
+**Threshold:** Maximum 15 per function (Tier 2), 20 (Tier 1) – blocking only when a complexity analyser produced the score; otherwise record `not measured` (see section 9 measure-or-declare rule).
 
 ### 8.2 Cognitive complexity
 
@@ -88,9 +88,11 @@ Measures human understandability. Penalizes nesting more than sequential code.
 
 | Metric | Tier 1 | Tier 2 | Blocking |
 |--------|--------|--------|----------|
-| Line coverage | ≥70% | ≥80% | YES |
-| Branch coverage | ≥60% | ≥70% | YES |
+| Line coverage | ≥70% | ≥80% | YES when measured |
+| Branch coverage | ≥60% | ≥70% | YES when measured |
 | Function coverage | ≥70% | ≥80% | NO |
+
+**Measure or declare:** these thresholds bind on a figure produced by the project's coverage reporter. When the project has none, record `not measured` – never report the threshold as met without a measurement. Same rule for the section 8 complexity thresholds.
 
 ### 9.2 Test quality checks
 

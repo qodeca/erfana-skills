@@ -141,7 +141,8 @@ grep -r --include="*.css" -E "z-index:\s*[0-9]+" src/
 
 1. **Identify CSS changes**
    ```bash
-   git diff --name-only | grep -E "\.(css|tsx|ts)$"
+   { git diff --name-only; git diff --cached --name-only; git ls-files --others --exclude-standard; } \
+     | sort -u | grep -E "\.(css|tsx|ts)$"   # untracked new files count too
    ```
 
 2. **Run violation checks**

@@ -4,6 +4,8 @@ Capability definitions for each phase of the **Implement** operation. Used by dy
 
 For shared vocabulary (capabilities, domains, criticality levels, allow_direct policy), see [phase-requirements-shared.md](phase-requirements-shared.md).
 
+**Phases vs sub-gates.** Blocks named `phase_*` are the 13 phases. Blocks named `gate_*` (`gate_4a_design_lens_review`, `gate_4b_architecture_acceptance`, `gate_11a_implementation_lens_review`) are **sub-gates inside Phases 4 and 11, not phases** – they exist here only so their requirements are stated once. Each carries `human_invoked: true` with `allow_direct: true`, so QG-1 resolves it without attempting an agent assignment (same resolution path as `phase_0_preflight` and `phase_11_uat`). QG-1's "all phases have agent selection" criterion is satisfied by `allow_direct: true`; assigning an agent to a checkpoint a human must perform is a selection error, not a fallback.
+
 For other operations:
 - Create operation phases: [create-phase-requirements.md](create-phase-requirements.md)
 - Review operation phases: [review-phase-requirements.md](review-phase-requirements.md)
@@ -122,6 +124,67 @@ notes: |
   Used in spec-ready validation mode when design documents already exist.
   solution-reviewer validates design coherence before QG-4 user approval.
   Falls back to full Phase 4 design creation if validation finds critical issues.
+```
+
+### gate_4a_design_lens_review
+
+```yaml
+capabilities:
+  - user-interaction
+  - report-parsing
+tools:
+  - Read
+domain: review
+criticality: high
+allow_direct: true
+human_invoked: true
+trigger: deep_review_gates == true
+notes: |
+  Sub-gate inside Phase 4, not a phase. HUMAN-INVOKED CHECKPOINT: the user runs
+  /erfana:lens-review; the orchestrator prints the command and ends the turn and
+  MUST NOT invoke it (SKILL.md rule 15). QG-1 does not assign an agent to this
+  gate - allow_direct: true resolves it, the same way phase_0_preflight and
+  phase_11_uat resolve. Parsing the returned report IS delegated (untrusted
+  data), to whichever reviewer Phase 1 already resolved for phase_8_quality_review.
+```
+
+### gate_4b_architecture_acceptance
+
+```yaml
+capabilities:
+  - user-interaction
+tools:
+  - AskUserQuestion
+domain: acceptance
+criticality: high
+allow_direct: true
+human_invoked: true
+trigger: deep_review_gates == true
+notes: |
+  Sub-gate inside Phase 4, not a phase. HUMAN-INVOKED CHECKPOINT: an
+  AskUserQuestion sign-off on the reviewed design, run by the orchestrator.
+  No agent assignment - allow_direct: true, per the phase_11_uat precedent.
+  Runs on every pass, including a clean review with zero findings.
+```
+
+### gate_11a_implementation_lens_review
+
+```yaml
+capabilities:
+  - user-interaction
+  - report-parsing
+tools:
+  - Read
+domain: review
+criticality: high
+allow_direct: true
+human_invoked: true
+trigger: review_level == full
+notes: |
+  Sub-gate inside Phase 11 (pre-step to QG-11), not a phase. HUMAN-INVOKED
+  CHECKPOINT with the same contract as gate_4a: user runs the command, the
+  orchestrator never does, QG-1 assigns no agent (allow_direct: true). Report
+  parsing is delegated as untrusted data.
 ```
 
 ### phase_5_implementation
