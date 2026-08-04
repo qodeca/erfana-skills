@@ -85,6 +85,7 @@ Check:
 | Coupling Analysis | Coupling/cohesion scores |
 | Pattern Review | Design pattern usage evaluation |
 | Issue List | All findings by severity |
+| Task List Advance | Phase 6 and `QG-6 quality gate` marked `completed`; Phase 7 `in_progress` with `QG-7 quality gate` appended – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -109,6 +110,7 @@ Check:
 | Critical issues | 0 | 0 |
 | High issues | Document | Address |
 | User checkpoint | Not required | Required |
+| Task list advanced | `QG-6 quality gate` and `Phase 6: Architectural Review` `completed`, `Phase 7: Security` `in_progress`, `QG-7 quality gate` appended as `pending` | Same |
 
 ### Tier 2 Checkpoint
 
@@ -141,9 +143,34 @@ Present to user:
 ### Recommendations
 - <suggestion 1>
 - <suggestion 2>
-
-**Proceed to Security?** [Approve / Address Issues First]
 ```
+
+### Gate call (tier-conditional)
+
+**Tier 2 – MUST call `AskUserQuestion`.** Presenting the review above is not the gate; the gate is this call. Do not proceed on printed prose.
+
+```
+AskUserQuestion({
+  questions: [{
+    question: "Architectural review is complete. Proceed to Security?",
+    header: "QG-6",
+    options: [
+      { label: "Approve", description: "The design holds up - continue to Phase 7 (Security)" },
+      { label: "Address Issues First", description: "Fix the flagged architectural issues and re-review before Security runs" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+`Approve` → QG-6 = PASS. `Address Issues First` → QG-6 = FAIL; follow On FAIL below, then re-present.
+
+**Tier 1 – no user call.** Evaluate this predicate instead, reading the architecture reviewer's structured output (not the orchestrator's impression of it):
+
+- The reviewer's CRITICAL-severity finding count is 0, and
+- its overall assessment is not `ARCHITECTURAL ISSUES`.
+
+Pass only when both hold; otherwise QG-6 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** HIGH and MEDIUM findings, the SOLID table, and the coupling/cohesion assessment – the Tier 1 pass criteria already say "Document" for HIGH, so these are recorded in the run log and do not block.
 
 ### Result
 
@@ -161,5 +188,9 @@ Present to user:
 ## NEXT PHASE
 
 **QG-6 = PASS required to proceed to Phase 7: Security**
+
+**Task list:** on PASS, mark `QG-6 quality gate` then `Phase 6: Architectural Review` `completed`, set `Phase 7: Security` `in_progress`, and append `QG-7 quality gate` as `pending` ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-6=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-6 ≠ PASS. Do not proceed.**

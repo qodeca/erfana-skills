@@ -32,7 +32,8 @@ All agents are plugin-root shared agents (the plugin's top-level `agents/` direc
 | mi-codebase-explorer | 3 | Find files and patterns |
 | mi-solution-designer | 4, 9 | Plan + verify implementation |
 | software-developer | 5 | Write production code |
-| test-writer | 5 | Generate tests across new code paths |
+| test-writer | 5 | Generate unit and integration tests across new code paths |
+| e2e-test-writer | 5 | Generate e2e tests (Playwright / Cypress / Selenium); `test-writer` defers e2e to it |
 | architecture-reviewer | 6 | SOLID principles, coupling, patterns |
 | security-auditor | 7 | Security scanning |
 | code-reviewer | 8 | Comprehensive quality review |

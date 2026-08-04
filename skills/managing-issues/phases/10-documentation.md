@@ -50,7 +50,9 @@ Format:
 
 Get current count:
 ```bash
-npm run test 2>&1 | grep -E "Tests?:\s+\d+"
+TEST_CMD='npm test -- --run'   # or: absent
+: "${TEST_CMD:?not substituted}"
+[ "$TEST_CMD" = absent ] || eval "$TEST_CMD" 2>&1 | grep -E "Tests?:[[:space:]]+[0-9]+"
 ```
 
 Update CLAUDE.md: `**Total: X tests passing (Y test files)**`
@@ -99,22 +101,32 @@ Only for user-facing features:
 
 ### Step 8: Update project documentation
 
-Update documentation beyond CLAUDE.md to reflect implementation changes:
+Update documentation beyond CLAUDE.md to reflect implementation changes. **Detect what the project actually has – do not assume a fixed layout.** Enumerate candidate targets first:
 
-1. **CHANGELOG** (`docs/CHANGELOG.md`):
-   - Add entry under current version for the implemented feature/fix
-   - Follow existing format (Added/Changed/Fixed/Removed sections)
+```bash
+# Documentation surfaces present in this repo (adapt globs to the project's conventions)
+ls CHANGELOG.md docs/CHANGELOG.md 2>/dev/null            # changelog, if any
+git ls-files 'docs/**/*.md' '*.md' 2>/dev/null | head -50 # other documentation pages
+```
 
-2. **Testing docs** (`docs/testing/README.md`):
+Then update only the surfaces that exist and that this change affects:
+
+1. **Changelog** (wherever it lives – repo root or `docs/`; skip if the project keeps none):
+   - Add an entry under the current version for the implemented feature/fix
+   - Follow the file's existing format (Keep a Changelog, or whatever it uses)
+
+2. **Testing docs** (if the project documents its test suite):
    - Update test counts if tests were added
-   - Add new test area row if a new testing domain was introduced
+   - Add a new test-area entry if a new testing domain was introduced
 
-3. **API/feature docs** (`docs/api-services*.md`, `docs/ui-components.md`):
-   - Update service documentation if APIs changed
+3. **API / component / feature docs** (whichever the project maintains):
+   - Update service or API documentation if public interfaces changed
    - Update component documentation if UI changed
 
-4. **Development tasks** (`docs/development-tasks.md`):
-   - Update how-to guides if new patterns were established
+4. **Contributor / how-to guides** (if present):
+   - Update them if new patterns or workflows were established
+
+If none of these surfaces exist, record "no project documentation surfaces detected beyond CLAUDE.md" – that is a valid Step 8 result, not a skipped step.
 
 Use `mi-docs-updater` agent for the actual file modifications.
 
@@ -130,6 +142,9 @@ Use `mi-docs-updater` agent for the actual file modifications.
 | Feature Docs | Updated feature documentation |
 | Spec Update Report | Spec deviations addressed (when spec linked) |
 | Documentation Update | Files updated in docs/ folder |
+| Changed File List | Every file `mi-docs-updater` reported writing, appended to `PLANNED_FILES` (files only, never a directory) – Phase 12 stages exactly this list |
+| Documentation Decision | Which of the three predicate rows applied: surfaces affected, surfaces present but unaffected, or no surfaces detected |
+| Task List Advance | Phase 10 and `QG-10 quality gate` marked `completed`; Phase 11 `in_progress` with `QG-11a quality gate (lens review of implementation)` appended **before** `QG-11 quality gate` when `review_level = full`, `QG-11 quality gate` alone otherwise – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -148,17 +163,75 @@ Use `mi-docs-updater` agent for the actual file modifications.
 
 | Criterion | Tier 1 | Tier 2 |
 |-----------|--------|--------|
-| CLAUDE.md updated | Required | Required |
+| Agent-instruction file updated | If the project keeps one and the change affects it | If the project keeps one and the change affects it |
 | Test count updated | If changed | If changed |
 | JSDoc for new APIs | Optional | Required |
 | Feature docs | Not required | If user-facing |
+| Project docs | Not required | Changelog entry (if the project keeps one) plus any affected documentation page detected in Step 8 |
+| Spec update report | N/A when no spec linked | Required when `spec_maturity >= partial` (Step 7) |
+| Documentation decision | Recorded (one of the three rows in the predicate below) | Recorded (one of the three rows in the predicate below) |
+| Changed files recorded | Every file `mi-docs-updater` reported writing is in `PLANNED_FILES` – file paths only, no directories. Cross-check it against `CHANGED_MD` below: a markdown file this run changed that is absent from `PLANNED_FILES` was written but not reported, and Phase 12 stages exactly that list, so it would never be committed | Same |
+| Task list advanced | `QG-10 quality gate` and `Phase 10: Documentation` `completed`, `Phase 11: UAT` `in_progress`, `QG-11a quality gate` (when `review_level = full`) then `QG-11 quality gate` appended as `pending` | Same |
 
-### Automated Verification
+**Spec update report** records each Phase 9 intentional deviation applied to the spec text and the manifest status change. When a spec is linked, an absent report fails QG-10 – the spec silently drifting from the implementation is the failure this row prevents.
 
-Check that:
-1. CLAUDE.md contains reference to issue number
-2. Test count is current
-3. No broken links in documentation
+### Automated Verification (QG-10 predicate)
+
+QG-10 is an Automated gate, so it passes on a concrete command result – not on prose judgement. The checks are **conditional on what this project actually has**: a Go, Rust or Python repo with no agent-instruction file and no markdown is a legitimate pass, not a failure, and the "do not over-document trivial changes" guidance below would otherwise contradict a predicate demanding a markdown edit on every run.
+
+`NUMBER` is a recorded run-state value carried into the snippet as a literal ([../operations/implement.md](../operations/implement.md) – "The substitution preamble"); the guard exists because an empty value fails **open** – `grep "#"` matches the first markdown heading in any file.
+
+**The changed-markdown list comes from the working tree.** Nothing is committed before Phase 12, so `git diff <base>...HEAD -- '*.md'` is empty on every standard run: the file loop below would never execute, no `QG-10 FAIL` could ever be printed, and this gate would pass unconditionally – including for genuinely missing documentation ([../operations/implement.md](../operations/implement.md) – "The change set before the commit exists").
+
+```bash
+# Run-state value - the orchestrator replaces the right-hand side with this run's literal:
+NUMBER=42
+[[ "$NUMBER" =~ ^[0-9]+$ ]] || { echo "QG-10 FAIL: NUMBER unresolved"; exit 1; }
+fail=0
+
+# The markdown this run touched, read from the working tree.
+CHANGED_MD=$({ git diff --name-only; git diff --cached --name-only;
+               git ls-files --others --exclude-standard; } | sort -u | grep '\.md$')
+
+# 1. Agent-instruction file, only if the project keeps one. Checked in preference order -
+#    CLAUDE.md first: an alphabetical `ls | head -1` would pick AGENTS.md whenever both exist.
+AGENT_DOC=
+for cand in CLAUDE.md AGENTS.md .cursorrules; do
+  [ -f "$cand" ] && { AGENT_DOC=$cand; break; }
+done
+if [ -n "$AGENT_DOC" ] && printf '%s\n' "$CHANGED_MD" | grep -qx "$AGENT_DOC"; then
+  # `\b` is a GNU extension; this bracket form is portable to BSD/macOS grep.
+  grep -qE "#${NUMBER}([^0-9]|\$)" "$AGENT_DOC" \
+    || { echo "QG-10 FAIL: $AGENT_DOC was edited but does not reference #${NUMBER}"; fail=1; }
+fi
+
+# 2. Markdown edits are required only when the project has documentation to edit
+#    and this change affects it - see the decision below; never a bare "must edit a .md".
+
+# 3. Relative links added by this phase resolve on disk
+for f in $CHANGED_MD; do
+  [ -f "$f" ] || continue
+  for link in $(grep -oE '\]\(([^)#:]+\.md)' "$f" 2>/dev/null | sed 's/](//'); do
+    [ -e "$(dirname "$f")/$link" ] || { echo "QG-10 FAIL: dead link $link in $f"; fail=1; }
+  done
+done
+
+exit "$fail"
+```
+
+The link loop runs in this shell (no pipe into `while`), so `fail` survives and the snippet's exit status is the gate result rather than a constant 0.
+
+**Pass predicate:** the snippet exits 0 (no `QG-10 FAIL` output), **and** the documentation decision below is recorded.
+
+**The documentation decision (check 2, recorded not guessed).** Step 8 enumerated the project's documentation surfaces. Exactly one of these must hold, and which one must be stated in the phase's artifacts:
+
+| Situation | QG-10 |
+|---|---|
+| The project has documentation surfaces and this change affects one or more | PASS only when `CHANGED_MD` (the working-tree list above) is non-empty and names every affected surface. An affected surface with no edit in that list is a QG-10 **failure**, and is now reachable: the list reflects uncommitted edits |
+| The project has documentation surfaces but none is affected (internal refactor, no behaviour or interface change) | PASS with the recorded statement "documentation surfaces present, none affected by this change" |
+| The project keeps no documentation surfaces at all (no agent-instruction file, no `*.md` beyond an untouched README) | PASS with the recorded statement "no documentation surfaces detected" |
+
+"Nothing needed changing" is a legitimate pass in the last two rows – but only as a recorded finding, never as an unstated default.
 
 ### Result
 
@@ -189,5 +262,9 @@ Check that:
 ## NEXT PHASE
 
 **QG-10 = PASS required to proceed to Phase 11: UAT**
+
+**Task list:** on PASS, mark `QG-10 quality gate` then `Phase 10: Documentation` `completed`, set `Phase 11: UAT` `in_progress`, and append the gate items for Phase 11 as `pending` – **when `review_level = full`, `QG-11a quality gate (lens review of implementation)` first, then `QG-11 quality gate`**; QG-11a is a pre-step and must sit above QG-11. At any other `review_level`, append `QG-11 quality gate` alone ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-10=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-10 ≠ PASS. Do not proceed.**

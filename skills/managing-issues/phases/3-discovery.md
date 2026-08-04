@@ -90,7 +90,9 @@ If `has_ui_impact = false` (from Phase 0), check if affected files suggest UI wo
 
 ### Step 6: Capture research summary
 
-**Output deliverable:** fill in the Research Summary template at [`templates/implement/research-summary.md`](../templates/implement/research-summary.md), capturing related issues discovered, prior art / pattern references, technical references found in the codebase, and the dependency map from Step 4. The completed template carries forward as input to Phase 4 (Architecture).
+**Output deliverable:** produce the Research Summary artifact in the shape of [`templates/implement/research-summary.md`](../templates/implement/research-summary.md), capturing related issues discovered, prior art / pattern references, technical references found in the codebase, and the dependency map from Step 4.
+
+**The template file is a shape, not a destination.** It ships inside the installed skill directory; writing into it would modify the installed skill and leak one run's findings into the next. The filled artifact is **context-only** – it carries forward to Phase 4 (Architecture) as an artifact of this phase, and Phase 3 writes nothing to the working tree (this phase is read-only by design).
 
 ---
 
@@ -102,6 +104,9 @@ If `has_ui_impact = false` (from Phase 0), check if affected files suggest UI wo
 | Dependency Map | How affected files relate to each other |
 | Pattern Inventory | Existing patterns to follow |
 | Complexity Assessment | Final tier confirmation |
+| UI Impact Flag | `has_ui_impact` confirmed or upgraded to true (Step 4b) – drives Phases 4 and 8 |
+| Research Summary Artifact | Step 6 deliverable in the shape of [`templates/implement/research-summary.md`](../templates/implement/research-summary.md) – context-only, input to Phase 4 |
+| Task List Advance | Phase 3 and `QG-3 quality gate` marked `completed`; Phase 4 `in_progress` with `QG-4 quality gate` appended, plus `QG-4a quality gate (lens review of design)` and `QG-4b quality gate (architecture acceptance)` when `deep_review_gates = true` – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -123,7 +128,13 @@ If `has_ui_impact = false` (from Phase 0), check if affected files suggest UI wo
 | Files identified | 1-3 files | All affected files |
 | Patterns reviewed | Basic | Comprehensive |
 | Dependencies mapped | Direct only | Full dependency tree |
+| Complexity confirmed | Tier reconfirmed or revised | Tier reconfirmed or revised |
+| UI impact re-evaluated | Step 4b applied to the affected-files list | Step 4b applied to the affected-files list |
+| Research summary artifact | Produced, every section non-empty (context-only) | Same |
 | User checkpoint | Not required | Required |
+| Task list advanced | `QG-3 quality gate` and `Phase 3: Discovery` `completed`, `Phase 4: Architecture` `in_progress`, `QG-4` (plus `QG-4a` / `QG-4b` when `deep_review_gates = true`) appended as `pending` | Same |
+
+**Research summary artifact** is the Step 6 deliverable, shaped by [`templates/implement/research-summary.md`](../templates/implement/research-summary.md); Phase 4 consumes it, so a missing or half-filled artifact fails QG-3 on both tiers. **UI impact re-evaluated** means the Step 4b check ran against the discovered files – a `has_ui_impact` left at `false` without that check is a QG-3 failure, because Phases 4 and 8 silently drop the UX track on a false flag.
 
 ### Tier 2 Checkpoint
 
@@ -160,9 +171,38 @@ Present to user:
 - Files: <count>
 - Cross-cutting: <yes/no>
 - Breaking changes: <risk level>
-
-**Proceed to Architecture?** [Approve / Clarify / Re-analyze]
 ```
+
+### Gate call (tier-conditional)
+
+**Tier 2 – MUST call `AskUserQuestion`.** Presenting the report above is not the gate; the gate is this call. Do not proceed on printed prose.
+
+```
+AskUserQuestion({
+  questions: [{
+    question: "Discovery is complete. Proceed to Architecture?",
+    header: "QG-3",
+    options: [
+      { label: "Approve", description: "The affected files and dependencies look right - continue to Phase 4 (Architecture)" },
+      { label: "Clarify", description: "Ask about something in the findings before design work starts" },
+      { label: "Re-analyze", description: "Discovery missed or misread files - widen the search and redo Phase 3" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+`Approve` → QG-3 = PASS. `Clarify` or `Re-analyze` → QG-3 = FAIL; follow On FAIL below, then re-present.
+
+**Tier 1 – no user call.** Evaluate this predicate instead:
+
+- The affected-files list is non-empty, and
+- every path in it exists on disk (`test -e` on each, all exit 0), and
+- every listed file has a direct-dependency entry (count of files with no dependency line is 0), and
+- the research-summary artifact this phase produced carries every section non-empty – a check on **this run's artifact**, never a `test -s` against the shipped template file, which always exists and is never empty and would make the clause vacuously true – and
+- the Step 4b UI-impact re-evaluation ran against the affected-files list and `has_ui_impact` carries an explicit value.
+
+Pass only when all five hold; otherwise QG-3 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** the existing-patterns catalogue – pattern recognition has no exit-code predicate, so it is recorded, not enforced.
 
 ### Result
 
@@ -180,5 +220,9 @@ Present to user:
 ## NEXT PHASE
 
 **QG-3 = PASS required to proceed to Phase 4: Architecture**
+
+**Task list:** on PASS, mark `QG-3 quality gate` then `Phase 3: Discovery` `completed`, set `Phase 4: Architecture` `in_progress`, and append Phase 4's gate items as `pending` – `QG-4 quality gate`, and **when `deep_review_gates = true` also `QG-4a quality gate (lens review of design)` then `QG-4b quality gate (architecture acceptance)`, in that order**. When `deep_review_gates = false`, append `QG-4 quality gate` alone ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-3=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-3 ≠ PASS. Do not proceed.**

@@ -90,7 +90,9 @@ Compile:
 5. Identified risks
 6. Recommended approach
 
-**Output deliverable:** fill in the Requirements Clarification template at [`templates/implement/requirements-clarification.md`](../templates/implement/requirements-clarification.md), capturing the clarifying questions and user answers from Step 3, the validated acceptance criteria from Step 4, and the risk register. The completed template carries forward as input to Phase 3 (Discovery) and Phase 4 (Architecture).
+**Output deliverable:** produce the Requirements Clarification artifact in the shape of [`templates/implement/requirements-clarification.md`](../templates/implement/requirements-clarification.md), capturing the clarifying questions and user answers from Step 3, the validated acceptance criteria from Step 4, and the risk register.
+
+**The template file is a shape, not a destination.** It ships inside the installed skill directory; writing into it would modify the installed skill, and every run would then inherit the previous run's answers. The filled artifact is **context-only**: it lives in this run's context and is carried forward to Phase 3 (Discovery) and Phase 4 (Architecture) as an artifact of this phase, not as a file on disk. Nothing in this phase writes to the working tree.
 
 ---
 
@@ -102,6 +104,8 @@ Compile:
 | Requirements Document | Clarified requirements from questionnaire |
 | Validated Criteria | Acceptance criteria with gaps addressed |
 | Risk Assessment | Identified risks and mitigations |
+| Clarification Artifact | Step 5 deliverable in the shape of [`templates/implement/requirements-clarification.md`](../templates/implement/requirements-clarification.md) – context-only, input to Phases 3 and 4 |
+| Task List Advance | Phase 2 and `QG-2 quality gate` marked `completed`; Phase 3 `in_progress` with `QG-3 quality gate` appended – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -123,7 +127,12 @@ Compile:
 | Research completed | 1-2 searches | 3-5 searches |
 | Questions answered | 1-2 | 3-5 |
 | Criteria validated | Basic check | Full validation |
+| Clarification artifact | Produced, all three sections non-empty (context-only) | Same |
+| Risk assessment | Advisory (document only) | Advisory (document only) |
 | User checkpoint | Not required | Required |
+| Task list advanced | `QG-2 quality gate` and `Phase 2: Business Analysis` `completed`, `Phase 3: Discovery` `in_progress`, `QG-3 quality gate` appended as `pending` | Same |
+
+**Clarification artifact** is the Step 5 deliverable, shaped by [`templates/implement/requirements-clarification.md`](../templates/implement/requirements-clarification.md): Step 3 questions and answers (including any recorded as unanswered), the Step 4 validated criteria, and the risk register. Phases 3 and 4 consume it, so a missing or half-filled artifact fails QG-2 on both tiers. Its **risk register content** is advisory – completeness of a risk table has no honest machine-checkable predicate, so it is recorded, not enforced.
 
 ### Tier 2 Checkpoint
 
@@ -157,9 +166,36 @@ Present to user:
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
 | <risk> | <L/M/H> | <L/M/H> | <action> |
-
-**Proceed to Discovery?** [Approve / Revise / Add Questions]
 ```
+
+### Gate call (tier-conditional)
+
+**Tier 2 – MUST call `AskUserQuestion`.** Presenting the summary above is not the gate; the gate is this call. Do not proceed on printed prose.
+
+```
+AskUserQuestion({
+  questions: [{
+    question: "Business analysis is complete. Proceed to Discovery?",
+    header: "QG-2",
+    options: [
+      { label: "Approve", description: "Requirements and acceptance criteria look right - continue to Phase 3 (Discovery)" },
+      { label: "Revise", description: "Something in the analysis is wrong - rework Phase 2 with your corrections before Discovery" },
+      { label: "Add Questions", description: "Ask further clarifying questions first - the analysis is incomplete rather than wrong" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+`Approve` → QG-2 = PASS. `Revise` or `Add Questions` → QG-2 = FAIL; follow On FAIL below, then re-present.
+
+**Tier 1 – no user call.** Evaluate this predicate instead; it passes only on a structural check, never on self-judgement:
+
+- Every acceptance criterion in the issue body maps to exactly one row of the validated-criteria list (count of unmapped criteria is 0), and
+- the research summary artifact exists and is non-empty, and
+- the clarification artifact this phase produced carries all three sections – questions, validated criteria, risk register – each non-empty (unanswered questions count as filled when recorded as such). This is a check on **this run's artifact**, never a `test -s` against the shipped template file: that file always exists and is never empty, so testing it would make the predicate vacuously true.
+
+Pass only when all three hold; otherwise QG-2 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** prior-art research depth and risk-table completeness – no honest machine-checkable predicate exists for research quality, so these are recorded, not enforced.
 
 ### Result
 
@@ -177,5 +213,9 @@ Present to user:
 ## NEXT PHASE
 
 **QG-2 = PASS required to proceed to Phase 3: Discovery**
+
+**Task list:** on PASS, mark `QG-2 quality gate` then `Phase 2: Business Analysis` `completed`, set `Phase 3: Discovery` `in_progress`, and append `QG-3 quality gate` as `pending` ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-2=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-2 ≠ PASS. Do not proceed.**
