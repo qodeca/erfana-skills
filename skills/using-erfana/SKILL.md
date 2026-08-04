@@ -30,7 +30,7 @@ This plugin is an open-source (GPL-3.0-only) Claude Code toolkit maintained by Q
 |---|---|
 | `erfana:managing-agents` | Creating, reviewing, modifying, or validating Claude Code agents (lifecycle management with research, design, validation phases) |
 | `erfana:managing-articles` | Writing medium-form articles end-to-end – research, outline, draft, review, publish (bilingual Polish/English support) |
-| `erfana:managing-issues` | Full lifecycle of GitHub issues – create, implement (multi-phase), review code, and display (read-only `show issue #N` / `list issues` / `find issues` modes added v4.2.2) |
+| `erfana:managing-issues` | Full lifecycle of GitHub issues – create, implement (multi-phase), review code, and display (read-only `show issue #N` / `list issues` / `find issues` modes added v4.2.2). The Implement operation is **interactive-only**: it blocks on user approval at several gates, ends the turn twice for a user-run `/erfana:lens-review`, and refuses a detected headless run – do not route a `claude -p` / CI session into it |
 | `erfana:managing-reports` | Creating, reviewing, and validating professional consulting reports (Pyramid Principle, SCQA, Five Cs framework) |
 | `erfana:managing-skills` | Creating, reviewing, modifying, and **modernizing** (apply Claude 5 patterns) Claude Code skills following Anthropic best practices – opens with a coverage-map requirements interview (Create always; Modify/Review/Modernize when gated in) |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue, T2 spec, T3 lite spec, T4 standard spec) |
@@ -138,6 +138,7 @@ User message arrives
     │       ├─ Medium-form article (research → publish)? → erfana:managing-articles
     │       ├─ GitHub issue (create / implement / review / display)? → erfana:managing-issues
     │       │     (Display sub-modes: "show issue #N", "list issues", "find issues with label X")
+    │       │     (Implement is interactive-only – it refuses a headless session)
     │       ├─ Consulting report (Pyramid / SCQA)? → erfana:managing-reports
     │       ├─ Claude Code skill lifecycle? → erfana:managing-skills
     │       └─ Specification (T1-T4)? → erfana:managing-specs

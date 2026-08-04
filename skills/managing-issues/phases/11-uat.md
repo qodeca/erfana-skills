@@ -23,7 +23,7 @@
 **Gate ID:** QG-11a
 **Entry condition:** QG-10 = PASS – so every other gate in the run (QG-0 through QG-10, including the mandatory QG-7 and QG-9) has already passed. QG-11a is deliberately the last check before a human touches the application.
 
-**Deliberate reversal.** An earlier version stripped PRE-STEP scaffolding from this phase per the v4.2.0 anti-ritual patterns. QG-11a reinstates a pre-step here on purpose: it is not a checklist ritual, it is a user-run review checkpoint with a turn boundary in the middle, and it has nowhere else to sit if it must run after all other gates.
+**Deliberate reversal.** An earlier version stripped PRE-STEP scaffolding from this phase – finding F4 of the v4.2.1 Modernize pass, per [`docs/modernization-registry.md`](../../../docs/modernization-registry.md). QG-11a reinstates a pre-step here on purpose: it is not a checklist ritual, it is a user-run review checkpoint with a turn boundary in the middle, and it has nowhere else to sit if it must run after all other gates.
 
 The orchestrator **MUST NOT invoke `/erfana:lens-review` itself, by any tool** – see Rule 12 in [../operations/implement-rules.md](../operations/implement-rules.md).
 

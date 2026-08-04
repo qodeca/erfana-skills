@@ -75,6 +75,16 @@ print(f'PASS: {len(seen)} cross-references resolve')
 PYEOF
 ```
 
+## Limitations
+
+The pass-2 glob is `skills/*/references/*.md` – **plural**. Two skills spell the directory in the singular, `reference/`: `managing-issues` (22 files) and `managing-reports` (7 files). Every link inside those files is unchecked. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" therefore holds for the plural spelling only.
+
+The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. In `managing-issues` that is 13 phase files, 9 operation files and 5 example files – the bulk of the skill's prose. Only the handful of links in its `SKILL.md` are gate-checked.
+
+The Implement hardening (PR #24) added two files inside that blind spot (`reference/run-state-resume.md`, `examples/implement-edge-cases.md`) and roughly forty new cross-links from `operations/` and `phases/`. A **manual link-resolution pass** is the substitute, and is what covered the equivalent gap at v4.2.19 – [`../known-caveats.md`](../known-caveats.md) records both that pass and the gap itself as an accepted risk.
+
+Widening the glob is a code change to `scripts/run-all-gates.sh`, deliberately not made here: this file documents the limit so the gate doc does not contradict the accepted caveat.
+
 ## Pass criteria
 
 `PASS: <N> cross-references resolve` with `N` typically ≥ 80 against current content (the brand-prose glob added in v0.4.0 raised the count from ~69 to ~84). The first-backtick-only rule is a content-shape contract: when authoring SKILL.md, write each path as the leading backtick of its bullet; if you need two real paths in one line, split into two bullets.
