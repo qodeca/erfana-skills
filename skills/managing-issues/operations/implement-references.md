@@ -50,7 +50,8 @@ Selection is dynamic at Phase 1 — the discoverer + matcher agents resolve the 
 | `mi-codebase-explorer` | Phase 3 (Discovery) |
 | `mi-solution-designer` | Phase 4 (Architecture) + Phase 9 (Verification) |
 | `software-developer` | Phase 5 (Implementation) |
-| `test-writer` | Phase 5 (Implementation) |
+| `test-writer` | Phase 5 (Implementation) – unit and integration tests |
+| `e2e-test-writer` | Phase 5 (Implementation) – e2e tests; `test-writer` defers e2e work to it |
 | `architecture-reviewer` | Phase 6 (Architectural Review) |
 | `security-auditor` | Phase 7 (Security) |
 | `code-reviewer` | Phase 8 (Quality Review) |
@@ -71,7 +72,8 @@ Full per-agent specs are split across three reference files (v4.2.2 hoist):
 ## Related references
 
 - [reference/code-review-standards-2025.md](../reference/code-review-standards-2025.md) – Phase 8 review dimensions
-- [reference/post-review-tracking.md](../reference/post-review-tracking.md) – Phase 12 re-review enforcement
+- [reference/post-review-tracking.md](../reference/post-review-tracking.md) – Phase 12 re-review enforcement, run-state block format and how it is written
+- [reference/run-state-resume.md](../reference/run-state-resume.md) – reading the run-state block back: fetch query, field shapes, acceptance rules, resume confirmation
 - [reference/parallel-review.md](../reference/parallel-review.md) – Multi-agent parallel review patterns
 - [reference/delta-review.md](../reference/delta-review.md) – Lightweight re-review for small post-UAT changes
 - [reference/design-system-checklist.md](../reference/design-system-checklist.md) – Phase 8 token compliance

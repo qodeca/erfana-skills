@@ -78,6 +78,7 @@ If implementation cannot continue:
 
 1. **Document Reason** — `<reason>` is untrusted free text; never inline it into a shell command (a `"` or `$(…)` would break out). Write it to a file and post with `--body-file`, and confirm `<number>` is digit-only first:
    ```bash
+   NUMBER=42   # emitted as a literal by the orchestrator
    [[ "$NUMBER" =~ ^[0-9]+$ ]] || { echo "refusing: issue number not numeric"; exit 1; }
    # write <reason> to /tmp/abort-<numeric-ts>.md with the Write tool, then:
    gh issue comment -- "$NUMBER" --body-file /tmp/abort-<numeric-ts>.md
@@ -85,6 +86,12 @@ If implementation cannot continue:
 
 2. **Clean Up (destructive — confirm the resolved targets first).** `git clean -fd` permanently removes untracked files and `git branch -D` force-deletes the branch, so echo the exact targets and require explicit user confirmation before running them. Use the `BASE_BRANCH` captured at QG-0 and the actual branch created in Phase 0 (`RUN_BRANCH`), not hardcoded `main`/`fix/...`:
    ```bash
+   # Emitted as literals by the orchestrator - nothing is inherited between tool calls:
+   BASE_BRANCH=main
+   RUN_BRANCH=fix/42-null-guard
+   : "${BASE_BRANCH:?not substituted - refusing to run a destructive cleanup}" \
+     "${RUN_BRANCH:?not substituted - refusing to run a destructive cleanup}"
+
    echo "About to discard working-tree changes, delete untracked files, and force-delete branch:"
    echo "  base to return to : $BASE_BRANCH"
    echo "  branch to delete  : $RUN_BRANCH"

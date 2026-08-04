@@ -18,7 +18,9 @@ description: |
   </example>
 tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch
 model: opus
+effort: medium
 color: emerald
+capabilities: [test-generation, file-editing, test-execution, web-search]
 permissionMode: acceptEdits
 ---
 

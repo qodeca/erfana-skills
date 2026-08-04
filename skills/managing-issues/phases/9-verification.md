@@ -103,6 +103,7 @@ Use `mi-spec-compliance-checker` agent:
 | Deviations List | Any changes from original plan |
 | Acceptance Verification | Per-criterion status |
 | Spec Compliance Scorecard | Per-requirement compliance status (when spec linked) |
+| Task List Advance | Phase 9 and `QG-9 quality gate` marked `completed`; Phase 10 `in_progress` with `QG-10 quality gate` appended – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -134,6 +135,7 @@ Use `mi-spec-compliance-checker` agent:
 | Plan conformance | Full match or justified deviations |
 | Acceptance criteria | ALL criteria met |
 | Spec compliance | Zero non-compliant items without documented justification (when spec linked) |
+| Task list advanced | `QG-9 quality gate` and `Phase 9: Verification` `completed`, `Phase 10: Documentation` `in_progress`, `QG-10 quality gate` appended as `pending` |
 | Can be overridden | **NO** |
 
 ### Verification Checkpoint
@@ -162,9 +164,33 @@ Present to user:
 ### Quick Validation (not a re-review – QG-8 owns code quality)
 - Tests: detected test command passing
 - Types: detected typecheck command passing
-
-**Proceed to Documentation?** [Approve / Address Issues]
 ```
+
+### Gate call (tier-conditional)
+
+QG-9 is **Mandatory**, so it is predicate-first and non-overridable on both tiers: the user cannot approve past a failing predicate, and the predicate alone decides PASS or FAIL.
+
+1. **Evaluate the mandatory predicate** (both tiers): architect status is `VERIFIED`, every acceptance criterion is marked met with evidence (count of unmet criteria is 0), detected `TEST_CMD` and `TYPECHECK_CMD` exit 0 (or none detected), and – when a spec is linked – zero non-compliant items lack a documented justification. Any clause failing → QG-9 = FAIL. Do not ask the user; go to On FAIL.
+2. **Tier 1: the predicate is the gate.** Record `QG-9 = PASS`, present the checkpoint summary above for the record, and continue to Phase 10 without a prompt. QG-9 is Mandatory, not User-Approval – on a trivial run there is nothing for the user to decide that the predicate has not already decided, and the run's irreversible actions are still fronted by QG-4 and QG-12.
+3. **Tier 2 only, and only if the predicate passes, MUST call `AskUserQuestion`** to confirm the Definition of Done before Documentation:
+
+```
+AskUserQuestion({
+  questions: [{
+    question: "Verification passed and every acceptance criterion has evidence. Proceed to Documentation?",
+    header: "QG-9",
+    options: [
+      { label: "Approve", description: "The work is done as specified - continue to Phase 10 (Documentation)" },
+      { label: "Address Issues", description: "Something is still missing or wrong - return to fixes and re-verify" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+`Approve` → QG-9 = PASS. `Address Issues` → QG-9 = FAIL; follow On FAIL below, then re-verify.
+
+**Gate type is unchanged.** QG-9 stays **Mandatory on both tiers** in every gate-type table; the Tier 2 call is a confirmation on top of a passing predicate, not a promotion to User-Approval. It is deliberately absent from the "calls `AskUserQuestion` on all tiers" list ([../operations/implement.md](../operations/implement.md)), which holds QG-4 and QG-12 only.
 
 ### Result
 
@@ -190,5 +216,9 @@ If cannot achieve VERIFIED after 3 attempts:
 ## NEXT PHASE
 
 **QG-9 = PASS (VERIFIED) required to proceed to Phase 10: Documentation**
+
+**Task list:** on PASS, mark `QG-9 quality gate` then `Phase 9: Verification` `completed`, set `Phase 10: Documentation` `in_progress`, and append `QG-10 quality gate` as `pending` ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-9=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 
 **STOP if QG-9 ≠ PASS. Do not proceed.**

@@ -13,9 +13,9 @@
 
 - [ ] QG-7 = PASS (Security scan completed)
 - [ ] No critical/high security vulnerabilities from QG-7
-- [ ] All tests passing (`npm run test`)
-- [ ] Typecheck passing (`npm run typecheck`)
-- [ ] Lint passing (`npm run lint`)
+- [ ] All tests passing (detected `TEST_CMD`, plus every category QG-5 enforced)
+- [ ] Typecheck passing (detected `TYPECHECK_CMD`)
+- [ ] Lint passing (detected `LINT_CMD`)
 - [ ] Files changed list available
 - [ ] Tier classification known (from Phase 0)
 
@@ -31,7 +31,7 @@
 
 ```
 Invoke code-reviewer with:
-  files_changed: <list from git diff>
+  files_changed: <the working-tree change set - see ../operations/implement.md, "The change set before the commit exists"; a git-range diff is empty here because nothing is committed before Phase 12>
   tier: <from Phase 0>
   context: {
     issue_number: <from Phase 0>
@@ -131,15 +131,19 @@ Verify using ../reference/code-review-standards-2025.md Section 3:
 - Class coupling (CBO) ≤ 9
 - Flag circular dependencies as CRITICAL
 
+**Measure or declare:** these thresholds bind only when a complexity analyser is present. Run it and gate on the reported figure; if none exists, record complexity as `not measured` and treat the reviewer's qualitative assessment as advisory. Never assert a threshold was met without a tool-produced number.
+
 ### Step 6: Test coverage verification
 
 **Reference:** `../reference/code-review-standards-2025.md` Section 9
 
 | Metric | Tier 1 | Tier 2 | Blocking |
 |--------|--------|--------|----------|
-| Line coverage | ≥70% | ≥80% | YES |
-| Branch coverage | ≥60% | ≥70% | YES |
+| Line coverage | ≥70% | ≥80% | YES when measured |
+| Branch coverage | ≥60% | ≥70% | YES when measured |
 | Function coverage | ≥70% | ≥80% | NO |
+
+**Measure or declare:** run the project's coverage reporter and gate on the reported figures. If the project has no coverage tooling, record `not measured` for every coverage row – the thresholds are unenforceable without a number and MUST NOT be reported as met.
 
 **Quality checks:**
 - [ ] Tests exist for all changed files
@@ -188,7 +192,7 @@ When the implementation involves UI or CSS changes, verify design token usage:
 Invoke `ux-reviewer` agent for UX audit:
 
 1. **Input to ux-reviewer:**
-   - Changed files (from git diff)
+   - Changed files (the working-tree change set, not a git range – nothing is committed yet)
    - UX specification from Phase 4 Step 1a (if produced)
    - Platform context
    - Review depth: standard (Tier 1) or deep (Tier 2)
@@ -242,14 +246,17 @@ Invoke `ux-reviewer` agent for UX audit:
 | Summary | Counts by severity |
 | Findings | All findings with details |
 | Blocking Issues | Issues that MUST be fixed |
-| Recommendations | Non-blocking suggestions |
-| Metrics | Complexity, coverage, coupling |
+| Recommendations | Non-blocking suggestions (informational – not gated by QG-8) |
+| Metrics | Complexity, coverage, coupling (coupling is advisory) |
+| UX Audit Report | `ux-reviewer` output from Step 8b when `has_ui_impact = true` |
+| Reviewed Tree | `last_review_tree` snapshot recorded on PASS – Phase 12's pre-commit review gate diffs against it |
+| Task List Advance | Phase 8 and `QG-8 quality gate` marked `completed`; Phase 9 `in_progress` with `QG-9 quality gate` appended – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
 ## Quality Gate
 
-**Success criterion:** Code-reviewer status is `approved` or `changes_requested` (not `blocked`); 0 CRITICAL issues; HIGH issues addressed (T2) or documented (T1); coverage and complexity thresholds met. PRE/POST-STEP scaffolding stripped per v4.2.0 patterns — Phase 8 is read-only review; QG-8 below enforces the pass criteria.
+**Success criterion:** Code-reviewer status is `approved` or `changes_requested` (not `blocked`); 0 CRITICAL issues; HIGH issues addressed (T2) or documented (T1); coverage and complexity thresholds met **where the tooling exists to measure them**, recorded as `not measured` where it does not. PRE/POST-STEP scaffolding stripped per v4.2.0 patterns – Phase 8 is read-only review; QG-8 below enforces the pass criteria.
 
 ---
 
@@ -267,11 +274,16 @@ Invoke `ux-reviewer` agent for UX audit:
 | Security checks | Pass | Pass | YES |
 | TypeScript safety | Pass | Pass | YES |
 | SOLID violations | ≤3 medium | 0 high | Tier 2 |
-| Complexity max | <20 | <15 | YES |
-| Line coverage | ≥70% | ≥80% | YES |
-| Branch coverage | ≥60% | ≥70% | YES |
-| UX audit (if UI) | Pass or N/A | Pass or N/A | If applicable |
+| Complexity max | <20 | <15 | YES when measured |
+| Line coverage | ≥70% | ≥80% | YES when measured |
+| Branch coverage | ≥60% | ≥70% | YES when measured |
+| Design tokens (if UI/CSS) | No hardcoded values | No hardcoded values | If applicable |
+| UX audit (if UI) | Report present, 0 CRITICAL | Report present, 0 CRITICAL | If `has_ui_impact = true` |
 | User checkpoint | Not required | Required | N/A |
+| Reviewed tree recorded | `last_review_tree` = a fresh working-tree snapshot (not `git rev-parse HEAD`) | Same | YES |
+| Task list advanced | `QG-8` + `Phase 8` `completed`, `Phase 9: Verification` `in_progress`, `QG-9` appended `pending` | Same | YES |
+
+**Complexity and coverage rows** are blocking only when the project ships the tooling that produces the number (Steps 5-6 measure-or-declare rule). With no analyser or reporter present, record `not measured` – that is a pass, not a silent assertion that the threshold held. **UX audit** is N/A only when `has_ui_impact = false`. On a true flag a missing Step 8b report fails QG-8 – "no report" is not "pass". **Design tokens** row applies only when the changeset touches UI or CSS (Step 8).
 
 ### Tier 2 Checkpoint
 
@@ -328,10 +340,10 @@ Present to user:
 ### Code Quality Metrics
 | Metric | Value | Target | Status |
 |--------|-------|--------|--------|
-| Max Complexity | <n> | <15 | ✅/❌ |
-| Avg Complexity | <n> | <10 | ✅/⚠️ |
-| Line Coverage | <n>% | ≥80% | ✅/❌ |
-| Branch Coverage | <n>% | ≥70% | ✅/❌ |
+| Max Complexity | <n \| not measured> | <15 | ✅/❌/n-a |
+| Avg Complexity | <n \| not measured> | <10 | ✅/⚠️/n-a |
+| Line Coverage | <n>% \| not measured | ≥80% | ✅/❌/n-a |
+| Branch Coverage | <n>% \| not measured | ≥70% | ✅/❌/n-a |
 | Coupling | <low/med/high> | low | ✅/⚠️/❌ |
 
 ---
@@ -356,13 +368,51 @@ Present to user:
 ---
 
 **Reference:** [Code Review Standards 2025](../reference/code-review-standards-2025.md)
-
-**Proceed to Verification?** [Approve / Address Issues First]
 ```
+
+### Gate call (tier-conditional)
+
+**Tier 2 – MUST call `AskUserQuestion`.** Presenting the report above is not the gate; the gate is this call. Do not proceed on printed prose.
+
+```
+AskUserQuestion({
+  questions: [{
+    question: "Quality review is complete. Proceed to Verification?",
+    header: "QG-8",
+    options: [
+      { label: "Approve", description: "The findings are acceptable - continue to Phase 9 (Verification)" },
+      { label: "Address Issues First", description: "Fix the flagged findings and re-review before Verification runs" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+`Approve` → QG-8 = PASS. `Address Issues First` → QG-8 = FAIL; follow On FAIL below, then re-present.
+
+**Tier 1 – no user call.** Evaluate this predicate instead, reading tool output and the code-reviewer's structured result:
+
+- Code-reviewer status is not `blocked`, and its CRITICAL-severity count is 0, and
+- detected `TEST_CMD` and `TYPECHECK_CMD` exit 0 (or none detected), and
+- when the project has coverage tooling: reported line coverage ≥70% and branch coverage ≥60%.
+
+Pass only when all applicable clauses hold; otherwise QG-8 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** HIGH/MEDIUM findings, SOLID violations, code smells, and – when no coverage tooling is detected – the coverage rows. Coverage cannot be honestly asserted without a coverage reporter, so record "not measured" rather than treating the thresholds as met.
 
 ### Result
 
 **QG-8 Result:** [PASS | FAIL]
+
+**On PASS, record `last_review_tree`** – a snapshot of the working tree, on both tiers and on every re-review pass:
+
+```bash
+TMP_INDEX=$(mktemp -t mi-index.XXXXXX)
+GIT_INDEX_FILE="$TMP_INDEX" git read-tree HEAD
+GIT_INDEX_FILE="$TMP_INDEX" git add -A
+GIT_INDEX_FILE="$TMP_INDEX" git write-tree      # <- record this SHA as last_review_tree
+rm -f "$TMP_INDEX"
+```
+
+`git rev-parse HEAD` is **not** the baseline: no phase commits, so HEAD is the branch point from QG-0 until Phase 12 and every review would record the same SHA, making Phase 12's pre-commit diff empty by construction – a silent no-op ([post-review-tracking](../reference/post-review-tracking.md), [../operations/implement.md](../operations/implement.md)).
 
 ### On FAIL
 
@@ -377,8 +427,8 @@ Present to user:
 | Failure Reason | Action |
 |----------------|--------|
 | CRITICAL security issue | STOP - must fix, no override |
-| Coverage below threshold | Justify or add tests |
-| Complexity above limit | Refactor or justify |
+| Measured coverage below threshold | Justify or add tests |
+| Measured complexity above limit | Refactor or justify |
 | Multiple SOLID violations | Architectural review |
 
 ---
@@ -386,5 +436,9 @@ Present to user:
 ## NEXT PHASE
 
 **QG-8 = PASS required to proceed to Phase 9: Verification**
+
+**Task list:** on PASS, mark `QG-8 quality gate` then `Phase 8: Quality Review` `completed`, set `Phase 9: Verification` `in_progress`, and append `QG-9 quality gate` as `pending` ([progress-tracking](../reference/progress-tracking.md)).
+
+**Run state:** record `QG-8=PASS` and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). `last_review_tree` is held **in this session only** and written to the comment as `-`: it names a loose git object this session created, which means nothing to a later one, and a persisted baseline that a resume trusted would be exactly the silent no-op this mechanism exists to prevent. A failed write never fails the gate.
 
 **STOP if QG-8 ≠ PASS. Do not proceed.**

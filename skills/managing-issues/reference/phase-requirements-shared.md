@@ -13,7 +13,7 @@ Extracted from `implement-phase-requirements.md` in v4.2.2 (D5) so each operatio
 | **Search** | codebase-exploration, file-search, code-search, web-search, pattern-matching |
 | **Analysis** | requirements-analysis, prior-art-research, code-analysis, architecture-review, quality-assessment, complexity-analysis |
 | **Development** | code-generation, file-editing, test-generation, refactoring |
-| **Review** | code-review, security-scanning, vulnerability-detection, anti-pattern-detection, SOLID-principles, solution-design-review, design-validation, coherence-analysis |
+| **Review** | code-review, security-scanning, vulnerability-detection, anti-pattern-detection, SOLID-principles, solution-design-review, design-validation, coherence-analysis, report-parsing |
 | **UX** | ux-design, accessibility-audit, heuristic-evaluation, platform-compliance, design-system-review |
 | **Documentation** | documentation-generation, issue-drafting, template-application, commit-message-generation |
 | **Infrastructure** | git-operations, gh-cli, validation, test-execution |
@@ -37,11 +37,13 @@ Extracted from `implement-phase-requirements.md` in v4.2.2 (D5) so each operatio
 
 ## Criticality levels
 
-| Level | Auto-select threshold | Fallback allowed |
-|-------|----------------------|------------------|
-| mandatory | 80% | No – must have agent or escalate |
-| high | 80% | Only with user justification (even if allow_direct=true) |
-| low | 60% | Yes – but still prefer agent delegation |
+Coverage is qualitative (`full` / `partial` / `none`), never a numeric percentage – see SKILL.md "Selection algorithm".
+
+| Level | Auto-select on | Fallback allowed |
+|-------|----------------|------------------|
+| mandatory | Full coverage only | No – must have agent or escalate |
+| high | Full coverage only | Only with user justification (even if allow_direct=true) |
+| low | Full coverage; partial acceptable with the user's pick | Yes – but still prefer agent delegation |
 
 ---
 
@@ -60,7 +62,7 @@ Extracted from `implement-phase-requirements.md` in v4.2.2 (D5) so each operatio
 
 ### Policy enforcement
 
-- **`allow_direct: false`** – agent delegation is MANDATORY. No matching agent (≥80%) → escalate to user.
+- **`allow_direct: false`** – agent delegation is MANDATORY. No full-coverage agent → escalate to user.
 - **`allow_direct: true`** – agent delegation is STILL preferred. Log context cost warning on direct execution.
 
 **Context preservation rationale:** Orchestrator context is shared across ALL phases. File reading costs 500-2000 tokens per file; 5 files ≈ losing an entire phase's context.
