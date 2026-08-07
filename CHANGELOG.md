@@ -3,6 +3,45 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **`grill-me` now sizes the interview to the plan.** Previously every plan – a
+  one-file config tweak and a funded migration alike – got the same 16-dimension
+  sweep, the same seven never-waivable dimensions, one `AskUserQuestion` per
+  proposed waiver (up to nine turns of pure overhead), and the same flat
+  "fewer than 10 questions" red flag. Three depths (`short` / `standard` /
+  `full`) are now selected by the model from four observable plan properties –
+  blast radius, reversibility, cost of being wrong, consumers – with any single
+  `full` trigger (one-way door, external consumers, money/legal/safety/data-loss
+  exposure, weeks of rework, cross-team scope) forcing `full`, and ambiguity
+  resolving upward. Depth re-sizes upward mid-interview when an answer reveals a
+  one-way door or an external consumer.
+- **Skips are batched, not charged per question.** The model states all skips for
+  the chosen depth in one sizing statement, each with the waivability condition
+  that holds, and proceeds without stopping for approval. The user may reopen any
+  skipped area at any point without justification.
+- **New mandatory sizing statement** opens every interview: the selected depth,
+  the four plan properties behind it, and the batched skip list. It is a
+  declaration, not a question – the guardrail against silently defaulting to
+  `short`.
+- **The seven mandatory dimensions survive at every depth**, in compressed form
+  at `short` (recorded per dimension in `references/question-stems.md`). The
+  premortem and reversibility rounds run as one question each at `short`; a
+  one-way door surfaced there re-sizes the interview upward.
+- **Question floor is now depth-relative** – `short` under 5, `standard` under 10,
+  `full` under 16 – replacing the flat "fewer than 10 on a non-trivial plan".
+- **Rationalization table gained a row** guarding the new failure mode ("this
+  sweep is dragging – I'll call it `short`"), and the "this plan is small enough"
+  row was reframed: sizing down is legitimate, skipping the interview is not.
+- Exit gate is unchanged in substance – all five conditions hold at every depth.
+  Condition 1 now reads "`[w]` with its reason stated" rather than "with the
+  user's explicit confirmation", so that batched skips and the gate no longer
+  contradict each other.
+- The `grill-guard` Stop hook and the `<!-- erfana:grill-open -->` sentinel are
+  untouched.
+
 ## [6.5.0] - 2026-08-04
 
 **Behaviour change for `managing-issues` Implement.** A run that previously
