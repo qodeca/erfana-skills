@@ -2,7 +2,7 @@
 
 Read this once at interview start, when building the coverage map. Each dimension lists: when it is mandatory, battle-tested question stems (verbatim where the source is battle-tested – rephrasing loses nuance, per Shostack's explicit warning), and the cognitive bias the dimension counters (UK MOD red-teaming pattern: naming the bias justifies and depersonalizes the question).
 
-Dimensions 1, 2, 5, 9, 13, 14, and 16 are mandatory for every interview. The rest are waivable only by an explicit user waiver or a written justification in the coverage map ("waived: no external dependencies"), never silently.
+Dimensions 1, 2, 5, 9, 13, 14, and 16 run in every interview at every depth – at `short` in the compressed form each records below. The rest are closed only by an answered sweep, an explicit user waiver, or a skip stated with its reason in the sizing statement ("waived: no external dependencies"), never silently. Each dimension carries a `Short pass:` line recording what survives a `short` interview; depths and their selection criteria are defined in [../SKILL.md](../SKILL.md).
 
 ## Contents
 
@@ -27,6 +27,8 @@ Dimensions 1, 2, 5, 9, 13, 14, and 16 are mandatory for every interview. The res
 
 Mandatory, always the opening move. Counters: anchoring on the interviewer's assumptions instead of the user's actual plan.
 
+Short pass: runs as-is – the account is the input the depth is sized from.
+
 Get the full uninterrupted account before challenging anything (PEACE model; Shostack Q1 "What are we working on?"). Stems:
 
 - "Tell me, uninterrupted, what we're working on and how it works end to end."
@@ -38,6 +40,8 @@ Challenge nothing during the account. Contradictions noticed here go to the deci
 ## 2. Goals and worth
 
 Mandatory. Counters: solution-first bias (building before knowing why).
+
+Short pass: compressed – one question: the real reason, plus the non-goal.
 
 Gause and Weinberg context-free questions, verbatim:
 
@@ -52,6 +56,8 @@ Google design-doc practice adds the negative space:
 ## 3. Stakeholders and customer
 
 Waivable only for purely personal projects. Counters: false-consensus bias (assuming the answerer speaks for everyone).
+
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
 
 Amazon Working Backwards customer questions, verbatim:
 
@@ -68,6 +74,8 @@ Gause and Weinberg metaquestion, verbatim:
 
 Mandatory when the plan responds to a problem; waivable for greenfield feature work. Counters: premature closure on the first plausible framing.
 
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
+
 Kepner-Tregoe problem analysis – specify each dimension with an IS and an IS NOT column:
 
 - "What is the problem – and what is it *not*?"
@@ -80,6 +88,8 @@ The IS NOT column is the distinctive move: the negative space is where wrong fra
 ## 5. Assumptions
 
 Mandatory. Counters: unexamined-assumption risk; optimism bias.
+
+Short pass: compressed – one question, aimed at the strongest hedge word in the account.
 
 Hunt hedge words in the user's answers: "typically", "generally", "experience has shown", "should", "probably". Each one marks an implicit assumption. Then per assumption, UK MOD assumptions check, verbatim:
 
@@ -95,6 +105,8 @@ Paul-Elder assumption stems:
 ## 6. Evidence and gaps
 
 Waivable for low-stakes plans. Counters: confirmation bias.
+
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
 
 UK MOD structured self-critique, verbatim headings:
 
@@ -114,6 +126,8 @@ Annie Duke's probability discipline:
 
 Mandatory for any plan that commits meaningful time or money; waivable for trivial changes. Counters: false-dichotomy framing; sunk-cost momentum.
 
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
+
 - "What options did you consider and reject – and why did each lose?"
 - "Can we copy something that already exists?" (Gause and Weinberg, verbatim)
 - Include the three always-available alternatives: buy, copy, do nothing. "What happens if we do nothing?"
@@ -121,6 +135,8 @@ Mandatory for any plan that commits meaningful time or money; waivable for trivi
 ## 8. Values and trade-offs
 
 Waivable when the plan has one dominant quality attribute. Counters: wishful "we'll have it all" planning.
+
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
 
 Decision Quality (SDG) and ATAM:
 
@@ -131,6 +147,8 @@ Decision Quality (SDG) and ATAM:
 ## 9. Failure modes
 
 Mandatory – this is the premortem round, run late in the interview, after the map is mostly explored. Counters: optimism bias, planning fallacy, plan-continuation bias.
+
+Short pass: compressed – one premortem question, one boring failure mode as the floor.
 
 Klein's premortem framing – assert failure as fact, never ask "what might go wrong":
 
@@ -147,6 +165,8 @@ FMEA per component, with the chronically forgotten fourth question:
 
 Waivable for self-contained changes. Counters: single-loop thinking.
 
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
+
 Gause and Weinberg product question, verbatim:
 
 - "What problems could this product create?"
@@ -159,6 +179,8 @@ ADR consequences discipline:
 
 Waivable for internal-only changes. Counters: inside view / planning in a vacuum.
 
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
+
 Gause and Weinberg, verbatim: "What environment is this product likely to encounter?"
 
 UK MOD outside-in sweep – walk the PESTLE headings (political, economic, social, technological, legal, environmental) against the plan and ask about any that bite.
@@ -166,6 +188,8 @@ UK MOD outside-in sweep – walk the PESTLE headings (political, economic, socia
 ## 12. Extremes and unlikelies
 
 Waivable for low-stakes plans. Counters: groupthink; probability neglect.
+
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
 
 UK MOD high-impact low-probability analysis:
 
@@ -178,6 +202,8 @@ Tenth-man doctrine – argue the consensus's opposite as a duty, not a convictio
 ## 13. Reversibility and commitment
 
 Mandatory. Counters: one-way-door blindness.
+
+Short pass: compressed – one question: any one-way doors? A yes re-sizes the interview upward.
 
 Amazon, verbatim:
 
@@ -195,6 +221,8 @@ Decision Quality commitment element:
 
 Mandatory. Counters: unfalsifiable success ("we'll know it when we see it").
 
+Short pass: compressed – one question: what does done-well look like, measurably?
+
 Shostack Q4, verbatim: "Did we do a good job?" – unpacked as "Were we effective? Were we efficient? Would you do it again?"
 
 ATAM scenario discipline:
@@ -205,6 +233,8 @@ ATAM scenario discipline:
 ## 15. Perspective shifts
 
 Waivable for trivial plans. Counters: egocentric framing.
+
+Short pass: skipped by default – state the skip with its condition in the sizing statement.
 
 Cognitive interview mnemonics adapted:
 
@@ -218,6 +248,8 @@ Annie Duke's backcasting pairs with the premortem:
 ## 16. Meta check
 
 Mandatory, always the closing move before the read-back. Counters: interviewer tunnel vision – and doubles as the termination check.
+
+Short pass: runs as-is – it is the closing move at every depth.
 
 Gause and Weinberg metaquestions, verbatim:
 
