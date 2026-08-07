@@ -52,7 +52,7 @@ v6.6.0 makes `grill-me` size its own interview: three depths (`short` / `standar
 3. **No staged rollout, again.** This alters runtime behaviour for every auto-update user of `grill-me` (materially fewer questions on plans the model sizes down) and adds two `when_to_use` trigger phrases (`"quick grill"`, `"grill me lightly"`) – squarely two CLAUDE.md staged-rollout triggers, skill-behaviour change and trigger-phrase change. Shipped as a routine release with no `rc.N` soak by explicit maintainer decision. This is the **tenth consecutive no-soak release**, extending the tally in the PR #24 entry above.
 4. **The new behaviour ships unexercised.** No interview has been run end to end under the depth model – not a `short` pass, not an upward re-size, not a batched-skip statement. Gate coverage is static (frontmatter, links, sentinel symmetry, counts); no gate executes an interview. The `grill-guard` Stop hook and the `<!-- erfana:grill-open -->` sentinel are untouched and keep their v6.2.0 caveats above verbatim.
 
-## Unreleased skill registry + Gate 18 — a generated doc with three unguarded edges (accepted risk)
+## v6.6.1 skill registry + Gate 18 — a generated doc with three unguarded edges (accepted risk)
 
 `docs/skill-registry.md` is generated from git history (`scripts/gen-skill-registry.sh`) and policed by Gate 18. The gate deliberately warns rather than blocks on stale dates – the rationale is in [`gates/18-skill-registry.md`](gates/18-skill-registry.md) and is not repeated here. Four accepted risks:
 

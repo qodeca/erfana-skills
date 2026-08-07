@@ -1,4 +1,4 @@
-# Gate 18 — skill registry sync (unreleased)
+# Gate 18 — skill registry sync (v6.6.1+)
 
 **Type**: hard (with one soft sub-check). **Runner order**: after Gate 17, before the soft Gate 13.
 

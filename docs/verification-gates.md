@@ -44,7 +44,7 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+; seven checks today; v4.2.2 extended `docs_to_scan` to 6 files; Gate 18 added `docs/skill-registry.md` for 7) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
 | 16 | hook fixtures + sentinel symmetry: verify-completion + grill-guard + ms-grill-guard (v4.2.9+; OS-native replay via dispatch.sh v4.2.20+; grill family v6.2.0+; ms-grill family + guard-drift check v6.4.0) | hard | [`gates/16-hook-fixtures.md`](gates/16-hook-fixtures.md) |
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email; active brand not the removed proprietary bundle) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
-| 18 | Skill registry sync (`docs/skill-registry.md` vs `ls skills/` + `git log`; shallow clone, list drift, duplicate rows and values git contradicts are hard, lagging dates warn; unreleased) | hard | [`gates/18-skill-registry.md`](gates/18-skill-registry.md) |
+| 18 | Skill registry sync (`docs/skill-registry.md` vs `ls skills/` + `git log`; shallow clone, list drift, duplicate rows and values git contradicts are hard, lagging dates warn; v6.6.1+) | hard | [`gates/18-skill-registry.md`](gates/18-skill-registry.md) |
 
 Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 15, 17, 18, 13 (hard gates first; hook-related gates 14 and 16 run consecutively; the soft Gate 13 trails so a `WARN` lands at the end of the output rather than mid-stream).
 
