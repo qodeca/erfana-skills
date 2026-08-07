@@ -57,6 +57,7 @@ If a scanner flags a known false positive, add a narrow allowlist (gitleaks: an 
 - [ ] Prose uses **sentence case**, en dashes (not em dashes), and contains **no CJK characters** (a hard gate).
 - [ ] Per-file licensing is preserved: scripts carry an SPDX license header (`GPL-3.0-only`); new binary assets are covered by the `REUSE.toml` catch-all (add a `.license` sidecar only to *override* it, e.g. a CC0 or third-party asset – see [REUSE](https://reuse.software)). `reuse lint` should pass.
 - [ ] Docs and counts updated if you changed plugin shape (Gate 15 enforces count claims).
+- [ ] If you added, removed, or renamed a skill: `bash scripts/gen-skill-registry.sh` re-run and `docs/skill-registry.md` committed (Gate 18 hard-fails on a drifted skill list).
 - [ ] Once the CLA-assistant check is enabled, it is green.
 
 ## Code of style

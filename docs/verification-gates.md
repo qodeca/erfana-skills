@@ -1,6 +1,6 @@
 # Verification gates
 
-Seventeen static checks (16 hard + 1 soft) that prove the zero-CJK invariant, plugin schema correctness, brand-manifest integrity, brandbook value fidelity, hook safety-net health, hook behavioural correctness via fixture replay, doc-claim sync against the filesystem, publication readiness (no proprietary / internal-only framing), and structural integrity hold across the v4.0+ skill layout. Gate 13 (brandbook hex coverage) is currently soft – it does not fail CI – pending the stabilisation period defined in `ROADMAP.md` v2.3.2 item #3b.
+Eighteen static checks (17 hard + 1 soft) that prove the zero-CJK invariant, plugin schema correctness, brand-manifest integrity, brandbook value fidelity, hook safety-net health, hook behavioural correctness via fixture replay, doc-claim sync against the filesystem, skill-registry sync against git history, publication readiness (no proprietary / internal-only framing), and structural integrity hold across the v4.0+ skill layout. Gate 13 (brandbook hex coverage) is currently soft – it does not fail CI – pending the stabilisation period defined in `ROADMAP.md` v2.3.2 item #3b.
 
 **Canonical command (use this – runs every gate below):**
 
@@ -41,11 +41,12 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 12 | Brand manifests valid (schema-driven) | hard | [`gates/12-brand-manifests.md`](gates/12-brand-manifests.md) |
 | 13 | Brandbook hex coverage | **soft** | [`gates/13-brandbook-hex.md`](gates/13-brandbook-hex.md) |
 | 14 | Hooks valid (v4.1+; cross-platform sibling + launcher checks v4.2.20+) | hard | [`gates/14-hooks.md`](gates/14-hooks.md) |
-| 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+; seven checks today; v4.2.2 extended `docs_to_scan` to 6 files) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
+| 15 | Doc-claim sync (v4.1.2+, extended v4.1.3+; seven checks today; v4.2.2 extended `docs_to_scan` to 6 files; Gate 18 added `docs/skill-registry.md` for 7) | hard | [`gates/15-doc-claims.md`](gates/15-doc-claims.md) |
 | 16 | hook fixtures + sentinel symmetry: verify-completion + grill-guard + ms-grill-guard (v4.2.9+; OS-native replay via dispatch.sh v4.2.20+; grill family v6.2.0+; ms-grill family + guard-drift check v6.4.0) | hard | [`gates/16-hook-fixtures.md`](gates/16-hook-fixtures.md) |
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email; active brand not the removed proprietary bundle) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
+| 18 | Skill registry sync (`docs/skill-registry.md` vs `ls skills/` + `git log`; shallow clone, list drift, duplicate rows and values git contradicts are hard, lagging dates warn; unreleased) | hard | [`gates/18-skill-registry.md`](gates/18-skill-registry.md) |
 
-Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 15, 17, 13 (hard gates first; hook-related gates 14 and 16 run consecutively; the soft Gate 13 trails so a `WARN` lands at the end of the output rather than mid-stream).
+Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 15, 17, 18, 13 (hard gates first; hook-related gates 14 and 16 run consecutively; the soft Gate 13 trails so a `WARN` lands at the end of the output rather than mid-stream).
 
 ## Run all gates
 
@@ -53,7 +54,7 @@ Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1
 bash scripts/run-all-gates.sh
 ```
 
-The runner executes all 17 gates (16 hard + 1 soft) plus `claude plugin validate` in sequence and exits non-zero on the first failure. It is the same script CI runs on every push and PR – keeping local and CI in sync.
+The runner executes all 18 gates (17 hard + 1 soft) plus `claude plugin validate` in sequence and exits non-zero on the first failure. It is the same script CI runs on every push and PR – keeping local and CI in sync.
 
 If any gate fails, the commit is not ready. Fix, re-run, then commit.
 

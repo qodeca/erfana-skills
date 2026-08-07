@@ -21,6 +21,7 @@
 - [ ] No CJK characters; prose is sentence case with en dashes.
 - [ ] Per-file licensing preserved (SPDX header on scripts, `.license` sidecar for new binaries); `reuse lint` passes.
 - [ ] Docs / count claims updated if plugin shape changed (Gate 15).
+- [ ] Skill added, removed, or renamed? `bash scripts/gen-skill-registry.sh` re-run and `docs/skill-registry.md` committed (Gate 18).
 - [ ] I have signed the [CLA](https://github.com/qodeca/erfana-skills/blob/main/CLA.md) (once the CLA-assistant check is enabled, it will confirm).
 
 ## Notes for reviewers

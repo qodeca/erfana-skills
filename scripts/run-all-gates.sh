@@ -512,6 +512,15 @@ bash scripts/gate-15-doc-claims.sh
 echo "=== Gate 17 — publication readiness ==="
 bash scripts/gate-17-publication-readiness.sh
 
+echo "=== Gate 18 — skill registry sync ==="
+# Reads the committed docs/skill-registry.md and checks it against `ls skills/`
+# + `git log`. Hard-fails on a drifted skill list, a duplicate row, or a value
+# git cannot account for; warns (without blocking) when dates merely lag, which
+# they do by construction between releases. Deliberately NOT a whole-file diff -
+# see docs/gates/18-skill-registry.md. Fix with: bash scripts/gen-skill-registry.sh.
+# Standalone runner under scripts/gate-18-skill-registry.sh.
+bash scripts/gate-18-skill-registry.sh
+
 echo "=== Gate 13 — brandbook hex coverage (soft) ==="
 # Verifies any brandbook-defined hex codes (scripts/_lib/brandbook-hex-inventory.json)
 # are present in the matching brand tokens; the default erfana brand ships none.
