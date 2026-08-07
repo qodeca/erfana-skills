@@ -6,7 +6,7 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) design + orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
 
-Current version: **v6.6.0**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v6.6.1**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (15)** – all invoke as `/erfana:<name>`:
 
@@ -54,7 +54,7 @@ Full per-path layout: [`docs/architecture.md`](docs/architecture.md) `## Reposit
 
 ## Critical commands
 
-Pre-commit + CI verification – single command for all 17 gates (16 hard + 1 soft):
+Pre-commit + CI verification – single command for all 18 gates (17 hard + 1 soft):
 
 ```bash
 bash scripts/run-all-gates.sh
@@ -64,16 +64,24 @@ Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returni
 
 REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
 
-Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 17 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
+Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 18 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](docs/verification-gates.md) `## Quick spot-checks`.
+
+The skill registry ([`docs/skill-registry.md`](docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
+
+```bash
+bash scripts/gen-skill-registry.sh
+```
+
+and the regenerated file committed alongside it. Gate 18 hard-fails when the registry's skill list drifts from `ls skills/`, a skill is listed twice, or a row carries a date or subject git contradicts, and warns (without blocking) when dates merely lag – dates go stale the moment a skill is committed, so blocking on that would red-light `develop` after every skill change. Step 3 of the release process regenerates the file, so every shipped version is accurate.
 
 ## Release process
 
 For every release:
-1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
+1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, registry, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
 2. Bump `version` in `.claude-plugin/plugin.json` only (semver). `plugin.json` is the single source of truth – the marketplace entry carries no `version` (Claude Code resolves `plugin.json` `version` first per the [version-resolution order](https://code.claude.com/docs/en/plugin-marketplaces), so a duplicate in `marketplace.json` would only mask it).
-3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent.
+3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent. Then regenerate the skill registry – `bash scripts/gen-skill-registry.sh` – and commit it, so the shipped `docs/skill-registry.md` is accurate as of the release rather than lagging (Gate 18 warns between releases; this step is what clears the warning).
 4. Add an entry to `CHANGELOG.md` (Keep a Changelog format). If an `## [Unreleased]` section exists (feature branches may accumulate one), promote it to `## [vX.Y.Z] - <date>` as part of the release.
 5. Commit (auto-signed via SSH) and let CI run.
 6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`).
@@ -123,6 +131,8 @@ Most rules here are the negative form of a Hard constraint above; only non-dupli
 - Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
 - Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
 - Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example: rule 15 of `skills/managing-issues/SKILL.md`, which drives the QG-4a / QG-11a checkpoints.
+- Hand-editing [`docs/skill-registry.md`](docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
+- Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).
 
 ## Repository workflow

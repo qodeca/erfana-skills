@@ -89,17 +89,18 @@ erfana-skills/
 │       └── test-prompts.json
 ├── hooks/                   ← four safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+)
 ├── commands/                ← slash commands (v4.1+: doc-update; v4.2.5+: project-status; v4.2.6+: session-status; v4.2.11+: lens-review; v4.2.14+: explain-issue)
-├── scripts/                 ← run-all-gates.sh, gate-12-brand-manifests.sh, gate-14-hooks.sh, gate-16-hook-fixtures.sh, ...
+├── scripts/                 ← run-all-gates.sh, gate-12-brand-manifests.sh, gate-14-hooks.sh, gate-16-hook-fixtures.sh, gen-skill-registry.sh (only generator), ...
 ├── tests/                   ← maintainer test fixtures (v4.2.9+ adds tests/hooks/verify-completion/*.json; v6.2.0+ tests/hooks/grill-guard/; v6.4.0 tests/hooks/ms-grill-guard/)
 └── docs/
     ├── architecture.md      ← this document
-    ├── verification-gates.md← index for the 17 gates
+    ├── verification-gates.md← index for the 18 gates
     ├── known-caveats.md     ← accepted risks, one section per release that added any
     ├── modernization-registry.md ← audit-trail of Modernize passes per skill
+    ├── skill-registry.md    ← generated: every skill + when it last changed (Gate 18)
     ├── publish-runbook.md   ← executed 2026-06-13; only the main-protection ruleset recipe remains
     ├── oss-launch-checklist.md ← remaining post-publication and data-protection obligations
     ├── release-notes-v6.0.0.md ← historical snapshot of the OSS release
-    └── gates/               ← 17 per-gate detail files (v4.1.3+: 01-cjk.md … 15-doc-claims.md; v4.2.9+ adds 16-hook-fixtures.md; v6.0.0 adds 17-publication-readiness.md)
+    └── gates/               ← 18 per-gate detail files (v4.1.3+: 01-cjk.md … 15-doc-claims.md; v4.2.9+ adds 16-hook-fixtures.md; v6.0.0 adds 17-publication-readiness.md; v6.6.1 adds 18-skill-registry.md)
 ```
 
 ### Cross-cutting safety surface (v4.1+)
@@ -310,6 +311,7 @@ The shared skeleton applies to both domains; the differences (which references t
 7. **Update `README.md`** – add a row to the appropriate skills sub-table at the top.
 8. **Update `CHANGELOG.md`** – entry under the next release describing the addition.
 9. **Bump `version`** in both `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (same number).
+9b. **Regenerate the skill registry** – `bash scripts/gen-skill-registry.sh` – and commit `docs/skill-registry.md`. Gate 18 hard-fails when the registry's skill list disagrees with `ls skills/`. The new skill's row reads `uncommitted` until its commit lands, after which Gate 18 warns (not blocks) until the next regeneration.
 10. **Run `bash scripts/run-all-gates.sh`** – Gate 2 lists the new skill (and any added agents) and enforces invariants; Gate 7 hard-fails on broken citations; Gate 8 (design-only, `skills/design-*/SKILL.md` glob) hard-fails if a new design skill's `description:` + `when_to_use:` text doesn't keep all 6 design categories covered. Orchestration skills do NOT trip Gate 8. If a new design skill introduces a brand-new task type (e.g. `design-3d`), update Gate 8's `categories` dict in the runner before opening the PR.
 11. **Open a PR** – CODEOWNERS auto-tags `@marcinobel`. Squash-merge via admin bypass per the documented release process.
 
@@ -324,7 +326,8 @@ Note on agents: v4.0.0 added `agents/` (75 files at the time, rising to 76 when 
 ## See also
 
 - [`CLAUDE.md`](../CLAUDE.md) – repository layout table, hard constraints, release process
-- [`verification-gates.md`](verification-gates.md) – index for the 17 gates (16 hard + 1 soft); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents + brand prose), Gate 12 (brand-manifest validation incl. RULES.md ↔ CLAUDE.md symmetry), Gate 13 (brandbook hex coverage), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+)
+- [`skill-registry.md`](skill-registry.md) – generated inventory of every shipped skill and the last commit that touched it; regenerate with `scripts/gen-skill-registry.sh`, policed by Gate 18.
+- [`verification-gates.md`](verification-gates.md) – index for the 18 gates (17 hard + 1 soft); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents + brand prose), Gate 12 (brand-manifest validation incl. RULES.md ↔ CLAUDE.md symmetry), Gate 13 (brandbook hex coverage), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+), Gate 18 (skill-registry sync against git history – list drift and impossible dates hard, lagging dates warn, v6.6.1+)
 - [`modernization-registry.md`](modernization-registry.md) – audit-trail of every skill that has been through the Modernize operation (v4.2.0+) – first pass, last pass, scope, score. Convention-enforced (not gated). Updated atomically with each Modernize pass.
 - [`known-caveats.md`](known-caveats.md) – accepted risks from the v4.0.0 scope widening, v4.1.0 hooks migration, the 2026-05-17 v4.2.8 → v4.2.10 same-day release chain, and every later release that added one (generic-name agent collisions, unverified per-skill nested `agents/` discovery, skipped rc soaks, `~/.claude/` duplication, etc.). The running tally of no-staged-rollout overrides lives in that file's newest section – the last one in the file – and is not restated here. Extracted from CLAUDE.md to keep that file under the 40 KB recommended ceiling.
 - [`../skills/design-shared/brands/README.md`](../skills/design-shared/brands/README.md) – brand-system contract details, "adding a new brand" walkthrough

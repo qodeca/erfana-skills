@@ -57,6 +57,9 @@ docs_to_scan = [
     'MAINTAINER.md',
     'skills/using-erfana/SKILL.md',
     'docs/verification-gates.md',
+    # Added with Gate 18: the generated registry states its own skill count in
+    # prose, which Gate 18 does not parse (it reads table rows only).
+    'docs/skill-registry.md',
 ]
 
 # === Check 1: CLAUDE.md "Current version: **vX.Y.Z**" matches plugin.json ===
@@ -216,7 +219,7 @@ if os.path.isdir('commands'):
 # `ls docs/gates/*.md`. Guards claims about the NUMBER of per-gate detail
 # files ("N per-gate detail files") and the range enumeration ("gates/01-N").
 # Narrowly scoped on purpose: it must NOT match generic "N gates" / "N hard
-# gates" / "Seventeen static checks" phrasings, the Gate-15 "Seven classes
+# gates" / "Eighteen static checks" phrasings, the Gate-15 "Seven classes
 # ... (7)" self-reference, or the historical "01-cjk.md ... 15-doc-claims.md"
 # prose (no digit immediately before the dash there).
 if os.path.isdir('docs/gates'):
