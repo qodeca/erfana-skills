@@ -51,7 +51,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 
 | Skill | What it does | Triggers |
 |---|---|---|
-| `erfana:grill-me` | One-at-a-time Socratic interrogation of a plan or design – walks the decision tree, recommends an answer per branch, explores the codebase first when the answer is already there. Imported from upstream `superpowers:grill-me` in v4.2.3. | "grill me", "stress-test this plan", "interview me about this", "challenge my plan", "poke holes in this", "walk the decision tree" |
+| `erfana:grill-me` | One-at-a-time Socratic interrogation of a plan or design – walks the decision tree, recommends an answer per branch, explores the codebase first when the answer is already there. Since v6.6.0 the interview is sized to the plan – three depths selected from blast radius, reversibility, cost of being wrong, and consumers, with skips batched into one stated sizing statement rather than one question each. Imported from upstream `superpowers:grill-me` in v4.2.3. | "grill me", "quick grill", "grill me lightly", "stress-test this plan", "interview me about this", "challenge my plan", "poke holes in this", "walk the decision tree" |
 
 ### Verification skills
 
@@ -229,7 +229,7 @@ Sample opener: *"Design an infographic comparing our Q2 vs Q3 numbers."*
 
 **Stress-test a plan before implementing** (process skill, v4.2.3+)
 
-1. `erfana:grill-me` – Socratic walk through the decision tree; one question at a time, recommended answer per branch, explores the codebase before asking when the answer is already encoded there
+1. `erfana:grill-me` – Socratic walk through the decision tree; one question at a time, recommended answer per branch, explores the codebase before asking when the answer is already encoded there. Depth scales to the plan: a small reversible change gets a short pass, anything with a one-way door gets the full sweep
 2. Downstream skill of choice – `erfana:managing-issues` create / `erfana:managing-specs` (T1–T4) / any `erfana:design-*` skill, depending on what the locked plan is meant to produce
 
 Sample opener: *"Grill me on this rollout plan before we build it – I want to ship X by Friday, here's my draft approach."*
