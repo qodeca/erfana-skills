@@ -95,7 +95,6 @@ capabilities:
   - task-breakdown
 tools:
   - Read
-  - AskUserQuestion
 domain: architecture
 criticality: high
 allow_direct: false

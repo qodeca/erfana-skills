@@ -14,12 +14,9 @@ Use it after finishing a chunk of work to get a researched, multi-angle review o
 
 # Consumers (user-run only)
 
-`erfana:managing-issues`' Implement operation depends on this command at two sub-gates:
+No shipped skill invokes this command. As of v6.7.0, `erfana:managing-issues`' Implement operation runs its reviews as embedded agent fan-outs (QG-4a design, QG-8 impl review-and-fix, QG-11a pre-UAT) directly in-context – it no longer consumes this command at any sub-gate and no longer hands the run back to the user to run it.
 
-- **QG-4a** – lens review of the architecture. Target is the design document, a single tracked path (the native path target; the design doc must not live under the ignored report directory).
-- **QG-11a** – lens review of the whole change set before UAT. Target is the run's changed-file list (the path-list target), with `--lens` pinned explicitly so a path containing a lens word cannot silently collapse the review to one lens.
-
-Both pass a validated `--out` path under the run's untracked report directory, and both are **user-run only**: that skill's orchestrator prints the command, ends its turn, and resumes when the user hands back the report path. It must never invoke this command by any tool. Two reasons – a skill invoking another skill re-enters skill-level work instead of delegating to agents, and this command fans out up to ten reviewers into whatever session runs it, which would consume the caller's context mid-run. The rule generalizes: any other skill's orchestrator must print this command for the user rather than run it. Canonical statement: Rule 12 in [`../skills/managing-issues/operations/implement-rules.md`](../skills/managing-issues/operations/implement-rules.md).
+The rule generalizes: any skill's orchestrator that would reach for this command must instead print it for the user rather than invoke it by any tool. Two reasons – a skill invoking another skill re-enters skill-level work instead of delegating to agents, and this command fans out up to ten reviewers into whatever session runs it, which would consume the caller's context mid-run.
 
 # Trust model (read before anything else)
 

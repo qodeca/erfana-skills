@@ -54,7 +54,6 @@ Requirements gathering protocol for each operation. Defines when questions are m
 4. **Reference implementations** – any existing patterns to follow (optional)
 
 ### User approval checkpoints (not Q&A but mandatory interaction)
-- QG-4: Architecture plan approval
 - QG-11: UAT approval
 - QG-12: Finalization approval
 
