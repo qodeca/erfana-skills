@@ -47,10 +47,10 @@ The list opens with the 13 phase items plus the gate item for the phase that is 
 
 ```
 {content: "QG-4 quality gate", ...},
-{content: "QG-4a quality gate (lens review of design)", ...},
-{content: "QG-4b quality gate (architecture acceptance)", ...},
+{content: "QG-4a quality gate (embedded design review)", ...},
+{content: "QG-4b quality gate (architecture judgment)", ...},
 ...
-{content: "QG-11a quality gate (lens review of implementation)", ...},
+{content: "QG-11a quality gate (embedded implementation review)", ...},
 {content: "QG-11 quality gate", ...},
 ```
 

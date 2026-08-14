@@ -9,7 +9,7 @@
 
 **STOP if ANY condition is unchecked. Do not proceed.**
 
-- [ ] **Session is interactive** (Step 0 – no CI/automation signal; the operation cannot complete headlessly)
+- [ ] **Session is interactive** (Step 0 – no CI/automation signal; the run is autonomous but still needs a human at UAT/finalization, so it cannot complete headlessly)
 - [ ] **Current branch is the repo's default/integration branch** (the `BASE_BRANCH` detected in Step 1 – BLOCKING prerequisite)
 - [ ] Git repository exists in current directory
 - [ ] `gh` CLI installed and authenticated
@@ -28,18 +28,18 @@ N/A – first phase, no prior quality gate required.
 
 ### Step 0: Refuse a non-interactive run
 
-The Implement operation is **interactive-only** ([../operations/implement.md](../operations/implement.md) – "Interactive-only operation"): it blocks on `AskUserQuestion` at several gates, and QG-4a / QG-11a end the turn waiting for a human to run `/erfana:lens-review`. Starting under automation means stalling mid-run, after branch creation and possibly after code changes, on a prompt nobody can answer. Refuse before that, not during it.
+The Implement operation runs **autonomously through UAT** ([../operations/implement.md](../operations/implement.md) – "Autonomous operation"): it designs, builds, reviews and fixes with no user gate before Phase 11. But it still **cannot complete headlessly** – **UAT (QG-11) and finalization (QG-12) require a human**, so a fully non-interactive session would run all the way to UAT and then stall there, after branch creation and code changes, on a prompt nobody can answer. Refuse before that, not during it.
 
 ```bash
 if [ -n "$GITHUB_ACTIONS" ] || [ -n "$CI" ]; then
-  echo "REFUSING: the Implement operation is interactive-only and cannot run headlessly."
-  echo "It requires user approval at QG-4/QG-4b/QG-11/QG-12 and two user-run /erfana:lens-review checkpoints."
+  echo "REFUSING: the Implement operation runs autonomously but still needs a human at UAT (QG-11) and finalization (QG-12)."
+  echo "A headless session would run to UAT and stall; re-run interactively."
   echo "The '@claude' auto-implement marker triggers this repo's own Actions workflow, not this operation."
   exit 1
 fi
 ```
 
-STOP on refusal – no branch, no state comment, no retry. This is a **best-effort early exit on CI signals, not a security control**: a headless local run (`claude -p`) sets no such variable, so the interactive-only stance documented in the operation file is the binding rule and this check is only its cheapest enforcement point.
+STOP on refusal – no branch, no state comment, no retry. This is a **best-effort early exit on CI signals, not a security control**: a headless local run (`claude -p`) sets no such variable, so the autonomous-until-UAT stance documented in the operation file is the binding rule and this check is only its cheapest enforcement point.
 
 ### Step 1: Detect and validate the base branch
 
@@ -192,25 +192,14 @@ Map from the labels actually present on the issue ([../reference/labels.md](../r
 
 Notes on the traps: there is no `feature` label – the canonical name is `enhancement`. `refactor` is **not** in the canonical label set even though the conditional-agent tables reference it; accept it when a project defines it, otherwise the issue lands in the unlabeled row.
 
-**Unlabeled or contradictory (MUST call `AskUserQuestion` once):**
+**Unlabeled or contradictory — auto-infer, no prompt.** `task_type` is a **technical classification**, so it is resolved autonomously (SKILL.md rule 16: no technical/architecture prompt). Infer it from the issue content and any labels:
 
-```
-AskUserQuestion({
-  questions: [{
-    question: "This issue's labels do not pin down what kind of change it is. Which is it? This decides which test suites must pass before the work can ship.",
-    header: "Task type",
-    options: [
-      { label: "Feature", description: "New behaviour - unit and integration tests are required, plus e2e if the UI changes (default if unsure)" },
-      { label: "Bug", description: "Fixing broken behaviour - a unit test reproducing the bug is required; integration is advisory" },
-      { label: "Refactor", description: "Restructuring with no behaviour change - unit and integration tests must exist and keep passing" },
-      { label: "Docs", description: "Documentation only, no shipped code - no test categories are enforced" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+- Body describes broken/incorrect behaviour, a stack trace, "fix", "regression" → `bug`
+- Body describes restructuring with no behaviour change ("refactor", "clean up", "extract") and the project defines a `refactor` label → `refactor`
+- Documentation-only change (no shipped code) → `docs`
+- Otherwise, or genuinely unclear → `feature` (the strictest non-docs row, the safe default)
 
-Ask at most once per run. If the user does not answer, record `feature`. (A non-interactive session never reaches this step – Step 0 refuses it.)
+Record the inferred `task_type` and the one-line basis in the phase summary. **If what is actually unclear is a REQUIREMENT** (what the change should *do*, not how it is classified), do not guess it here — defer it to the Phase 2 requirements Q&A ([2-business-analysis.md](2-business-analysis.md) Step 3), which is the one place the run may ask the user a requirements question.
 
 Output: `task_type` added to QG-0 artifacts.
 
@@ -254,7 +243,7 @@ Output: `has_ui_impact` flag added to QG-0 artifacts.
 
 ### Step 5d: Scope the deep-review sub-gates
 
-Three sub-gates sit outside the numbered phase sequence: **QG-4a** (user-run lens review of the architecture), **QG-4b** (user acceptance of the reviewed architecture), and **QG-11a** (user-run lens review of the whole change set, immediately before UAT). Their scope is decided here, once, and recorded as `review_level`.
+Three embedded review sub-gates sit outside the numbered phase sequence: **QG-4a** (autonomous parallel review of the architecture), **QG-4b** (internal judgment checkpoint on the findings), and **QG-11a** (autonomous review-and-fix of the whole change set, immediately before UAT). All three run **without user interaction** – the skill fans out reviewer agents and a judge triages the findings ([../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md)). Only their *scope* is decided here, once, and recorded as `review_level`.
 
 | `review_level` | QG-4a + QG-4b | QG-11a | `deep_review_gates` (derived) |
 |---|---|---|---|
@@ -266,37 +255,18 @@ Three sub-gates sit outside the numbered phase sequence: **QG-4a** (user-run len
 
 | Tier | Default | How it is set |
 |------|---------|---------------|
-| Tier 2 (standard) | `full` | The question below, asked once |
-| Tier 1 (trivial) | `none` | Not asked – a trivial run skips the sub-gates |
+| Tier 2 (standard) | `full` | Auto-defaulted – no prompt |
+| Tier 1 (trivial) | `none` | Auto-defaulted – a trivial run skips the sub-gates |
 
-Tier 1 is not asked because a one-line typo fix would otherwise pay for two manual review rounds and an extra sign-off, and asking about it is itself a blocking stop on the run that can least afford one. **A user who wants the deep review on a trivial issue asks for it when starting the run** ("implement #42 with the full review") – the orchestrator then records `review_level = full` and does not ask again.
-
-**Tier 2 review level (MUST call `AskUserQuestion` when `tier = 2`):**
-
-```
-AskUserQuestion({
-  questions: [{
-    question: "This is a standard (Tier 2) issue. The deep review adds two checkpoints where you run /erfana:lens-review yourself and hand back the report, plus a design sign-off. How much of it should this run include?",
-    header: "Review level",
-    options: [
-      { label: "Both reviews", description: "Full treatment - lens review of the design, design sign-off, and a lens review of the whole change set before you test it (recommended for anything non-obvious)" },
-      { label: "Design only", description: "Lens review and sign-off of the design before code is written; no second review of the finished change set" },
-      { label: "Neither", description: "No lens reviews and no extra design sign-off - the 13 phase gates still run, including the mandatory ones" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-`Both reviews` → `review_level = full`. `Design only` → `review_level = design`. `Neither` → `review_level = none`. On Tier 1 do not ask – the value is `none` unless the user asked for the full review when starting the run.
+**`review_level` is a technical/process choice, so it is decided autonomously — no `AskUserQuestion` (SKILL.md rule 16).** Tier 2 auto-defaults to **`full`** (the most thorough setting and the best-practice default: both the embedded design review and the pre-UAT implementation review-and-fix run). Tier 1 auto-defaults to `none` because a one-line typo fix does not warrant two extra autonomous review rounds. **A user who explicitly asks for a different depth when starting the run** ("implement #42 with design-only review", or "with the full review" on a Tier 1) is honoured; otherwise the default stands. Record the resolved `review_level` and its basis (tier default, or explicit user request) in the phase summary.
 
 **Recording the choice.** `review_level` (and the `deep_review_gates` derived from it) is a run-state variable, persisted with the rest of the run state so Phases 4 and 11 read the decision rather than re-deriving it mid-run (see [../reference/post-review-tracking.md](../reference/post-review-tracking.md)). Phases 4 and 11 MUST NOT re-ask.
 
-**On a resume this step runs again and its result wins.** `review_level` is never read back from the run-state block: the tier default is re-derived and the Tier 2 question is asked again. Otherwise the review scope and the sub-gate results would both arrive in the same attacker-writable comment, and Phase 12's "sub-gate skipped while it was in scope" assertion would compare one against the other and pass with all three sub-gates gone.
+**On a resume this step runs again and its result wins.** `review_level` is never read back from the run-state block: the tier default is re-derived (Tier 2 → `full`, Tier 1 → `none`, honouring an explicit user request in the resuming message). Otherwise the review scope and the sub-gate results would both arrive in the same attacker-writable comment, and Phase 12's "sub-gate skipped while it was in scope" assertion would compare one against the other and pass with all three sub-gates gone.
 
-### Step 5e: Resolve the lens-review report directory
+### Step 5e: Resolve the run's untracked scratch directory
 
-QG-4a and QG-11a write their reports through `/erfana:lens-review --out <file>`, whose contract rejects absolute paths, `~`, `..`, anything resolving outside the working directory, requires a `.md` extension, and does **not** create missing parent directories. A report landing in a tracked path would trip the clean-tree check on the next run and could be swept into the commit, so resolve an untracked directory now and pre-create it:
+`LENS_DIR` is the run's **untracked scratch directory** – the Phase 11 UAT dev-server log and PID files live here ([../phases/11-uat.md](../phases/11-uat.md)), and any embedded-review scratch. It must be untracked so it never trips the clean-tree check on the next run or gets swept into the commit. The name is kept for compatibility. Resolve an untracked directory now and pre-create it:
 
 ```bash
 LENS_DIR=""
@@ -359,8 +329,8 @@ Set `run_id = <RUN_BRANCH>@<ISO-8601 UTC start>`.
 | Task Type | `task_type`: docs, bug, feature, or refactor (Step 5a) – drives the QG-5 test-category matrix, independent of tier |
 | Spec Maturity | `spec_maturity`: none, partial, complete, or complete_with_design |
 | UI Impact | `has_ui_impact`: true or false |
-| Deep-Review Scope | `review_level`: full / design / none, and the `deep_review_gates` derived from it – governs QG-4a, QG-4b (both levels above `none`) and QG-11a (`full` only), Step 5d |
-| Lens Report Directory | `LENS_DIR`: untracked directory pre-created for lens-review `--out` reports (Step 5e); absent when `deep_review_gates = false` |
+| Deep-Review Scope | `review_level`: full / design / none, and the `deep_review_gates` derived from it – governs the embedded QG-4a, QG-4b (both levels above `none`) and QG-11a (`full` only), Step 5d |
+| Scratch Directory | `LENS_DIR`: untracked directory pre-created for UAT dev-server logs and review scratch (Step 5e) |
 | Stack Commands | `BASE_BRANCH`, `TEST_CMD`, `TYPECHECK_CMD`, `LINT_CMD` (reused by Phases 5, 8, 10, 11, 12) |
 | UAT Commands | `BUILD_CMD`, `DEV_CMD` – each a command string or the literal `absent` (Step 4); read by Phase 11 Steps 1-2 and the Tier 1 QG-11 predicate |
 | Test Category Commands | `UNIT_TEST_CMD`, `INTEGRATION_TEST_CMD`, `E2E_TEST_CMD` – each a command string or the literal `absent` (Step 4a); read by Phase 4 (missing-suite decision) and QG-5 |
@@ -399,7 +369,7 @@ Set `run_id = <RUN_BRANCH>@<ISO-8601 UTC start>`.
 
 | Criterion | Check |
 |-----------|-------|
-| **Interactive session** | **No CI/automation signal detected (Step 0) – the run can reach a human at every blocking gate** |
+| **Interactive session** | **No CI/automation signal detected (Step 0) – the run can reach a human at UAT (QG-11) and finalization (QG-12)** |
 | **Source branch** | **Started from the detected `BASE_BRANCH` (BLOCKING)** |
 | Issue valid | OPEN state, no `blocked` label |
 | Clean state | No uncommitted changes **on a fresh run**. On a resume the dirty paths are recorded and reported instead (Step 3) – an interrupted implementation has uncommitted work by construction |
@@ -434,7 +404,7 @@ Set `run_id = <RUN_BRANCH>@<ISO-8601 UTC start>`.
 
 | Failure | Resolution |
 |---------|------------|
-| **Non-interactive session** | **STOP - re-run interactively; the operation has no headless mode** |
+| **Non-interactive session** | **STOP - re-run interactively; the run is autonomous but still needs a human at UAT/finalization** |
 | **Wrong source branch** | **STOP - switch to the detected `BASE_BRANCH` first, then re-run** |
 | Issue closed | Abort - cannot implement closed issue |
 | Issue blocked | Abort - resolve blocker first |

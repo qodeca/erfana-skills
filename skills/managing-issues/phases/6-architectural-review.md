@@ -2,7 +2,9 @@
 
 **Goal:** Validate architectural quality of implemented code.
 **Agent:** `architecture-reviewer`
-**Quality Gate:** QG-6 (Checkpoint for T2, Automated for T1)
+**Quality Gate:** QG-6 (Judgment – non-blocking, ALL tiers)
+
+**Autonomous phase.** QG-6 issues no blocking `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13): evaluate the predicate, record it, summarise in one line, proceed. This is part of the autonomous review feeding the run's judge.
 
 ---
 
@@ -97,7 +99,7 @@ Check:
 
 ## QUALITY GATE: QG-6
 
-**Gate Type:** Checkpoint (T2) | Automated (T1)
+**Gate Type:** Judgment (non-blocking, ALL tiers)
 **Gate ID:** QG-6
 
 ### Pass Criteria
@@ -108,13 +110,13 @@ Check:
 | Coupling analysis | Quick | Detailed |
 | Pattern review | N/A | Required |
 | Critical issues | 0 | 0 |
-| High issues | Document | Address |
-| User checkpoint | Not required | Required |
+| High issues | Document | Auto-fix (CRIT/HIGH) or route to judge |
+| User checkpoint | None (non-blocking) | None (non-blocking) |
 | Task list advanced | `QG-6 quality gate` and `Phase 6: Architectural Review` `completed`, `Phase 7: Security` `in_progress`, `QG-7 quality gate` appended as `pending` | Same |
 
-### Tier 2 Checkpoint
+### Phase summary (recorded, not a prompt)
 
-Present to user:
+Record the review and emit a one-line summary:
 
 ```markdown
 ## Architectural Review Results
@@ -145,32 +147,14 @@ Present to user:
 - <suggestion 2>
 ```
 
-### Gate call (tier-conditional)
+### Gate evaluation (non-blocking, ALL tiers)
 
-**Tier 2 – MUST call `AskUserQuestion`.** Presenting the review above is not the gate; the gate is this call. Do not proceed on printed prose.
-
-```
-AskUserQuestion({
-  questions: [{
-    question: "Architectural review is complete. Proceed to Security?",
-    header: "QG-6",
-    options: [
-      { label: "Approve", description: "The design holds up - continue to Phase 7 (Security)" },
-      { label: "Address Issues First", description: "Fix the flagged architectural issues and re-review before Security runs" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-`Approve` → QG-6 = PASS. `Address Issues First` → QG-6 = FAIL; follow On FAIL below, then re-present.
-
-**Tier 1 – no user call.** Evaluate this predicate instead, reading the architecture reviewer's structured output (not the orchestrator's impression of it):
+**QG-6 does NOT call `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13).** Evaluate this predicate on both tiers, reading the architecture reviewer's structured output (not the orchestrator's impression of it):
 
 - The reviewer's CRITICAL-severity finding count is 0, and
 - its overall assessment is not `ARCHITECTURAL ISSUES`.
 
-Pass only when both hold; otherwise QG-6 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** HIGH and MEDIUM findings, the SOLID table, and the coupling/cohesion assessment – the Tier 1 pass criteria already say "Document" for HIGH, so these are recorded in the run log and do not block.
+Pass only when both hold; otherwise QG-6 = FAIL. **CRITICAL/HIGH findings are auto-fixed and re-reviewed inline** (implementation agents apply the fix); **MEDIUM/LOW findings are routed to the run's judge** (`mi-solution-designer`, fix / accept-as-tech-debt / not-worth-it) per [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md) rather than blocking. The SOLID table and coupling/cohesion assessment are recorded in the run log.
 
 ### Result
 

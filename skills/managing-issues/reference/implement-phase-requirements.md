@@ -122,69 +122,69 @@ allow_direct: false
 trigger: spec_maturity >= complete_with_design
 notes: |
   Used in spec-ready validation mode when design documents already exist.
-  solution-reviewer validates design coherence before QG-4 user approval.
+  solution-reviewer validates design coherence before QG-4 is recorded (non-blocking).
   Falls back to full Phase 4 design creation if validation finds critical issues.
 ```
 
-### gate_4a_design_lens_review
+### gate_4a_design_review
 
 ```yaml
 capabilities:
-  - user-interaction
-  - report-parsing
+  - architecture-review
+  - parallel-fan-out
 tools:
-  - Read
+  - Task
 domain: review
 criticality: high
 allow_direct: true
-human_invoked: true
 trigger: deep_review_gates == true
 notes: |
-  Sub-gate inside Phase 4, not a phase. HUMAN-INVOKED CHECKPOINT: the user runs
-  /erfana:lens-review; the orchestrator prints the command and ends the turn and
-  MUST NOT invoke it (SKILL.md rule 15). QG-1 does not assign an agent to this
-  gate - allow_direct: true resolves it, the same way phase_0_preflight and
-  phase_11_uat resolve. Parsing the returned report IS delegated (untrusted
-  data), to whichever reviewer Phase 1 already resolved for phase_8_quality_review.
+  Sub-gate inside Phase 4, not a phase. AUTONOMOUS EMBEDDED REVIEW: the
+  orchestrator fans out its own reviewer agents (architecture-reviewer,
+  solution-reviewer, security-auditor, ux-reviewer) in parallel over the
+  design and MUST NOT invoke /erfana:lens-review (SKILL.md rule 15). No user
+  hand-off. Findings feed the QG-4b judgment step. Protocol:
+  reference/embedded-review-and-fix.md.
 ```
 
-### gate_4b_architecture_acceptance
+### gate_4b_architecture_judgment
 
 ```yaml
 capabilities:
-  - user-interaction
-tools:
-  - AskUserQuestion
-domain: acceptance
-criticality: high
-allow_direct: true
-human_invoked: true
-trigger: deep_review_gates == true
-notes: |
-  Sub-gate inside Phase 4, not a phase. HUMAN-INVOKED CHECKPOINT: an
-  AskUserQuestion sign-off on the reviewed design, run by the orchestrator.
-  No agent assignment - allow_direct: true, per the phase_11_uat precedent.
-  Runs on every pass, including a clean review with zero findings.
-```
-
-### gate_11a_implementation_lens_review
-
-```yaml
-capabilities:
-  - user-interaction
-  - report-parsing
+  - cost-benefit-triage
+  - acceptance-criteria-verification
 tools:
   - Read
+domain: judgment
+criticality: high
+allow_direct: true
+trigger: deep_review_gates == true
+notes: |
+  Sub-gate inside Phase 4, not a phase. INTERNAL JUDGMENT CHECKPOINT (no user
+  gate): mi-solution-designer triages the QG-4a findings (fix / accept-as-tech-
+  debt / not-worth-it); unresolved CRITICAL/HIGH trigger an automatic design
+  revision bounded by embedded_loop_iter (3 rounds). Runs on every pass.
+```
+
+### gate_11a_implementation_review
+
+```yaml
+capabilities:
+  - code-review
+  - parallel-fan-out
+  - cost-benefit-triage
+tools:
+  - Task
 domain: review
 criticality: high
 allow_direct: true
-human_invoked: true
 trigger: review_level == full
 notes: |
-  Sub-gate inside Phase 11 (pre-step to QG-11), not a phase. HUMAN-INVOKED
-  CHECKPOINT with the same contract as gate_4a: user runs the command, the
-  orchestrator never does, QG-1 assigns no agent (allow_direct: true). Report
-  parsing is delegated as untrusted data.
+  Sub-gate inside Phase 11 (pre-step to QG-11), not a phase. AUTONOMOUS EMBEDDED
+  REVIEW-AND-FIX with the same contract as gate_4a: parallel reviewer fan-out over
+  the change set, CRITICAL/HIGH auto-fixed inline, MED/LOW to the mi-solution-
+  designer JUDGE mode, bounded by embedded_loop_iter (3 rounds). No /erfana:lens-review, no user
+  hand-off. Protocol: reference/embedded-review-and-fix.md.
 ```
 
 ### phase_5_implementation

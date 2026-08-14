@@ -43,7 +43,7 @@ Prose outside the sentinels never reaches the orchestrator; inside them only `ke
 
 **A duplicate known key rejects the block.** Two `run_branch:` lines inside one sentinel region are either corruption or an attempt to make the parse order decide the value; there is no correct answer and no "last one wins". The same holds for a repeated `planned_files:` or `task_list_snapshot:` header. Repeated `  - ` items under a single list header are normal and are not duplicates.
 
-This is deliberately weaker than the lens-report path, which delegates the read to an agent so the orchestrator never sees the text. A lens report is long free-form prose with no checkable shape; the state block is a fixed key list where every accepted value is charset-constrained, which the orchestrator can enforce itself in one pass. **The residual exposure is real and accepted**: up to 80 `key: value` lines from a comment authored by the authenticated user enter orchestrator context, and a repository collaborator can rewrite that comment in place. The mitigation is the fetch-time author filter plus shape validation and known-keys-only, not isolation.
+The state block is a fixed key list where every accepted value is charset-constrained, which the orchestrator can enforce itself in one pass. **The residual exposure is real and accepted**: up to 80 `key: value` lines from a comment authored by the authenticated user enter orchestrator context, and a repository collaborator can rewrite that comment in place. The mitigation is the fetch-time author filter plus shape validation and known-keys-only, not isolation.
 
 ---
 
@@ -73,7 +73,7 @@ Rule 5's "validated against their shapes" means exactly this table. Validation r
 | `review_level` | `full` / `design` / `none` |
 | `state_persistence` | `enabled` / `unavailable` |
 | `last_passed_gate` | `^(QG-(0\|[1-9]\|1[0-2])[ab]?\|none)$` |
-| `awaiting` | `none` / `QG-4a:lens-report` / `QG-11a:lens-report` |
+| `awaiting` | `none` (always – the embedded reviews run inline and create no mid-phase pause; the former `QG-4a:lens-report` / `QG-11a:lens-report` turn-ending states are removed) |
 | each `gate_results` token | `^QG-(0\|[1-9]\|1[0-2])[ab]?=(PASS\|skipped\|-)$` |
 | `design_path`, `lens_dir`, `awaiting_out`, each `planned_files` entry | the path shape below |
 | `awaiting_target` | `^[A-Za-z0-9._/ -]{1,200}$`, **no `..` segment, no leading `-`, no leading `/`** – it is echoed into a command a human is told to paste |
@@ -90,7 +90,7 @@ Rule 5's "validated against their shapes" means exactly this table. Validation r
 - `.md` extension for `design_path` and `awaiting_out`
 - a regular file, never a directory and never a symlink, for `design_path`, `awaiting_out` and every `planned_files` entry
 
-These are the same constraints the `/erfana:lens-review --out` contract already imposes ([../phases/0-preflight.md](../phases/0-preflight.md) Step 5e); the resume path is held to them too. The containment check runs only after charset and traversal have passed, and resolves the **physical** path so a symlink cannot point out of the tree:
+These are the same path constraints QG-0 Step 5e imposes on `LENS_DIR` and the run's file paths ([../phases/0-preflight.md](../phases/0-preflight.md) Step 5e); the resume path is held to them too. The containment check runs only after charset and traversal have passed, and resolves the **physical** path so a symlink cannot point out of the tree:
 
 ```bash
 # <path> is substituted literally, and only once it matched the path shape above.
@@ -136,11 +136,12 @@ Rule 1 is a filter and not a guarantee, so the principle that follows is: **no b
 | Field | What the resume does |
 |---|---|
 | `last_review_tree`, `uat_approved_tree` | **Always unset on a resume, and written as `-`.** They name loose git objects belonging to the session that made them, so there is nothing honest to persist. Phase 12's pre-commit check therefore has no baseline and re-reviews the **whole working-tree change set**. Read back, a value naming the current state would produce an empty pre-commit diff and a "no unreviewed changes" verdict for work that was never reviewed. That guard is the reason [post-review-tracking.md](post-review-tracking.md) exists |
+| `embedded_loop_iter`, `judged_findings` | **Session-local, never persisted or read back.** They belong to an embedded-review gate's in-session loop (QG-4a / QG-8 / QG-11a). A resume that re-enters such a gate **restarts its loop at `embedded_loop_iter = 0` and re-derives `judged_findings` from scratch**, re-reviewing the working tree fresh – a persisted counter or sticky-verdict set would let a forged block cut the loop short or suppress a real finding. See [embedded-review-and-fix.md](embedded-review-and-fix.md) Step 6 |
 | `base_branch` | **Re-detected** by QG-0 Step 1 in this session – one `git symbolic-ref` call. The recorded value is compared against it under rule 2 and a mismatch **rejects the block**; it is never adopted. `BASE_BRANCH` is the diff base of Phase 12's pre-commit re-review and the merge and push target of Phase 12 Step 4, so a block naming the run's own branch would make that re-review diff a branch against itself – empty, and every post-review change waved through – and a plausible-but-wrong name would redirect the merge and the push |
 | `review_level` | **Re-derived** at QG-0 Step 5d, which re-runs: the tier default is recomputed and Tier 2 is asked the review-level question again. Read back, the scope and the sub-gate results would both come from the same block, so Phase 12's "sub-gate skipped while it was in scope" assertion would compare an attacker value against an attacker value and pass, and all three sub-gates would vanish |
 | `test_harness_decisions` | **Treated as unset on a resume**, exactly like the two tree snapshots. It is the sole input to QG-5's per-category enforcement, and it is set at Phase 4 Step 2a – a gate a resume into Phase 5 or later never re-runs, so the block would be its only source and `descope` on every category would disarm the whole blocking test matrix. A resume targeting Phase 5 or later therefore **re-runs Phase 4 Step 2a alone** for any blocking category whose Phase 0 command came back `absent`, and asks again. The recorded value is displayed in the resume confirmation and nowhere else. Its `accept` justification is also carried into the pull-request description, so a read-back value would put attacker prose in the PR |
 | `gate_results`, `last_passed_gate` | **Advisory display values.** Shown in the resume confirmation so the user can recognise a wrong run; never accepted as evidence. Phase 12 credits a gate only from the current session's own record |
-| `awaiting_target`, `awaiting_out` | **Re-derived** by QG-4a / QG-11a from their own Step 1 logic under the current `LENS_DIR`. The block values are used only when re-derivation yields the identical path; otherwise the freshly derived path is printed. These strings are echoed into a command the orchestrator tells the **user** to paste, so an unverified block value there would make the run a confused deputy for an attacker-composed slash command |
+| `awaiting_target`, `awaiting_out` | **Obsolete** – they supported the removed user-run lens pause. The embedded reviews run inline and print no user-pasted command, so these are always `-` and never used |
 | `task_list_snapshot` | **Validated item by item** against the canonical strings before it becomes the run's task list – see "Rebuilding the task list" |
 | `state_comment_id` | Informational. The patch target is the `id` of the comment the accepted block was fetched from |
 | the three test commands | Re-detected by QG-0 Step 4a; the recorded values are displayed, never run |
@@ -181,7 +182,7 @@ Resume restarts at the **earliest phase whose inputs can actually be reconstruct
 
 **The one fallback rule:** if `design_path` is unset, fails the path shape, or is unreadable, any resume target from Phase 5 onward steps back to **Phase 2**. There is no way to re-derive the approved plan, and resuming into review or commit phases without it would review work against a plan nobody holds. A `design_path` that validates is still only *plausible*, not *verified* – it is shown to the user in the rule-6 confirmation precisely so a wrong-but-valid path is caught by a human.
 
-`design_path` is recorded at QG-4a Step 1 – the spec design doc, or the plan the designer agent wrote to the **tracked** destination QG-4a resolved ([../phases/4-architecture.md](../phases/4-architecture.md) QG-4a Step 1: the design document must sit on a tracked, non-ignored path, because `lens-review` respects ignore rules; `$LENS_DIR` holds the `--out` report only, never the design). It is also recorded at the QG-4 boundary whenever a design document already exists on disk – spec-ready mode gives one for free. When `deep_review_gates = false` (`review_level = none`) and no spec design doc exists, no plan file is forced and `design_path` stays `-`, so those runs fall back to Phase 2 – which is cheap, because a Tier 1 run at that level is trivial by definition.
+`design_path` is recorded at QG-4a Step 1 – the spec design doc, or the plan the designer agent wrote to the **tracked** destination QG-4a resolved ([../phases/4-architecture.md](../phases/4-architecture.md) QG-4a Step 1: the design document sits on a tracked, non-ignored path so it commits with the change; `$LENS_DIR` holds only untracked run scratch, never the design). It is also recorded at the QG-4 boundary whenever a design document already exists on disk – spec-ready mode gives one for free. When `deep_review_gates = false` (`review_level = none`) and no spec design doc exists, no plan file is forced and `design_path` stays `-`, so those runs fall back to Phase 2 – which is cheap, because a Tier 1 run at that level is trivial by definition.
 
 ---
 
@@ -193,7 +194,7 @@ Resume restarts at the **earliest phase whose inputs can actually be reconstruct
 
 - the 13 phase items, `Phase 0: Pre-flight` through `Phase 12: Finalization`, verbatim
 - `QG-N quality gate` for N in 0-12
-- `QG-4a quality gate (lens review of design)`, `QG-4b quality gate (architecture acceptance)`, `QG-11a quality gate (lens review of implementation)`
+- `QG-4a quality gate (embedded design review)`, `QG-4b quality gate (architecture judgment)`, `QG-11a quality gate (embedded implementation review)`
 - a status of `pending`, `in_progress` or `completed`
 
 A non-matching item is dropped. **If any item fails, discard the snapshot entirely and rebuild the canonical list** from [progress-tracking.md](progress-tracking.md) with every gate item `pending` – a partially forged list is not a list to build a run on. The same rebuild applies when the snapshot is missing or malformed.
@@ -204,13 +205,9 @@ On an accepted snapshot: items at or after the resume phase are reset to `pendin
 
 ---
 
-## The mid-phase pause (`awaiting`)
+## No mid-phase pause (`awaiting` is always `none`)
 
-QG-4a and QG-11a pause **inside** their phase, at a turn boundary, waiting for a lens-review report path – not at a phase boundary. `last_passed_gate` cannot express that, so `awaiting` does, alongside `awaiting_target` and `awaiting_out`:
-
-- **Entering the pause:** immediately before ending the turn, write `awaiting: QG-4a:lens-report` (or `QG-11a:lens-report`) with the exact target and `--out` path that were printed. `last_passed_gate` stays at the last gate that actually passed (QG-4, or QG-10).
-- **Resuming into it:** re-enter that gate at its Step 2 and **re-derive the target and the `--out` path from the gate's own Step 1 logic under the current `LENS_DIR`** – do not replay the block's strings. Print the re-derived command and end the turn, unless the user's message already carries the report path, in which case go straight to Step 3 of that gate. The recorded `awaiting_target` / `awaiting_out` are used only to confirm that re-derivation produced the same paths; where they differ, the re-derived pair wins and the difference is mentioned in one line. This command is pasted by a human, so a block value must never reach it unverified. Do not re-run the phase from its start; the pause is not a phase boundary.
-- **Leaving the pause:** set `awaiting: none` when the gate reaches PASS or FAIL.
+The embedded reviews (QG-4a, QG-11a) are **autonomous agent fan-outs that run inline** – they never end the turn to wait for a user-pasted lens-review report. There is therefore **no mid-phase pause**, and `awaiting` is always `none`. The former `QG-4a:lens-report` / `QG-11a:lens-report` turn-boundary states, and the `awaiting_target` / `awaiting_out` strings that supported them, are removed; they are written as `-` for backward-compatible parsing and are never load-bearing. A resume re-enters at the phase boundary given by `last_passed_gate`, per "Which resume points are reconstructible".
 
 ---
 

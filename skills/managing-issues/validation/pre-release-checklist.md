@@ -22,7 +22,8 @@ Validate skill integrity before deployment. Score threshold: **18/20 items**.
 
 - [ ] All 16 gates defined: 13 phase gates (QG-0 through QG-12) plus the 3 sub-gates QG-4a, QG-4b, QG-11a
 - [ ] QG-0, QG-7, QG-9 marked as non-overridable; the 3 sub-gates non-skippable once the run's `review_level` puts them in scope
-- [ ] Each gate has explicit pass/fail criteria – Automated gates a concrete exit-code predicate, Checkpoint and User-Approval gates an `AskUserQuestion` call, User-Run Review gates a returned report path
+- [ ] Each gate has explicit pass/fail criteria – Automated and Judgment (non-blocking) gates a concrete predicate, Embedded Review gates a reviewer fan-out + judge outcome, the User-Approval gates (QG-11 UAT, QG-12) an `AskUserQuestion` call
+- [ ] Autonomy invariant holds: no pre-UAT *technical* gate calls `AskUserQuestion`; the only user interactions are Phase 2 requirements (Step 3), UAT (QG-11), QG-12 git confirmations, QG-0 public-repo consent, reviewer `needs_user_input`, and the resume confirmation
 - [ ] Retry logic (max 3) present in all phase files
 
 ## Section 4: Contract compliance

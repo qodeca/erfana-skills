@@ -24,7 +24,9 @@ The orchestrator MUST track these variables throughout the implementation:
 | `BASE_BRANCH` | QG-0 (Step 1) | Detected default branch (diff base, merge target). **Re-detected on every resume**, and a recorded value that differs rejects the block – it decides the pre-commit diff base and Phase 12's merge and push targets |
 | `RUN_BRANCH` | QG-0 | Feature branch created for this run |
 | `review_level` | QG-0 (Step 5d) | `full` / `design` / `none`. QG-4a and QG-4b run above `none` (the derived `deep_review_gates = true`); QG-11a runs at `full` only. Fixed at QG-0, never relaxed mid-run, and re-derived rather than read back on a resume |
-| `LENS_DIR` | QG-0 (Step 5e) | Untracked directory for lens-review `--out` reports |
+| `LENS_DIR` | QG-0 (Step 5e) | Untracked scratch directory for the run (UAT dev-server logs, review scratch) |
+| `embedded_loop_iter` | each embedded-review gate (QG-4a / QG-8 / QG-11a) | Fix-application round counter for that gate's review→fix→judge loop; init 0 at gate entry, `>= 3` stops the loop (Rule 14). **Session-local; never read back on a resume** – a resumed gate restarts its loop at 0 and re-reviews the working tree from scratch |
+| `judged_findings` | each embedded-review gate, during Step 5 | Set of finding keys (**file + category + description**) already ruled `not-worth-it` / `accept-as-tech-debt`; a re-emitted match is skipped, not re-judged (sticky verdicts, B5). **Session-local; never read back on a resume** |
 | `last_review_tree` | QG-8 (Quality Review) passes | **Tree** SHA snapshotting the working tree as reviewed. Session-local; **never read back on a resume** |
 | `uat_approved_tree` | QG-11 (UAT) passes | Tree SHA snapshotting what the user accepted. Session-local; **never read back on a resume** |
 | `changes_after_review` | Computed before Phase 12 | Boolean: the current working-tree snapshot differs from `uat_approved_tree` |
@@ -33,9 +35,9 @@ The orchestrator MUST track these variables throughout the implementation:
 | `STATE_COMMENT_ID` | QG-0 (comment created) | Id of the single run-state comment, edited in place thereafter |
 | `design_path` | QG-4a (Step 1) | Approved plan on disk – the input that decides how far back a resume must step |
 | `PLANNED_FILES` | QG-4, then extended at QG-5 / QG-10 / QG-11a | The run's changed-file list: every **file** path (never a directory) the plan named plus every path the implementation, test and documentation agents reported writing. Phase 12 stages exactly this list |
-| `awaiting` | QG-4a / QG-11a turn boundary | The mid-phase pause marker; `none` at every other point |
+| `awaiting` | (obsolete) | Always `none` – the embedded reviews run inline and create no mid-phase pause. Retained as a written key for backward-compatible parsing |
 
-Every variable above is persisted to the run-state comment described below, plus `tier`, `task_type`, `spec_maturity`, `has_ui_impact`, the three test-category commands, `test_harness_decisions` (Phase 4 Step 2a; **re-decided, not read back, on any resume into Phase 5 or later**) and a task-list snapshot.
+Every variable above is persisted to the run-state comment described below, plus `tier`, `task_type`, `spec_maturity`, `has_ui_impact`, the three test-category commands, `test_harness_decisions` (Phase 4 Step 2a; **re-decided, not read back, on any resume into Phase 5 or later**) and a task-list snapshot. **Exceptions — session-local, never written to the comment (or written only as `-`):** `last_review_tree`, `uat_approved_tree`, `embedded_loop_iter`, and `judged_findings`. They belong to the session that created them and are re-derived from scratch on a resume.
 
 ### They are recorded values, not live shell variables
 
@@ -87,9 +89,9 @@ integration_test_cmd: <command|absent>
 e2e_test_cmd: <command|absent>
 test_harness_decisions: <none required | unit=<build|descope|accept:"<justification>">; integration=...; e2e=...>
 last_passed_gate: <QG-N|QG-Na|none>
-awaiting: <none|QG-4a:lens-report|QG-11a:lens-report>
-awaiting_target: <target the printed lens-review command resolved|->
-awaiting_out: <--out path the printed command used|->
+awaiting: none
+awaiting_target: <->
+awaiting_out: <->
 last_review_tree: <always `-` - the snapshot is a session-local git object, never persisted>
 uat_approved_tree: <always `-` - same>
 gate_results: QG-0=<PASS|skipped|-> QG-1=... QG-2=... QG-3=... QG-4=... QG-4a=... QG-4b=... QG-5=... QG-6=... QG-7=... QG-8=... QG-9=... QG-10=... QG-11a=... QG-11=... QG-12=...
@@ -150,7 +152,7 @@ Then rewrite the block with `state_comment_id` filled in and PATCH it once, so a
 
 ### Updating in place (one comment per run)
 
-At every gate boundary – gate PASS, gate skip, and each of the two mid-phase pauses – refresh `updated_at`, `head_sha`, the changed fields, `gate_results` and `task_list_snapshot`, then:
+At every gate boundary – gate PASS and gate skip – refresh `updated_at`, `head_sha`, the changed fields, `gate_results` and `task_list_snapshot`, then:
 
 ```bash
 gh api --method PATCH "repos/{owner}/{repo}/issues/comments/$STATE_COMMENT_ID" -f body="$BLOCK"
@@ -257,7 +259,7 @@ IF changes_after_review == true:
             GOTO Phase 12 Entry Check
 ```
 
-The 3-iteration cap matches the skill-wide "max 3 retries per phase, then escalate" invariant — without it, fixes that themselves introduce changes could loop indefinitely.
+**`re_review_iterations` is one of three distinct iteration counters** (Rule 14a in [../operations/implement-rules.md](../operations/implement-rules.md)); it is **not** the same counter as an embedded-review gate's `embedded_loop_iter` or a gate's per-attempt retry cap. It counts **whole Phase-12 pre-commit re-review passes** (from 1) and caps at **3 iterations**; when a Phase-12 re-review invokes Phase 8, that Phase-8 run has its own `embedded_loop_iter` nested inside this pass. Without this cap, post-UAT fixes that themselves introduce changes could loop indefinitely.
 
 ---
 

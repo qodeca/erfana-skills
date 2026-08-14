@@ -144,7 +144,7 @@ Use `mi-docs-updater` agent for the actual file modifications.
 | Documentation Update | Files updated in docs/ folder |
 | Changed File List | Every file `mi-docs-updater` reported writing, appended to `PLANNED_FILES` (files only, never a directory) – Phase 12 stages exactly this list |
 | Documentation Decision | Which of the three predicate rows applied: surfaces affected, surfaces present but unaffected, or no surfaces detected |
-| Task List Advance | Phase 10 and `QG-10 quality gate` marked `completed`; Phase 11 `in_progress` with `QG-11a quality gate (lens review of implementation)` appended **before** `QG-11 quality gate` when `review_level = full`, `QG-11 quality gate` alone otherwise – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
+| Task List Advance | Phase 10 and `QG-10 quality gate` marked `completed`; Phase 11 `in_progress` with `QG-11a quality gate (embedded implementation review)` appended **before** `QG-11 quality gate` when `review_level = full`, `QG-11 quality gate` alone otherwise – see [../reference/progress-tracking.md](../reference/progress-tracking.md) |
 
 ---
 
@@ -263,7 +263,7 @@ The link loop runs in this shell (no pipe into `while`), so `fail` survives and 
 
 **QG-10 = PASS required to proceed to Phase 11: UAT**
 
-**Task list:** on PASS, mark `QG-10 quality gate` then `Phase 10: Documentation` `completed`, set `Phase 11: UAT` `in_progress`, and append the gate items for Phase 11 as `pending` – **when `review_level = full`, `QG-11a quality gate (lens review of implementation)` first, then `QG-11 quality gate`**; QG-11a is a pre-step and must sit above QG-11. At any other `review_level`, append `QG-11 quality gate` alone ([progress-tracking](../reference/progress-tracking.md)).
+**Task list:** on PASS, mark `QG-10 quality gate` then `Phase 10: Documentation` `completed`, set `Phase 11: UAT` `in_progress`, and append the gate items for Phase 11 as `pending` – **when `review_level = full`, `QG-11a quality gate (embedded implementation review)` first, then `QG-11 quality gate`**; QG-11a is a pre-step and must sit above QG-11. At any other `review_level`, append `QG-11 quality gate` alone ([progress-tracking](../reference/progress-tracking.md)).
 
 **Run state:** record `QG-10=PASS`, refresh `head_sha` / `updated_at` / the task-list snapshot, and PATCH the run-state comment ([post-review-tracking](../reference/post-review-tracking.md) – "Updating in place"). A failed write never fails the gate.
 

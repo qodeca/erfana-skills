@@ -20,26 +20,26 @@ Detailed examples showing workflows for each operation.
 
 ### Implement Operation Quality Gates
 
-| Quality Gate | Phase | Tier 1 | Tier 2 | Can Override |
+| Quality Gate | Phase | Tier 1 | Tier 2 | Blocks user? |
 |--------------|-------|--------|--------|--------------|
-| QG-0: Pre-flight | 0 | Mandatory | Mandatory | **NO** |
-| QG-1: Agent Selection | 1 | Automated | Automated | Yes |
-| QG-2: Business Analysis | 2 | Automated | Checkpoint | Yes |
-| QG-3: Discovery | 3 | Automated | Checkpoint | Yes |
-| QG-4: Architecture | 4 | User-Approval | User-Approval | Yes |
-| QG-4a: Design lens review | 4 | Skipped | User-Run Review (`full` / `design`) | **NO** (once in scope) |
-| QG-4b: Architecture acceptance | 4 | Skipped | User-Approval (`full` / `design`) | **NO** (once in scope) |
-| QG-5: Implementation | 5 | Automated | Automated | Yes |
-| QG-6: Architectural Review | 6 | Automated | Checkpoint | Yes |
-| QG-7: Security | 7 | Mandatory | Mandatory | **NO** |
-| QG-8: Quality Review | 8 | Automated | Checkpoint | Yes |
-| QG-9: Verification | 9 | Mandatory | Mandatory | **NO** |
-| QG-10: Documentation | 10 | Automated | Automated | Yes |
-| QG-11a: Implementation lens review | 11 | Skipped | User-Run Review (`full` only) | **NO** (once in scope) |
-| QG-11: UAT | 11 | Automated | User-Approval | Yes |
-| QG-12: Finalization | 12 | User-Approval | User-Approval | Yes |
+| QG-0: Pre-flight | 0 | Mandatory | Mandatory | No |
+| QG-1: Agent Selection | 1 | Automated | Automated | No |
+| QG-2: Business Analysis | 2 | Automated | Judgment (non-blocking) | No |
+| QG-3: Discovery | 3 | Automated | Judgment (non-blocking) | No |
+| QG-4: Architecture | 4 | Judgment (non-blocking) | Judgment (non-blocking) | No |
+| QG-4a: Design review | 4 | Skipped | Embedded Review (`full` / `design`) | No |
+| QG-4b: Architecture judgment | 4 | Skipped | Judgment (`full` / `design`) | No |
+| QG-5: Implementation | 5 | Automated | Automated | No |
+| QG-6: Architectural Review | 6 | Automated | Judgment (non-blocking) | No |
+| QG-7: Security | 7 | Mandatory | Mandatory | No |
+| QG-8: Quality Review | 8 | Automated | Embedded Review-and-Fix | No |
+| QG-9: Verification | 9 | Mandatory | Mandatory | No |
+| QG-10: Documentation | 10 | Automated | Automated | No |
+| QG-11a: Implementation review | 11 | Skipped | Embedded Review-and-Fix (`full` only) | No |
+| QG-11: UAT | 11 | Automated | **User-Approval** | **YES – UAT acceptance** |
+| QG-12: Finalization | 12 | User-Approval | User-Approval | YES (confirms git actions) |
 
-**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping. The table lists **13 phase gates plus 3 sub-gates**; the sub-gates run inside Phases 4 and 11 per the `review_level` chosen at QG-0 (Tier 2 is asked, default `full`; Tier 1 gets `none`) and add no phases. **User-Run Review** means the *user* runs `/erfana:lens-review` and returns the report path – the orchestrator never invokes it. Canonical definitions: [operations/implement.md](operations/implement.md).
+**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping. No pre-UAT technical gate blocks on the user – **QG-11 (UAT) and QG-12 (git actions) are the User-Approval gates**; Phase 2 Step 3 may separately ask a requirements (product/scope) question, never a technical one. The 3 sub-gates run inside Phases 4 and 11 per the `review_level` chosen at QG-0 (Tier 2 is asked, default `full`; Tier 1 gets `none`) and add no phases. **Embedded Review** means the skill fans out its own reviewer agents and a judge triages the findings – it never invokes `/erfana:lens-review`. Canonical definitions: [operations/implement.md](operations/implement.md).
 
 ### Create Operation Checkpoints
 
@@ -132,7 +132,7 @@ Detailed examples showing workflows for each operation.
 - QG-0: Pre-flight → Tier 2 (3 acceptance criteria)
 - QG-1: Agent Selection → Dynamic capability matching
 - QG-2-3: Analyze + Discover → Theme patterns, affected files
-- QG-4: Architecture → Design toggle + context → **USER APPROVAL**
+- QG-4: Architecture → Design toggle + context → recorded (non-blocking); QG-4a/4b embedded review + judge
 - QG-5: Implementation → Code + tests (software-developer, test-writer)
 - QG-6: Architecture Review → SOLID check (architecture-reviewer)
 - QG-7: Security → Scan (security-auditor) → **MANDATORY**
