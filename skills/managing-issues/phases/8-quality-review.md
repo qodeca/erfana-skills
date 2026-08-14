@@ -1,9 +1,11 @@
-# Phase 8: Implementation quality review
+# Phase 8: Implementation quality review-and-fix
 
-**Goal:** Code quality assessment using 2025 industry standards.
-**Agents:** `code-reviewer`, `architecture-reviewer`
-**Quality Gate:** QG-8 (Checkpoint for T2, Automated for T1)
-**Reference:** `../reference/code-review-standards-2025.md`
+**Goal:** Code quality assessment **and fix** using 2025 industry standards.
+**Agents:** `code-reviewer`, `architecture-reviewer`, `security-auditor`, `test-writer` (parallel fan-out); `mi-solution-designer` (judge)
+**Quality Gate:** QG-8 (Embedded Review-and-Fix – non-blocking, ALL tiers)
+**Reference:** `../reference/code-review-standards-2025.md`, `../reference/embedded-review-and-fix.md`
+
+**Autonomous phase.** QG-8 reviews the implementation **and fixes what should be fixed** – it is no longer report-only, and it issues no blocking `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13). CRITICAL/HIGH findings are auto-fixed and re-verified inline; MEDIUM/LOW go to the judge. Protocol: [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md).
 
 ---
 
@@ -25,9 +27,9 @@
 
 **QG-8 scope:** Code quality exclusively. Plan conformance and acceptance criteria verification belong to QG-9.
 
-### Step 1: Invoke review agent
+### Step 1: Fan out the reviewers (parallel)
 
-**MANDATORY: Use `code-reviewer` agent for all reviews.**
+**Dispatch the reviewer fan-out in parallel** – single message, multiple `Task` calls – using the 4-agent pattern (`code-reviewer`, `architecture-reviewer`, `security-auditor`, `test-writer`; add `ux-reviewer` when `has_ui_impact = true`) under the concurrency cap in [../reference/parallel-review.md](../reference/parallel-review.md). Each reviewer gets the self-contained payload and returns severity-ranked findings; a reviewer runs a web best-practices lookup only on a genuine unknown ([../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md) Step 2b). `code-reviewer` is the primary code-quality lens and runs its full dimension pass:
 
 ```
 Invoke code-reviewer with:
@@ -223,18 +225,18 @@ Invoke `ux-reviewer` agent for UX audit:
 
 **Note:** UX findings merge into the same severity resolution flow as code-reviewer findings (Step 9). No separate resolution path.
 
-### Step 9: Address findings
+### Step 9: Review-and-fix by severity (fix authority)
 
-**By severity (MANDATORY resolution rules):**
+QG-8 **fixes** what should be fixed, it does not merely report. Apply the fix authority from [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md) to the consolidated findings (code-reviewer + fan-out + UX):
 
-| Severity | Tier 1 | Tier 2 |
-|----------|--------|--------|
-| CRITICAL | MUST fix | MUST fix |
-| HIGH | Document | MUST fix |
-| MEDIUM | Document | Should fix or document |
-| LOW | Optional | Optional |
+**Normalize severity first (fail-safe):** any finding whose severity is missing, empty, or off-vocabulary (`severe`, `warning`, `blocker`, `nit`, a number, …) is treated as **CRITICAL** — a finding never falls through this table and is never silently dropped ([../reference/parallel-review.md](../reference/parallel-review.md) consolidation rules).
 
-**CRITICAL issues are BLOCKING - no override allowed.**
+| Normalized severity | Action |
+|----------|--------|
+| **CRITICAL / HIGH** | **Auto-fixed and re-verified inline.** Implementation agents (`software-developer`, `test-writer`) apply the fix; the orchestrator never edits. Re-run the relevant check before marking resolved. Never routed to the judge. These fixes are post-review changes → re-review per the matrix in [../reference/post-review-tracking.md](../reference/post-review-tracking.md) and re-snapshot `last_review_tree` |
+| **MEDIUM / LOW** | **NOT auto-applied.** Routed to `mi-solution-designer` JUDGE mode (`{findings[], diff}`), which rules each one **fix / accept-as-tech-debt / not-worth-it**; a finding already ruled `not-worth-it` / `accept-as-tech-debt` this run is not re-judged (sticky). Only `fix` verdicts create more work – this prevents gold-plating |
+
+The whole review→fix→judge loop is bounded by **`embedded_loop_iter`** — max 3 fix-application rounds, distinct from the per-gate retry cap and the Phase-12 re-review cap (implement-rules Rule 14/14a; [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md) Step 6). Each fix-application round (including an inline re-verify that surfaces a new finding) increments it. **At the cap: unresolved CRITICAL/HIGH → ESCALATE to the user or abort (never recorded as tech debt); unresolved MEDIUM/LOW → recorded as accepted tech debt.** No silent override of a live CRITICAL.
 
 ---
 
@@ -256,13 +258,13 @@ Invoke `ux-reviewer` agent for UX audit:
 
 ## Quality Gate
 
-**Success criterion:** Code-reviewer status is `approved` or `changes_requested` (not `blocked`); 0 CRITICAL issues; HIGH issues addressed (T2) or documented (T1); coverage and complexity thresholds met **where the tooling exists to measure them**, recorded as `not measured` where it does not. PRE/POST-STEP scaffolding stripped per v4.2.0 patterns – Phase 8 is read-only review; QG-8 below enforces the pass criteria.
+**Success criterion:** After review-and-fix, code-reviewer status is `approved` or `changes_requested` (not `blocked`); 0 unresolved CRITICAL issues; CRITICAL/HIGH findings auto-fixed and re-verified; MEDIUM/LOW judged; coverage and complexity thresholds met **where the tooling exists to measure them**, recorded as `not measured` where it does not. QG-8 is now review-**and-fix** (not read-only); it is non-blocking and enforces the pass criteria below.
 
 ---
 
 ## QUALITY GATE: QG-8
 
-**Gate Type:** Checkpoint (T2) | Automated (T1)
+**Gate Type:** Embedded Review-and-Fix (non-blocking, ALL tiers)
 **Gate ID:** QG-8
 
 ### Pass Criteria
@@ -279,15 +281,16 @@ Invoke `ux-reviewer` agent for UX audit:
 | Branch coverage | ≥60% | ≥70% | YES when measured |
 | Design tokens (if UI/CSS) | No hardcoded values | No hardcoded values | If applicable |
 | UX audit (if UI) | Report present, 0 CRITICAL | Report present, 0 CRITICAL | If `has_ui_impact = true` |
-| User checkpoint | Not required | Required | N/A |
+| User checkpoint | None (non-blocking) | None (non-blocking) | N/A |
+| CRIT/HIGH auto-fixed | All resolved and re-verified inline; MED/LOW judged | Same | YES |
 | Reviewed tree recorded | `last_review_tree` = a fresh working-tree snapshot (not `git rev-parse HEAD`) | Same | YES |
 | Task list advanced | `QG-8` + `Phase 8` `completed`, `Phase 9: Verification` `in_progress`, `QG-9` appended `pending` | Same | YES |
 
 **Complexity and coverage rows** are blocking only when the project ships the tooling that produces the number (Steps 5-6 measure-or-declare rule). With no analyser or reporter present, record `not measured` – that is a pass, not a silent assertion that the threshold held. **UX audit** is N/A only when `has_ui_impact = false`. On a true flag a missing Step 8b report fails QG-8 – "no report" is not "pass". **Design tokens** row applies only when the changeset touches UI or CSS (Step 8).
 
-### Tier 2 Checkpoint
+### Phase summary (recorded, not a prompt)
 
-Present to user:
+Record the review-and-fix outcome and emit a one-line status summary (reviewers run, findings by severity, auto-fixed count, judge verdicts, iterations used):
 
 ```markdown
 ## Implementation Quality Review - 2025 Standards
@@ -370,33 +373,16 @@ Present to user:
 **Reference:** [Code Review Standards 2025](../reference/code-review-standards-2025.md)
 ```
 
-### Gate call (tier-conditional)
+### Gate evaluation (non-blocking, ALL tiers)
 
-**Tier 2 – MUST call `AskUserQuestion`.** Presenting the report above is not the gate; the gate is this call. Do not proceed on printed prose.
+**QG-8 does NOT call `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13).** After the review-and-fix loop (Step 9) has run, evaluate this predicate on both tiers, reading tool output and the code-reviewer's structured result:
 
-```
-AskUserQuestion({
-  questions: [{
-    question: "Quality review is complete. Proceed to Verification?",
-    header: "QG-8",
-    options: [
-      { label: "Approve", description: "The findings are acceptable - continue to Phase 9 (Verification)" },
-      { label: "Address Issues First", description: "Fix the flagged findings and re-review before Verification runs" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-`Approve` → QG-8 = PASS. `Address Issues First` → QG-8 = FAIL; follow On FAIL below, then re-present.
-
-**Tier 1 – no user call.** Evaluate this predicate instead, reading tool output and the code-reviewer's structured result:
-
-- Code-reviewer status is not `blocked`, and its CRITICAL-severity count is 0, and
+- Code-reviewer status is not `blocked`, and its **unresolved** CRITICAL-severity count is 0 (CRITICAL/HIGH were auto-fixed in Step 9), and
+- every MEDIUM/LOW finding has a judge verdict, and
 - detected `TEST_CMD` and `TYPECHECK_CMD` exit 0 (or none detected), and
-- when the project has coverage tooling: reported line coverage ≥70% and branch coverage ≥60%.
+- when the project has coverage tooling: reported line coverage ≥70% (T1) / ≥80% (T2) and branch coverage ≥60% (T1) / ≥70% (T2).
 
-Pass only when all applicable clauses hold; otherwise QG-8 = FAIL. **Advisory on Tier 1 (non-blocking, document only):** HIGH/MEDIUM findings, SOLID violations, code smells, and – when no coverage tooling is detected – the coverage rows. Coverage cannot be honestly asserted without a coverage reporter, so record "not measured" rather than treating the thresholds as met.
+Pass only when all applicable clauses hold; otherwise QG-8 = FAIL (the loop iterates, bounded by `embedded_loop_iter` at 3 rounds, then escalates unresolved CRITICAL/HIGH). **Recorded, not blocking:** SOLID violations, code smells, and – when no coverage tooling is detected – the coverage rows (record "not measured", never assert the threshold was met).
 
 ### Result
 

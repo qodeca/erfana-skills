@@ -1,14 +1,15 @@
 # Parallel review protocol
 
-Defines how to dispatch multiple review agents simultaneously and consolidate findings into a unified action plan. Used by Phase 11 (UAT) multi-agent review and optionally by Phase 8 (Quality Review).
+Defines how to dispatch multiple review agents simultaneously and consolidate findings into a unified action plan. Used by the embedded review-and-fix protocol ([embedded-review-and-fix.md](embedded-review-and-fix.md)) at Phase 4 (QG-4a design review), Phase 8 (QG-8 quality review-and-fix) and Phase 11 (QG-11a pre-UAT review-and-fix).
 
 ---
 
 ## When to use
 
-- At UAT (Phase 11) when user requests a multi-agent review
-- At Quality Review (Phase 8) for complex implementations (user opt-in)
-- When 5+ files changed or 3+ acceptance criteria in Tier 2
+- At QG-4a (Phase 4) for the embedded design review fan-out
+- At QG-8 (Phase 8) for the embedded implementation review-and-fix
+- At QG-11a (Phase 11) for the embedded pre-UAT review-and-fix
+- Autonomously (no user opt-in) – the embedded protocol runs these on every applicable `review_level`
 
 ---
 
@@ -58,31 +59,29 @@ Each reviewer returns findings as:
 
 ---
 
-## Severity mapping for user-run lens reviews (QG-4a, QG-11a)
+## Fix authority for the embedded reviews (QG-4a, QG-8, QG-11a)
 
-QG-4a and QG-11a consume a `/erfana:lens-review` report, which uses reader-facing labels. Map them onto the ladder above before consolidating – there is no second scheme:
+The embedded reviews fan out the operation's own reviewer agents (not `/erfana:lens-review`), which already return the ladder severities above. Once consolidated, the fix authority in [embedded-review-and-fix.md](embedded-review-and-fix.md) applies:
 
-| lens-review label | Underlying engineering severity | Ladder severity | Action class |
-|---|---|---|---|
-| Must-fix | `blocker` | critical | MUST FIX |
-| Should-fix | `major` | high | MUST FIX |
-| Nice-to-fix | `minor` | medium | SHOULD FIX |
-| Cosmetic | `nit` | low | TECH DEBT |
+| Ladder severity | Action class | Authority |
+|---|---|---|
+| critical / high | MUST FIX | Auto-fixed and re-verified inline |
+| medium / low | JUDGE | Routed to `mi-solution-designer`: fix / accept-as-tech-debt / not-worth-it |
 
-Once mapped, the consolidation rules below apply unchanged. At QG-4a and QG-11a every MUST FIX finding is resolved before the gate passes – those gates have no skip option.
+Every CRITICAL/HIGH finding is resolved (or escalated after the `embedded_loop_iter` cap of 3 rounds — never recorded as tech debt) before the gate passes; MEDIUM/LOW are decided by the judge, never gold-plated.
 
 ---
 
 ## Consolidation rules
 
 1. **Deduplicate:** Same finding from multiple reviewers --> keep highest severity, note all reviewers
-2. **Renumber:** Assign unified IDs F1-FN after deduplication
-3. **Contradictions:** Reviewers cannot call AskUserQuestion, so a reviewer that hits a contradiction or an ambiguous call returns `needs_user_input` (per SKILL.md rule 7) rather than resolving it internally. The orchestrator consolidates those, presents both sides with context via AskUserQuestion, and the user decides — the reviewer never silently picks a side.
-4. **Prioritize:** Sort by severity (critical --> high --> medium --> low)
-5. **Categorize actions:**
-   - **MUST FIX:** Critical and high findings --> address before proceeding
-   - **SHOULD FIX:** Medium findings --> address if time permits, otherwise document as tech debt
-   - **TECH DEBT:** Low findings --> document for future improvement
+2. **Normalize severity (fail-safe – never drop a finding):** map each finding's severity to exactly one of `{critical, high, medium, low}` (case-insensitive). **Any severity that is missing, empty, or off-vocabulary (`severe`, `warning`, `blocker`, `nit`, a number, …) becomes `critical`.** A finding with an unrecognized severity is never silently dropped and never falls through the fix-authority routing — it is escalated to the safest bucket. Run this before prioritization and before any fix-authority routing.
+3. **Renumber:** Assign unified IDs F1-FN after deduplication
+4. **Contradictions:** Reviewers cannot call AskUserQuestion, so a reviewer that hits a genuine contradiction (not a technical choice it can make itself) returns `needs_user_input` (per SKILL.md rule 7) rather than resolving it internally. The orchestrator consolidates those, presents both sides with context via AskUserQuestion, and the user decides — the reviewer never silently picks a side, and never raises a technical/architecture question this way.
+5. **Prioritize:** Sort by normalized severity (critical --> high --> medium --> low)
+6. **Categorize actions:**
+   - **MUST FIX:** Critical and high findings --> auto-fixed and re-verified inline; never routed to the judge
+   - **JUDGE:** Medium and low findings --> routed to the `mi-solution-designer` judge (fix / accept-as-tech-debt / not-worth-it)
 
 ---
 
@@ -100,13 +99,13 @@ Present a consolidated table to the user:
 
 ---
 
-## Post-consolidation workflow
+## Post-consolidation workflow (autonomous)
 
-1. User reviews unified findings
-2. Address all MUST FIX items (create implementation plan if needed)
-3. After fixes: re-run affected reviewers on changed files only (delta review)
-4. When all MUST FIX resolved --> proceed to manual UAT testing
-5. SHOULD FIX items --> address or document as tech debt
+1. Record the unified findings and emit a one-line summary (no user prompt)
+2. Normalize severities (rule 2 above), then auto-fix all CRITICAL/HIGH items via the implementation agents and re-verify
+3. Route MEDIUM/LOW items to the judge (`mi-solution-designer` JUDGE mode): fix / accept-as-tech-debt / not-worth-it. Skip any finding already ruled `not-worth-it` / `accept-as-tech-debt` this run (sticky verdicts)
+4. After fixes: re-run affected reviewers on changed files only (delta review). Each fix-application round increments `embedded_loop_iter`, bounded at 3 rounds ([embedded-review-and-fix.md](embedded-review-and-fix.md) Step 6)
+5. At convergence (no unresolved CRITICAL/HIGH, every MEDIUM/LOW judged) the gate passes; at the cap, unresolved CRITICAL/HIGH escalates (never tech debt), unresolved MEDIUM/LOW is recorded as tech debt
 
 ---
 

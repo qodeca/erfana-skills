@@ -62,24 +62,20 @@ Dynamically select agents for all subsequent phases based on capability matching
      none     – no required capability covered
      ```
    - The `score` field `mi-agent-matcher` returns is an advisory ranking signal for ordering candidates within a coverage class; never a reported confidence figure or a gate threshold
-   - Apply selection rules:
-     - Full coverage → auto-select, inform user
-     - Partial coverage → present options, user picks
-     - No coverage → fallback to direct execution (if phase allows) or escalate
+   - Apply selection rules (autonomous, non-blocking – SKILL.md rule 16):
+     - Full coverage → auto-select, record it
+     - Partial coverage → auto-select the best-scoring candidate (or default-map agent), record the choice + rationale
+     - No coverage → fall back to direct execution (if phase allows) or the best general-purpose / default agent, record the fallback
 
-3. **Present selection plan**
-   If any phase lacks a full-coverage match:
-   ```
-   Use AskUserQuestion to let user pick from options
-   ```
+3. **Record the selection plan**
+   No user prompt. Auto-decide every phase and record a one-line summary; escalate via `needs_user_input` only on a genuine rule-7 contradiction (a hard-required capability no agent can cover).
 
 4. **Store selections**
    Cache agent selections for use in subsequent phases
 
-**Quality Gate QG-1:**
+**Quality Gate QG-1 (Automated, non-blocking):**
 - [ ] All phases have agent selection (agent assigned or allow_direct=true)
-- [ ] User informed of auto-selections (full-coverage matches)
-- [ ] User confirmed edge cases (partial or no coverage)
+- [ ] Auto-selections and any fallbacks recorded in the phase summary
 - [ ] Selection plan stored for subsequent phases
 
 **Context-aware matching:**
@@ -98,7 +94,7 @@ Dynamically select agents for all subsequent phases based on capability matching
 | Input Conditions | QG-1 = PASS |
 | Agent | *selected at 1* |
 | Output Artifacts | Research summary, requirements document, filled requirements-clarification template |
-| Quality Gate | QG-2 (Checkpoint for T2, Automated for T1) |
+| Quality Gate | QG-2 (Judgment – non-blocking) |
 
 **Quick Summary:**
 - Research prior art
@@ -115,7 +111,7 @@ Dynamically select agents for all subsequent phases based on capability matching
 | Input Conditions | QG-2 = PASS |
 | Agent | *selected at 1* |
 | Output Artifacts | Affected files list, patterns found, complexity confirmation, re-evaluated `has_ui_impact`, filled research-summary template |
-| Quality Gate | QG-3 (Checkpoint for T2, Automated for T1) |
+| Quality Gate | QG-3 (Judgment – non-blocking) |
 
 **Quick Summary:**
 - Identify affected code areas
@@ -131,15 +127,15 @@ Dynamically select agents for all subsequent phases based on capability matching
 |-----------|-------|
 | Input Conditions | QG-3 = PASS |
 | Agent | *selected at 1* |
-| Output Artifacts | Implementation plan, test strategy, risk register, UX specification (when `has_ui_impact = true`), lens review report + finding resolution record + architecture acceptance (when `deep_review_gates = true`) |
-| Quality Gates | QG-4 (User-Approval), then QG-4a (User-Run Review) and QG-4b (User-Approval) when `deep_review_gates = true` |
+| Output Artifacts | Implementation plan, test strategy, risk register, UX specification (when `has_ui_impact = true`), embedded design-review findings + resolution record + judgment record (when `deep_review_gates = true`) |
+| Quality Gates | QG-4 (Judgment – non-blocking), then QG-4a (Embedded Review) and QG-4b (Judgment) when `deep_review_gates = true` |
 
 **Quick Summary:**
 - Design implementation approach
 - Architect verifies plan completeness
-- User approves plan before implementation
-- QG-4a: user runs `/erfana:lens-review` over the design; must-fix findings are resolved
-- QG-4b: user accepts the reviewed architecture (runs on every pass, including a clean review)
+- Plan recorded (non-blocking) – the run does not wait for user approval
+- QG-4a: embedded parallel reviewer fan-out over the design; CRITICAL/HIGH auto-fixed, MED/LOW judged
+- QG-4b: internal judgment checkpoint – the judge triages findings; unresolved MUST-FIX trigger an automatic design revision (embedded_loop_iter, max 3 rounds). No user gate
 
 ---
 
@@ -168,7 +164,7 @@ Dynamically select agents for all subsequent phases based on capability matching
 | Input Conditions | QG-5 = PASS |
 | Agent | *selected at 1* |
 | Output Artifacts | Architecture assessment |
-| Quality Gate | QG-6 (Checkpoint for T2, Automated for T1) |
+| Quality Gate | QG-6 (Judgment – non-blocking) |
 
 **Quick Summary:**
 - Validate SOLID principles
@@ -203,7 +199,7 @@ Dynamically select agents for all subsequent phases based on capability matching
 | Input Conditions | QG-7 = PASS |
 | Agent | *selected at 1* |
 | Output Artifacts | Quality assessment, UX audit report (when `has_ui_impact = true`) |
-| Quality Gate | QG-8 (Checkpoint for T2, Automated for T1) |
+| Quality Gate | QG-8 (Embedded Review-and-Fix – non-blocking) |
 
 **Quick Summary:**
 - Code smell detection
@@ -254,11 +250,11 @@ Dynamically select agents for all subsequent phases based on capability matching
 |-----------|-------|
 | Input Conditions | QG-10 = PASS |
 | Agent | - (manual) |
-| Output Artifacts | User confirmation, `uat_approved_tree` snapshot, lens review report + finding resolution record (when `review_level = full`) |
-| Quality Gates | QG-11a (User-Run Review, pre-step) when `review_level = full`, then QG-11 (User-Approval for T2, Automated for T1) |
+| Output Artifacts | User confirmation, `uat_approved_tree` snapshot, embedded review-and-fix findings + resolution record (when `review_level = full`) |
+| Quality Gates | QG-11a (Embedded Review-and-Fix, pre-step) when `review_level = full`, then QG-11 (User-Approval for T2, Automated for T1) – **QG-11 is the human acceptance gate; QG-12 then confirms the git actions** |
 
 **Quick Summary:**
-- QG-11a: user runs `/erfana:lens-review` over the whole change set, after every other gate has passed; must-fix findings are fixed and the fixes go back through the re-review matrix
+- QG-11a: embedded review-AND-fix fan-out over the whole change set, after every other gate has passed; CRITICAL/HIGH auto-fixed, MED/LOW judged, fixes go back through the re-review matrix
 - Build project
 - User manually tests
 - Verify acceptance criteria

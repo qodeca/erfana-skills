@@ -29,27 +29,30 @@ Operation-specific NOTs:
 
 ---
 
-## Interactive-only operation
+## Autonomous operation
 
-**The Implement operation cannot complete without a human in the loop, and does not attempt to.** It is interactive by construction:
+**The Implement operation makes no architecture/technical decision by asking.** Like an experienced developer working an issue end to end, it designs, builds, reviews and fixes on its own — resolving every technical choice by best practice + conditional web research + judgment. It **does** clarify *requirements* (what the change should do) with the user; it never asks *how* to build it.
 
-- QG-4, QG-4b, QG-11 (T2) and QG-12 are satisfied only by an `AskUserQuestion` call and an actual answer; QG-2, QG-3, QG-6, QG-8 and QG-9's Definition-of-Done confirmation add more on Tier 2. Phase 2 Step 3's requirements questionnaire blocks on **both** tiers.
-- QG-4a and QG-11a go further: they **end the turn** and wait for a human to run `/erfana:lens-review` and return a report path. No tool call can substitute.
+- **Every pre-UAT technical gate is non-blocking** – QG-3, QG-4, QG-4b, QG-6, QG-8, and QG-9's Definition-of-Done confirmation – evaluated against agent output, recorded, summarised in one line, and the run proceeds. The plan and architecture are produced and recorded but not gated on a reply (SKILL.md rule 16; implement-rules Rule 13).
+- QG-4a, QG-8 and QG-11a are **embedded autonomous reviews**: the skill fans out its own reviewer agents in parallel and a judgment step (`mi-solution-designer` JUDGE mode) triages the findings. None ends the turn, none invokes `/erfana:lens-review` (SKILL.md rule 15; implement-rules Rule 12). Protocol: [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md).
+- QG-0 does **not** prompt for task-type or review-level – both are auto-inferred and recorded.
 
-**Stop count, counted from the phase files.** "Unconditional" means it happens on every run at that tier and level; "realistic" adds the conditionals a default repo actually hits. Both figures are given because either alone misleads.
+**Stop count — the complete list of interactions that can reach the user.** Every prompt this operation can raise, exhaustively:
 
-| Run | Unconditional | Realistic |
+| # | Interaction | When it fires |
 |---|---|---|
-| Tier 1 (trivial) | **4** – the Phase 2 questionnaire, QG-4 plan approval, the QG-12 commit approval, the QG-12 branch decision | +1 each for: a public repo (run-state consent), labels that do not pin the task type, and every blocking test category with no harness |
-| Tier 2 at `review_level = full` | **14** – 12 blocking prompts plus the 2 turn-ending lens checkpoints (QG-4a, QG-11a) | **17** on the common default: unlabeled issue (+task type), public repo (+consent), no e2e harness (+one harness decision) |
-| Tier 2 at `design` | 13 – as `full`, without the QG-11a checkpoint | 16 on the same default |
-| Tier 2 at `none` | 11 – as `full`, without QG-4b and both lens checkpoints | 14 on the same default |
+| 1 | **Phase 2 requirements clarification** (Step 3) | Conditional – only when a genuine product/scope/acceptance-criteria ambiguity remains (often none on Tier 1); never technical |
+| 2 | **QG-0 public-repo run-state consent** | Conditional – public repo + persistence available |
+| 3 | **UAT (QG-11)** | Unconditional on Tier 2 (Tier 1 reduces to an automated liveness predicate) |
+| 4 | **QG-12 commit confirmation** | Unconditional (fronts the first irreversible git action) |
+| 5 | **QG-12 branch decision** | Unconditional (merge / push / delete) |
+| 6 | **Reviewer `needs_user_input`** | Conditional – a genuine contradiction only (SKILL.md rule 7) |
+| 7 | **Resume-point confirmation** | Conditional – only on a resumed run |
+| 8 | **Gate escalation after the retry cap** | Conditional – a gate that will not pass after its retries |
 
-The 12 unconditional Tier 2 prompts are: the QG-0 review-level question, the Phase 2 questionnaire, QG-2, QG-3, QG-4, QG-4b, QG-6, QG-8, QG-9's Definition-of-Done confirmation, QG-11, the QG-12 commit approval and the QG-12 branch decision. **Phase 11 offers two more interactions on top** – the optional multi-agent review before manual testing (Step 3b), and the early-UAT choice when every acceptance criterion already has an automated test – so a typical Tier 2 run lands at **18-19**. A resumed run adds the resume confirmation, and one question per blocking test category still undecided.
+Nothing else prompts: QG-4/QG-4a/QG-4b/QG-6/QG-8/QG-11a and the QG-0 task-type/review-level choices are all autonomous. A typical Tier 2 run stops at 3-5 (UAT + the two QG-12 confirmations, plus a requirements question and public-repo consent where they apply); a clean Tier 1 run can stop only at QG-12.
 
 **The `@claude` auto-implement on-ramp does not drive this operation.** The "Ready for @claude to implement" checkbox in this skill's own issue-template forms ([../templates/create/bug-report.yml](../templates/create/bug-report.yml), [../templates/create/enhancement.yml](../templates/create/enhancement.yml)) – which are reference forms for consuming repos, not this repo's `.github/ISSUE_TEMPLATE/` – and the `@claude` marker documented in [../reference/claude-code-friendly-issues.md](../reference/claude-code-friendly-issues.md) trigger a repo's Claude Code GitHub Actions workflow, which is headless. That workflow may implement an issue its own way; it does **not** run these 13 phases. Treat the marker as issue-routing metadata, not as an entry point into this operation.
-
-**Pre-flight refuses a detected non-interactive run** (Phase 0 Step 0) rather than starting phases it cannot finish, then stalling mid-run on a prompt nobody can answer. That check is a best-effort early exit on CI environment signals, not a security control: a headless local run (`claude -p`) sets no such signal, so the documented stance above is the binding one.
 
 ---
 
@@ -75,8 +78,8 @@ No persisted block, or a rejected one, means a normal run from Phase 0.
 |-----------|-------|
 | Phases | 13 (0-12) |
 | Tiers | 2 (Trivial, Standard) |
-| Quality Gates | 13 phase gates (QG-0 through QG-12) plus 3 sub-gates (QG-4a, QG-4b, QG-11a) per the run's `review_level` |
-| Session | Interactive only – see "Interactive-only operation" below |
+| Quality Gates | 13 phase gates (QG-0 through QG-12) plus 3 embedded review sub-gates (QG-4a, QG-4b, QG-11a) per the run's `review_level` |
+| Session | Autonomous through UAT – see "Autonomous operation" below. Sole human stop: QG-11 (UAT); QG-12 confirms irreversible git actions |
 | Agents | Dynamic selection from builtin, shared, dedicated sources |
 
 ---
@@ -122,7 +125,7 @@ Spec-ready mode activates when ALL of the following are true:
 - ALL 13 phases still execute (depth changes, not skipping)
 - ALL quality gates still apply (QG-0 through QG-12)
 - ALL mandatory gates remain non-overridable (QG-0, QG-7, QG-9)
-- QG-4 (User-Approval) still required in both modes
+- QG-4 (non-blocking judgment gate) still runs in both modes – plan produced and recorded, no user approval
 - Tier still determines checkpoint frequency (T1 = automated, T2 = manual)
 - If validation fails at any phase, seamless fallback to full discovery mode
 
@@ -143,17 +146,17 @@ Spec-ready mode activates when ALL of the following are true:
 |-------|------|----------|--------------|-----------|
 | 0 | Pre-flight | - | QG-0 | Mandatory |
 | 1 | Agent Selection | discover-agents, match-agents | QG-1 | Automated |
-| 2 | Business Analysis | *selected at 1* | QG-2 | Checkpoint (T2) |
-| 3 | Discovery | *selected at 1* | QG-3 | Checkpoint (T2) |
-| 4 | Architecture | *selected at 1* | QG-4, then QG-4a + QG-4b | User-Approval; QG-4a User-Run Review, QG-4b User-Approval |
+| 2 | Business Analysis | *selected at 1* | QG-2 | Judgment (non-blocking) |
+| 3 | Discovery | *selected at 1* | QG-3 | Judgment (non-blocking) |
+| 4 | Architecture | *selected at 1* | QG-4, then QG-4a + QG-4b | Judgment (non-blocking); QG-4a Embedded Review, QG-4b Judgment |
 | 5 | Implementation | *selected at 1* | QG-5 | Automated |
-| 6 | Architectural Review | *selected at 1* | QG-6 | Checkpoint (T2) |
+| 6 | Architectural Review | *selected at 1* | QG-6 | Judgment (non-blocking) |
 | 7 | Security | *selected at 1* | QG-7 | Mandatory |
-| 8 | Quality Review | *selected at 1* | QG-8 | Checkpoint (T2) |
+| 8 | Quality Review | *selected at 1* | QG-8 | Embedded Review-and-Fix (non-blocking) |
 | 9 | Verification | *selected at 1* | QG-9 | Mandatory |
 | 10 | Documentation | *selected at 1* | QG-10 | Automated |
-| 11 | UAT | - | QG-11a, then QG-11 | QG-11a User-Run Review; QG-11 User-Approval (T2) |
-| 12 | Finalization | *selected at 1* | QG-12 | User-Approval |
+| 11 | UAT | - | QG-11a, then QG-11 | QG-11a Embedded Review-and-Fix; **QG-11 User-Approval – UAT acceptance** |
+| 12 | Finalization | *selected at 1* | QG-12 | User-Approval (confirms irreversible git actions) |
 
 *Note: Agents for phases 2-12 are dynamically selected at Phase 1 based on capability matching. See [../reference/implement-phase-requirements.md](../reference/implement-phase-requirements.md) for phase requirements.*
 
@@ -164,14 +167,16 @@ Spec-ready mode activates when ALL of the following are true:
 | Type | Description | Retry Allowed | User Interaction |
 |------|-------------|---------------|------------------|
 | **Mandatory** | MUST pass, no override | Yes (3x) | Escalate on fail |
-| **Checkpoint** | Requires acknowledgment (Tier 2) | Yes (3x) | Review findings |
+| **Judgment (non-blocking)** | Pre-UAT gate the orchestrator decides on agent output; records, summarises, proceeds | Yes (3x) | None (one-line status summary); escalate after cap |
+| **Embedded Review-and-Fix** | Parallel reviewer fan-out + judge; auto-fixes CRIT/HIGH, triages MED/LOW | Yes (embedded_loop_iter, 3 rounds) | None (autonomous) |
 | **User-Approval** | Requires explicit user consent | No | Must approve |
-| **User-Run Review** | Requires a `/erfana:lens-review` report the **user** runs; the gate prints the command and ends the turn | Yes (re-review on rework) | Must run the command and return the report path |
 | **Automated** | Pass on a concrete exit-code predicate | Yes (3x) | None unless fail |
 
-**User-Run Review gates (QG-4a, QG-11a).** The orchestrator never invokes `/erfana:lens-review` – see Rule 12 in [implement-rules.md](implement-rules.md). It resolves a concrete target, prints the command with a validated `--out` path under `LENS_DIR`, and ends the turn with **no tool call** (an open `AskUserQuestion` prompt would leave the user nowhere to type a slash command). On resume a delegated agent parses the report as untrusted data; MUST FIX findings are resolved before the gate passes. **There is no skip option** – abort remains available.
+**Embedded Review-and-Fix gates (QG-4a, QG-8, QG-11a).** The orchestrator never invokes `/erfana:lens-review` – see Rule 12 in [implement-rules.md](implement-rules.md). It fans out the operation's own reviewer agents in parallel (protocol: [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md)), aggregates severity-ranked findings (any off-vocabulary severity is treated as CRITICAL, fail-safe), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to the `mi-solution-designer` JUDGE mode (fix / accept-as-tech-debt / not-worth-it). The loop is bounded by `embedded_loop_iter` (max 3 fix-application rounds – Rule 14). No turn ends and there is no user hand-off; at the cap, unresolved CRITICAL/HIGH escalates or aborts (never tech debt), unresolved MEDIUM/LOW is recorded as accepted tech debt.
 
-**Sub-gate scope.** Scope is one choice at QG-0 Step 5d, recorded as `review_level`: `full` runs all three, `design` runs QG-4a and QG-4b only, `none` runs none of them. **Tier 2 is asked which**, defaulting to `full`; **Tier 1 is not asked** and gets `none` unless the user requested the full review when starting the run. `deep_review_gates` is the derived shorthand for "QG-4a and QG-4b are in scope". The level is fixed once at QG-0 and cannot be relaxed mid-run; Phase 12's terminal gate assertion checks it, and accepts a skip that the level legitimately excludes.
+**Judgment (non-blocking) gates (QG-2, QG-3, QG-4, QG-4b, QG-6, QG-8, QG-9's DoD).** These carry no blocking `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13). The orchestrator evaluates the gate's pass predicate against the agents' structured output – the same predicate the former Tier-1 branch used – records the result, emits a one-line summary, and proceeds. On failure it auto-retries to the per-gate retry cap (3 retries), then surfaces to the user.
+
+**Sub-gate scope.** Scope is one choice at QG-0 Step 5d, recorded as `review_level`: `full` runs all three embedded reviews, `design` runs QG-4a and QG-4b only, `none` runs none of them. **Tier 2 is asked which**, defaulting to `full`; **Tier 1 is not asked** and gets `none` unless the user requested the full review when starting the run. `deep_review_gates` is the derived shorthand for "QG-4a and QG-4b are in scope". The level is fixed once at QG-0 and cannot be relaxed mid-run; Phase 12's terminal gate assertion checks it, and accepts a skip that the level legitimately excludes. All three sub-gates are autonomous agent fan-outs (protocol: [../reference/embedded-review-and-fix.md](../reference/embedded-review-and-fix.md)); none blocks on the user.
 
 **Automated-gate predicates (machine-checkable, not a prose checkbox):** each Automated gate passes only on a concrete command result, so it cannot collapse into orchestrator self-judgement:
 - **QG-1 (Agent Selection):** every phase has a resolved agent (default-map entry or a full-coverage match), else escalate.
@@ -179,7 +184,7 @@ Spec-ready mode activates when ALL of the following are true:
 - **QG-7 (Security):** the Phase 7 secret scan returns empty (fail-closed) and the dependency audit's parsed output reports zero high/critical (moderate/low are recorded, non-blocking – the auditor's raw exit code is not the verdict).
 - **QG-10 (Documentation):** the Phase 10 verification block runs clean and the documentation decision is recorded. The checks are conditional on what the project has: an agent-instruction file that this change edited must reference the issue number, and every relative doc link added must resolve on disk. A repo with no documentation surfaces, or one whose surfaces this change does not affect, passes on the recorded statement – the gate never demands a markdown edit per run.
 
-The gates that are **Checkpoint on Tier 2 but Automated on Tier 1** carry their own Tier 1 predicates, so the automated tier never falls back to orchestrator self-judgement. Canonical wording lives in each phase file's "Gate call (tier-conditional)" section; summarised here:
+The **non-blocking judgment gates** (QG-2, QG-3, QG-6, QG-8) now pass on their pass predicate on **both** tiers – the predicate that was formerly the Tier 1 branch becomes the universal path, since no tier calls `AskUserQuestion` before UAT. Each is recorded and summarised, never a checkbox self-judgement. Canonical wording lives in each phase file's gate section; summarised here:
 
 - **QG-2 (Business Analysis, T1):** zero acceptance criteria unmapped to a validated-criteria row, and a non-empty research summary artifact exists.
 - **QG-3 (Discovery, T1):** affected-files list non-empty, every listed path exists on disk, every listed file has a dependency entry.
@@ -191,7 +196,7 @@ The gates that are **Checkpoint on Tier 2 but Automated on Tier 1** carry their 
 
 For **Tier 1** (trivial), the purely Automated gates (QG-1, QG-5, QG-10) additionally reduce to a single combined predicate – run the detected `test && typecheck && lint` and the QG-7 secret scan; pass only on success.
 
-**Gate calls are tool calls, not prose.** Every Checkpoint (Tier 2) and User-Approval gate is satisfied only by an `AskUserQuestion` call; printing a summary that ends in a bracketed option list is not a gate and MUST NOT be treated as one. QG-4 and QG-12 call `AskUserQuestion` on **all** tiers – they front the run's irreversible actions (design commitment; commit, push, merge, branch deletion) and are never tier-exempt.
+**Gate calls: the one User-Approval gate is a tool call.** QG-11 (UAT) and QG-12 (finalization) are satisfied only by an `AskUserQuestion` call and an actual answer; printing a summary that ends in a bracketed option list is not a gate. Every **pre-UAT** gate is non-blocking (Judgment or Embedded Review) and is satisfied by its recorded pass predicate plus a one-line summary – it does **not** call `AskUserQuestion` (SKILL.md rule 16). QG-11 (UAT) and QG-12 (finalization) are the two User-Approval gates; every pre-UAT technical gate is non-blocking. Separately, Phase 2 Step 3 may ask a requirements (product/scope) question — never a technical one.
 
 ---
 
@@ -297,33 +302,33 @@ See [implement-procedures.md](implement-procedures.md) for the workflow state di
 
 ## Quality Gate Summary by Tier
 
-| Quality Gate | Tier 1 | Tier 2 | Can Override |
+| Quality Gate | Tier 1 | Tier 2 | Blocks user? |
 |--------------|--------|--------|--------------|
-| QG-0: Pre-flight | Mandatory | Mandatory | **NO** |
-| QG-1: Agent Selection | Automated | Automated | Yes |
-| QG-2: Business Analysis | Automated | Checkpoint | Yes |
-| QG-3: Discovery | Automated | Checkpoint | Yes |
-| QG-4: Architecture | User-Approval | User-Approval | Yes |
-| QG-4a: Design lens review | Skipped | User-Run Review (`full` / `design`) | **NO** (once in scope) |
-| QG-4b: Architecture acceptance | Skipped | User-Approval (`full` / `design`) | **NO** (once in scope) |
-| QG-5: Implementation | Automated | Automated | Yes |
-| QG-6: Architectural Review | Automated | Checkpoint | Yes |
-| QG-7: Security | Mandatory | Mandatory | **NO** |
-| QG-8: Quality Review | Automated | Checkpoint | Yes |
-| QG-9: Verification | Mandatory | Mandatory | **NO** |
-| QG-10: Documentation | Automated | Automated | Yes |
-| QG-11a: Implementation lens review | Skipped | User-Run Review (`full` only) | **NO** (once in scope) |
-| QG-11: UAT | Automated | User-Approval | Yes |
-| QG-12: Finalization | User-Approval | User-Approval | Yes |
+| QG-0: Pre-flight | Mandatory | Mandatory | No (automated) |
+| QG-1: Agent Selection | Automated | Automated | No |
+| QG-2: Business Analysis | Automated | Judgment (non-blocking) | No |
+| QG-3: Discovery | Automated | Judgment (non-blocking) | No |
+| QG-4: Architecture | Judgment (non-blocking) | Judgment (non-blocking) | No |
+| QG-4a: Design review | Skipped | Embedded Review (`full` / `design`) | No (autonomous) |
+| QG-4b: Architecture judgment | Skipped | Judgment (`full` / `design`) | No (autonomous) |
+| QG-5: Implementation | Automated | Automated | No |
+| QG-6: Architectural Review | Automated | Judgment (non-blocking) | No |
+| QG-7: Security | Mandatory | Mandatory | No (automated) |
+| QG-8: Quality Review | Automated | Embedded Review-and-Fix | No (autonomous) |
+| QG-9: Verification | Mandatory | Mandatory | No |
+| QG-10: Documentation | Automated | Automated | No |
+| QG-11a: Implementation review | Skipped | Embedded Review-and-Fix (`full` only) | No (autonomous) |
+| QG-11: UAT | Automated | **User-Approval** | **YES – UAT acceptance** |
+| QG-12: Finalization | User-Approval | User-Approval | YES (confirms git actions) |
 
 **Gate Types:**
 - **Mandatory**: MUST pass, cannot be overridden (QG-0, QG-7, QG-9)
-- **Checkpoint**: User reviews findings before proceeding (Tier 2 only)
-- **User-Approval**: Requires explicit user consent
-- **User-Run Review**: Requires a lens-review report the user runs (QG-4a, QG-11a)
-- **Automated**: Passes if automated checks pass
+- **Judgment (non-blocking)**: pre-UAT gate decided on agent output; recorded + summarised, no `AskUserQuestion`
+- **Embedded Review-and-Fix**: autonomous reviewer fan-out + judge (QG-4a, QG-8, QG-11a)
+- **User-Approval**: requires explicit user consent (QG-11 UAT; QG-12 finalization)
+- **Automated**: passes if automated checks pass
 
-**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping. The three lettered sub-gates are the one scoped exception – they run per the run's `review_level` (Tier 2 column above shows the `full` default) and add no phases; the phase count stays 13.
+**Note:** ALL phases execute for both tiers. Tier determines validation depth, not phase skipping. No pre-UAT technical gate blocks on the user; **QG-11 (UAT) and QG-12 (git actions) are the User-Approval gates**, and Phase 2 Step 3 may separately ask a requirements question. The three lettered sub-gates run per the run's `review_level` (Tier 2 column shows the `full` default) and add no phases; the phase count stays 13.
 
 ---
 

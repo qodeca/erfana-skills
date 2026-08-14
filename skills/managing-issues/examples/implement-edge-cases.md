@@ -223,12 +223,12 @@ QG-0: Pre-flight --> Tier 2, spec_maturity = complete_with_design
 QG-1: Agent selection --> DEFAULT_AGENT_MAP (skip discovery)
 QG-2: Business analysis --> Validate spec requirements (skip research)
 QG-3: Discovery --> Spot-check key files (skip full exploration)
-QG-4: Architecture --> Validate design doc --> USER APPROVAL
-      then QG-4a (user-run lens review) + QG-4b (acceptance) - Tier 2 default
+QG-4: Architecture --> Validate design doc --> recorded (non-blocking)
+      then QG-4a (embedded design review) + QG-4b (judgment) - Tier 2 default
 QG-5: Implementation --> software-developer + test-writer (+ e2e-test-writer)
-QG-6-8: Reviews (standard depth)
+QG-6-8: Reviews (standard depth; QG-8 review-and-fix)
 QG-9: Verification --> acceptance criteria check
-QG-10: Documentation; QG-11a (user-run lens review) --> QG-11 UAT; QG-12 finalize
+QG-10: Documentation; QG-11a (embedded review-and-fix) --> QG-11 UAT (human stop); QG-12 finalize
 ```
 
 Sub-gate mechanics are shown once, in Example 2 of [implement.md](implement.md) - not repeated here.

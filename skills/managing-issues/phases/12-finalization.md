@@ -103,7 +103,7 @@ Use `commit-writer` agent to:
 
 ### Step 3: Create Commit
 
-**Stage an explicit planned file list – never `git add -A`.** The working tree can hold files that are not part of this issue: lens-review reports (`$LENS_DIR/...`), scratch files, and anything the user left behind. `git add -A` sweeps all of them into the commit. Stage only the files the run itself changed, from the plan:
+**Stage an explicit planned file list – never `git add -A`.** The working tree can hold files that are not part of this issue: the run's scratch under `$LENS_DIR/...` (UAT dev-server logs), and anything the user left behind. `git add -A` sweeps all of them into the commit. Stage only the files the run itself changed, from the plan:
 
 `PLANNED_FILES` is a **declared output artifact** of Phase 4 (the plan's file table plus the QG-4a design doc), Phase 5 (what the implementation and test agents reported writing), Phase 10 (what the documentation agent reported writing) and Phase 11 (QG-11a fixes). It is persisted in the run state, so a resumed run still has it – and on a resume every entry is first shape-validated as a repo-relative, traversal-free file path ([../reference/run-state-resume.md](../reference/run-state-resume.md), "Path shape"); an entry that fails is dropped, and check 2 below is what surfaces the dropped file. It is substituted here literally – it is not a shell array inherited from an earlier tool call.
 
@@ -167,7 +167,7 @@ AskUserQuestion({
 
 `Add them` → append the confirmed paths to `PLANNED_FILES`, **then re-review them before re-running the block** (below). `Leave them out` → proceed with the planned list; the unstaged files are reported to the user in the QG-12 summary. `Stop here` → `git reset` the index and stop. A file is never swept in silently, and the run is never stuck.
 
-**Added files are re-reviewed, not just staged.** A file no agent reported is by definition a file no review gate saw: QG-6, QG-7, QG-8 and QG-9 all worked from the reported change set, and QG-11a's target list was built from the working tree at that time. Committing it on the strength of one staging prompt would put unreviewed code in the commit – exactly the Issue #68 failure this phase exists to prevent. Route the added paths through the **same** path Phase 11 uses for late fixes: run the re-review decision matrix in [../reference/post-review-tracking.md](../reference/post-review-tracking.md) over them, apply the level it returns, update `last_review_tree` when it passes, and only then re-run the staging block. The matrix's 3-iteration cap applies.
+**Added files are re-reviewed, not just staged.** A file no agent reported is by definition a file no review gate saw: QG-6, QG-7, QG-8 and QG-9 all worked from the reported change set, and QG-11a's target list was built from the working tree at that time. Committing it on the strength of one staging prompt would put unreviewed code in the commit – exactly the Issue #68 failure this phase exists to prevent. Route the added paths through the **same** path Phase 11 uses for late fixes: run the re-review decision matrix in [../reference/post-review-tracking.md](../reference/post-review-tracking.md) over them, apply the level it returns, update `last_review_tree` when it passes, and only then re-run the staging block. The matrix's `re_review_iterations` cap (3 iterations) applies.
 
 **Planned file missing.** When the existence check reports a planned path that was never created, the run is not stuck either – present the list and ask:
 
