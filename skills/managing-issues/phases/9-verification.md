@@ -138,9 +138,9 @@ Use `mi-spec-compliance-checker` agent:
 | Task list advanced | `QG-9 quality gate` and `Phase 9: Verification` `completed`, `Phase 10: Documentation` `in_progress`, `QG-10 quality gate` appended as `pending` |
 | Can be overridden | **NO** |
 
-### Verification Checkpoint
+### Verification summary (recorded, not a prompt)
 
-Present to user:
+Record for the run log:
 
 ```markdown
 ## Implementation Verification
@@ -166,31 +166,13 @@ Present to user:
 - Types: detected typecheck command passing
 ```
 
-### Gate call (tier-conditional)
+### Gate evaluation (predicate-first, non-blocking, both tiers)
 
-QG-9 is **Mandatory**, so it is predicate-first and non-overridable on both tiers: the user cannot approve past a failing predicate, and the predicate alone decides PASS or FAIL.
+QG-9 is **Mandatory**, so it is predicate-first and non-overridable, and – under the autonomous-until-UAT rule (SKILL.md rule 16; implement-rules Rule 13) – it issues **no `AskUserQuestion`** on either tier. The Definition-of-Done confirmation is now the predicate itself, recorded, not a user prompt.
 
-1. **Evaluate the mandatory predicate** (both tiers): architect status is `VERIFIED`, every acceptance criterion is marked met with evidence (count of unmet criteria is 0), detected `TEST_CMD` and `TYPECHECK_CMD` exit 0 (or none detected), and – when a spec is linked – zero non-compliant items lack a documented justification. Any clause failing → QG-9 = FAIL. Do not ask the user; go to On FAIL.
-2. **Tier 1: the predicate is the gate.** Record `QG-9 = PASS`, present the checkpoint summary above for the record, and continue to Phase 10 without a prompt. QG-9 is Mandatory, not User-Approval – on a trivial run there is nothing for the user to decide that the predicate has not already decided, and the run's irreversible actions are still fronted by QG-4 and QG-12.
-3. **Tier 2 only, and only if the predicate passes, MUST call `AskUserQuestion`** to confirm the Definition of Done before Documentation:
+**Evaluate the mandatory predicate** (both tiers): architect status is `VERIFIED`, every acceptance criterion is marked met with evidence (count of unmet criteria is 0), detected `TEST_CMD` and `TYPECHECK_CMD` exit 0 (or none detected), and – when a spec is linked – zero non-compliant items lack a documented justification. All clauses hold → record `QG-9 = PASS`, emit a one-line summary, continue to Phase 10. Any clause failing → QG-9 = FAIL; go to On FAIL (auto-retry to the per-gate retry cap of 3 retries, then surface to the user).
 
-```
-AskUserQuestion({
-  questions: [{
-    question: "Verification passed and every acceptance criterion has evidence. Proceed to Documentation?",
-    header: "QG-9",
-    options: [
-      { label: "Approve", description: "The work is done as specified - continue to Phase 10 (Documentation)" },
-      { label: "Address Issues", description: "Something is still missing or wrong - return to fixes and re-verify" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-`Approve` → QG-9 = PASS. `Address Issues` → QG-9 = FAIL; follow On FAIL below, then re-verify.
-
-**Gate type is unchanged.** QG-9 stays **Mandatory on both tiers** in every gate-type table; the Tier 2 call is a confirmation on top of a passing predicate, not a promotion to User-Approval. It is deliberately absent from the "calls `AskUserQuestion` on all tiers" list ([../operations/implement.md](../operations/implement.md)), which holds QG-4 and QG-12 only.
+**Gate type is unchanged.** QG-9 stays **Mandatory on both tiers** in every gate-type table. The run's irreversible actions are still fronted by QG-11 (UAT) and QG-12 (finalization).
 
 ### Result
 

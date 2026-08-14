@@ -2,7 +2,9 @@
 
 **Goal:** Research prior art and clarify requirements before exploring codebase.
 **Agent:** `mi-requirements-analyzer`
-**Quality Gate:** QG-2 (Checkpoint for T2, Automated for T1)
+**Quality Gate:** QG-2 (Judgment – non-blocking, ALL tiers)
+
+**The requirements phase — the one place the run may ask the user.** Phase 2 MAY issue a blocking `AskUserQuestion` in Step 3, but **only for genuine REQUIREMENT / product ambiguities**, never architecture or technical questions (SKILL.md rule 16). The QG-2 *gate* itself is non-blocking (evaluated on a structural predicate); the interaction, when it happens, is the requirements clarification in Step 3.
 
 ---
 
@@ -58,18 +60,20 @@ Use WebSearch to find:
 
 ### Step 3: Requirements Questionnaire
 
-`mi-requirements-analyzer` returns a `proposed_questions` set — it does **not** ask the user (AskUserQuestion is not delivered to subagents; SKILL.md rule 7). The **orchestrator** asks those questions via AskUserQuestion, batching at most 4 per call, then passes the answers back to the analyzer (or carries them into the summary).
+**This is the one place the run may ask the user, and it asks ONLY requirements/product questions — never architecture or technical implementation questions** (SKILL.md rule 16). Clarifying *what the change should do* is a human decision; *how to build it* is not.
 
-**Tier 1:** 1-2 questions
-**Tier 2:** 3-5 questions (orchestrator batches ≤4 per AskUserQuestion call)
+`mi-requirements-analyzer` returns a `proposed_questions` set — it does **not** ask the user (AskUserQuestion is not delivered to subagents; SKILL.md rule 7). The **orchestrator** filters those to the genuine REQUIREMENT ambiguities and, when any remain, **MUST call `AskUserQuestion`** (batching at most 4 per call), then passes the answers back to the analyzer (or carries them into the summary).
 
-Categories:
-1. Requirements clarification
-2. Edge cases & boundaries
-3. Reference implementations
-4. Scope boundaries
+**Ask when — and only when — a requirement is genuinely unresolved:**
+- Unclear or under-specified scope (what is in vs out of this change)
+- Missing, contradictory, or ambiguous acceptance criteria
+- A product-behaviour choice the issue leaves open (e.g. what should happen in an empty / error / conflict state, which of two valid behaviours is wanted)
 
-A skipped question is a valid answer — record it as unanswered and proceed; never re-ask the same question.
+**NEVER ask** (resolve these autonomously by best practice + conditional web research + judgment, per the technical phases): architecture, patterns, data models, API shape, library choice, file layout, framework mechanics, test strategy. If a proposed question is technical, drop it — it is answered downstream, not here.
+
+**Tier 1:** 0-2 requirement questions (often none — a typo fix has no requirement ambiguity). **Tier 2:** batch the genuine ones, ≤4 per `AskUserQuestion` call. A requirement that the issue already settles is not re-asked. A skipped question is a valid answer — record it as unanswered and proceed; never re-ask the same question.
+
+Categories (requirements only): scope boundaries, acceptance-criteria gaps, product-behaviour choices.
 
 ### Step 4: Acceptance Criteria Validation
 
@@ -78,7 +82,7 @@ Verify all criteria are:
 - [ ] Measurable (success metrics)
 - [ ] Bounded (explicit scope)
 
-If gaps found: Add suggested criteria for user approval.
+If a criteria gap is a genuine **requirement** ambiguity (a missing or contradictory acceptance criterion that changes what the work must do), fold it into the Step 3 requirements questionnaire and ask. If it is merely a wording tidy-up with no ambiguity about intent, add the suggested criterion on the record and note it in the phase summary — no prompt.
 
 ### Step 5: Create Requirements Summary
 
@@ -111,13 +115,13 @@ Compile:
 
 ## Quality Gate
 
-**Success criterion:** Issue classified, requirements questionnaire complete, acceptance criteria validated, research summary produced. Phase 2 produces analysis artifacts only (no code mutations), so post-step validation is bounded by the Tier 2 user checkpoint at QG-2 below.
+**Success criterion:** Issue classified, requirement ambiguities clarified with the user (Step 3) or recorded as resolved, acceptance criteria validated, research summary produced. Phase 2 produces analysis artifacts only (no code mutations); QG-2 is the non-blocking predicate below.
 
 ---
 
 ## QUALITY GATE: QG-2
 
-**Gate Type:** Checkpoint (T2) | Automated (T1)
+**Gate Type:** Judgment (non-blocking, ALL tiers)
 **Gate ID:** QG-2
 
 ### Pass Criteria
@@ -125,18 +129,18 @@ Compile:
 | Criterion | Tier 1 | Tier 2 |
 |-----------|--------|--------|
 | Research completed | 1-2 searches | 3-5 searches |
-| Questions answered | 1-2 | 3-5 |
+| Requirement ambiguities resolved | Any genuine ones asked (Step 3) or none present | Same – asked when present, ≤4 per call |
 | Criteria validated | Basic check | Full validation |
 | Clarification artifact | Produced, all three sections non-empty (context-only) | Same |
 | Risk assessment | Advisory (document only) | Advisory (document only) |
-| User checkpoint | Not required | Required |
+| User checkpoint | None (non-blocking) | None (non-blocking) |
 | Task list advanced | `QG-2 quality gate` and `Phase 2: Business Analysis` `completed`, `Phase 3: Discovery` `in_progress`, `QG-3 quality gate` appended as `pending` | Same |
 
 **Clarification artifact** is the Step 5 deliverable, shaped by [`templates/implement/requirements-clarification.md`](../templates/implement/requirements-clarification.md): Step 3 questions and answers (including any recorded as unanswered), the Step 4 validated criteria, and the risk register. Phases 3 and 4 consume it, so a missing or half-filled artifact fails QG-2 on both tiers. Its **risk register content** is advisory – completeness of a risk table has no honest machine-checkable predicate, so it is recorded, not enforced.
 
-### Tier 2 Checkpoint
+### Phase summary (recorded, not a prompt)
 
-Present to user:
+Record the analysis and emit a one-line summary (assumptions made in Step 3 are listed here):
 
 ```markdown
 ## Business Analysis Complete
@@ -168,28 +172,9 @@ Present to user:
 | <risk> | <L/M/H> | <L/M/H> | <action> |
 ```
 
-### Gate call (tier-conditional)
+### Gate evaluation (non-blocking, ALL tiers)
 
-**Tier 2 – MUST call `AskUserQuestion`.** Presenting the summary above is not the gate; the gate is this call. Do not proceed on printed prose.
-
-```
-AskUserQuestion({
-  questions: [{
-    question: "Business analysis is complete. Proceed to Discovery?",
-    header: "QG-2",
-    options: [
-      { label: "Approve", description: "Requirements and acceptance criteria look right - continue to Phase 3 (Discovery)" },
-      { label: "Revise", description: "Something in the analysis is wrong - rework Phase 2 with your corrections before Discovery" },
-      { label: "Add Questions", description: "Ask further clarifying questions first - the analysis is incomplete rather than wrong" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-`Approve` → QG-2 = PASS. `Revise` or `Add Questions` → QG-2 = FAIL; follow On FAIL below, then re-present.
-
-**Tier 1 – no user call.** Evaluate this predicate instead; it passes only on a structural check, never on self-judgement:
+**The QG-2 *gate* does NOT call `AskUserQuestion`** — it is a structural predicate (the requirements Q&A, when it happens, is Step 3 of the phase, not this gate). Evaluate this predicate on both tiers; it passes only on a structural check, never on self-judgement:
 
 - Every acceptance criterion in the issue body maps to exactly one row of the validated-criteria list (count of unmapped criteria is 0), and
 - the research summary artifact exists and is non-empty, and

@@ -91,10 +91,10 @@ For each phase in the current operation:
 
 `mi-agent-matcher` returns a `score` field. Treat it as an **advisory ranking signal only** – useful for ordering candidates within the same coverage class. Never report it to the user as a confidence figure and never use it as a numeric gate threshold.
 
-**Selection rules (coverage-based):**
-- Full coverage → auto-select, inform user
-- Partial coverage → present the top candidates, user picks
-- No coverage → fallback to direct execution (if `allow_direct=true`) or escalate
+**Selection rules (coverage-based, autonomous – rule 16):**
+- Full coverage → auto-select, record it
+- Partial coverage → auto-select the best-scoring candidate (or default-map agent), record the choice + rationale
+- No coverage → fall back to direct execution (if `allow_direct=true`) or the best general-purpose / default agent, record the fallback; `needs_user_input` only on a genuine rule-7 contradiction
 
 ### Step 3: Apply context-aware preferences
 
@@ -108,28 +108,22 @@ Adjust candidate ordering based on issue context. These are tie-breakers within 
 | `bug` | bug-investigator (Phase 2) |
 | `frontend`, `ui`, `ux`, `design`, `accessibility` | ux-designer (Phase 4), ux-reviewer (Phase 8) |
 
-### Step 4: Present selection plan
+### Step 4: Record the selection plan (autonomous, non-blocking)
+
+**Phase 1 issues no blocking `AskUserQuestion` (SKILL.md rule 16; implement-rules Rule 13).** Agent selection is decided autonomously and recorded in a one-line phase summary the user can watch; the run proceeds.
 
 **If every phase has a full-coverage match:**
-- Auto-select all agents
-- Inform user: "Agent selection complete. Using [agent list]."
+- Auto-select all agents (default-map entry, else the full-coverage match)
+- Record: "Agent selection complete. Using [agent list]."
 
 **If any phase has only partial coverage:**
-- Present options using AskUserQuestion:
-  ```
-  Phase N requires [capabilities]. Select agent:
-  Option 1: [agent name] – covers [capabilities], missing [capabilities]
-  Option 2: [agent name] – covers [capabilities], missing [capabilities]
-  Option 3: Direct execution (if allowed)
-  ```
+- **Auto-select the best-scoring candidate** for that phase (or its default-map agent), the same qualitative ranking used above – prefer the most specific specialist, break ties toward the lower-effort agent.
+- Record the choice and a one-line rationale (which required capabilities it covers, which it does not) in the phase summary, and proceed. **No user prompt.**
 
 **If any phase has no coverage:**
-- Check if phase allows direct execution (`allow_direct: true`)
-- If yes: Fallback to orchestrator direct execution with warning
-- If no: Escalate to user with options:
-  - Skip phase (if non-mandatory)
-  - Create custom agent
-  - Approve direct execution with justification
+- Check if phase allows direct execution (`allow_direct: true`) → fall back to orchestrator direct execution, record the fallback + rationale, proceed.
+- Otherwise **fall back to the best available general-purpose / default agent** for that phase (e.g. the builtin `Explore` for read/analysis phases, `Plan` for design), record the fallback + rationale in the phase summary, and proceed.
+- **Escalate via `needs_user_input` ONLY on a genuine rule-7 contradiction** – no agent can possibly cover a hard-required capability and proceeding would be unsafe (never a routine "pick one" approval).
 
 ### Step 5: Store selections
 
@@ -178,7 +172,7 @@ AGENT_SELECTIONS = {
 | Discovery complete | All agent sources scanned |
 | Matching complete | Every phase has a coverage classification (full / partial / none) |
 | Full-coverage matches auto-selected | Full-coverage phases assigned automatically |
-| Edge cases resolved | Partial- or no-coverage phases have a user decision or a declared fallback |
+| Edge cases resolved | Partial- or no-coverage phases have an auto-selected agent or a declared fallback, each recorded with a rationale (no user prompt) |
 | Selections stored | Cache ready for phase execution |
 | Mandatory phases covered | No mandatory phase without agent |
 | Task list advanced | `QG-1 quality gate` and `Phase 1: Agent Selection` `completed`, `Phase 2: Business Analysis` `in_progress`, `QG-2 quality gate` appended as `pending` |
@@ -239,21 +233,16 @@ If issue has `frontend`, `ui`, `ux`, `design`, or `accessibility` label (or `has
 
 ## FALLBACK BEHAVIOR
 
-When no suitable agent matches a phase:
+When no suitable agent matches a phase (autonomous, non-blocking – rule 16):
 
 ### If phase has `allow_direct: true`
-1. Warn user: "No agent found for Phase N. Running directly (may consume context)."
+1. Record: "No agent found for Phase N. Running directly (may consume context)."
 2. Proceed with orchestrator direct execution
-3. Log context cost warning
+3. Log context cost note in the phase summary
 
 ### If phase has `allow_direct: false`
-1. Present options to user:
-   - Create custom agent for this phase
-   - Approve direct execution with justification
-   - Skip phase (if non-mandatory)
-   - Abort operation
-2. Wait for user decision
-3. Proceed based on user choice
+1. **Fall back to the best available general-purpose / default agent** for that phase (e.g. builtin `Explore` for read/analysis, `Plan` for design), record the fallback + a one-line rationale, and proceed.
+2. Escalate via `needs_user_input` **only** on a genuine rule-7 contradiction – a hard-required capability no agent can cover and proceeding would be unsafe. Never a routine "pick one" approval.
 
 ### Context Preservation Priority
 

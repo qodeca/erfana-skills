@@ -10,7 +10,7 @@
 
 **STOP if ANY condition is unchecked. Do not proceed.**
 
-- [ ] QG-4 = PASS (Architecture approved by user)
+- [ ] QG-4 = PASS (Architecture plan recorded – architect-verified, non-blocking)
 - [ ] Implementation plan available and APPROVED
 - [ ] Test strategy defined
 - [ ] Affected files list available
@@ -23,7 +23,7 @@
 
 ## PRE-STEP VALIDATION
 
-VERIFY: QG-4 = PASS (User-Approved). STOP if architecture not approved.
+VERIFY: QG-4 = PASS (plan recorded, architect-verified). When `deep_review_gates = true`, QG-4a and QG-4b must also be PASS. STOP if not.
 
 ---
 
@@ -206,7 +206,7 @@ Rows are the categories detected at QG-0 Step 4a; columns are the `task_type` fr
 | `descope` | No – the category is skipped for this run |
 | `accept` (with justification) | No – skipped, and the recorded justification travels to Phase 12 |
 
-QG-5 never opens this decision itself: raising new harness work here would contradict the "no scope creep" criterion above and the plan the user approved at QG-4.
+QG-5 never opens this decision itself: raising new harness work here would contradict the "no scope creep" criterion above and the plan recorded at QG-4.
 
 ### Automated Verification
 
