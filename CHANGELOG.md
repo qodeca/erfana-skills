@@ -3,6 +3,17 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.7.1] - 2026-08-14
+
+### Fixed
+
+- **`mi-solution-designer` JUDGE mode now ships.** The guarded JUDGE mode that v6.7.0's autonomous Implement operation depends on for MEDIUM/LOW finding triage was omitted from the v6.7.0 release commit (which staged only `skills/managing-issues/`, while the agent lives at plugin-root `agents/`), so v6.7.0 reached `main` referencing a mode the agent file did not contain. This adds it: a mode selector, a findings + diff input contract, a mode-conditional STOP guard, a fix / accept-as-tech-debt / not-worth-it rubric, and a verdict-table output.
+
+### Changed
+
+- Documentation synced to the v6.7.0 autonomous Implement model and stale interactive-era references removed across the repo: `README.md` (skill row + the `/erfana:lens-review` command row no longer calls managing-issues a required consumer), `docs/architecture.md`, `skills/using-erfana/SKILL.md`, `commands/lens-review.md` (managing-issues no longer listed as a user-run consumer), `CLAUDE.md` (the never-invoke-a-skill worked example recast to the embedded-fan-out model), and `skills/managing-issues/reference/{qa-protocol,implement-phase-requirements,parallel-review}.md` (QG-4 dropped from user-approval checkpoints; `AskUserQuestion` dropped from the autonomous Phase 4 tool set; reviewer enum completed).
+- `docs/known-caveats.md`: the v6.5.0 interactive-hardening entry marked superseded; a v6.7.0 accepted-risk entry added. `docs/modernization-registry.md`: the obsolete F4/phase-11 note annotated. `docs/gates/{02-frontmatter,15-doc-claims}.md`: reference-file count and the illustrative SKILL.md quote refreshed. `agents/mi-solution-designer.md`: in-body tool list aligned with frontmatter.
+
 ## [6.7.0] - 2026-08-14
 
 ### Changed
