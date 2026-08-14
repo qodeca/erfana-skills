@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| managing-issues | 2026-08-14 | docs: remove stale interactive-era references to managing-issues Impl... |
+| managing-issues | 2026-08-14 | chore(release): v6.7.1 (#36) |
 | using-erfana | 2026-08-14 | fix + docs: mi-solution-designer JUDGE mode + v6.7.0 doc sync (#34) |
 | grill-me | 2026-08-07 | feat(grill-me): scale interview depth to plan stakes (#26) |
 | managing-skills | 2026-08-03 | docs: full-repo doc-update sweep after v6.3.0 + interrogation merge |
