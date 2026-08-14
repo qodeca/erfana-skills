@@ -6,7 +6,7 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) design + orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
 
-Current version: **v6.7.0**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v6.7.1**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (15)** – all invoke as `/erfana:<name>`:
 
@@ -130,7 +130,7 @@ Most rules here are the negative form of a Hard constraint above; only non-dupli
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
 - Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
 - Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
-- Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example: rule 15 of `skills/managing-issues/SKILL.md`, which drives the QG-4a / QG-11a checkpoints.
+- Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: rule 15 of `skills/managing-issues/SKILL.md`, whose QG-4a / QG-11a checkpoints run their reviews as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
 - Hand-editing [`docs/skill-registry.md`](docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
 - Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).
