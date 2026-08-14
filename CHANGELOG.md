@@ -3,6 +3,26 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [6.7.0] - 2026-08-14
+
+### Changed
+
+- **`managing-issues` Implement operation is now autonomous.** It clarifies requirements with the user in the business-analysis phase, then designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals. Human interaction is limited to Phase 2 requirements clarification, UAT (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo consent. Review depth and task type are auto-resolved (best practice + conditional online research + judgment), never prompted. The previous interactive per-gate approval flow is removed with no fallback; trigger phrases and slash commands are unchanged.
+- **Embedded review-and-fix replaces the two user-run `/erfana:lens-review` steps.** The post-architecture review (QG-4a), the implementation quality review (QG-8, previously report-only), and the pre-UAT review (QG-11a) now fan out the operation's own reviewer agents directly, with conditional web research triggered only on a genuine unknown. The "never invoke another skill/slash-command" constraint is preserved and made central.
+- CRITICAL/HIGH findings are auto-fixed and re-verified inline; MEDIUM/LOW findings are routed to a good-enough judge (`mi-solution-designer` JUDGE mode: fix / accept-as-tech-debt / not-worth-it) that ends the review-refactor loop and prevents overengineering.
+
+### Added
+
+- `skills/managing-issues/reference/embedded-review-and-fix.md` — shared protocol for the embedded review-and-fix loop (parallel reviewer fan-out, conditional research, severity fix-authority, judge triage, iteration cap), invoked by QG-4a/QG-8/QG-11a.
+- `mi-solution-designer` gains a guarded JUDGE mode (findings + diff triage) alongside its existing planning/verification mode.
+
+### Fixed
+
+- Loop termination is now mechanized: a real `embedded_loop_iter` counter (max 3 fix rounds, session-local) bounds the embedded review-and-fix loop, where the cap was previously prose-only.
+- At the cap, unresolved CRITICAL/HIGH findings escalate rather than being recorded as accepted tech debt (only MEDIUM/LOW become tech debt).
+- Severity fail-safe: findings with missing or unrecognized severity are normalized to CRITICAL so they cannot fall through the fix-authority routing.
+- Judge verdicts are sticky within a run (`judged_findings` dedupe), so dismissed findings are not re-litigated on later delta reviews; the inline re-verify sub-loop is bounded; the three iteration counters (per-gate retry cap, `embedded_loop_iter`, Phase-12 `re_review_iterations`) are named and scoped distinctly.
+
 ## [6.6.1] - 2026-08-07
 
 ### Added
