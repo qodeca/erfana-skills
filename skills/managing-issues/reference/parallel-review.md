@@ -53,7 +53,7 @@ Each reviewer returns findings as:
   line: 42,
   description: "What the issue is",
   recommendation: "How to fix it",
-  reviewer: "code-reviewer" | "architecture-reviewer" | "security-auditor" | "test-writer"
+  reviewer: "code-reviewer" | "architecture-reviewer" | "security-auditor" | "test-writer" | "solution-reviewer" | "ux-reviewer" | "refactor-advisor"  // non-exhaustive
 }
 ```
 
