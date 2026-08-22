@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use erfana, please cite it using the metadata below."
-title: "erfana - a design and orchestration toolkit for Claude Code"
-abstract: "An open-source Claude Code plugin providing design skills (prototypes, slide decks, motion graphics, infographics, design review) and orchestration skills (agents, articles, GitHub issues, consulting reports, skills, specifications), with a shared agent pool and safety hooks."
+title: "erfana - an orchestration toolkit for Claude Code"
+abstract: "An open-source Claude Code plugin providing orchestration skills (agents, articles, GitHub issues, consulting reports, skills, specifications) plus a process skill and a verification skill, with a shared agent pool and safety hooks."
 type: software
 authors:
   - family-names: "Obel"
@@ -11,12 +11,11 @@ authors:
 repository-code: "https://github.com/qodeca/erfana-skills"
 url: "https://github.com/qodeca/erfana-skills"
 license: GPL-3.0-only
-version: 6.7.1
-date-released: 2026-08-14
+version: 7.0.0
+date-released: 2026-08-22
 keywords:
   - claude-code
   - claude-code-plugin
-  - design
   - orchestration
   - agents
   - automation

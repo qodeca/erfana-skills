@@ -8,7 +8,6 @@ This page is provenance, not status. It answers "when was skill X last modernize
 
 | Skill | First pass | Last pass | Status | Notes |
 |---|---|---|---|---|
-| [`erfana:design-review`](../skills/design-review/SKILL.md) | v4.2.0 (Phase 0 pilot, 2026-05-09) | v4.2.0 | PASS | 5 patterns PASS / 2 N/A. Hand-modernization audit, no edits required – design-review represents the target shape for focused-reviewer skills. |
 | [`erfana:managing-skills`](../skills/managing-skills/SKILL.md) | v4.2.0 (Phase 6 self-modernization, 2026-05-09) | v6.3.0 (Claude 5 refresh, 2026-08-02) | PASS | v4.2.0/v4.2.1: scaffolding + Lane-4 honesty rounds. v6.3.0: research-driven Claude 5 refresh — 12.4 repurposed as delegation calibration (score contract preserved), 12.7 extended with the reasoning-display ban (new Rule 22), `claude-5-patterns.md` created, the 4.7-era guide and migration-guide.md retired (hazards resolved by deletion; content preserved in git history), role→model/effort tables one step cooler across 3 copies + 10 ms-* agents, double end-gates merged, todo mandates → proportionate progress tracking, cross-model-guide rewritten. Post-refresh 5-lens review (31 findings) remediated in the same release: refusal/fallback story corrected to Anthropic's documented mechanism, validator shape taxonomy + worked-example arithmetic fixed, Gate 2 detector v2 with committed fixtures. Direct plan-driven remediation, not a Modernize-operation invocation. |
 | [`erfana:managing-issues`](../skills/managing-issues/SKILL.md) | v4.2.1 (Modernize-operation output, 2026-05-09) | v4.2.2 (cleanup + Display op, 2026-05-10) – see note on the Unreleased pass | PASS (68.5/70) | F1–F10 Modernize findings carried forward + 20 review findings from 3-reviewer audit (orthodox + adversarial + first-time-user lenses). Section 12: 6.5/8 → 8.0/8.0. **Unreleased (2026-08-04) – not a modernization.** The Claude 5 pattern audit (Section 12, incl. 12.7 deprecated APIs and reasoning-display) ran clean: **zero modernization findings**, no pattern edits applied, so `Last pass` stays v4.2.2. What shipped instead was **enforcement plus new requirements** (PR #24): prose checkpoints converted to blocking `AskUserQuestion` calls, concrete exit-code predicates on the automated gates with the unmeasurable criteria relabelled advisory, three new sub-gates (QG-4a / QG-4b / QG-11a, user-run lens reviews + architecture acceptance), risk-scaled test enforcement at QG-5, run-state persistence with a narrow issue-comment carve-out, explicit staging in place of `git add -A`, and a doc-reconciliation pass. Direct plan-driven work, not an `ms-modifier` invocation. |
 | [`erfana:managing-agents`](../skills/managing-agents/SKILL.md) | v4.2.4 (Modernize-operation output, 2026-05-14) | v4.3.1 (currency + security + trigger-contract refresh, 2026-05-30) | PASS | v4.2.4: 8 findings applied (F1 voice / F2 hybrid `when_to_use:` / F3 narrowed Rule #9 / F4 explicit fan-out / F5 Effort+Model columns / F6 filler strip / F10 bulk fan-out / F11 softened STOP) + `effort:` on all 7 ma-*.md. v4.3.1: 28-finding lens-review remediation (Task→Agent rename, `@agent-<name>`, `~/.claude/agents/`, 6 permission modes + plugin-ignored caveat, `mcpServers`/`disallowedTools`, both-trigger-forms contract, `<example>`-free description, checklist↔ma-validator count resync). |
@@ -18,12 +17,14 @@ This page is provenance, not status. It answers "when was skill X last modernize
 
 ## Per-pass detail
 
-### `erfana:design-review` – v4.2.0 Phase 0 pilot
+### `erfana:design-review` – v4.2.0 Phase 0 pilot (skill removed in v7.0.0)
+
+> Historical record. The skill, its `references/critique-guide.md`, and every path cited below were deleted in v7.0.0. Kept because this pilot is why the Section 12 checklist exists; the paths are no longer resolvable.
 
 - **Operator:** Opus 4.7 hand-modernization (no `ms-modifier` invocation – pilot deliberately predates the operation it informed).
 - **Source record:** [`tests/managing-skills/v4.2.0-pilot.md`](../tests/managing-skills/v4.2.0-pilot.md).
 - **Time-box:** 2 hours allocated, ~30 min spent.
-- **Scope:** Sections 12.1–12.7 evaluated against `skills/design-review/SKILL.md` (64 lines) + `references/critique-guide.md` (199 lines).
+- **Scope:** Sections 12.1–12.7 evaluated against the then-shipping `design-review` SKILL.md (64 lines) + its `critique-guide.md` reference (199 lines).
 - **Outcome:** 5 PASS, 2 N/A, 0 FAIL. No edits applied. Decision: design-review represents the target shape; proceed to Phase 1 with the patterns the pilot validated.
 - **Why it matters:** This pilot proved the Section 12 checklist could be applied without false positives on a healthy 4.7-shaped skill, unblocking the rest of v4.2.0.
 
@@ -134,18 +135,15 @@ This page is provenance, not status. It answers "when was skill X last modernize
 - **When reviewing a skill in a CI failure** – check whether it has a Modernize history that explains current patterns (e.g., `managing-issues` operation-scoped phase-requirements files reflect F1 from v4.2.1).
 - **When estimating the v5.0.0 sibling cascade** – every row in this table is a skill where cascade is unnecessary; every skill NOT in this table that is in scope for cascade still owes a Modernize pass.
 
-## Skills NOT yet modernized (as of v6.4.0)
+## Skills NOT yet modernized (as of v7.0.0)
 
 The Modernize operation has an early-exit guard for skills with nested `<skill>/agents/` directories – today only `managing-reports` (`managing-articles` shed its nested agents in the v4.3.0 redesign). Nested-agent skills require the v5.0.0 architectural cascade (migration to plugin-root with disambiguating prefixes), not prose modernization. See `ROADMAP.md > Forward-looking — v5.0.0 sibling cascade` for the deferred work.
 
 Skills in scope for routine (prose-only) Modernize:
 
-- `erfana:design-direction`
-- `erfana:design-prototype`
-- `erfana:design-slides`
-- `erfana:design-motion`
-- `erfana:design-infographic`
-- `using-erfana`
+- `using-erfana` (rewritten in v7.0.0 when the design routing was removed; a Modernize pass has still not been recorded)
+
+The five `design-*` rows that stood here were removed in v7.0.0 along with the skills themselves.
 
 Skills in scope for v5.0.0 architectural cascade (NOT routine Modernize):
 
@@ -170,7 +168,7 @@ Every future Modernize pass MUST add or update a row here. Treat this as a Gate 
 - [`../skills/managing-skills/guides/claude-5-patterns.md`](../skills/managing-skills/guides/claude-5-patterns.md) – current reference for the patterns Modernize applies (its 4.7-era predecessor was retired in v6.3.0; content preserved in git history).
 - [`../skills/managing-skills/validation/pre-release-checklist.md`](../skills/managing-skills/validation/pre-release-checklist.md) – Section 12 (skills) the Modernize operation scores against.
 - [`../skills/managing-skills/validation/agent-pre-release-checklist.md`](../skills/managing-skills/validation/agent-pre-release-checklist.md) – Section 13 (agents) mirror.
-- [`../tests/managing-skills/v4.2.0-pilot.md`](../tests/managing-skills/v4.2.0-pilot.md) – the design-review Phase 0 pilot record.
+- [`../tests/managing-skills/v4.2.0-pilot.md`](../tests/managing-skills/v4.2.0-pilot.md) – the Phase 0 pilot record (its subject skill was removed in v7.0.0; kept as history).
 - [`../CHANGELOG.md`](../CHANGELOG.md) – authoritative release narrative (v4.2.0 / v4.2.1 / v4.2.2 entries for the full context behind each pass).
-- [`../ROADMAP.md`](../ROADMAP.md) – v5.0.0 sibling-cascade plan for skills not yet modernized.
+- [`../ROADMAP.md`](../ROADMAP.md) – sibling-cascade plan for skills not yet modernized.
 - [`architecture.md`](architecture.md) – `managing-skills` row + Modernize-operation summary.

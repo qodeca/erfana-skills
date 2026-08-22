@@ -9,7 +9,6 @@
 - [ ] Bug fix
 - [ ] New feature (skill / command / agent)
 - [ ] Documentation
-- [ ] Brand bundle / design assets
 - [ ] Infrastructure / gates / CI
 
 ## Checklist

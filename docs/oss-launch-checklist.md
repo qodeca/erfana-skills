@@ -33,4 +33,5 @@ Self-hosting the `qodeca/erfana-skills` marketplace is the canonical install pat
 
 ## Data protection
 
+- [ ] Update the repo **topics** on GitHub: drop `design` (the design skills were removed in v7.0.0) and consider adding `orchestration`. The completed checkbox above records the topics as set at launch; the live repo still carries `design`. This is a GitHub settings action, not a file change.
 - [ ] Document the lawful basis + retention + access restriction for the **archived private repo** `qodeca/erfana-skills-archive` (GitHub reports it at roughly 200 MB packed). Its history still holds employee headshots, the qodeca brandbook PDFs, and committer identities. **Moving data to an archive is not erasure under GDPR** – the obligation is live and unaffected by the public repo being clean.

@@ -1,6 +1,8 @@
 # erfana-skills roadmap
 
-Beyond v2.3.1. Items are sequenced so each release closes a specific debt or proves a specific abstraction. Items NOT on this roadmap are either (a) journal notes in [`BACKLOG.md`](BACKLOG.md), (b) cross-team dependencies that aren't ours to schedule (e.g. "first real second brand"), or (c) explicitly out of scope (e.g. a public docs site not yet justified by demand).
+Items are sequenced so each release closes a specific debt or proves a specific abstraction. Items NOT on this roadmap are either (a) journal notes in [`BACKLOG.md`](BACKLOG.md), (b) cross-team dependencies that aren't ours to schedule, or (c) explicitly out of scope (e.g. a public docs site not yet justified by demand).
+
+> **v7.0.0 scope reduction (2026-08-22)**: the design half of the plugin was removed. Most of this file is a historical record written while the design roadmap was live; those sections stay as written. Only the "Forward-looking" and "Out of scope" sections at the end describe work that is still open.
 
 > **v4.0.0 scope expansion (2026-05-06)**: The plugin widened from a focused design toolkit into a design + orchestration toolkit. Items below are the design / brand-system roadmap; orchestration roadmap items (lifecycle for `managing-*` skills and the shared agents – 87 today, 76 at v4.0.0) accumulate separately as they emerge. The two roadmaps are independent – design roadmap items remain sequenced under their existing version numbers (v2.3.2 → v2.4.0 → v2.4.x → v2.5.0), while plugin-level releases continue to bump the marketplace version (v3.x.x → v4.x.x → ...). v4.1.0 (hooks + commands migration), v4.1.1 (docs sweep), v4.1.2 (Gate 15 doc-claim sync + release-process hardening), v4.1.3 (Gate 15 widening to 6 checks + verification-gates.md split into `docs/gates/`), v4.2.0 (Modernize operation + Opus 4.7 patterns for managing-skills, see "Shipped in v4.2.0" below), v4.2.1 (Lane-4 honesty + documentation patch on managing-skills, see "Shipped in v4.2.1"), v4.2.2 (managing-issues post-modernization cleanup + Display operation, see "Shipped in v4.2.2"), v4.2.3 (first process skill `grill-me`, see "Shipped in v4.2.3"), v4.2.4 (managing-agents Modernize + Opus 4.7 patterns + ma-* effort declarations, see "Shipped in v4.2.4"), v4.2.5 (`/erfana:project-status` read-only executive-brief slash command for context recovery on long-running tabs), v4.2.6 (sibling `/erfana:session-status` slash command sourced from in-context conversation history), v4.2.7 (first verification skill `fact-checking` migrated from a prior Qodeca consulting project + Modernize-passed in the same release; four-agent `fc-*` plugin-root quartet added), v4.2.8 (stakeholder rewrite of `/erfana:project-status` and `/erfana:session-status` for a PO/PM/BA audience – outcome-shaped three-axis structure, two-layer recommendation, and a hard hallucination-guards section against the previous developer-shaped reports), v4.2.9 (consolidated remediation of three independent code reviews on the v4.2.8 follow-up – sentinel-comment allowlist replaces the bypass-prone 3-label substring check, inventory-qualifier exemption dropped, AWK fence-strip robustness, `\bverified\b` word boundary, and a new Gate 16 with nine executable hook fixtures plus sentinel-symmetry verification across the two status commands and the Stop hook; `/erfana:project-status` also gains a dual-issue GitHub probe that queries both assigned-to-me and all-open issues), v4.2.10 (status-command protocol tightening – soft "~30-50 words each" support-bullet target elevated to a hard 55-word ceiling with a ±15-word balance requirement, and Layer 2 of "Recommended next" is now always emitted with a new priority rung covering post-release / smoke / MAINTAINER-checklist follow-ups so the previous "skip when caught up" carve-out no longer hides real next steps), v4.2.11 (researched multi-lens code review command `/erfana:lens-review` with cited current-best-practice research per lens, capped fan-out, trust-model propagation, and dynamic agent matching), and v4.2.12 (lens-review report re-pitched for a PM/PO audience – single plain-language findings table plus a technical subsection keyed by row, fixed-translation reader-facing severities, area naming as plain label + technical term in parentheses) shipped on the plugin track without touching design roadmap items. Same day three stale Dependabot PRs (#3, #4, #5 – open since 28 April) admin-merged to lift the CI workflow's `actions/checkout`, `actions/setup-python`, and `actions/setup-node` to v6 on Node 24 runtime. Future design-roadmap work batches into a later plugin release as items below land.
 
@@ -8,47 +10,9 @@ Beyond v2.3.1. Items are sequenced so each release closes a specific debt or pro
 
 Three independent reviewers (strategic / engineering / risk) audited the original 25-item draft and converged on a 14-item plan. Their critiques are summarized in the v2.3.1 → v2.4 transition entry of `CHANGELOG.md`.
 
-## v2.3.2 – close v2.3.1 testing gaps
+## Retired: the design / brand-system roadmap
 
-Patch release; no behavior change for users. All three reviewers flagged these as the most urgent missing items.
-
-| # | Task | Effort | Why now |
-|---|---|---|---|
-| 1 | `scripts/_lib/tests/test_json_schema_lite.py` – pytest suite (type, oneOf, anyOf, enum, pattern, minLength, required, additionalProperties) | S (~250 LOC) | Zero coverage on a critical-path validator |
-| 2 | `scripts/test-gate-12.sh` – CI-wired golden-file harness for the 7 v2.3.1 negative manifests | S (~80 LOC) | Negative tests exist only in the v2.3.1 implementation transcript |
-| 3 | `skills/design-shared/references/brand-context.md` – canonical "how skills read the active brand" doc | S (~120 LOC) | Prerequisite for v2.4.0 consumer work; without it, four SKILL.md prose blocks diverge |
-| 3b | Promote Gate 13 (brandbook hex coverage) from soft to hard fail. Inventory-driven verifier (`scripts/check-brandbook-hex.sh` + `scripts/_lib/brandbook-hex-inventory.json`) lands in v0.4.0 brand integration as a soft check; promote once it has been stable for one release cycle with no false positives | XS (~2 LOC) | Soft state must have an exit condition or it stays advisory forever |
-
-## v2.4.0 – prove the abstraction with a consumer
-
-Ship one consumer skill that actually reads the brand manifest at generation time. Until this lands, v2.3.1 is data-with-no-readers.
-
-| # | Task | Effort | Why now |
-|---|---|---|---|
-| 4 | First skill consumer: `design-slides` reads the active brand's `brand.json` (e.g. `brands/erfana/brand.json`) at generation time | M | Highest-leverage consumer; decks are most-frequent deliverable |
-| 5 | Active-brand discoverability – surface active brand id + watermark in `using-erfana` bootstrap; optional `/erfana:brand-switch <id>` slash command | S | Layer is not surfaced to users today |
-| 7 | Render-pipeline preflight: `render-video.js` reads `ACTIVE_BRAND` and asserts resolved watermark literal appears in the HTML; consume `voice.watermark` object form (placement / color / font) | M | Closes v2.3.1 advertising debt; catches missing watermarks before 90-second render |
-| 8 | `scripts/scaffold-brand.sh <id> <displayName> <legalName>` – one-command brand skeleton generator | S (~120 LOC) | Reduces friction when brand #2 actually lands |
-
-## v2.4.x – extend coverage to the other visual-output skills
-
-Once the helper-doc and first consumer stabilize, the rest are mechanical.
-
-| # | Task | Effort | Why now |
-|---|---|---|---|
-| 6 | _(Obsolete – the qodeca brand bundle and its brandbook were removed in v6.0.0.)_ Generate example pattern SVGs into a brand's `patterns/` library with `INDEX.md`, if a future brand ships a brandbook with a pattern grammar | S | Re-scope only when a brand with a documented pattern grammar ships |
-| 9 | Second + third skill consumers: `design-prototype` and `design-infographic` read brand tokens | M | Completes the three visual-output skills |
-| 10 | Schema migration tooling: `scripts/migrate-brand-manifest.py --from <a> --to <b>` | S | Blocks future schema bumps from being painless |
-
-## v2.5.0 – explicit exit condition + bus-factor
-
-Time-box the brand-#2 trigger. If no real second brand has materialized, the abstraction is officially overhead until decided.
-
-| # | Task | Effort | Why now |
-|---|---|---|---|
-| 11 | **Brand-#2 trigger decision (deadline-driven).** By v2.5 cutoff, choose one: (a) real client engagement provides brand #2, (b) build a synthetic-but-real variant (e.g. `erfana-dark` or another sibling brand) that exercises the resolver, or (c) absorb the layer back into `using-erfana` and delete `example-acme/`. Explicit exit condition for the abstraction | dec | Otherwise abstraction accrues maintenance cost forever with no payback |
-| 12 | MAINTAINER.md pre-release smoke checklist additions: `ACTIVE_BRAND` mid-session swap; drop-a-fake-brand validation | S | Only item that reduces bus-factor-1 risk |
-| 13 | Generalize Gate 11 across `brands/**` – multi-brand banned-token scan (conditional on path 11.a) | M (~60–90 LOC) | Triggered by brand #2 reality, not speculation |
+v7.0.0 removed the six `design-*` skills, the `design-shared` bundle and the brand-system layer. Every open item on the old design / brand-system roadmap (v2.3.2 through v2.5.0 – brand-context doc, per-skill brand consumers, Gate 13 hardening, the second-brand exit condition) died with them and is not carried forward. Those sections were deleted here rather than marked done; the reasoning lives in `CHANGELOG.md` v7.0.0. Sections below this point are historical release records, kept as written.
 
 ## v3.0.0 – shipped 2026-05-02
 
@@ -161,9 +125,9 @@ See `CHANGELOG.md` v4.2.13 for the full surface, `BACKLOG.md` for the tracked cr
 
 ## Forward-looking – sibling cascade (no schedule yet, no target version)
 
-Concrete trigger: the Modernize operation is the cascade primitive for the remaining sibling skills – as of v6.3.0 that is the five design-* sub-skills (`design-direction`, `design-prototype`, `design-slides`, `design-motion`, `design-infographic`) plus `using-erfana`, per [`docs/modernization-registry.md`](docs/modernization-registry.md) (every other skill has a recorded pass or redesign; `grill-me` was imported already-shaped in v4.2.3; `managing-reports` additionally owes the nested-agent architectural cascade below). Items intentionally deferred (separate plan, not on the design / brand-system roadmap):
+Concrete trigger: the Modernize operation is the cascade primitive for the remaining sibling skills – after the v7.0.0 design removal that is `using-erfana` alone, per [`docs/modernization-registry.md`](docs/modernization-registry.md) (every other skill has a recorded pass or redesign; `grill-me` was imported already-shaped in v4.2.3; `managing-reports` additionally owes the nested-agent architectural cascade below). Items intentionally deferred (separate plan):
 
-- **Cascade managing-skills' Modernize op against design-* and other managing-* siblings.** v4.2.0 smoke-tests Modernize against `design-review` (small case, focused-reviewer). `managing-articles` was the harder architectural case; it was fully redesigned in v4.3.0 (23 nested agents consolidated to 5 plugin-root `article-*` shared agents) rather than Modernized in place, so `managing-reports` is now the remaining nested-agent case requiring a separate proof-of-concept before wholesale cascade.
+- **Cascade managing-skills' Modernize op against the remaining managing-* siblings.** `managing-articles` was the harder architectural case; it was fully redesigned in v4.3.0 (23 nested agents consolidated to 5 plugin-root `article-*` shared agents) rather than Modernized in place, so `managing-reports` is now the remaining nested-agent case requiring a separate proof-of-concept before wholesale cascade.
 - **Generic-named agent renames.** 9 unprefixed agents at risk of cross-plugin collision (`code-reviewer`, `commit-writer`, `software-developer`, etc.). Breaking change. Trigger: any reported mixed-plugin nondeterminism or maintainer policy decision.
 - **`managing-reports` nested-agent migration.** 11 nested agents. Architectural decision per Lane 2 review of v4.2.0: hoist genuinely-reusable to plugin-root with prefix (`mr-*`), convert stage-specific to `prompts/` files invoked via Task with inline content (the obra/superpowers pattern), drop the nested `agents/` directory. (`managing-articles` completed its equivalent migration in v4.3.0 – 23 nested agents consolidated to 5 plugin-root `article-*` shared agents.)
 
@@ -173,8 +137,7 @@ Tracked in `BACKLOG.md` under "Deferred to a future major – concrete-trigger e
 
 See [`BACKLOG.md`](BACKLOG.md) for the full deprioritized list. Highlights of what is **not** here and why:
 
-- **First real second brand bundle** – sales event, not a roadmap item we can schedule.
-- **Component-tier tokens / Style Dictionary export / sub-brand model** – speculative complexity; defer until 3rd skill needs role tokens beyond colors and font families.
-- **Email / proposal / report skills** – different problem domain; belongs in a separate plugin or roadmap.
-- **Brand-asset signing / public docs site** – not yet justified by demand; re-evaluate post-launch now that the project is public.
+- **Reinstating any design capability** – removed in v7.0.0. Re-adding one is a new plugin, not a roadmap item here.
+- **Email / proposal skills** – different problem domain; belongs in a separate plugin or roadmap.
+- **Public docs site** – not yet justified by demand; re-evaluate post-launch now that the project is public.
 - **Vendor full `jsonschema`** – `json_schema_lite.py` was written specifically to avoid this; reverse only with a concrete trip-wire (e.g., `$ref` becomes necessary AND tests prove it).
