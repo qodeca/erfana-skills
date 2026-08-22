@@ -233,108 +233,12 @@ print(f'PASS: detector fixtures — {len(expected)} expected detections hit, no 
 PYEOF
 
 echo "=== Gate 3 — JSON parse ==="
-for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json skills/design-shared/test-prompts.json skills/design-shared/assets/personal-asset-index.example.json skills/design-shared/brands/brand.schema.json; do
+for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
     python3 -m json.tool "$f" > /dev/null && echo "  PASS: $f"
 done
 
 echo "=== Gate 4 — script syntax ==="
-python3 -c "import ast; ast.parse(open('skills/design-shared/scripts/verify.py').read())" && echo "  PASS: verify.py"
-python3 -c "import ast; ast.parse(open('scripts/_lib/json_schema_lite.py').read())" && echo "  PASS: scripts/_lib/json_schema_lite.py"
-for f in skills/design-shared/scripts/render-video.js skills/design-shared/scripts/html2pptx.js skills/design-shared/scripts/export_deck_pdf.mjs skills/design-shared/scripts/export_deck_pptx.mjs skills/design-shared/scripts/export_deck_stage_pdf.mjs skills/design-shared/assets/deck_stage.js; do
-    [ -f "$f" ] && node --check "$f" 2>&1 && echo "  PASS: $f"
-done
-
-echo "=== Gate 5 — SVG + HTML ==="
-python3 <<'PYEOF'
-import re, sys, glob
-import xml.etree.ElementTree as ET
-from html.parser import HTMLParser
-
-errors = []
-warnings = []
-EXTERNAL_HREF = re.compile(r'^(https?://|data:|javascript:)', re.IGNORECASE)
-
-
-def check_svg(path):
-    try:
-        tree = ET.parse(path)
-    except Exception as e:
-        errors.append(f'{path}: SVG parse failed: {e}')
-        return
-    root = tree.getroot()
-    for el in root.iter():
-        tag = el.tag.split('}')[-1] if isinstance(el.tag, str) else str(el.tag)
-        if tag == 'script':
-            errors.append(f'{path}: forbidden <script> element (XSS risk)')
-        if tag == 'foreignObject':
-            errors.append(f'{path}: forbidden <foreignObject> element (HTML-injection surface)')
-        for attr_name, attr_val in el.attrib.items():
-            local = attr_name.split('}')[-1]
-            if local == 'href' and EXTERNAL_HREF.match(attr_val):
-                errors.append(f'{path}: forbidden external href in <{tag}> (external/data/javascript)')
-            if local.startswith('on') and len(local) > 2:
-                errors.append(f'{path}: forbidden event-handler attribute "{local}" in <{tag}>')
-    with open(path, encoding='utf-8') as fh:
-        content = fh.read()
-    if 'PLACEHOLDER' in content:
-        warnings.append(f'{path}: PLACEHOLDER artwork — replace with real logo before shipping')
-
-
-# 1. Banner SVG (existing single-file check, retained).
-check_svg('skills/design-shared/assets/banner.svg')
-
-# 2. Brand SVGs — runtime brand vocabulary (logos, shapes) is content-checked.
-# Templates (slide masters under templates/ subfolders) are reference material,
-# never loaded by render-video.js, so they bypass the script/foreignObject/
-# external-href content rules. Authors review template content out-of-band
-# when authoring skills that consume them. The exemption is folder-name based
-# (any path segment named 'templates') so it is auditable in PR diffs.
-brand_svgs = sorted(glob.glob('skills/design-shared/brands/**/*.svg', recursive=True))
-brand_svgs = [s for s in brand_svgs if 'templates' not in s.replace('\\', '/').split('/')]
-for s in brand_svgs:
-    check_svg(s)
-
-# 3. Demos and showcase HTML well-formedness (existing).
-class V(HTMLParser):
-    def error(self, msg):
-        raise Exception(msg)
-
-
-html_files = sorted(set(
-    glob.glob('skills/design-shared/demos/*.html')
-    + glob.glob('skills/design-shared/assets/showcases/**/*.html', recursive=True)
-))
-ok = bad = 0
-for fp in html_files:
-    try:
-        with open(fp, encoding='utf-8') as fh:
-            V(convert_charrefs=True).feed(fh.read())
-        ok += 1
-    except Exception as e:
-        errors.append(f'{fp}: HTML parse failed: {e}')
-        bad += 1
-
-if errors:
-    print(f'  FAIL: {len(errors)} SVG/HTML issue(s)')
-    for e in errors:
-        print(f'    {e}')
-    sys.exit(1)
-
-for w in warnings:
-    print(f'  WARN: {w}')
-print(f'  PASS: 1 banner + {len(brand_svgs)} brand SVG(s); {ok}/{ok+bad} HTML file(s)')
-PYEOF
-
-echo "=== Gate 6 — JSX braces ==="
-for f in skills/design-shared/assets/*.jsx; do
-    python3 -c "
-content = open('$f').read()
-assert content.count('{') == content.count('}'), 'brace mismatch'
-assert content.count('(') == content.count(')'), 'paren mismatch'
-assert content.count('[') == content.count(']'), 'bracket mismatch'
-print('  PASS: $f')
-"
-done
+python3 -c "import ast; ast.parse(open('scripts/_lib/gate2_detector.py').read())" && echo "  PASS: scripts/_lib/gate2_detector.py"
 
 echo "=== Gate 7 — cross-references resolve ==="
 python3 <<'PYEOF'
@@ -394,14 +298,12 @@ for src in sorted(glob.glob('skills/*/SKILL.md')):
         if not os.path.exists(full):
             issues.append((src, p))
 
-# Pass 2: every SKILL.md, references/*.md, brand prose .md, and agents/*.md —
-# markdown link syntax anywhere. This catches genuine broken links inside reference
-# prose, inside brand bundles (CLAUDE.md, INDEX.md, RULES.md), and inside agent
-# prompts without false positives; [text](path) markdown link syntax is unambiguous,
-# unlike bare backticks. agents/*.md is empty until the agent-migration commit lands.
-brand_md = glob.glob('skills/design-shared/brands/*/**/*.md', recursive=True)
+# Pass 2: every SKILL.md, references/*.md, and agents/*.md — markdown link syntax
+# anywhere. This catches genuine broken links inside reference prose and inside
+# agent prompts without false positives; [text](path) markdown link syntax is
+# unambiguous, unlike bare backticks.
 agents_md = glob.glob('agents/*.md')
-for src in sorted(glob.glob('skills/*/SKILL.md') + glob.glob('skills/*/references/*.md') + brand_md + agents_md):
+for src in sorted(glob.glob('skills/*/SKILL.md') + glob.glob('skills/*/references/*.md') + agents_md):
     base_dir = os.path.dirname(src)
     content = open(src, encoding='utf-8').read()
     for m in MD_LINK.finditer(content):
@@ -424,45 +326,6 @@ if issues:
 print(f'  PASS: {len(seen)} cross-references resolve')
 PYEOF
 
-echo "=== Gate 8 — trigger phrase coverage (across all sub-skills) ==="
-python3 <<'PYEOF'
-import yaml, glob, sys
-combined = ''
-for fp in sorted(glob.glob('skills/design-*/SKILL.md')):
-    if 'design-shared' in fp:
-        continue
-    m = yaml.safe_load(open(fp).read().split('---')[1])
-    combined += ' ' + (m.get('description', '') or '') + ' ' + (m.get('when_to_use', '') or '')
-text = combined.lower()
-categories = {
-    'prototype': ['prototype', 'mockup'],
-    'animation': ['animation', 'motion', 'mp4', 'gif'],
-    'slides': ['slide deck', 'deck', 'pitch deck', 'keynote'],
-    'advisor': ['design direction', 'design philosophy', 'recommend a style', 'what style', 'pick a style'],
-    'critique': ['design review', 'critique'],
-    'infographic': ['infographic', 'data visualization', 'data viz'],
-}
-hit = sum(1 for cat, phrases in categories.items() if any(p in text for p in phrases))
-if hit != 6:
-    missing = [cat for cat, phrases in categories.items() if not any(p in text for p in phrases)]
-    print(f'  FAIL: {hit}/6 trigger categories present; missing: {missing}')
-    sys.exit(1)
-print(f'  PASS: {hit}/6 trigger categories present across sub-skills')
-PYEOF
-
-echo "=== Gate 9 — watermark consistency ==="
-# Watermark literal is brand-output only ('Created with erfana', sourced from
-# brand.json voice.watermark). Allowlist: legacy-brand reminder line in
-# using-erfana, and template prose 'Created by default' in managing-specs which
-# describes filesystem-creation behavior, not brand watermarking.
-hits=$(grep -rnE 'Created (by|with)' skills/ 2>/dev/null | grep -v 'Created with erfana' | grep -v 'Never `Created by qodesign`' | grep -v 'legacy brand' | grep -v 'Created by default' || true)
-if [ -n "$hits" ]; then
-    echo "FAIL: non-canonical watermark (allowed: 'Created with erfana')"
-    echo "$hits"
-    exit 1
-fi
-echo "  PASS: all watermarks use 'Created with erfana'"
-
 echo "=== Gate 10 — git history CJK-free ==="
 git log --pretty=%s | python3 -c "
 import sys, re
@@ -475,17 +338,14 @@ print('  PASS')
 "
 
 echo "=== Gate 11 — brand consistency (no qodesign) ==="
-hits=$(grep -r -i 'qodesign' skills/ .claude-plugin/ README.md LICENSE CHANGELOG.md SECURITY.md .github/ 2>/dev/null | grep -v 'using-erfana/SKILL.md' | grep -v 'CHANGELOG.md' || true)
-# CHANGELOG retains historical mentions (renames, brand replacements). using-erfana retains legacy-brand reminder.
+hits=$(grep -r -i 'qodesign' skills/ .claude-plugin/ README.md LICENSE CHANGELOG.md SECURITY.md .github/ 2>/dev/null | grep -v 'CHANGELOG.md' || true)
+# CHANGELOG retains historical mentions (renames, brand replacements) and is the sole exception.
 if [ -n "$hits" ]; then
     echo "FAIL: leftover qodesign strings:"
     echo "$hits"
     exit 1
 fi
 echo "  PASS: no qodesign strings outside the documented exceptions"
-
-echo "=== Gate 12 — brand manifests valid ==="
-bash scripts/gate-12-brand-manifests.sh
 
 echo "=== Gate 14 — hooks valid ==="
 # Validates hooks/hooks.json shape, ${CLAUDE_PLUGIN_ROOT} path discipline,
@@ -520,14 +380,6 @@ echo "=== Gate 18 — skill registry sync ==="
 # see docs/gates/18-skill-registry.md. Fix with: bash scripts/gen-skill-registry.sh.
 # Standalone runner under scripts/gate-18-skill-registry.sh.
 bash scripts/gate-18-skill-registry.sh
-
-echo "=== Gate 13 — brandbook hex coverage (soft) ==="
-# Verifies any brandbook-defined hex codes (scripts/_lib/brandbook-hex-inventory.json)
-# are present in the matching brand tokens; the default erfana brand ships none.
-# Catches transcription typos that schema validation cannot see.
-# Currently soft (non-blocking) per ROADMAP integration plan – future hardening
-# turns the trailing `|| ...` clause into a hard fail when the script stabilises.
-bash scripts/check-brandbook-hex.sh || echo "  WARN: hex coverage check failed (soft – not blocking CI)"
 
 echo "=== claude plugin validate ==="
 if command -v claude > /dev/null; then

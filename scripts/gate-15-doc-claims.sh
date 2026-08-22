@@ -14,7 +14,7 @@
 #   3. Plugin-root agent count claims ("75 shared agents") that diverge
 #      from `ls agents/*.md`.
 #   4. Top-level skills count claims ("13 skills", "13 auto-discovered
-#      skills") that diverge from `ls skills/` minus design-shared (added
+#      skills") that diverge from `ls skills/` (added
 #      v4.1.3+).
 #   5. Hooks count claims ("4 safety hooks", "4 hook scripts") that
 #      diverge from `ls hooks/*.sh` (added v4.1.3+).
@@ -26,7 +26,7 @@
 #      covered this class).
 #
 # Hard gate. Wired into scripts/run-all-gates.sh between Gate 14 (hooks)
-# and Gate 13 (brandbook hex, soft).
+# and Gate 17 (publication readiness).
 #
 # Standalone runner – `bash scripts/gate-15-doc-claims.sh`.
 
@@ -81,8 +81,6 @@ for skill_dir in sorted(glob('skills/*/')):
     # normpath handles both / and \ separators + trailing slash, so basename
     # resolves correctly on Windows (glob returns backslash paths there).
     skill = os.path.basename(os.path.normpath(skill_dir))
-    if skill in ('design-shared',):
-        continue
     agents_dir = os.path.join(skill_dir, 'agents')
     if os.path.isdir(agents_dir):
         fs_counts[skill] = sum(1 for f in os.listdir(agents_dir) if f.endswith('.md'))
@@ -156,12 +154,12 @@ if os.path.isdir('agents'):
     passes.append(f'plugin-root agents/ count {plugin_root_count} aligns with all "X shared agents" claims')
 
 # === Check 4 (v4.1.3+): top-level skills count ===
-# `ls skills/` minus the design-shared bundle (which is not a skill).
+# `ls skills/`.
 # Pattern: "13 skills" or "13 auto-discovered skills". Negative lookahead
 # excludes path-like uses (skills/foo) and compounds (skills-related).
 skills_count = sum(
     1 for d in os.listdir('skills')
-    if os.path.isdir(os.path.join('skills', d)) and d != 'design-shared'
+    if os.path.isdir(os.path.join('skills', d))
 )
 skills_pattern = re.compile(r'(\d+)\s+(?:auto-discovered\s+)?skills\b(?![/-])')
 for doc in docs_to_scan:
@@ -171,7 +169,7 @@ for doc in docs_to_scan:
         claimed = int(m.group(1))
         if claimed != skills_count:
             errors.append(
-                f'{doc}: "{m.group(0)}" disagrees with skills/ count ({skills_count}, excluding design-shared)'
+                f'{doc}: "{m.group(0)}" disagrees with skills/ count ({skills_count})'
             )
             break  # one error per doc
 passes.append(f'skills/ count {skills_count} aligns with all "X (auto-discovered) skills" claims')

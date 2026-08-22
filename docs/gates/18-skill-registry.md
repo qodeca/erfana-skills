@@ -1,6 +1,6 @@
 # Gate 18 — skill registry sync (v6.6.1+)
 
-**Type**: hard (with one soft sub-check). **Runner order**: after Gate 17, before the soft Gate 13.
+**Type**: hard (with one soft sub-check). **Runner order**: last, after Gate 17.
 
 ## What it enforces
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | 0 | The repository is not a shallow clone | hard |
 | 1 | The registry exists, its table parses, and no skill is listed twice | hard |
-| 2 | Its skill list equals `ls skills/` minus `design-shared` | hard |
+| 2 | Its skill list equals `ls skills/` | hard |
 | 3 | No row claims something git cannot account for: a date ahead of history, or – on a row whose date git confirms – a commit subject that is not that commit's subject | hard |
 | 4 | Rows behind git are reported with the fix command | **soft** (warn) |
 
@@ -57,7 +57,7 @@ The generator truncates a commit subject to 72 characters (`[:69] + "..."`) and 
 ## Limitations
 
 - The gate proves the registry matches git, not that a skill's *content* is current. A skill can be stale in substance while its row is accurate.
-- Dates reflect commits touching `skills/<name>/`, so a change made elsewhere that affects a skill (a shared agent under `agents/`, a hook, a brand bundle) does not move that skill's date. `managing-articles` is the standing example: its five `article-*` agents live at plugin root, so work on them never dates its row.
+- Dates reflect commits touching `skills/<name>/`, so a change made elsewhere that affects a skill (a shared agent under `agents/`, a hook, a shared reference file) does not move that skill's date. `managing-articles` is the standing example: its five `article-*` agents live at plugin root, so work on them never dates its row.
 - A row that is behind git can carry any subject at all – the subject is only verified when the date matches. Hand-editing a date *backwards* is therefore indistinguishable from ordinary lag, and warns rather than blocks.
 - Squash-merge and fresh-repo publishes flatten history: a cluster of skills sharing one old date means "not touched since that flattening event", not "created then". The registry says so in prose.
 - The gate parses the first Markdown table in the file. Prose lines beginning with `|` added after the table would be read as rows.
