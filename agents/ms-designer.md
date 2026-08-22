@@ -51,7 +51,7 @@ Design skill structure based on validated requirements.
      - 0-1 agents (or 1 reusable agent)
      - References-heavy (`references/*.md` carries the depth, SKILL.md stays terse 60-200 lines)
      - User invokes explicitly for that one outcome (often `disable-model-invocation: true`)
-     - Reference shape: `skills/design-prototype/SKILL.md` (65 lines), `skills/design-review/SKILL.md` (64 lines)
+     - Reference shape: `skills/grill-me/SKILL.md` (134 lines)
    - **Simple** — emit `complexity: "simple"` for: 2-3 orchestrator steps, 1-2 agents, single output format, NO multi-phase orchestration but more than one delegation step
    - **Medium** — emit `complexity: "medium"` for: 4-6 steps, 2-4 agents, templates needed
    - **Complex** — emit `complexity: "complex"` for: 7+ steps, 5+ agents, validation/guides needed
