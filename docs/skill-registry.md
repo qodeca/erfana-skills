@@ -18,9 +18,9 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| grill-me | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
-| managing-skills | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
-| using-erfana | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
+| grill-me | 2026-08-22 | feat!: remove the design half of the plugin (v7.0.0) (#39) |
+| managing-skills | 2026-08-22 | feat!: remove the design half of the plugin (v7.0.0) (#39) |
+| using-erfana | 2026-08-22 | feat!: remove the design half of the plugin (v7.0.0) (#39) |
 | managing-issues | 2026-08-14 | chore(release): v6.7.1 (#36) |
 | managing-reports | 2026-07-22 | fix(managing-reports): lens-review remediation + v6.1.0 (#16) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
