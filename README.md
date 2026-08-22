@@ -2,7 +2,7 @@
 
 # Erfana Skills
 
-**An open-source Claude Code toolkit (GPL-3.0-only) – design and orchestration in one plugin.**
+**An open-source Claude Code orchestration toolkit (GPL-3.0-only).**
 
 by [Qodeca](https://github.com/qodeca)
 
@@ -14,27 +14,13 @@ by [Qodeca](https://github.com/qodeca)
 
 </div>
 
-Two domains in one plugin:
+Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside Claude Code. 6 orchestration skills plus a process skill, a verification skill, and 87 shared agents, all delegating substantive work via the `Task` tool.
 
-- **Design.** Build production-grade design artifacts directly inside Claude Code: clickable UI prototypes, 1920×1080 slide decks (HTML / PDF / editable PPTX), MP4 / GIF motion graphics, vertical print-grade infographics, and 5-dimension design critiques.
-- **Orchestration.** Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications. 6 orchestration skills plus 87 shared agents, all delegating substantive work via the `Task` tool.
-
-Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills uses it to verify rendered output and is not affiliated with or endorsed by Microsoft.
+Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills ships agents that author and review Playwright tests and is not affiliated with or endorsed by Microsoft.
 
 ---
 
 ## What's in this plugin
-
-### Design skills
-
-| Skill | What it does | Triggers |
-|---|---|---|
-| `erfana:design-direction` | The brief is vague – recommends 3 differentiated philosophies from a 20-school library, shows prebuilt samples, generates 3 visual demos to compare. **Run this first** when no visual direction is set. | "what style should I use", "recommend a style", "I don't know what style", "design advisor", "make it look good" |
-| `erfana:design-prototype` | Hi-fi clickable UI prototypes – iOS, Android, web, desktop. Single-file HTML, real device frames, real images, Playwright-verified. | "build a prototype", "iOS prototype", "Android prototype", "app mockup", "clickable design", "hi-fi mockup" |
-| `erfana:design-slides` | 1920×1080 HTML presentation decks with PDF + editable PPTX export. Multi-file aggregator for ≥10 pages, single-file deck for ≤10 pages. | "design a deck", "design a slide deck", "pitch deck", "keynote", "PPT", "editable PPTX" |
-| `erfana:design-motion` | Timeline-driven animations exported as MP4 (25fps base, 60fps interpolated) or palette-optimized GIF. Optional BGM + SFX with frequency separation. Watermark: `Created with erfana`. | "animate this", "motion design", "export MP4", "export GIF", "60fps video", "motion graphics" |
-| `erfana:design-infographic` | Vertical (1080×1920) print-grade data visualizations. Honest placeholders over fabricated numbers. | "infographic", "data visualization", "data viz", "vertical infographic", "chart design" |
-| `erfana:design-review` | 5-dimension critique of completed design work – Keep / Fix / Quick Wins. Severity-tagged, implementable feedback. | "design review", "critique", "rate this design", "score this", "expert review" |
 
 ### Orchestration skills
 
@@ -63,7 +49,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 
 | Component | What it does |
 |---|---|
-| `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, dispatches design-vs-orchestration. Loads automatically. |
+| `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, routes to the right sub-skill. Loads automatically. |
 | `agents/` (87 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
@@ -93,7 +79,7 @@ All four are project-agnostic – no personal style preferences. They activate o
 | `/erfana:explain-issue` | Translates a single GitHub issue into a Product Owner / PM / BA brief (accepts a bare number, `#N`, or full URL). Pulls the issue, comments, linked PRs, and referenced files/specs to ground the translation, but stays purely descriptive – no suggested next step. Non-interactive, read-only. Full contract: [`commands/explain-issue.md`](commands/explain-issue.md). |
 | `/erfana:lens-review` | Researched multi-lens code review over any target – `/erfana:lens-review <path \| #PR \| "description"> [--lens a,b,c] [--out file.md]`. Fans out reviewers (up to 10, chosen at runtime), each grounded in cited best practices from the last ~12 months, then returns one severity-ranked, plain-language report (PM/PO-facing, with full technical detail kept for engineers). Manual trigger only; distinct from `/review` by its live research and any-target scope. Full contract: [`commands/lens-review.md`](commands/lens-review.md). |
 
-Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json` and from `skills/<skill>/SKILL.md` `hooks:` frontmatter; commands from `commands/*.md`. Shared design content (workflow templates, content guidelines, asset bundle: 4 references / 37 SFX / 6 BGM / 24 showcases) lives in `skills/design-shared/`.
+Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json` and from `skills/<skill>/SKILL.md` `hooks:` frontmatter; commands from `commands/*.md`. Every skill is self-contained – there is no shared content bundle.
 
 > **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `mi-codebase-explorer`, `ma-designer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
 
@@ -106,8 +92,7 @@ Prompts you send through any skill or agent in this plugin are forwarded to Anth
 Treat the plugin like any other AI tool routed through external infrastructure:
 
 - **Do not paste**: client-confidential data, customer PII, financial figures marked sensitive, unreleased product specs, internal credentials, or anything covered by an NDA you signed.
-- **Default to public-grade brand context** when describing the design target (paste your published color palette, not a draft you have not shipped).
-- **For sensitive design work**, work locally and skip this plugin.
+- **For sensitive work**, review the agent prompts before granting tool permissions in your session.
 
 Review Anthropic's data-usage and privacy terms before routing sensitive material through any Claude-based tool, and treat the conservative defaults above as policy.
 
@@ -136,17 +121,17 @@ The marketplace registers under the name `erfana-skills` (matches `marketplace.j
 
 You should see `erfana@erfana-skills` enabled. Then type a trigger phrase like:
 
-> design a slide deck
+> create an issue for the login bug
 
-`erfana:design-slides` should activate. (Or `erfana:design-direction` first if you want it to suggest a visual style – try `"what style should I use for a Q2 retrospective deck"` for that path.)
+`erfana:managing-issues` should activate.
 
 ### Invocation forms – bare vs. namespaced
 
 Both forms resolve to the same skill:
 
 ```
-/erfana:design-prototype     # canonical, namespaced (use this)
-/design-prototype            # bare form, also works
+/erfana:managing-issues     # canonical, namespaced (use this)
+/managing-issues            # bare form, also works
 ```
 
 Use the **namespaced form** in shared docs, screenshots, and team conversations. The bare form is a built-in Claude Code convenience – it exists for autocomplete brevity but collides with personal or other-plugin skills of the same name. The `/erfana:` prefix prevents that collision and makes the source explicit.
@@ -188,7 +173,7 @@ If you turned on auto-update and need stability for a critical project, pin to a
 
 Replace `v6.4.0` with whichever release you want to lock to. A pinned version is never auto-updated. To upgrade later, run the same command with a newer tag and restart Claude Code.
 
-Use case: you are mid-flight on a deck, a new version drops, and you do not want trigger-phrase behavior to shift under you. Pin until you are done, then unpin (`/plugin install erfana@erfana-skills` without a `@vX.Y.Z` suffix).
+Use case: you are mid-flight on an issue implementation, a new version drops, and you do not want trigger-phrase behavior to shift under you. Pin until you are done, then unpin (`/plugin install erfana@erfana-skills` without a `@vX.Y.Z` suffix).
 
 ---
 
@@ -196,45 +181,29 @@ Use case: you are mid-flight on a deck, a new version drops, and you do not want
 
 Skills compose. The most common chains:
 
-**Pitch deck for an investor or client (visual style not yet decided)**
+**Feature from idea to merged code**
 
-1. `erfana:design-direction` – pick a visual philosophy from a 20-school library; see 3 demos compared
-2. `erfana:design-slides` – build the deck in the chosen direction
-3. `erfana:design-review` – score the result before sending
+1. `erfana:managing-specs` – right-size the requirements (T1 issue through T4 standard spec)
+2. `erfana:managing-issues` create – file the issue against the spec
+3. `erfana:managing-issues` implement – autonomous build through 13 phased quality gates, embedded reviews, human only at requirements, UAT and the final git confirm
 
-Sample opener: *"What style should I use for a Series B pitch deck? Help me decide, then build it."*
-
-**Hi-fi app prototype (iOS / Android / web)**
-
-1. `erfana:design-prototype` – build clickable single-file HTML mockup with real device frame
-2. `erfana:design-review` – catch hierarchy / craft / functionality issues before delivery
-
-Sample opener: *"Build me a clickable iOS prototype for a Pomodoro app, 4 screens."*
-
-**Product-launch animation with audio**
-
-1. `erfana:design-direction` (only if visual style is unclear)
-2. `erfana:design-motion` – timeline-driven animation with BGM + SFX, MP4 / GIF export
-3. `erfana:design-review` – pre-publish QA
-
-Sample opener: *"Make me a 15-second product launch animation in the Field.io kinetic style."*
-
-**Vertical infographic from real data**
-
-1. `erfana:design-direction` (if no chosen philosophy)
-2. `erfana:design-infographic` – print-grade vertical layout with honest placeholders
-3. `erfana:design-review` – typography / hierarchy pass
-
-Sample opener: *"Design an infographic comparing our Q2 vs Q3 numbers."*
+Sample opener: *"Spec out the new export feature, then create and implement the issue."*
 
 **Stress-test a plan before implementing** (process skill, v4.2.3+)
 
 1. `erfana:grill-me` – Socratic walk through the decision tree; one question at a time, recommended answer per branch, explores the codebase before asking when the answer is already encoded there. Depth scales to the plan: a small reversible change gets a short pass, anything with a one-way door gets the full sweep
-2. Downstream skill of choice – `erfana:managing-issues` create / `erfana:managing-specs` (T1–T4) / any `erfana:design-*` skill, depending on what the locked plan is meant to produce
+2. Downstream skill of choice – `erfana:managing-issues` create / `erfana:managing-specs` (T1–T4), depending on what the locked plan is meant to produce
 
 Sample opener: *"Grill me on this rollout plan before we build it – I want to ship X by Friday, here's my draft approach."*
 
-**Why workflows matter**: each output skill works alone, but `design-direction` first prevents generic AI-look outputs and `design-review` last catches issues humans miss. Skip neither for important deliverables.
+**Publish a researched article**
+
+1. `erfana:managing-articles` – research, outline, draft, review, revise, publish (bilingual Polish/English supported)
+2. `erfana:fact-checking` – trace every factual claim in the draft back to a source passage before it ships
+
+Sample opener: *"Write a 2500-word article comparing managed Postgres providers, then fact-check it."*
+
+**Why workflows matter**: each skill works alone, but locking requirements first and verifying claims last catches problems that are expensive to fix after delivery.
 
 ---
 
@@ -250,10 +219,10 @@ Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin updat
 The registered marketplace name comes from `marketplace.json` (`erfana-skills`). Make sure step 3 ran successfully – `/plugin marketplace list` should show it.
 
 **Trigger phrases don't activate the right sub-skill**
-Confirm the plugin is enabled (`/plugin list`) and try a trigger phrase from the skill table above. Each sub-skill (`design-direction`, `design-prototype`, `design-slides`, `design-motion`, `design-infographic`, `design-review`) has its own keyword set – if your phrasing is far from the listed triggers, mention the deliverable type explicitly ("prototype", "slide deck", "animation", "infographic").
+Confirm the plugin is enabled (`/plugin list`) and try a trigger phrase from the skill table above. Each sub-skill has its own keyword set – if your phrasing is far from the listed triggers, name the artifact explicitly ("issue", "spec", "article", "report", "agent", "skill").
 
-**`/erfana:design-prototype` and `/design-prototype` both appear in autocomplete**
-Expected behavior. Plugin skills are registered at both the bare path (`/design-prototype`) and the namespaced path (`/erfana:design-prototype`) – see [Invocation forms](#invocation-forms--bare-vs-namespaced). Use the namespaced form to avoid collisions with personal or other-plugin skills.
+**`/erfana:managing-issues` and `/managing-issues` both appear in autocomplete**
+Expected behavior. Plugin skills are registered at both the bare path (`/managing-issues`) and the namespaced path (`/erfana:managing-issues`) – see [Invocation forms](#invocation-forms--bare-vs-namespaced). Use the namespaced form to avoid collisions with personal or other-plugin skills.
 
 **Plugin updated but Claude Code still uses old behavior**
 Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin update erfana@erfana-skills`, then restart Claude Code. If still stuck, clear the cache: `rm -rf ~/.claude/plugins/cache/` and restart Claude Code.
@@ -262,7 +231,7 @@ Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin updat
 If your network blocks `api.github.com` or `raw.githubusercontent.com`, marketplace operations fail without a clear error. Ask IT to allowlist both. As a workaround, `git clone` the repo locally and register it as a local-path marketplace: `/plugin marketplace add /absolute/path/to/erfana-skills`. Pull updates manually with `git pull` + `/plugin marketplace update erfana-skills`.
 
 **Skill scope precedence**
-If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/design-slides/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.
+If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/managing-issues/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.
 
 **Local development (testing changes before they hit main)**
 Clone the repo locally, then register it as a local-path marketplace:

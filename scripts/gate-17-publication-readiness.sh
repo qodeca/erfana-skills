@@ -10,7 +10,6 @@
 #   3. No internal `@qodeca.com` address in published files, except the one
 #      public hi@qodeca.com alias used in CODE_OF_CONDUCT.md.
 #   4. No proprietary / internal-only framing in published files.
-#   5. ACTIVE_BRAND does not point at the removed proprietary `qodeca` brand.
 #
 # CHANGELOG.md (history), this script, and its gate doc are exempt — they legitimately
 # reference the old literals.
@@ -75,13 +74,8 @@ fi
 scan 'Qodeca-internal|scoped to Qodeca|Qodeca employees|for Qodeca employees|employees only|Qodeca tools channel|internal use by Qodeca|employees and contractors only|private internal|internal-only license' \
      "proprietary/internal-only framing in published files"
 
-# 5. Active brand
-if [ "$(cat skills/design-shared/brands/ACTIVE_BRAND 2>/dev/null)" = "qodeca" ]; then
-    echo "  FAIL: ACTIVE_BRAND still points at the removed 'qodeca' brand"; fail=1
-fi
-
 if [ "$fail" -ne 0 ]; then
     echo "  FAIL: publication-readiness checks failed"
     exit 1
 fi
-echo "  PASS: publication-readiness (license, contact, framing, active brand)"
+echo "  PASS: publication-readiness (license, contact, framing)"

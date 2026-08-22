@@ -35,7 +35,7 @@ bash scripts/run-all-gates.sh        # expect: === ALL GATES PASSED ===
 claude plugin validate .             # expect: Validation passed
 ```
 
-The gates enforce hard project invariants (valid manifests, no CJK characters, brand-manifest integrity, cross-references resolve, doc-claims match the filesystem, hook health, publication-readiness, and more). See [`docs/verification-gates.md`](docs/verification-gates.md).
+The gates enforce hard project invariants (valid manifests, no CJK characters, cross-references resolve, doc-claims match the filesystem, skill-registry sync, hook health, publication-readiness, and more). See [`docs/verification-gates.md`](docs/verification-gates.md).
 
 ### Secret scanning
 
@@ -64,7 +64,7 @@ If a scanner flags a known false positive, add a narrow allowlist (gitleaks: an 
 
 - Skills and agents are Markdown with YAML frontmatter on line 1 – never prepend a comment above the frontmatter.
 - Do not introduce deprecated Anthropic API parameters (`temperature`, `top_p`, `top_k`, fixed `thinking.budget_tokens`).
-- Keep changes single-concern; split brand-bundle, skill, and infrastructure changes into separate commits.
+- Keep changes single-concern; split skill-content, agent-content, and infrastructure changes into separate commits.
 
 ## Governance
 

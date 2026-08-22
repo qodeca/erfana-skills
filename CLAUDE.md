@@ -4,13 +4,12 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 ## What this is
 
-The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) design + orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
+The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
 
-Current version: **v6.7.1**. The plugin ships 15 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v7.0.0**. The plugin ships 9 auto-discovered skills + 87 shared agents + 4 safety hooks + 5 slash commands. Load-bearing summary below.
 
-**Skills (15)** – all invoke as `/erfana:<name>`:
+**Skills (9)** – all invoke as `/erfana:<name>`:
 
-- Design (6): `design-direction`, `design-prototype`, `design-slides`, `design-motion`, `design-infographic`, `design-review` (user-invoked only – `disable-model-invocation: true`).
 - Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `managing-reports`, `managing-articles` (per-skill agent notes below).
 - `managing-articles` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
 - `managing-reports` ships 11 internal validation agents.
@@ -21,50 +20,43 @@ Current version: **v6.7.1**. The plugin ships 15 auto-discovered skills + 87 sha
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
-The design asset bundle (`skills/design-shared/`) holds shared `assets/`, `demos/`, `scripts/`, and cross-cutting `references/` consumed by **design** sub-skills only via `../design-shared/...`. Orchestration skills are brand-agnostic. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
+Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/`, `guides/`, `templates/` and (for `managing-reports`) `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
 
 ## Hard constraints (non-negotiable)
 
 Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail lives in [`docs/gates/`](docs/gates/).
 
 - **Zero CJK characters anywhere** in `*.md`, `*.json`, `*.html`, `*.js`, `*.mjs`, `*.jsx`, `*.py`, `*.sh`, `*.svg`, `*.yml`, `*.yaml`, `.gitignore`. UTF-8 only. (Gate 1)
-- **Default shipped brand is `erfana`**; the copyright holder / maintainer is `Qodeca sp. z o.o.` (`github.com/qodeca`). Plugin package id is `erfana`. Legacy brand `qodesign` is forbidden across `skills/`, `.claude-plugin/`, `README.md`, `LICENSE`, `SECURITY.md`, `MAINTAINER.md`, `.github/`. Two whitelisted exceptions: `skills/using-erfana/SKILL.md` (legacy-brand reminder), `CHANGELOG.md` (history). (Gate 11)
-- **SKILL.md `name:` = folder name** for all fifteen skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:design-prototype`) and bare (`/design-prototype`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Gate 2)
+- **Plugin package id is `erfana`**; the copyright holder / maintainer is `Qodeca sp. z o.o.` (`github.com/qodeca`). Legacy brand `qodesign` is forbidden across the paths Gate 11 scans – `skills/`, `.claude-plugin/`, `README.md`, `LICENSE`, `CHANGELOG.md`, `SECURITY.md`, `.github/`. One whitelisted exception: `CHANGELOG.md` (history). (Gate 11)
+- **SKILL.md `name:` = folder name** for all nine skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:managing-issues`) and bare (`/managing-issues`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Gate 2)
 - **Agent `name:` = filename basename** (no `.md`) for every `agents/*.md`. (Gate 2)
 - **Skill descriptions are trigger-shaped**, not workflow summaries. Frontmatter `description:` answers "when to use this skill"; workflow goes in the body. Soft-warn over 500 chars. (Gate 2)
-- **Watermark literal** for the active brand is `Created with erfana` (motion MP4/GIF only), sourced at runtime from `brand.json` → `voice.watermark`. Note: Gate 9 enforces it as a **hardcoded allowlist literal** in `scripts/run-all-gates.sh` (a brand-output check, not read from the manifest at gate time) – changing the active brand's watermark requires updating that allowlist in the same change. Never `Created by qodesign` or any other hardcoded phrasing. (Gate 9)
-- **Brand identity is sourced from manifest, not inline literals.** Colors, typography, voice, watermark, illustration style, and logos live under `skills/design-shared/brands/<id>/`, never as literals in skill prose. Convention over configuration: `id` MUST equal the folder basename. Adding a brand = folder copy under `brands/` + one-line append to `PRODUCTION_BRANDS` in `scripts/gate-12-brand-manifests.sh`. Manifest + token schema, the per-brand `CLAUDE.md` / `INDEX.md` / `RULES.md` expectations, the active-brand pointer, and brandbook-hex fidelity: [`docs/gates/12-brand-manifests.md`](docs/gates/12-brand-manifests.md) + [`docs/architecture.md`](docs/architecture.md). (Gate 12, Gate 13)
-- **Brand SVGs (logos, shapes) MUST contain no `<script>`, no `<foreignObject>`, no event-handler attributes (`onload`, `onclick`), no `href` / `xlink:href` starting with `http://`, `https://`, `data:`, `javascript:`.** Browsers execute SVG during Playwright recording (`render-video.js`) – script-bearing or external-fetching SVGs are a supply-chain attack surface. **Exception**: SVGs under any path segment named `templates` bypass content rules (templates are reference material `render-video.js` never loads). the default `erfana` brand ships a self-contained neutral logo (no placeholder warnings). (Gate 5)
-- **Cross-references in `skills/*/SKILL.md` and `skills/*/references/*.md` must resolve** from the skill's directory. Sub-skills cite shared assets via `../design-shared/...`. No dead paths, no absolute paths to other home directories. (Gate 7)
+- **Cross-references in `skills/*/SKILL.md` and `skills/*/references/*.md` must resolve** from the skill's directory. No dead paths, no absolute paths to other home directories. (Gate 7)
 - **Plugin manifests are valid JSON.** `plugin.json` keeps `name: erfana` + string `repository` field (not an object). `marketplace.json` plugin source starts with `./`. (Gate 2)
 - **`hooks/hooks.json` is valid JSON**, plugin wrapper format (`{"hooks": {…}}`), every command path uses `${CLAUDE_PLUGIN_ROOT}/hooks/<script>.<ext>`. No bare absolute paths, no `~/`, no other env vars. Every referenced script must exist with executable bit, recognised shebang (`#!/usr/bin/env bash` or `#!/bin/bash`), and pass `bash -n`. Commands invoke `dispatch.sh <hook>` per the cross-platform contract described under "What this is" above; Gate 14 additionally verifies each dispatched `<hook>` has both siblings and PowerShell-parses the `.ps1` files when a PowerShell is on PATH (skipped on bare Linux CI). Hooks ship as the project-agnostic safety net only; personal style preferences belong in user settings. Skill-scoped hooks (`skills/<name>/hooks/`, declared in SKILL.md frontmatter with the `dispatch.sh ../skills/<name>/hooks/<hook>` relative form) are exempt from Gate 14's path rule and covered by Gate 16 instead. (Gate 14)
-- **Prose claims about plugin shape MUST match the filesystem.** Seven classes enforced atomically by Gate 15: (1) `Current version: **vX.Y.Z**` banner = `plugin.json` version; (2) per-skill internal agent counts (CLAUDE.md / README.md / docs/architecture.md / MAINTAINER.md) = `ls skills/managing-*/agents/`; (3) "X shared agents" claims = `ls agents/*.md`; (4) top-level skills count claims = `ls skills/` minus design-shared; (5) hooks count claims = `ls hooks/*.sh` minus the `dispatch.sh` launcher; (6) slash command count claims = `ls commands/*.md`; (7) per-gate detail-file count claims (CLAUDE.md / docs/architecture.md) = `ls docs/gates/*.md`. `MAINTAINER.md` "Current state" header is exempt from (1) only; its "Plugin scope" line participates in (2)-(6). (Gate 15)
-- **`erfana:design-review` must keep `disable-model-invocation: true`.** Reviews are user-requested only.
-- **Brand-styled artwork follows the active brand's `CLAUDE.md` rules verbatim.** The default `erfana` brand (`skills/design-shared/brands/erfana/CLAUDE.md`) is a neutral logo-only bundle: Inter (body + display) + JetBrains Mono, the indigo/cyan/ink/paper palette from `tokens.tokens.json`, and one self-contained logo lockup in `logo/`. It declares no photo/shape/template libraries, so any artwork beyond the logo is the user's to supply (bring-your-own-brand). Sub-skills inherit via `using-erfana`; never hardcode brand specifics in skill prose.
-- **`erfana:design-slides` deliverables follow the v3.1.0 contract**: 20 px text floor; 8 px grid (`8/16/24/.../112`); per-deck `assets/` local copy of brand assets (slide HTML/CSS reference `../assets/...`, never `skills/design-shared/brands/...`); per-slide independent subagent review before declaring done (step 5b in `skills/design-slides/SKILL.md`); delete `_*.png` verification screenshots before completion. Full rules in `skills/design-slides/references/slide-decks.md`.
+- **Prose claims about plugin shape MUST match the filesystem.** Seven classes enforced atomically by Gate 15: (1) `Current version: **vX.Y.Z**` banner = `plugin.json` version; (2) per-skill internal agent counts (CLAUDE.md / README.md / docs/architecture.md / MAINTAINER.md) = `ls skills/managing-*/agents/`; (3) "X shared agents" claims = `ls agents/*.md`; (4) top-level skills count claims = `ls skills/`; (5) hooks count claims = `ls hooks/*.sh` minus the `dispatch.sh` launcher; (6) slash command count claims = `ls commands/*.md`; (7) per-gate detail-file count claims (CLAUDE.md / docs/architecture.md) = `ls docs/gates/*.md`. `MAINTAINER.md` "Current state" header is exempt from (1) only; its "Plugin scope" line participates in (2)-(6). (Gate 15)
+- **`erfana:fact-checking` must keep `disable-model-invocation: true`.** Fact-check runs are user-requested only.
 - **No deprecated Anthropic APIs in skills/agents**: no `temperature`, `top_p`, `top_k` (400 error on Claude Opus 4.7 and later per Anthropic's parameter-deprecation table) and no fixed `thinking: {type: "enabled", budget_tokens: N}` on Claude 5 models (unsupported on Fable 5 / Opus 5 / Sonnet 5; Haiku 4.5 still supports it) in skill body, agent body, or templates. Use `{type: "adaptive"}` + `effort` field instead. Gate 2 warns at line-start YAML-key syntax; blocking at checklist level via Section 12.7 of `pre-release-checklist.md` + Section 13.3/13.4 of `agent-pre-release-checklist.md`. False-positive guard skips backtick'd code references and detection regexes.
 - **No reasoning-display instructions in skills/agents**: no prose telling a model to surface its internal reasoning (`show your reasoning`, `reproduce your thinking`, `thinking.display: visible`) — trips the `reasoning_extraction` refusal classifier on Claude Fable 5 and Claude Opus 5 (`stop_reason: "refusal"`; where fallback is configured, requests re-route to Claude Opus 4.8). Request evidence in structured output instead; author-filled `<critical_thinking>` blocks are exempt. Gate 2 warns; blocking at checklist level (Section 12.7 / 13.5). Reference: `skills/managing-skills/guides/claude-5-patterns.md`.
 - **Skill descriptions follow the Claude 5 model patterns**: third-person voice (no "I can help" / "You can use" / "I'll help") — **Anthropic-required** per skill-creator/SKILL.md (pre-release-checklist 12.1); ≥3 specific quoted activation phrases in `when_to_use` — Anthropic requires "specific triggers" without count, **≥3 is plugin convention** for activation reliability (12.2); no filler word repetition ("comprehensive" / "thorough" / "detailed"); combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, 7.4). Gate 2 warns.
 
 ## Repository layout
 
-Detailed multi-domain architecture, shared-content layers, brand-system layer, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](docs/architecture.md).
-
-Full per-path layout: [`docs/architecture.md`](docs/architecture.md) `## Repository layout`.
+Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](docs/architecture.md).
 
 ## Critical commands
 
-Pre-commit + CI verification – single command for all 18 gates (17 hard + 1 soft):
+Pre-commit + CI verification – single command for all 12 gates (all hard):
 
 ```bash
 bash scripts/run-all-gates.sh
 ```
 
-Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate 13 (brandbook hex coverage) is soft. Gate 15 (doc-claim sync) is hard – seven checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem.
+Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are historical and non-contiguous – gates 5, 6, 8, 9, 12 and 13 retired with the design skills in v7.0.0 and the survivors kept their numbers. Gate 15 (doc-claim sync) is hard – seven checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem.
 
 REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
 
-Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 18 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
+Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 12 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](docs/verification-gates.md) `## Quick spot-checks`.
 
@@ -76,12 +68,14 @@ bash scripts/gen-skill-registry.sh
 
 and the regenerated file committed alongside it. Gate 18 hard-fails when the registry's skill list drifts from `ls skills/`, a skill is listed twice, or a row carries a date or subject git contradicts, and warns (without blocking) when dates merely lag – dates go stale the moment a skill is committed, so blocking on that would red-light `develop` after every skill change. Step 3 of the release process regenerates the file, so every shipped version is accurate.
 
+**Squash caveat.** Feature PRs are squash-merged into `develop`, so the squash commit's subject *becomes* the touched skill's latest-commit subject there. A registry regenerated **inside** a skill-touching PR records the pre-squash subject, and Gate 18 hard-fails the instant that PR is squashed. Fix: regenerate the registry in its own **registry-only** change (nothing under `skills/`) that lands *after* the skill-source PR is already on `develop`. A registry-only commit cannot rewrite any skill's latest-commit subject, so the row it records stays valid through its own squash. Do not bundle skill-source edits and the registry regen into one squash-merged PR. History: see `CHANGELOG.md`.
+
 ## Release process
 
 For every release:
 1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, registry, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
 2. Bump `version` in `.claude-plugin/plugin.json` only (semver). `plugin.json` is the single source of truth – the marketplace entry carries no `version` (Claude Code resolves `plugin.json` `version` first per the [version-resolution order](https://code.claude.com/docs/en/plugin-marketplaces), so a duplicate in `marketplace.json` would only mask it).
-3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent. Then regenerate the skill registry – `bash scripts/gen-skill-registry.sh` – and commit it, so the shipped `docs/skill-registry.md` is accurate as of the release rather than lagging (Gate 18 warns between releases; this step is what clears the warning).
+3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent. Then regenerate the skill registry – `bash scripts/gen-skill-registry.sh` – and commit it, so the shipped `docs/skill-registry.md` is accurate as of the release rather than lagging (Gate 18 warns between releases; this step is what clears the warning). Regenerate it **last**, after every skill-source PR has already squash-merged into `develop`, so each row's subject matches the final squash commit; if a skill lands after this regen, redo the regen as a registry-only change (see the squash caveat above).
 4. Add an entry to `CHANGELOG.md` (Keep a Changelog format). If an `## [Unreleased]` section exists (feature branches may accumulate one), promote it to `## [vX.Y.Z] - <date>` as part of the release.
 5. Commit (auto-signed via SSH) and let CI run.
 6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`).
@@ -91,7 +85,7 @@ For every release:
 
 Auto-update is **opt-in** for this third-party marketplace (only Anthropic's own marketplaces auto-update by default). Users who enabled it – per-marketplace in `/plugin`, or org-wide via `"autoUpdate": true` in managed settings – get the update on next session start. Manual fallback: `/plugin marketplace update erfana-skills && /plugin update erfana@erfana-skills`.
 
-Succession + bus-factor: [`MAINTAINER.md`](MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](ROADMAP.md) + GitHub issues under the [`brand-system`](https://github.com/qodeca/erfana-skills/labels/brand-system) label. De-scoped items + reasoning: [`BACKLOG.md`](BACKLOG.md).
+Succession + bus-factor: [`MAINTAINER.md`](MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](BACKLOG.md).
 
 ### Staged rollout
 
@@ -119,10 +113,7 @@ A local pass is **necessary but not sufficient** for the green "Verified" badge 
 
 ## Things to avoid
 
-Most rules here are the negative form of a Hard constraint above; only non-duplicative gotchas are listed.
-
-- Hand-editing any skill's `description:` / `when_to_use:` without re-running the trigger-phrase gate (Gate 8) – the frontmatter is the discovery surface.
-- Modifying code logic in `skills/design-shared/scripts/` during routine maintenance – touch comments/strings only.
+- Hand-editing any skill's `description:` / `when_to_use:` without re-running Gate 2 – the frontmatter is the discovery surface.
 - Reintroducing the v1 mega-skill pattern; each sub-skill stays single-concern, multi-skill requests route via `using-erfana`.
 - Adding hooks, agents, commands, or MCP servers to `plugin.json` without first updating CLAUDE.md, the verification gates, and CI.
 - Drifting a prose count claim from the filesystem when adding/removing skills, hooks, commands, plugin-root agents, or per-skill nested agents. Canonical count sites: the "What this is" summary above, `README.md`, `docs/architecture.md`, `MAINTAINER.md` "Plugin scope". Gate 15 catches drift.
@@ -139,16 +130,15 @@ Most rules here are the negative form of a Hard constraint above; only non-dupli
 
 - Two long-lived branches: **`main`** (default branch – what the marketplace serves; protected by the `main-protection` ruleset: signed commits, code-owner review, and passing `verify.yml` status checks) and **`develop`** (integration branch; CI-gated via `verify.yml`, no branch protection). `verify.yml` runs on push and PR to both branches. Feature work goes on `feature/...` branches cut from `develop` and PR'd back into `develop`; a release promotes `develop` into `main` via PR, then tags `main`. Conventional Commits: `feat(...)`, `fix(...)`, `docs(...)`, `chore(...)`. Remote: `github.com/qodeca/erfana-skills`.
 
-### Pre-commit checklist (touches brand or deck files)
+### Pre-commit checklist
 
 1. **Gates pass locally** – `bash scripts/run-all-gates.sh` and `claude plugin validate .` both report success.
-2. **Feature branch in use** – `git branch --show-current` is neither `main` nor `develop`. Skill, brand, deck, infra changes go through `feature/...` cut from `develop` and merge into `develop` via PR; `main` receives only release PRs (`develop` -> `main`) and emergency fixes.
-3. **Speaker notes coherent** – every modified slide HTML's `<aside class="speaker-notes">` reflects current visible copy. No stale references to removed copy.
-4. **No orphan assets in deck folders** – every file under each deck's `tests/design-slides/<deck>/assets/` is referenced by at least one slide HTML; remove unreferenced gradients, shapes, photos, logos before commit.
+2. **Feature branch in use** – `git branch --show-current` is neither `main` nor `develop`. Skill, agent and infra changes go through `feature/...` cut from `develop` and merge into `develop` via PR; `main` receives only release PRs (`develop` -> `main`) and emergency fixes.
+3. **Registry regenerated separately** – if the change touches anything under `skills/`, do NOT regenerate `docs/skill-registry.md` in the same PR (see the squash caveat above).
 
 ### Atomic commits
 
-Split brand-bundle changes from deck-iteration changes; each commit's diff stays within one of `{deck-iteration, brand-bundle, infrastructure}`. A commit touching both `skills/design-shared/brands/<id>/...` and `tests/design-slides/<deck>/...` should be split – brand-bundle changes are reusable across decks; deck-iteration is not.
+Each commit's diff stays within one of `{skill-content, agent-content, infrastructure}`. A commit touching both a skill body and the gate scripts that validate it should be split – infrastructure changes affect every skill, skill content does not.
 
 ## Known caveats
 

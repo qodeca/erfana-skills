@@ -6,13 +6,13 @@
 <!--
   Source for the GitHub social-preview image (E6), 1280x640. The layout is
   responsive (viewport units), so it composes identically at any 2:1 viewport.
-  Reproduce the committed erfana-social-preview.png with the bundled renderer:
-    python skills/design-shared/scripts/verify.py docs/assets/social-preview/card.html \
-      --viewports 640x320 --output docs/assets/social-preview/
-  verify.py renders at device_scale_factor=2, so a 640x320 viewport yields a
-  1280x640 PNG. Rename card.png -> erfana-social-preview.png and delete
-  card-full.png. Colors are the erfana brand tokens
-  (skills/design-shared/brands/erfana/tokens.tokens.json).
+  The bundled renderer that produced the committed erfana-social-preview.png was
+  removed in v7.0.0 along with the design skills, so the PNG is now a frozen
+  artifact. To regenerate it, screenshot this file at a 640x320 viewport with a
+  device scale factor of 2 (yielding 1280x640) using any headless browser, e.g.
+    npx playwright screenshot --viewport-size=640,320 --device-scale-factor=2 \
+      docs/assets/social-preview/card.html erfana-social-preview.png
+  Colors are inlined in this file; the brand token source was removed in v7.0.0.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

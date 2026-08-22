@@ -78,7 +78,7 @@ The prompt file owns the agent prose; the skill body owns the orchestration.
 
 **Path:** `skills/<name>/references/<topic>.md`
 
-**Discovery:** NOT auto-discovered. Claude reads on demand when the skill body cites the file (e.g. "see `references/critique-guide.md` for detailed scoring rubrics").
+**Discovery:** NOT auto-discovered. Claude reads on demand when the skill body cites the file (e.g. "see `references/question-stems.md` for per-dimension question stems").
 
 **When to use:**
 - Standing knowledge or rubric the skill body cites
@@ -86,8 +86,7 @@ The prompt file owns the agent prose; the skill body owns the orchestration.
 - Examples, anti-pattern catalogs, decision trees
 
 **Examples in this plugin:**
-- `skills/design-prototype/references/react-setup.md` — pinned versions, hard rules
-- `skills/design-review/references/critique-guide.md` — scoring rubrics
+- `skills/grill-me/references/question-stems.md` — reusable question stems
 - `skills/managing-skills/guides/qa-protocol.md` — Q&A format
 
 **Cost:** zero — Claude reads only when cited. Use freely for background material.

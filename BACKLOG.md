@@ -4,6 +4,8 @@ Items that are NOT on the roadmap (`ROADMAP.md`). This file exists so future-Mar
 
 Three independent reviewers (strategic / engineering / risk) audited the original 25-item v2.4+ roadmap draft. The 11 items below were either deleted, deferred indefinitely, or recategorized as journal notes rather than schedulable work.
 
+> **Superseded by v7.0.0.** Every entry below that concerns brands, brand manifests, DTCG tokens, demos, showcases, or asset libraries is **historical**. That whole subsystem was removed with the design skills in v7.0.0; none of those items is open work any more. They are kept for the reasoning, not as a to-do list.
+
 ## Deleted – already complete
 
 - **Migrate hardcoded brand-color literals from demos and showcases.** A `grep` across `skills/` shows brand-color hex literals do not leak outside the active brand's `tokens.tokens.json`. The "organic decay" framing in earlier roadmap drafts was wrong – the work is already done. Verify on each new demo PR.
@@ -26,8 +28,8 @@ Three independent reviewers (strategic / engineering / risk) audited the origina
 
 ## Out of domain – separate plugin or roadmap
 
-- **Email / proposal / report skills.** These are new skill features that *use* the brand layer but are independent text-output skills. They don't belong on the brand-system roadmap. If they ship, they belong in a separate plugin or as their own first-class skill set.
-- **Photo library content.** `brands/<id>/photos/` slot exists; population is a separate per-brand design task that's not ours to schedule. Document the affordance; populate when a consumer skill reads `imagery.photoLibrary`.
+- **Email / proposal skills.** Independent text-output skills. If they ship, they belong in a separate plugin or as their own first-class skill set.
+- **Anything design-related.** The design skills and the whole brand-system layer were removed in v7.0.0. Brand manifests, token schemas, photo libraries and asset bundles are out of this repo entirely; re-adding one is a new plugin, not a backlog item here. Entries above and below that discuss brands are historical.
 
 ## Deferred – conditional schema bumps
 
@@ -60,7 +62,7 @@ No v4.2.3 deferrals from this round, and no v4.2.4 deferrals either — F5 (`ma-
 
 These items are NOT scheduled but have explicit trigger conditions; none is tied to a specific version. Plan authoring begins when any of the triggers below materialize. (The heading previously named v5.0.0; that version shipped in 2026-05-30 with the managing-specs registry migration instead, so the version reference was dropped.)
 
-- **Sibling cascade for design-* and other managing-* skills.** Trigger: v4.2.0-rc.1 → v4.2.0 final ships, 48-hour pilot soak completes without regressions, ≥1 week of production use without reported regressions. The Modernize operation introduced in v4.2.0 becomes the cascade primitive (`/managing-skills modernize <sibling>`). v4.2.0 smoke-tested against `design-review` (focused-reviewer, small case); `managing-articles` was the harder architectural case and was fully redesigned in v4.3.0 (consolidated to 5 plugin-root `article-*` shared agents), so `managing-reports` is now the remaining case requiring a separate proof-of-concept before wholesale cascade. The "misleading green light" risk Lane 4 flagged is mitigated in v4.2.0 by the nested-agents early-exit guard, but the cascade itself remains future work.
+- **Sibling cascade for the remaining managing-* skills.** Trigger: ≥1 week of production use without reported regressions after the Modernize primitive's last change. The Modernize operation introduced in v4.2.0 is the cascade primitive (`/managing-skills modernize <sibling>`). `managing-articles` was the harder architectural case and was fully redesigned in v4.3.0 (consolidated to 5 plugin-root `article-*` shared agents), so `managing-reports` is now the remaining case requiring a separate proof-of-concept before wholesale cascade. The "misleading green light" risk Lane 4 flagged is mitigated in v4.2.0 by the nested-agents early-exit guard, but the cascade itself remains future work.
 
 - **Generic-named agent renames (8 unprefixed agents).** Trigger: any reported mixed-plugin nondeterminism (last-loaded-wins behavior on agents with the same name across plugins), OR a maintainer policy decision to systematically prevent the risk before incidents. Currently 8 agents are at risk: `code-reviewer`, `software-developer`, `commit-writer`, `architecture-reviewer`, `security-auditor`, `solution-architect`, `technical-architect`, `ux-reviewer`. Breaking change — proposed prefix scheme `er-*` (matches plugin id). v4.2.0 documented but did not act on this; the prefix scheme keeps Gate 2's name-equals-basename invariant intact and removes the cross-plugin collision risk.
 

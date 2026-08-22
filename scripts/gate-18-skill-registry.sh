@@ -16,7 +16,7 @@
 #
 #   HARD  0. The repository is not a shallow clone (every row would be garbage).
 #   HARD  1. The registry exists, its table parses, and no skill is listed twice.
-#   HARD  2. Its skill list equals `ls skills/` minus design-shared — catches a
+#   HARD  2. Its skill list equals `ls skills/` — catches a
 #            skill added, removed, or renamed without regenerating.
 #   HARD  3. No row claims something git cannot account for: a date ahead of
 #            history, or - on a row whose date git confirms - a commit subject
@@ -55,7 +55,6 @@ if subprocess.run(['git', 'rev-parse', '--is-shallow-repository'],
 fs_skills = sorted(
     os.path.basename(os.path.normpath(d))
     for d in glob('skills/*/')
-    if os.path.basename(os.path.normpath(d)) != 'design-shared'
 )
 
 
