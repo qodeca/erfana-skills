@@ -18,25 +18,17 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
+| grill-me | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
+| managing-skills | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
+| using-erfana | 2026-08-22 | feat(skills)!: remove the six design skills and the design-shared bundle |
 | managing-issues | 2026-08-14 | chore(release): v6.7.1 (#36) |
-| using-erfana | 2026-08-14 | fix + docs: mi-solution-designer JUDGE mode + v6.7.0 doc sync (#34) |
-| grill-me | 2026-08-07 | feat(grill-me): scale interview depth to plan stakes (#26) |
-| managing-skills | 2026-08-03 | docs: full-repo doc-update sweep after v6.3.0 + interrogation merge |
 | managing-reports | 2026-07-22 | fix(managing-reports): lens-review remediation + v6.1.0 (#16) |
-| design-direction | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
-| design-infographic | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
-| design-motion | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
-| design-prototype | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
-| design-review | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
-| design-slides | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 | managing-agents | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 | managing-articles | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 | managing-specs | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 
-15 skills. `skills/design-shared/` is excluded – it is the shared
-brand and asset bundle the design skills consume via `../design-shared/...`,
-not an invocable skill.
+9 skills, one row per folder under `skills/`.
 
 ## Reading the dates
 
