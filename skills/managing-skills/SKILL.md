@@ -344,12 +344,12 @@ Every successful Modernize pass MUST append (new skill) or update (existing row)
 
 ### Example 5: Modernize existing skill (added v4.2.0)
 
-**User:** "Apply Claude 5 patterns to design-review"
+**User:** "Apply Claude 5 patterns to grill-me"
 → Step 0: gate answered yes → grill-planner interview (intent: pattern refresh; scope: whole skill)
-→ Step 1: ms-reviewer deep mode runs Section 12 sweep, finds: 12.4 N/A (single-threaded), 12.5 N/A (no agents), all others PASS
+→ Step 1: ms-reviewer deep mode runs Section 12 sweep, finds: 12.4 N/A (single-threaded), 12.5 N/A (no agents), 12.6 N/A (not reviewer-shaped), all others PASS
 → Step 2: orchestrator presents findings to user — only minor P3 polish items
 → Step 3: ms-modifier applies (or skips if N/A dominates)
-→ Step 4: ms-validator confirms Section 12 score 6.0/6.0 (focused-reviewer max)
+→ Step 4: ms-validator confirms Section 12 score 4.5/4.5 (focused max)
 → PASS (already pattern-compliant; modernization minimal)
 
 **For more examples, see `examples/examples.md`.**

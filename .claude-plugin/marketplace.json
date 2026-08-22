@@ -1,6 +1,6 @@
 {
   "name": "erfana-skills",
-  "description": "A Claude Code toolkit marketplace — design + orchestration + verification skills, plus 87 shared agents.",
+  "description": "A Claude Code toolkit marketplace — orchestration + verification skills, plus 87 shared agents.",
   "owner": {
     "name": "Qodeca sp. z o.o."
   },
@@ -10,21 +10,18 @@
       "displayName": "erfana",
       "source": "./",
       "license": "GPL-3.0-only",
-      "category": "design",
+      "category": "productivity",
       "keywords": [
-        "design",
-        "prototyping",
-        "presentations",
-        "motion-graphics",
-        "infographics",
-        "design-review",
         "orchestration",
         "agents",
-        "automation"
+        "automation",
+        "github-issues",
+        "specifications",
+        "code-review"
       ],
       "homepage": "https://github.com/qodeca/erfana-skills",
       "repository": "https://github.com/qodeca/erfana-skills",
-      "description": "A Claude Code toolkit for design and orchestration: six design skills + six orchestration skills (Modernize op + Display op in managing-issues) + one process skill (grill-me) + one verification skill (fact-checking) + 87 shared agents (per-agent effort/model overrides, including fc-* quartet) + using-erfana router + four safety hooks + five slash commands (doc-update, project-status, session-status, lens-review, explain-issue)"
+      "description": "A Claude Code orchestration toolkit: six orchestration skills (Modernize op + Display op in managing-issues) + one process skill (grill-me) + one verification skill (fact-checking) + 87 shared agents (per-agent effort/model overrides, including fc-* quartet) + using-erfana router + four safety hooks + five slash commands (doc-update, project-status, session-status, lens-review, explain-issue)"
     }
   ]
 }

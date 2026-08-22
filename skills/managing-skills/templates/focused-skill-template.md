@@ -1,6 +1,6 @@
 # Focused Skill Template
 
-For single-purpose skills that do one thing well. Modeled after the `design-*` family in this plugin (each ~65-200 lines, no orchestrator ceremony, references-heavy).
+For single-purpose skills that do one thing well: 60-200 lines, no orchestrator ceremony, references-heavy.
 
 **When to use this template** vs `simple-skill-template.md` or `skill-md-template.md`:
 
@@ -12,7 +12,7 @@ For single-purpose skills that do one thing well. Modeled after the `design-*` f
 
 **Use `skill-md-template.md` instead** if your skill orchestrates multiple agents through a multi-step workflow with input conditions and quality gates per step. Use this template when there are no agents, or when there is one agent that does everything.
 
-**Reference**: `skills/design-prototype/SKILL.md` (65 lines), `skills/design-review/SKILL.md` (64 lines).
+**Reference**: `skills/grill-me/SKILL.md` (134 lines).
 
 ---
 
@@ -69,7 +69,6 @@ Out of scope:
 ## References
 
 - `references/[name].md` — [one-line description of what's in there]
-- `../design-shared/references/[name].md` — [shared resource description]
 
 ## Examples
 
@@ -109,7 +108,7 @@ Most Section 12 patterns from `pre-release-checklist.md` apply, but a few are N/
 | 12.3 Verify scaffolding cleanup | REQUIRED — focused skills should NOT mandate verify-after-every-step |
 | 12.4 Delegation calibration | N/A typically — focused skills are single-threaded |
 | 12.5 Per-subagent overrides | N/A typically — focused skills have no agents table |
-| 12.6 Find-vs-filter decoupled | REQUIRED if reviewer-shaped (e.g. `design-review`); N/A otherwise |
+| 12.6 Find-vs-filter decoupled | REQUIRED if reviewer-shaped; N/A otherwise |
 | 12.7 No deprecated APIs / reasoning-display | REQUIRED |
 
 ms-validator's N/A handling means focused skills can score 4.5/4.5 (full applicable max) without artificial penalties for inapplicable patterns.
@@ -138,16 +137,16 @@ Focused skills typically run 60-200 lines (~1,000-3,000 tokens), which is **belo
 
 ---
 
-## Example: Completed focused skill (design-review)
+## Example: Completed focused skill (grill-me)
 
-See `skills/design-review/SKILL.md` for the canonical example. Notable choices:
+See `skills/grill-me/SKILL.md` for the canonical example. Notable choices:
 
-- 64 lines total
-- `disable-model-invocation: true` (user-invoked only)
-- 8 quoted trigger phrases in `when_to_use`
-- 5-step Process: score 5 dimensions → total → output structure → ensure specifics → checklist sweep
-- Anti-patterns section with 4 concrete bad patterns
-- 4 reference doc links
-- 1 example demo link
+- 134 lines total
+- 12 quoted trigger phrases in `when_to_use`
+- A narrow `allowed-tools` grant (`Read, Glob, Grep, AskUserQuestion`)
+- The skill body IS the workflow: opening protocol → depth → coverage map → question loop → mandatory late rounds → exit gate
+- A rationalization table naming the concrete ways the workflow gets cut short
+- 1 reference doc (`references/question-stems.md`) carrying the reusable depth
+- A skill-scoped Stop hook declared in frontmatter as the backstop
 
-This shape — terse SKILL.md + heavy `references/critique-guide.md` (199 lines of detailed scoring rubrics) — is the focused-skill ideal.
+This shape — terse SKILL.md + heavy `references/question-stems.md` (260 lines of reusable question stems) — is the focused-skill ideal.

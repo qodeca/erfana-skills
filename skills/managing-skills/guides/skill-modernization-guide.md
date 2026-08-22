@@ -45,12 +45,12 @@ grep -n -E "I can help|I'll help|You can use" skills/<name>/SKILL.md
 
 **Anti-pattern example:**
 ```yaml
-description: I can help you create slide decks with high visual quality.
+description: I can help you write consulting reports with high quality.
 ```
 
 **Pattern (rewrite):**
 ```yaml
-description: Use when the user wants a slide deck, pitch deck, keynote, or presentation in any format.
+description: Use when the user wants to create, review, or validate a professional consulting report.
 ```
 
 **Rule:** lead with "Use when" or third-person verb ("Creates", "Reviews", "Generates"). Reference the user as "the user," not "you."
@@ -69,14 +69,14 @@ grep -A 3 "when_to_use:" skills/<name>/SKILL.md | grep -oE '"[^"]+"' | sort -u
 **Anti-pattern (filler):**
 ```yaml
 when_to_use: |
-  Use when comprehensive presentation work is needed with thorough detailed slides.
+  Use when comprehensive report work is needed with thorough detailed sections.
 ```
 (zero quoted triggers; fillers "comprehensive", "thorough", "detailed")
 
 **Pattern:**
 ```yaml
 when_to_use: |
-  Trigger phrases: "design a deck", "design a slide deck", "pitch deck", "keynote", "presentation", "PPT", "editable PPTX", "speaker notes", "multi-page presentation".
+  Trigger phrases: "create report", "review report", "validate report", "fix report issues", "version report".
 ```
 
 ---
@@ -200,7 +200,7 @@ Output: list of every finding, severity-tagged (critical / high / medium / low).
 - Low → polish list (optional, additive)
 ```
 
-**Acceptable additive variant (e.g. design-review):**
+**Acceptable additive variant (a reviewer-shaped skill):**
 ```markdown
 ### Step 3: Output structure
 - Keep: 3-5 things working

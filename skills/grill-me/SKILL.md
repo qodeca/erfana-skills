@@ -129,6 +129,6 @@ The final wrap-up (after the user confirms the read-back) omits the marker – t
 
 ## Terminal state
 
-When the exit gate has opened and the user confirmed the read-back: summarize the locked decisions as a numbered list and hand off to the relevant output skill (`erfana:managing-issues`, `erfana:managing-specs`, an `erfana:design-*` skill, or none) once the plan is fully specified.
+When the exit gate has opened and the user confirmed the read-back: summarize the locked decisions as a numbered list and hand off to the relevant output skill (`erfana:managing-issues`, `erfana:managing-specs`, or none) once the plan is fully specified.
 
 THE INTERVIEW ENDS ONLY WHEN THE COVERAGE MAP SAYS SO.

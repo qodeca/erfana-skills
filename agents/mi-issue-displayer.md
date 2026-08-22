@@ -247,14 +247,14 @@ sometimes returns the old token instead of the refreshed one...
 
 ### Example 3: search mode
 
-**Input:** `{mode: "search", query: "render-video frame skip", state: "all", limit: 3}`
+**Input:** `{mode: "search", query: "registry drift", state: "all", limit: 3}`
 
 **Output (abbreviated):**
 ```markdown
 | Rank | # | Title | Repo | State | Labels | Created |
 |---|---|---|---|---|---|---|
-| 1 | #38 | Render-video frame skip on macOS | qodeca/erfana-skills | open | bug, motion | 1w ago |
-| 2 | #29 | render-video.js Playwright upgrade | qodeca/erfana-skills | closed | enhancement | 3w ago |
-| 3 | #11 | Frame-rate inconsistency in MP4 | qodeca/erfana-skills | closed | bug | 2mo ago |
+| 1 | #38 | Skill registry drifts after squash-merge | qodeca/erfana-skills | open | bug, gates | 1w ago |
+| 2 | #29 | Gate 18 should warn on lagging dates | qodeca/erfana-skills | closed | enhancement | 3w ago |
+| 3 | #11 | Registry row duplicated after rename | qodeca/erfana-skills | closed | bug | 2mo ago |
 ```
 </examples>

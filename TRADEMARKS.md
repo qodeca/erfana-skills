@@ -23,11 +23,11 @@ The names **"Erfana"** and **"Qodeca"**, the Qodeca and Erfana logos, and any as
 
 **"GitHub"** and **"GitHub Actions"** are trademarks of **GitHub, Inc. (Microsoft Corporation)**. Erfana Skills integrates with GitHub through its public API and Actions and is not affiliated with, sponsored by, or endorsed by GitHub or Microsoft. References to GitHub describe interoperability only (nominative use).
 
-**"Playwright"** is a trademark of **Microsoft Corporation**. Erfana Skills uses Playwright to verify rendered design output and is not affiliated with, sponsored by, or endorsed by Microsoft. References to Playwright describe the tooling used only (nominative use).
+**"Playwright"** is a trademark of **Microsoft Corporation**. Erfana Skills ships agents that author and review Playwright tests and is not affiliated with, sponsored by, or endorsed by Microsoft. References to Playwright describe the tooling used only (nominative use).
 
 ## Logos and brand assets
 
-The repository ships a neutral default brand (`skills/design-shared/brands/erfana/`) so the design skills work out of the box. Its logo is provided as a functional default for the toolkit; treat the Erfana and Qodeca marks as trademarks per the rules above – do not present them as your own brand.
+The repository ships no brand-asset bundle. The only mark it ships is the GitHub social-preview logo under `docs/assets/social-preview/`. Treat the Erfana and Qodeca marks as trademarks per the rules above – do not present them as your own brand.
 
 ## Questions
 

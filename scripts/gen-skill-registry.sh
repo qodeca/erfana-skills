@@ -6,7 +6,7 @@
 # The registry answers one question: "when was each shipped skill last
 # touched, and by what change?" Every value is derived - the date and the
 # subject come from `git log -1` scoped to skills/<name>/, the skill list
-# comes from `ls skills/` minus the design-shared asset bundle - so the file
+# comes from `ls skills/` - so the file
 # cannot drift from reality the way a hand-maintained table does.
 #
 #   bash scripts/gen-skill-registry.sh
@@ -52,13 +52,9 @@ if subprocess.run(['git', 'rev-parse', '--is-shallow-repository'],
         'with the same tip commit. Deepen first: git fetch --unshallow'
     )
 
-# design-shared is the shared brand/asset bundle consumed by the design skills
-# via ../design-shared/..., not an invocable skill. Gate 15 applies the same
-# exclusion when it counts skills.
 skills = sorted(
     os.path.basename(os.path.normpath(d))
     for d in glob('skills/*/')
-    if os.path.basename(os.path.normpath(d)) != 'design-shared'
 )
 
 
@@ -120,9 +116,7 @@ for date, skill, subject in rows:
 
 lines += [
     '',
-    f'{len(rows)} skills. `skills/design-shared/` is excluded – it is the shared',
-    'brand and asset bundle the design skills consume via `../design-shared/...`,',
-    'not an invocable skill.',
+    f'{len(rows)} skills, one row per folder under `skills/`.',
     '',
     '## Reading the dates',
     '',

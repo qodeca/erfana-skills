@@ -16,8 +16,7 @@ Please include: the affected file(s) or component, reproduction steps or a proof
 In scope:
 
 - The `erfana` plugin code in this repository (`.claude-plugin/`, `skills/`, `agents/`, `commands/`, `hooks/`, `docs/`, `scripts/`).
-- Plugin configuration that ships to users (manifests, brand artifacts, safety hooks — bash `.sh` + Windows `.ps1` siblings).
-- Brand-system artifacts under `skills/design-shared/brands/` — manifests, DTCG token files, and SVG logos. Gate 5 scans every brand SVG for XSS / supply-chain vectors (no `<script>`, no `<foreignObject>`, no external / `data:` / `javascript:` hrefs, no event-handler attributes); brand SVGs render via Playwright during MP4 export, making them an active execution surface.
+- Plugin configuration that ships to users (manifests, safety hooks — bash `.sh` + Windows `.ps1` siblings).
 - The 87 shared agents in `agents/`. The orchestration skills (`managing-issues`, `managing-articles`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
 - The release pipeline (signed tags, GitHub Actions workflows).
 

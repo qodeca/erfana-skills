@@ -340,12 +340,12 @@ On failure: Log which criteria failed, return structured error.
 }
 ```
 
-### Example 3: Quick validation (focused-reviewer skill)
+### Example 3: Quick validation (focused skill)
 
 **Input:**
 ```json
 {
-  "skill_path": "skills/design-review",
+  "skill_path": "skills/grill-me",
   "validation_level": "quick"
 }
 ```
@@ -356,11 +356,11 @@ On failure: Log which criteria failed, return structured error.
   "status": "completed",
   "data": {
     "passed": true,
-    "skill_shape": "focused-reviewer",
-    "skill_shape_evidence": "no Agents table; description contains 'critique/review/score'; severity-tagged findings as primary output",
+    "skill_shape": "focused",
+    "skill_shape_evidence": "no Agents table; description is 'stress-test a plan through one-at-a-time questioning' — no review/audit/score verb; output is a coverage map plus locked decisions, not severity-tagged findings",
     "pre_release_score": {
       "total": "N/A (quick — critical items only)",
-      "applicable_max": 68,
+      "applicable_max": 66.5,
       "sections_checked": ["metadata", "structure", "architecture", "section_12_critical"],
       "critical_pass": true
     },
