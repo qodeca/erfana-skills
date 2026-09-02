@@ -124,6 +124,9 @@ declare -a GRILL_CASES=(
   "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
   "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
   "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
+  "open-inside-indented-code-fence|pass|marker inside a fence indented under a list item is stripped and passes"
+  "open-inside-tilde-code-fence|pass|marker inside a balanced ~~~ fence is stripped and passes"
+  "open-mentioned-in-inline-code|pass|backticked prose mention of the marker is not an open marker and passes"
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
@@ -134,6 +137,9 @@ declare -a MS_GRILL_CASES=(
   "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
   "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
   "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
+  "open-inside-indented-code-fence|pass|marker inside a fence indented under a list item is stripped and passes"
+  "open-inside-tilde-code-fence|pass|marker inside a balanced ~~~ fence is stripped and passes"
+  "open-mentioned-in-inline-code|pass|backticked prose mention of the marker is not an open marker and passes"
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 

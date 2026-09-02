@@ -24,20 +24,28 @@ $lastMsg = [string]$obj.last_assistant_message
 if ([string]::IsNullOrEmpty($lastMsg)) { exit 0 }
 
 # Strip balanced fenced code blocks; an unclosed trailing fence falls back to
-# the raw body (mirrors grill-guard.sh and verify-completion.ps1).
+# the raw body (mirrors grill-guard.sh and verify-completion.ps1). Fences are
+# recognised with up to three leading spaces and in both backtick and tilde
+# flavours, matching the bash sibling's rationale.
 $lines = $lastMsg -split "`r?`n"
-$fenceCount = ($lines | Where-Object { $_ -match '^```' }).Count
+$fenceRe = '^ ?[ ]?[ ]?(```|~~~)'
+$fenceCount = ($lines | Where-Object { $_ -match $fenceRe }).Count
 if ($fenceCount % 2 -ne 0) {
     $scrubbedLines = $lines
 } else {
     $scrubbedLines = @()
     $inFence = $false
     foreach ($line in $lines) {
-        if ($line -match '^```') { $inFence = -not $inFence; continue }
+        if ($line -match $fenceRe) { $inFence = -not $inFence; continue }
         if ($inFence) { continue }
         $scrubbedLines += $line
     }
 }
+
+# Drop inline code spans, so a backticked prose mention of the marker - which
+# the block reason below tells the model to write - is not read as an open
+# marker. Mirrors the sed pass in the bash sibling.
+$scrubbedLines = @($scrubbedLines | ForEach-Object { $_ -replace '`[^`]*`', '' })
 
 # End-anchored: the marker counts only in the last 3 non-empty lines.
 $tail = @($scrubbedLines | Where-Object { $_.Trim().Length -gt 0 } | Select-Object -Last 3)

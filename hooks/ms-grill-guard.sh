@@ -37,17 +37,31 @@ fi
 # Strip balanced fenced code blocks so a fenced example of the marker never
 # matches. An unclosed trailing fence falls back to the raw body (mirrors
 # verify-completion.sh): a genuine marker after an odd fence still blocks.
-FENCE_COUNT=$(printf '%s\n' "$LAST_MSG" | grep -c '^```' || true)
+#
+# Fences are recognised with up to three leading spaces and in both CommonMark
+# flavours (backtick and tilde), because a marker quoted inside a list item is
+# indented and a marker inside a ~~~ block is not a backtick fence at all -
+# anchoring on a bare ^``` blocked both. The two flavours are counted as one
+# family, which is an approximation CommonMark does not make; over-stripping
+# only costs a missed block on a message that mixes them, while under-stripping
+# blocks a stop on prose that merely quotes the marker.
+FENCE_COUNT=$(printf '%s\n' "$LAST_MSG" | grep -cE '^ ?[ ]?[ ]?(```|~~~)' || true)
 if [ $((FENCE_COUNT % 2)) -ne 0 ]; then
   SCRUBBED="$LAST_MSG"
 else
   SCRUBBED=$(echo "$LAST_MSG" | awk '
     BEGIN { in_fence = 0 }
-    /^```/ { in_fence = 1 - in_fence; next }
+    /^ ?[ ]?[ ]?(```|~~~)/ { in_fence = 1 - in_fence; next }
     in_fence == 1 { next }
     { print }
   ')
 fi
+
+# Drop inline code spans. The block reason below literally tells the model to
+# "remove the trailing <!-- erfana:grill-open --> marker", so a model that
+# complies and says so in backticks would re-trigger this guard on its own
+# report. A backticked mention is prose about the marker, not an open marker.
+SCRUBBED=$(printf '%s\n' "$SCRUBBED" | sed 's/`[^`]*`//g')
 
 # End-anchored: the marker counts only in the last 3 non-empty lines.
 TAIL=$(printf '%s\n' "$SCRUBBED" | awk 'NF' | tail -n 3)

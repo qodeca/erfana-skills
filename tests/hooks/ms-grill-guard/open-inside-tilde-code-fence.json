@@ -1,0 +1,4 @@
+{
+  "stop_hook_active": false,
+  "last_assistant_message": "The skill emits this marker while an interview is open:\n\n~~~\n<!-- erfana:ms-grill-open -->\n~~~"
+}

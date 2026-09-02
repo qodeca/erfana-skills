@@ -89,12 +89,16 @@ run_bounded() {
   pid=$!
   set +m
 
-  # With job control on, the child leads its own group and PGID == PID. Read it
-  # back anyway: a wrong PGID here would send the signal to OUR group.
-  pgid="$(ps -o pgid= -p "$pid" 2>/dev/null | tr -d ' ')"
-  if [ -z "$pgid" ]; then
-    pgid="$pid"
-  fi
+  # With job control on, the child leads its own process group, so PGID == PID
+  # by construction. Do NOT read it back from ps. Two reasons, both verified:
+  # under "set -e" plus "pipefail" a failing ps aborts this function outright
+  # (making any fallback below it dead code), and Git Bash ships an MSYS ps
+  # with no -o format flag, so the readback fails on every Windows invocation
+  # and takes the whole safety net down silently. A readback also creates the
+  # only path by which a wrong PGID could reach the kill below -- a lying or
+  # PID-reusing ps would aim the group kill at an unrelated group, possibly
+  # our own caller's.
+  pgid="$pid"
 
   # The watchdog's own stdout and stderr go to /dev/null. It must not inherit
   # ours: a caller reading this launcher through a pipe (a hook runner, or
@@ -102,6 +106,13 @@ run_bounded() {
   # watchdog holding the pipe open would make each hook take the full timeout
   # even when it finished in milliseconds. That is the same wedged-writer
   # failure this function exists to prevent, one level up.
+  #
+  # The watchdog runs in its own process group too (set -m again), so the
+  # teardown below can kill the group and take the pending sleep with it.
+  # Killing only the subshell leaves its sleep orphaned to init, and with three
+  # Stop hooks plus a PreToolUse hook on every Bash/Write/Edit that is a steady
+  # trickle of stray sleeps for the whole session.
+  set -m
   (
     sleep "$HOOK_TIMEOUT_SECONDS"
     kill -TERM "-$pgid" 2>/dev/null || true
@@ -109,10 +120,11 @@ run_bounded() {
     kill -KILL "-$pgid" 2>/dev/null || true
   ) >/dev/null 2>&1 &
   watchdog=$!
+  set +m
 
   wait "$pid" || rc=$?
 
-  kill "$watchdog" 2>/dev/null || true
+  kill -TERM "-$watchdog" 2>/dev/null || true
   wait "$watchdog" 2>/dev/null || true
 
   return "$rc"
@@ -134,14 +146,23 @@ case "$(uname -s 2>/dev/null || echo unknown)" in
     run_bounded powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$PS_SCRIPT"
     ;;
   *)
-    # Every .sh hook parses its payload with jq. Without jq the parse yields an
-    # empty string, the hook takes its allow branch, and the safety net is off
+    # Most .sh hooks parse their payload with jq. Without jq the parse yields an
+    # empty string, the hook takes its allow branch, and that control is off
     # with no signal at all -- on a stock macOS box, which ships no jq. Say so
     # rather than pretend the hook ran, matching the cygpath branch above.
-    if ! command -v jq > /dev/null 2>&1; then
-      echo "dispatch.sh: jq not found; ${HOOK} cannot parse its payload (hook skipped)" >&2
-      exit 0
-    fi
+    #
+    # The probe is per-hook, not blanket: post-compact-reminder reads no stdin
+    # and calls no jq (it is git plus a heredoc), so skipping it on a jq-less
+    # box would replace a working hook with nothing.
+    case "$HOOK" in
+      post-compact-reminder) ;;
+      *)
+        if ! command -v jq > /dev/null 2>&1; then
+          echo "dispatch.sh: jq not found; ${HOOK} cannot parse its payload (hook skipped)" >&2
+          exit 0
+        fi
+        ;;
+    esac
     run_bounded bash "${DIR}/${HOOK}.sh"
     ;;
 esac
