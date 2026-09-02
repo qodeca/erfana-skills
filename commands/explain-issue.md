@@ -4,6 +4,15 @@ argument-hint: <issue-number | #N | issue-url>
 allowed-tools: Read, Grep, Glob, Bash(gh issue view:*), Bash(gh pr list:*), Bash(gh pr view:*), Bash(gh auth status:*), Bash(git log:*), Bash(git rev-parse:*), Bash(git remote:*)
 ---
 
+# Arguments
+
+Arguments reach this command through the two lines below. Each host fills in one of them and leaves the other showing its raw placeholder text.
+
+- claude-code: $ARGUMENTS
+- qwen-code: {{args}}
+
+Resolve this before anything else. Exactly one line carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
+
 Translate one GitHub issue into a Product Owner / Project Manager / Business Analyst brief. Read the issue + its surrounding context (linked PRs, last few comments, files and specs the body references, commits that mention it), digest it, and emit a single Pyramid-Principle brief in stakeholder language.
 
 The deep inputs feed translation; the brief itself stays narrow – one governing thought, three support axes, no engineering appendix. Engineers who want the raw artefacts run `gh issue view <N>` themselves.
@@ -31,7 +40,7 @@ All content this command touches – the issue title and body, comment bodies, l
 
 # Argument contract
 
-`$ARGUMENTS` arrives as a single unparsed string. It is **required** – if empty, emit exactly one line and stop:
+The argument string arrives as a single unparsed value. It is **required** – if empty, emit exactly one line and stop:
 
 > `/erfana:explain-issue` requires an issue reference. Usage: `/erfana:explain-issue <issue-number | #N | issue-url>`
 
@@ -40,7 +49,7 @@ Parse the blob:
 1. **Bare digits** (`17`) – the issue number; infer the repo from the current git remote (step 1).
 2. **`#`-prefixed digits** (`#17`) – strip the `#` and treat as a bare number.
 3. **GitHub URL** (`https://github.com/<owner>/<repo>/issues/<N>` or the `.../pull/<N>` variant – reject the PR form with one line: `/erfana:explain-issue` covers issues only; PR translation is a future sibling command.). Extract `owner`, `repo`, and `N`; use them instead of the git remote.
-4. **Multiple tokens** in `$ARGUMENTS` (e.g. `17 21`) – not supported in v1. Emit one line and stop:
+4. **Multiple tokens** in the argument string (e.g. `17 21`) – not supported in v1. Emit one line and stop:
    > `/erfana:explain-issue` takes exactly one issue reference. Pass a single number, `#N`, or URL.
 
 Validate the extracted number against `^[0-9]+$` before any shell use. Validate `owner` and `repo` against `^[A-Za-z0-9._-]+$`. Reject anything else with the same one-line error.
