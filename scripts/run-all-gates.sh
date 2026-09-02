@@ -238,7 +238,26 @@ for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
 done
 
 echo "=== Gate 4 — script syntax ==="
-python3 -c "import ast; ast.parse(open('scripts/_lib/gate2_detector.py').read())" && echo "  PASS: scripts/_lib/gate2_detector.py"
+python3 <<'PYEOF'
+import ast
+import glob
+import sys
+
+# Every module under scripts/_lib, not just the detector. The shared libs are
+# imported by gates and generators that run late in the suite, so a syntax
+# error there would otherwise surface as a confusing failure inside whichever
+# gate imported it first rather than as a syntax problem.
+modules = sorted(glob.glob('scripts/_lib/*.py'))
+if not modules:
+    sys.exit('  FAIL: no modules found under scripts/_lib/')
+for path in modules:
+    with open(path, encoding='utf-8') as fh:
+        try:
+            ast.parse(fh.read(), filename=path)
+        except SyntaxError as exc:
+            sys.exit(f'  FAIL: {path}: {exc}')
+    print(f'  PASS: {path}')
+PYEOF
 
 echo "=== Gate 7 — cross-references resolve ==="
 python3 <<'PYEOF'

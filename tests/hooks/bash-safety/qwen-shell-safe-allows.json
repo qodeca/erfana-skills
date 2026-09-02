@@ -1,0 +1,6 @@
+{
+  "tool_name": "run_shell_command",
+  "tool_input": {
+    "command": "ls -la src/"
+  }
+}

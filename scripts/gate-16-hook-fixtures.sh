@@ -4,7 +4,7 @@
 # Gate 16 — hook fixtures + sentinel symmetry (verify-completion +
 # grill-guard + ms-grill-guard).
 #
-# Four responsibilities:
+# Five responsibilities:
 #   1. For each tests/hooks/verify-completion/*.json fixture, pipe it through
 #      hooks/verify-completion.sh and assert whether stdout carries the
 #      `{"decision":"block"...}` payload (the Stop-hook block signal).
@@ -33,6 +33,16 @@
 #   4. Guard-drift check: ms-grill-guard.sh must equal grill-guard.sh
 #      modulo header comments, the sentinel literal, and the block-reason
 #      JSON — a machinery fix must never land in one family only.
+#   5. PreToolUse replay for secret-detector and bash-safety against
+#      tests/hooks/secret-detector/*.json and tests/hooks/bash-safety/*.json.
+#      Different protocol from the Stop hooks: these block with exit 2 plus a
+#      `BLOCKED:` line on stderr, so the gate asserts on the exit code.
+#      Each family carries the same payload in both host shapes, because the
+#      PreToolUse payload names the tool differently on each host — Claude Code
+#      sends the display name (`Write`, `Bash`), Qwen sends the canonical name
+#      (`write_file`, `run_shell_command`). Before v7.1.0 there were no
+#      PreToolUse fixtures at all, so a hook that silently stopped inspecting
+#      one host's payloads would have failed nothing.
 #
 # Standalone runner — invoked by scripts/run-all-gates.sh; can also be
 # run directly while iterating on hook or fixture changes.
@@ -52,6 +62,10 @@ GRILL_HOOK_NAME="../skills/grill-me/hooks/grill-guard"
 GRILL_FIXTURE_DIR="tests/hooks/grill-guard"
 MS_GRILL_HOOK_NAME="../skills/managing-skills/hooks/ms-grill-guard"
 MS_GRILL_FIXTURE_DIR="tests/hooks/ms-grill-guard"
+SECRET_HOOK_NAME="secret-detector"
+SECRET_FIXTURE_DIR="tests/hooks/secret-detector"
+BASH_SAFETY_HOOK_NAME="bash-safety"
+BASH_SAFETY_FIXTURE_DIR="tests/hooks/bash-safety"
 STATUS_SENTINEL='<!-- erfana:status-template -->'
 EXPLAIN_SENTINEL='<!-- erfana:explain-template -->'
 GRILL_SENTINEL='<!-- erfana:grill-open -->'
@@ -75,7 +89,8 @@ for exec_impl in "skills/grill-me/hooks/grill-guard.sh" "skills/managing-skills/
     exit 1
   fi
 done
-for dir in "$FIXTURE_DIR" "$GRILL_FIXTURE_DIR" "$MS_GRILL_FIXTURE_DIR"; do
+for dir in "$FIXTURE_DIR" "$GRILL_FIXTURE_DIR" "$MS_GRILL_FIXTURE_DIR" \
+           "$SECRET_FIXTURE_DIR" "$BASH_SAFETY_FIXTURE_DIR"; do
   if [ ! -d "$dir" ]; then
     echo "  FAIL: $dir is missing"
     exit 1
@@ -117,6 +132,39 @@ declare -a MS_GRILL_CASES=(
   "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
   "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
+)
+
+# PreToolUse fixtures (secret-detector, bash-safety). A different protocol from
+# the Stop hooks above: a PreToolUse hook blocks with exit 2 plus a message on
+# stderr, and allows with exit 0 and no output. Both hosts read it that way -
+# Claude Code natively, and Qwen via `exitCode === 2` -> parse stderr ->
+# `{decision:"deny"}` when the text is not JSON.
+#
+# Each family carries the same payload in both host shapes, because the
+# PreToolUse payload names the tool differently on each: Claude Code sends the
+# display name (`Write`, `Bash`), Qwen sends the canonical name (`write_file`,
+# `run_shell_command`). A hook that switches on that value therefore has to
+# accept both, and until it does the Qwen-shaped payload silently sails past.
+#
+# What these fixtures CANNOT test is matcher dispatch - piping a payload
+# straight into a hook bypasses the host's matcher entirely. That the matcher
+# resolves on both hosts is Gate 14's job, via the dual-naming rule it reads
+# from scripts/_lib/host_matrix.py. Bodies here, wiring there.
+declare -a SECRET_CASES=(
+  "claude-write-secret-blocks|deny|Claude-shaped Write carrying an AWS key must block"
+  "claude-edit-secret-blocks|deny|Claude-shaped Edit carrying an AWS key must block"
+  "claude-multiedit-secret-blocks|deny|Claude-shaped MultiEdit carrying an AWS key must block"
+  "claude-write-clean-allows|allow|Claude-shaped Write with no secret passes"
+  "skipped-path-allows|allow|a .md path is skipped by design; pinned so the skip cannot widen unnoticed"
+  "unknown-tool-allows|allow|a tool the hook does not inspect passes without reading content"
+)
+
+declare -a BASH_SAFETY_CASES=(
+  "claude-bash-destructive-blocks|deny|Claude-shaped Bash running a documented injection signature must block"
+  "claude-bash-safe-allows|allow|an ordinary listing command passes"
+  "qwen-shell-destructive-blocks|deny|Qwen-shaped run_shell_command with the same command must block identically"
+  "qwen-shell-safe-allows|allow|Qwen-shaped safe command passes"
+  "empty-command-allows|allow|a payload with no command fails open rather than blocking everything"
 )
 
 failures=0
@@ -166,9 +214,59 @@ run_cases() {
   done
 }
 
+# PreToolUse replay: assert on the exit code, not on stdout. `set -e` is active,
+# so the invocation is guarded - an exit 2 here is the expected outcome for half
+# these cases, not a gate crash.
+run_pre_cases() {
+  local hook="$1" dir="$2"; shift 2
+  local case_line name expect desc fixture err rc
+  for case_line in "$@"; do
+    IFS='|' read -r name expect desc <<< "$case_line"
+    fixture="$dir/$name.json"
+    if [ ! -f "$fixture" ]; then
+      echo "  FAIL: missing fixture: $fixture"
+      failures=$((failures + 1))
+      continue
+    fi
+
+    set +e
+    err=$(bash "$DISPATCH" "$hook" < "$fixture" 2>&1 >/dev/null)
+    rc=$?
+    set -e
+
+    case "$expect" in
+      deny)
+        if [ "$rc" -eq 2 ] && printf '%s' "$err" | grep -q '^BLOCKED:'; then
+          echo "  PASS: $name → deny (exit 2 + stderr): $desc"
+        elif [ "$rc" -eq 2 ]; then
+          echo "  FAIL: $name → exit 2 but no 'BLOCKED:' reason on stderr: $desc"
+          failures=$((failures + 1))
+        else
+          echo "  FAIL: $name → expected exit 2, got $rc: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      allow)
+        if [ "$rc" -eq 0 ]; then
+          echo "  PASS: $name → allow (exit 0): $desc"
+        else
+          echo "  FAIL: $name → expected exit 0, got $rc: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      *)
+        echo "  FAIL: $name has unknown expected outcome '$expect'"
+        failures=$((failures + 1))
+        ;;
+    esac
+  done
+}
+
 run_cases "$HOOK_NAME" "$FIXTURE_DIR" "${CASES[@]}"
 run_cases "$GRILL_HOOK_NAME" "$GRILL_FIXTURE_DIR" "${GRILL_CASES[@]}"
 run_cases "$MS_GRILL_HOOK_NAME" "$MS_GRILL_FIXTURE_DIR" "${MS_GRILL_CASES[@]}"
+run_pre_cases "$SECRET_HOOK_NAME" "$SECRET_FIXTURE_DIR" "${SECRET_CASES[@]}"
+run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY_CASES[@]}"
 
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
@@ -242,7 +340,7 @@ else
 fi
 
 SENTINEL_CHECK_COUNT=$((${#STATUS_SENTINEL_FILES[@]} + ${#EXPLAIN_SENTINEL_FILES[@]} + ${#GRILL_SENTINEL_FILES[@]} + ${#MS_GRILL_SENTINEL_FILES[@]}))
-FIXTURE_COUNT=$((${#CASES[@]} + ${#GRILL_CASES[@]} + ${#MS_GRILL_CASES[@]}))
+FIXTURE_COUNT=$((${#CASES[@]} + ${#GRILL_CASES[@]} + ${#MS_GRILL_CASES[@]} + ${#SECRET_CASES[@]} + ${#BASH_SAFETY_CASES[@]}))
 
 if [ $failures -ne 0 ]; then
   echo "  FAIL: $failures failure(s) total"
