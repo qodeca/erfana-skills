@@ -5,12 +5,6 @@ when_to_use: |
   Trigger phrases: "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns", "Claude 5 refresh", "skill lifecycle".
 model: opus
 effort: high
-hooks:
-  Stop:
-    - hooks:
-        - type: command
-          command: bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" ../skills/managing-skills/hooks/ms-grill-guard
-          timeout: 5
 ---
 
 # Managing Skills
