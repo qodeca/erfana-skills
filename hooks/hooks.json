@@ -1,24 +1,22 @@
 {
-  "description": "erfana plugin hooks: project-agnostic safety, secret detection, post-compact reminders, and verification nudge. Each hook routes through dispatch.sh, which runs the .sh sibling on macOS/Linux and the .ps1 sibling on Windows.",
+  "description": "erfana plugin hooks: project-agnostic safety, secret detection, post-compact reminders, and verification nudge. Each hook routes through dispatch.sh, which runs the .sh sibling on macOS/Linux and the .ps1 sibling on Windows, and which enforces the 5-second timeout. No hook carries a timeout key: Claude Code reads that field as seconds and Qwen Code reads it as milliseconds, so no value is correct on both. Matchers name each host's tool vocabulary; see docs/hosts.md.",
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|run_shell_command",
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" bash-safety",
-            "timeout": 5
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" bash-safety"
           }
         ]
       },
       {
-        "matcher": "Write|Edit|MultiEdit",
+        "matcher": "Write|Edit|MultiEdit|write_file",
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" secret-detector",
-            "timeout": 5
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" secret-detector"
           }
         ]
       }
@@ -29,8 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" post-compact-reminder",
-            "timeout": 5
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" post-compact-reminder"
           }
         ]
       }
@@ -41,8 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" verify-completion",
-            "timeout": 5
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh\" verify-completion"
           }
         ]
       }

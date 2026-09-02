@@ -155,6 +155,9 @@ declare -a SECRET_CASES=(
   "claude-edit-secret-blocks|deny|Claude-shaped Edit carrying an AWS key must block"
   "claude-multiedit-secret-blocks|deny|Claude-shaped MultiEdit carrying an AWS key must block"
   "claude-write-clean-allows|allow|Claude-shaped Write with no secret passes"
+  "qwen-write-file-secret-blocks|deny|Qwen-shaped write_file carrying the same key must block identically"
+  "qwen-edit-secret-blocks|deny|Qwen-shaped edit carrying the same key must block identically"
+  "qwen-write-file-clean-allows|allow|Qwen-shaped write_file with no secret passes"
   "skipped-path-allows|allow|a .md path is skipped by design; pinned so the skip cannot widen unnoticed"
   "unknown-tool-allows|allow|a tool the hook does not inspect passes without reading content"
 )
@@ -267,6 +270,59 @@ run_cases "$GRILL_HOOK_NAME" "$GRILL_FIXTURE_DIR" "${GRILL_CASES[@]}"
 run_cases "$MS_GRILL_HOOK_NAME" "$MS_GRILL_FIXTURE_DIR" "${MS_GRILL_CASES[@]}"
 run_pre_cases "$SECRET_HOOK_NAME" "$SECRET_FIXTURE_DIR" "${SECRET_CASES[@]}"
 run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY_CASES[@]}"
+
+# --- 1b. Launcher guarantees ----------------------------------------------
+# The timeout that used to live in hooks/hooks.json now lives in
+# hooks/dispatch.sh, because the field means seconds on one host and
+# milliseconds on the other. A grep for the watchdog would prove only that a
+# string exists; these two checks prove the behaviour.
+
+# Watchdog: a hook whose background child holds stdout open must still be cut
+# off. Asserted as an upper bound, not an exact duration - a wall-clock
+# equality check is flaky on a loaded CI runner.
+SLOW_FIXTURE="tests/hooks/_fixtures/slow-hook.sh"
+if [ ! -f "$SLOW_FIXTURE" ]; then
+  echo "  FAIL: $SLOW_FIXTURE is missing (watchdog cannot be proven)"
+  failures=$((failures + 1))
+else
+  wd_start=$(date +%s)
+  set +e
+  ERFANA_HOOK_TIMEOUT=2 bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
+    < "$FIXTURE_DIR/stop-hook-active.json" >/dev/null 2>&1
+  wd_rc=$?
+  set -e
+  wd_elapsed=$(( $(date +%s) - wd_start ))
+  if [ "$wd_rc" -eq 0 ]; then
+    echo "  FAIL: watchdog - slow hook exited 0; it was never killed"
+    failures=$((failures + 1))
+  elif [ "$wd_elapsed" -gt 10 ]; then
+    echo "  FAIL: watchdog - slow hook took ${wd_elapsed}s; the bound did not hold"
+    failures=$((failures + 1))
+  else
+    echo "  PASS: watchdog - wedged hook killed in ${wd_elapsed}s (exit $wd_rc), stream closed"
+  fi
+fi
+
+# jq probe: every .sh hook parses its payload with jq, and without jq the parse
+# yields an empty string and the hook takes its allow branch - the safety net
+# off with no signal. stock macOS ships no jq. The launcher must say so.
+jq_dir="$(mktemp -d)"
+for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm ps sleep kill; do
+  tool_path="$(command -v "$tool" 2>/dev/null || true)"
+  [ -n "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+done
+set +e
+jq_err=$(PATH="$jq_dir" bash "$DISPATCH" secret-detector \
+  < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" 2>&1 >/dev/null)
+jq_rc=$?
+set -e
+rm -rf "$jq_dir"
+if [ "$jq_rc" -eq 0 ] && printf '%s' "$jq_err" | grep -q 'jq not found'; then
+  echo "  PASS: jq probe - missing jq skips the hook with a visible diagnostic"
+else
+  echo "  FAIL: jq probe - expected exit 0 plus a 'jq not found' diagnostic, got exit $jq_rc: $jq_err"
+  failures=$((failures + 1))
+fi
 
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
