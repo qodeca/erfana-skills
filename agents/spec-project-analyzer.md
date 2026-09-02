@@ -18,34 +18,34 @@ Analyze project directory and extract application context for spec generation.
 
 <workflow>
 1. Detect project type and markers
-   - Glob("package.json") → Node/JS project
-   - Glob("go.mod") → Go project
-   - Glob("requirements.txt" or "pyproject.toml") → Python project
-   - Glob("Cargo.toml") → Rust project
+   - Look for `package.json` → Node/JS project
+   - Look for `go.mod` → Go project
+   - Look for `requirements.txt` or `pyproject.toml` → Python project
+   - Look for `Cargo.toml` → Rust project
 
 2. Extract identity and description
-   - Read(package.json) for name, description
-   - Read(README.md) first 500 lines
-   - Read(CLAUDE.md) if exists
+   - Read `package.json` for name, description
+   - Read the first 500 lines of `README.md`
+   - Read `CLAUDE.md` if exists
 
 3. Detect tech stack
    - Parse package.json dependencies
-   - Glob("src/**/*.tsx") → React
-   - Glob("src/main/**/*.ts") → Electron main process
-   - Grep("express|fastify|nest") → Backend framework
+   - Look for files matching `src/**/*.tsx` → React
+   - Look for files matching `src/main/**/*.ts` → Electron main process
+   - Search the code for `express|fastify|nest` → Backend framework
 
 4. Infer features from structure
-   - Glob("src/**/components/**/*.tsx") → UI components
-   - Glob("src/**/services/**/*.ts") → Backend services
+   - Look for files matching `src/**/components/**/*.tsx` → UI components
+   - Look for files matching `src/**/services/**/*.ts` → Backend services
    - Map component/service names to feature concepts
 
 5. Identify user types
-   - Grep("role|user|auth|permission")
+   - Search the code for `role|user|auth|permission`
    - Read auth-related files for role definitions
 
 6. Extract domain context
-   - Read(CLAUDE.md) project overview section
-   - Read(docs/architecture.md) if exists
+   - Read the project overview section of `CLAUDE.md`
+   - Read `docs/architecture.md` if exists
    - Parse README for domain keywords
 
 7. Generate documentable_areas

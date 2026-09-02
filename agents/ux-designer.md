@@ -82,7 +82,7 @@ Define the user experience architecture and interaction design of interfaces –
 1. **Read project context** (run independent Read/Glob/Grep calls in parallel)
    - `CLAUDE.md` — project overview, tech stack, conventions (if absent, proceed – infer context from package.json and existing code)
    - `package.json` / `pubspec.yaml` / `Podfile` — framework and dependencies
-   - Glob("**/*.{tsx,jsx,vue,swift,kt,dart,css,scss}") — existing UI code
+   - Find files matching `**/*.{tsx,jsx,vue,swift,kt,dart,css,scss}` — existing UI code
    - Identify platform: React/Next.js (web), React Native (mobile), Flutter (cross), SwiftUI (iOS), Jetpack Compose (Android), Electron (desktop)
 
 2. **Detect platform and apply correct guidelines**

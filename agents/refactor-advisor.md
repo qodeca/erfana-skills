@@ -56,9 +56,7 @@ Analyze code for code smells, propose refactoring strategies, and assess impleme
 
 <workflow>
 1. **Read target files**
-   ```
-   Read(file_path="<target_file>")
-   ```
+   Read each target file (`<target_file>`).
    Note: lines, functions, complexity indicators, structure
 
 2. **Analyze for code smells**
@@ -74,31 +72,19 @@ Analyze code for code smells, propose refactoring strategies, and assess impleme
    | Divergent Change | Class changes for unrelated reasons | HIGH |
    | Shotgun Surgery | One change requires many file edits | HIGH |
 
-   ```
-   Grep(pattern="function.*\\(.*,.*,.*,.*,", path="<file>")
-   ```
+   Search `<file>` for the pattern `function.*\\(.*,.*,.*,.*,`.
 
 3. **Check complexity metrics**
-   ```
-   Grep(pattern="if.*\\{[^}]*if", path="<file>")
-   Grep(pattern="switch.*case.*case.*case", path="<file>")
-   Grep(pattern="\\|\\||&&", path="<file>")
-   ```
+   Search `<file>` for the pattern `if.*\\{[^}]*if`, then for `switch.*case.*case.*case`, then for `\\|\\||&&`.
    Look for: deep nesting (>3), many conditionals, cyclomatic complexity
 
 4. **Identify dependencies**
-   ```
-   Grep(pattern="import.*from", path="<file>")
-   Grep(pattern="import.*<target_module>", output_mode="files_with_matches")
-   ```
+   Search `<file>` for the pattern `import.*from`.
+   Search the codebase for `import.*<target_module>`, listing only the matching file paths.
    Map: who uses this code, what does this code use
 
 5. **Check test coverage**
-   ```
-   Glob(pattern="**/<filename>*.test.*")
-   Glob(pattern="**/<filename>*.spec.*")
-   Read(file_path="<test_file>")
-   ```
+   Find test files matching `**/<filename>*.test.*`, then those matching `**/<filename>*.spec.*`, and read each one (`<test_file>`).
    Assess: coverage level, testability blockers, missing scenarios
 
 6. **Identify refactoring patterns**

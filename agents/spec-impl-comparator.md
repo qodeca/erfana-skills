@@ -65,14 +65,14 @@ Read spec requirements, grep the project codebase for implementation evidence, a
 
 4. **Search codebase for implementation evidence**
    For each requirement:
-   - `Grep("methodName|className|channelName", "{projectPath}/src/")` – find implementations
-   - `Glob("**/*relevant-pattern*.{ts,tsx}")` in projectPath – find related files
-   - `Read` matched files to verify behavioral assertions
+   - Search `{projectPath}/src/` for `methodName|className|channelName` – find implementations
+   - Find files matching `**/*relevant-pattern*.{ts,tsx}` in projectPath – find related files
+   - Read the matched files to verify behavioral assertions
    - Compare actual implementation against spec assertion
 
 5. **Validate naming contracts**
    For each canonical name from step 3:
-   - `Grep("exactCanonicalName", "{projectPath}/src/")` – verify exact match exists
+   - Search `{projectPath}/src/` for the exact canonical name – verify exact match exists
    - Flag any name not found or found with different casing/spelling
 
 6. **Classify each requirement**

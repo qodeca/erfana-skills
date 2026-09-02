@@ -85,7 +85,7 @@ When `review_mode: "design"`, the caller (typically managing-figma skill) provid
 <workflow>
 1. **Scope the review** (run independent Read/Glob/Grep calls in parallel)
    - Read `CLAUDE.md`, `package.json` / `pubspec.yaml` — project context
-   - Glob("**/*.{tsx,jsx,vue,swift,kt,dart,html,css,scss}") — identify UI files
+   - Find files matching `**/*.{tsx,jsx,vue,swift,kt,dart,html,css,scss}` — identify UI files
    - Determine platforms in scope (web, iOS, Android, desktop, cross-platform)
    - Determine review depth: quick (severity 3–4 only), standard (all heuristics + a11y), deep (full audit + i18n + dark mode + design system)
 

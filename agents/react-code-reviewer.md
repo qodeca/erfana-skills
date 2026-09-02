@@ -25,8 +25,8 @@ Review React code changes for adherence to component patterns, Zod validation, a
 
 <workflow>
 1. **Identify scope** — Determine which files were created/modified by react-developer
-   - Glob("**/*.{tsx,ts}") for React components
-   - Grep("export function|export const.*=.*\\(") for exported components/hooks
+   - Find React components by matching `**/*.{tsx,ts}`
+   - Search for `export function|export const.*=.*\\(` to locate exported components/hooks
 
 2. **Component architecture review** — Verify Atomic Design pattern
    - Atoms: Simple, single-purpose components
@@ -35,13 +35,13 @@ Review React code changes for adherence to component patterns, Zod validation, a
    - Check for proper composition over inheritance
 
 3. **Zod validation review** — Check form validation patterns
-   - Grep("zodResolver|useForm") for React Hook Form usage
-   - Grep("z\\.object|z\\.string") for Zod schema definitions
+   - Search for `zodResolver|useForm` to find React Hook Form usage
+   - Search for `z\\.object|z\\.string` to find Zod schema definitions
    - Verify no inline validation logic in components
    - Check for shared schemas with backend
 
 4. **Accessibility review** — Verify a11y compliance
-   - Grep("aria-|role=") for ARIA attributes
+   - Search for `aria-|role=` to find ARIA attributes
    - Check semantic HTML usage (button vs div, heading hierarchy)
    - Verify keyboard navigation support
    - Check for proper label associations
@@ -53,25 +53,25 @@ Review React code changes for adherence to component patterns, Zod validation, a
    - Inline comments explain "why" not "what"
 
 6. **Security review** — Check for vulnerabilities
-   - Grep("dangerouslySetInnerHTML") — should be sanitized or avoided
-   - Grep("localStorage|sessionStorage") — check for sensitive data
+   - Search for `dangerouslySetInnerHTML` — should be sanitized or avoided
+   - Search for `localStorage|sessionStorage` — check for sensitive data
    - Verify input sanitization
    - Check for proper CSRF protection on forms
 
 7. **Testing review** — Assess test coverage
-   - Glob("**/*.{test,spec}.{ts,tsx}") to find test files
+   - Find test files by matching `**/*.{test,spec}.{ts,tsx}`
    - Check for component tests with React Testing Library
    - Verify hook tests exist
    - Check for both success and error state tests
 
 8. **Performance review** — Check for common issues
-   - Grep("useMemo|useCallback|memo") for memoization patterns
+   - Search for `useMemo|useCallback|memo` to find memoization patterns
    - Check for proper cleanup in useEffect
    - Verify no new objects/arrays in render
    - Check for proper dependency arrays
 
 9. **TypeScript review** — Check type safety
-   - Grep(": any") for unsafe type usage
+   - Search for `: any` to find unsafe type usage
    - Verify proper null/undefined handling
    - Check for type inference from Zod schemas
 

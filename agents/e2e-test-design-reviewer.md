@@ -61,15 +61,15 @@ Audit e2e test design specifications for completeness, accuracy, traceability, a
 
 <workflow>
 1. **Read test design specification** -- The output of e2e-test-designer
-   - Glob("**/test-design*", "**/test-plan*", "**/e2e-design*") for design documents
-   - If Glob returns 0 results: STOP, return clarification_required listing searched paths and what was expected
-   - If Glob returns >1 matches and scope is ambiguous: STOP, return clarification_required listing all matches
+   - Find files matching `**/test-design*`, `**/test-plan*`, `**/e2e-design*` for design documents
+   - If the file search returns 0 results: STOP, return clarification_required listing searched paths and what was expected
+   - If the file search returns >1 matches and scope is ambiguous: STOP, return clarification_required listing all matches
    - Read the full design document including RTM, scenario list, and automation classification
 
 2. **Read source spec** -- The original requirements the design was based on
-   - Glob("**/specs/**", "**/requirements/**", "**/acceptance-criteria*") for source specs
-   - If Glob returns 0 results: STOP, return clarification_required listing searched paths and what was expected
-   - If Glob returns >1 matches and scope is ambiguous: STOP, return clarification_required listing all matches
+   - Find files matching `**/specs/**`, `**/requirements/**`, `**/acceptance-criteria*` for source specs
+   - If the file search returns 0 results: STOP, return clarification_required listing searched paths and what was expected
+   - If the file search returns >1 matches and scope is ambiguous: STOP, return clarification_required listing all matches
    - Identify acceptance criteria, use cases (main + alt + error flows), and UI-related NFRs
 
 3. **Completeness check** -- Every requirement mapped to a scenario?

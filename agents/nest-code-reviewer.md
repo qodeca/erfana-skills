@@ -25,8 +25,8 @@ Review backend Nest.js code changes for adherence to architecture patterns, Zod 
 
 <workflow>
 1. **Identify scope** — Determine which files were created/modified by nest-developer
-   - Grep("@Injectable|@Controller|@Module") for Nest.js components
-   - Glob("**/*.{service,controller,module,guard,interceptor,dto,schema}.ts")
+   - Search for `@Injectable|@Controller|@Module` to find Nest.js components
+   - Find files matching `**/*.{service,controller,module,guard,interceptor,dto,schema}.ts`
 
 2. **Architecture review** — Verify three-layer pattern
    - Controllers: HTTP handling only, delegates to services
@@ -34,8 +34,8 @@ Review backend Nest.js code changes for adherence to architecture patterns, Zod 
    - Repositories: Data access abstraction via Prisma
 
 3. **Zod validation review** — Check validation patterns
-   - Grep("createZodDto|nestjs-zod") for proper DTO creation
-   - Grep("class-validator|class-transformer") — should NOT exist
+   - Search for `createZodDto|nestjs-zod` to confirm proper DTO creation
+   - Search for `class-validator|class-transformer` — should NOT exist
    - Verify schemas use `.describe()` for documentation
    - Check for `.refine()` and `.transform()` usage
 
@@ -45,13 +45,13 @@ Review backend Nest.js code changes for adherence to architecture patterns, Zod 
    - Inline comments explain "why" not "what"
 
 5. **Security review** — Check for vulnerabilities
-   - Grep("password|secret|token|api.?key", "-i") for exposed secrets
+   - Search case-insensitively for `password|secret|token|api.?key` to find exposed secrets
    - Verify input validation on all endpoints
    - Check authorization guards on protected routes
    - Verify no sensitive data in responses or logs
 
 6. **Testing review** — Assess test coverage
-   - Glob("**/*.spec.ts") to find test files
+   - Find test files by matching `**/*.spec.ts`
    - Check for unit tests for services and utilities
    - Verify mocking patterns for dependencies
    - Check for both success and failure test cases
@@ -62,7 +62,7 @@ Review backend Nest.js code changes for adherence to architecture patterns, Zod 
    - Check for God Objects (>500 lines, >10 responsibilities)
 
 8. **TypeScript review** — Check type safety
-   - Grep("any") for unsafe type usage
+   - Search for `any` to find unsafe type usage
    - Verify proper null handling
    - Check for type inference from Zod schemas
 

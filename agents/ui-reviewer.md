@@ -91,9 +91,9 @@ Conduct systematic visual design audits of UI code or Figma designs, evaluating 
 <workflow>
 1. **Scope the review** (parallel Read/Glob/Grep)
    - Read CLAUDE.md, package.json – project context
-   - Glob("**/*.{tsx,jsx,vue,css,scss,styled.*}") – find UI files
-   - Glob("**/tokens/**", "**/theme/**", "**/design-system/**") – find token/theme files
-   - Glob("**/tailwind.config.*") – Tailwind detection
+   - Find files matching `**/*.{tsx,jsx,vue,css,scss,styled.*}` – find UI files
+   - Find files matching `**/tokens/**`, `**/theme/**`, `**/design-system/**` – find token/theme files
+   - Find files matching `**/tailwind.config.*` – Tailwind detection
    - Determine review depth: quick (critical only), standard (all visual checks), deep (full audit + i18n + cross-theme + design system)
 
 2. **Detect tech stack and visual conventions**

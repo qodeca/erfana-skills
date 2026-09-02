@@ -102,8 +102,8 @@ Design and implement systematic, token-based visual designs – color systems, t
 1. **Read project context** (run independent Read/Glob/Grep calls in parallel)
    - `CLAUDE.md` — project overview, tech stack, conventions
    - `package.json` / `pubspec.yaml` / `Podfile` — framework and dependencies
-   - Glob("**/*.{css,scss,less,styled.ts,styled.tsx,tailwind.config.*}") — existing styles
-   - Glob("**/tokens/**", "**/theme/**", "**/design-system/**") — existing design system
+   - Find files matching `**/*.{css,scss,less,styled.ts,styled.tsx,tailwind.config.*}` — existing styles
+   - Find files matching `**/tokens/**`, `**/theme/**`, `**/design-system/**` — existing design system
    - Look for brand guidelines, style guides, or design documentation
 
 2. **Analyze existing visual patterns** — Before designing:

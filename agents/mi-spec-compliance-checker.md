@@ -49,16 +49,16 @@ STOP if either input is missing. Return error with missing fields.
 <workflow>
 1. Read the spec requirements file at the provided specPath
    - Look for `requirements/02-requirements.md` or similar structure
-   - If specPath is a directory, Glob("**/*.md") within it to find requirements files
+   - If specPath is a directory, find files matching `**/*.md` within it to find requirements files
 2. Extract all FR-NNN and NFR-NNN identifiers with their key assertions
-   - Grep("FR-\\d{3}|NFR-\\d{3}", specPath) to find all requirement IDs
+   - Search specPath for `FR-\d{3}|NFR-\d{3}` to find all requirement IDs
    - Read surrounding context to capture the assertion for each requirement
 3. Check for naming contracts table
-   - Grep("naming|canonical|convention", specPath) to detect naming sections
+   - Search specPath for `naming|canonical|convention` to detect naming sections
    - If found, extract all canonical names (classes, functions, files, IPC channels)
 4. For each FR/NFR requirement:
    - Derive search terms from the requirement assertion (key classes, functions, patterns)
-   - Grep(searchTerm, projectPath) to find implementation evidence
+   - Search projectPath for each search term to find implementation evidence
    - Read matching files for deeper context when needed
    - Classify:
      - **Compliant** – clear evidence of implementation matching the requirement
