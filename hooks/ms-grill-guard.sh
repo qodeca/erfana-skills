@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Skill-scoped Stop hook for erfana:managing-skills. Declared in the skill's
-# frontmatter (hooks: Stop:), so it runs on every stop while the skill is
-# active - sentinel presence alone scopes it to an open requirements
-# interview (references/interview-protocol.md).
+# Plugin-root Stop hook backing erfana:managing-skills. Registered in
+# hooks/hooks.json rather than in the skill's frontmatter, because Qwen Code's
+# extension skill parser does not extract hooks: and a skill-scoped
+# registration would be dead on one of the two supported hosts. It therefore
+# evaluates EVERY stop, in every session; the open marker - not the
+# registration - is what scopes it to a live requirements interview
+# (skills/managing-skills/references/interview-protocol.md).
 #
 # Protocol: while the interview is open, the skill ends every message with
 # the open marker; the wrap-up message simply omits it. This hook blocks a
@@ -51,7 +54,7 @@ TAIL=$(printf '%s\n' "$SCRUBBED" | awk 'NF' | tail -n 3)
 
 if echo "$TAIL" | grep -qF '<!-- erfana:ms-grill-open -->'; then
   cat <<'JSON'
-{"decision":"block","reason":"The managing-skills requirements interview is not closed; finish the coverage map, obtain waivers, or honor an abort before stopping (a wrap-up message omits the open marker)."}
+{"decision":"block","reason":"An erfana requirements-interview marker is still open on the last message. If an interview is running, finish the coverage map, obtain waivers, or honor an abort before stopping. If you are not in an interview, remove the trailing <!-- erfana:ms-grill-open --> marker and stop again."}
 JSON
   exit 0
 fi

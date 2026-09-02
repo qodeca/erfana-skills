@@ -11,10 +11,12 @@
 #      Exit code is always 0 per the Stop-hook protocol — the block decision
 #      is communicated via stdout JSON, not exit status — so the gate
 #      asserts on stdout shape rather than exit code.
-#   2. Same replay for the skill-scoped Stop hooks: grill-guard
-#      (skills/grill-me/hooks/) against tests/hooks/grill-guard/*.json and
-#      ms-grill-guard (skills/managing-skills/hooks/) against
-#      tests/hooks/ms-grill-guard/*.json — end-anchored open-marker blocking.
+#   2. Same replay for the two interview guards, both plugin-root Stop hooks
+#      since v7.1.0: grill-guard against tests/hooks/grill-guard/*.json and
+#      ms-grill-guard against tests/hooks/ms-grill-guard/*.json —
+#      end-anchored open-marker blocking. They moved out of skill frontmatter
+#      because Qwen Code's extension skill parser does not read hooks: there,
+#      so a skill-scoped registration was dead on one of the two hosts.
 #   3. Sentinel symmetry across four sentinel families:
 #        - `<!-- erfana:status-template -->` must appear in
 #          commands/project-status.md, commands/session-status.md, and
@@ -22,11 +24,11 @@
 #        - `<!-- erfana:explain-template -->` must appear in
 #          commands/explain-issue.md and hooks/verify-completion.{sh,ps1}.
 #        - `<!-- erfana:grill-open -->` must appear in
-#          skills/grill-me/SKILL.md and skills/grill-me/hooks/grill-guard.{sh,ps1}.
+#          skills/grill-me/SKILL.md and hooks/grill-guard.{sh,ps1}.
 #        - `<!-- erfana:ms-grill-open -->` must appear in
 #          skills/managing-skills/SKILL.md,
 #          skills/managing-skills/references/interview-protocol.md, and
-#          skills/managing-skills/hooks/ms-grill-guard.{sh,ps1}.
+#          hooks/ms-grill-guard.{sh,ps1}.
 #      If any one is missing, the corresponding hook behaviour would silently
 #      break (a clean-data report would block, or the grill backstop would
 #      never fire).
@@ -58,9 +60,9 @@ cd "$(dirname "$0")/.."
 DISPATCH="hooks/dispatch.sh"
 HOOK_NAME="verify-completion"
 FIXTURE_DIR="tests/hooks/verify-completion"
-GRILL_HOOK_NAME="../skills/grill-me/hooks/grill-guard"
+GRILL_HOOK_NAME="grill-guard"
 GRILL_FIXTURE_DIR="tests/hooks/grill-guard"
-MS_GRILL_HOOK_NAME="../skills/managing-skills/hooks/ms-grill-guard"
+MS_GRILL_HOOK_NAME="ms-grill-guard"
 MS_GRILL_FIXTURE_DIR="tests/hooks/ms-grill-guard"
 SECRET_HOOK_NAME="secret-detector"
 SECRET_FIXTURE_DIR="tests/hooks/secret-detector"
@@ -76,14 +78,14 @@ if [ ! -x "$DISPATCH" ]; then
   exit 1
 fi
 for impl in "hooks/${HOOK_NAME}.sh" "hooks/${HOOK_NAME}.ps1" \
-            "skills/grill-me/hooks/grill-guard.sh" "skills/grill-me/hooks/grill-guard.ps1" \
-            "skills/managing-skills/hooks/ms-grill-guard.sh" "skills/managing-skills/hooks/ms-grill-guard.ps1"; do
+            "hooks/grill-guard.sh" "hooks/grill-guard.ps1" \
+            "hooks/ms-grill-guard.sh" "hooks/ms-grill-guard.ps1"; do
   if [ ! -f "$impl" ]; then
     echo "  FAIL: $impl is missing (cross-platform sibling required)"
     exit 1
   fi
 done
-for exec_impl in "skills/grill-me/hooks/grill-guard.sh" "skills/managing-skills/hooks/ms-grill-guard.sh"; do
+for exec_impl in "hooks/grill-guard.sh" "hooks/ms-grill-guard.sh"; do
   if [ ! -x "$exec_impl" ]; then
     echo "  FAIL: $exec_impl is not executable"
     exit 1
@@ -114,8 +116,9 @@ declare -a CASES=(
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
-# Grill-guard fixtures (skill-scoped Stop hook): end-anchored open-marker
-# blocking. Same replay protocol as verify-completion.
+# Grill-guard fixtures (plugin-root Stop hook): end-anchored open-marker
+# blocking. Same replay protocol as verify-completion. The guard evaluates
+# every stop; the marker alone scopes it to an open interview.
 declare -a GRILL_CASES=(
   "open-blocks|block|end-anchored open marker on a mid-interview message must block"
   "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
@@ -343,8 +346,8 @@ EXPLAIN_SENTINEL_FILES=(
 # that end-anchors on it (both implementations).
 GRILL_SENTINEL_FILES=(
   "skills/grill-me/SKILL.md"
-  "skills/grill-me/hooks/grill-guard.sh"
-  "skills/grill-me/hooks/grill-guard.ps1"
+  "hooks/grill-guard.sh"
+  "hooks/grill-guard.ps1"
 )
 # ms-grill family: the managing-skills orchestrator prose, the static
 # interview protocol that governs the marker, and the skill-scoped Stop hook
@@ -352,8 +355,8 @@ GRILL_SENTINEL_FILES=(
 MS_GRILL_SENTINEL_FILES=(
   "skills/managing-skills/SKILL.md"
   "skills/managing-skills/references/interview-protocol.md"
-  "skills/managing-skills/hooks/ms-grill-guard.sh"
-  "skills/managing-skills/hooks/ms-grill-guard.ps1"
+  "hooks/ms-grill-guard.sh"
+  "hooks/ms-grill-guard.ps1"
 )
 
 check_sentinel() {
@@ -387,8 +390,8 @@ check_sentinel "$MS_GRILL_SENTINEL" "ms-grill" "${MS_GRILL_SENTINEL_FILES[@]}"
 normalize_guard() {
   grep -v '^#' "$1" | grep -v '"decision":"block"' | sed 's/erfana:ms-grill-open/erfana:grill-open/'
 }
-if diff <(normalize_guard "skills/grill-me/hooks/grill-guard.sh") \
-        <(normalize_guard "skills/managing-skills/hooks/ms-grill-guard.sh") >/dev/null; then
+if diff <(normalize_guard "hooks/grill-guard.sh") \
+        <(normalize_guard "hooks/ms-grill-guard.sh") >/dev/null; then
   echo "  PASS: guard machinery identical across grill-guard.sh and ms-grill-guard.sh"
 else
   echo "  FAIL: guard drift - grill-guard.sh and ms-grill-guard.sh differ beyond sentinel/reason/header"

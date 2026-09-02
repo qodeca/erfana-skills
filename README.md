@@ -54,7 +54,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 
 ### Safety hooks (v4.1+)
 
-Four hooks run silently in the background once the plugin is enabled, providing a project-agnostic safety net:
+Six hooks run silently in the background once the plugin is enabled, providing a project-agnostic safety net:
 
 | Hook | When | What it does |
 |---|---|---|

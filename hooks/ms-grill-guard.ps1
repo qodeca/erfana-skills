@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Skill-scoped Stop hook for erfana:managing-skills (Windows sibling of
+# Plugin-root Stop hook for erfana:managing-skills (Windows sibling of
 # ms-grill-guard.sh). Faithful 1:1 port of the bash version.
 #
 # Blocks a stop whose last assistant message still carries the open marker
@@ -44,7 +44,7 @@ $tail = @($scrubbedLines | Where-Object { $_.Trim().Length -gt 0 } | Select-Obje
 
 foreach ($line in $tail) {
     if ($line.Contains('<!-- erfana:ms-grill-open -->')) {
-        Write-Output '{"decision":"block","reason":"The managing-skills requirements interview is not closed; finish the coverage map, obtain waivers, or honor an abort before stopping (a wrap-up message omits the open marker)."}'
+        Write-Output '{"decision":"block","reason":"An erfana requirements-interview marker is still open on the last message. If an interview is running, finish the coverage map, obtain waivers, or honor an abort before stopping. If you are not in an interview, remove the trailing <!-- erfana:ms-grill-open --> marker and stop again."}'
         exit 0
     }
 }

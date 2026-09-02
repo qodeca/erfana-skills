@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Skill-scoped Stop hook for erfana:grill-me (Windows sibling of
+# Plugin-root Stop hook for erfana:grill-me (Windows sibling of
 # grill-guard.sh). Faithful 1:1 port of the bash version.
 #
 # Blocks a stop whose last assistant message still carries the open marker
@@ -44,7 +44,7 @@ $tail = @($scrubbedLines | Where-Object { $_.Trim().Length -gt 0 } | Select-Obje
 
 foreach ($line in $tail) {
     if ($line.Contains('<!-- erfana:grill-open -->')) {
-        Write-Output '{"decision":"block","reason":"The grill interview''s coverage map is not closed; the interview protocol expects continued questioning or a user-confirmed read-back (a wrap-up message without the open marker)."}'
+        Write-Output '{"decision":"block","reason":"An erfana grill-interview marker is still open on the last message. If an interview is running, the coverage map is not closed - continue questioning or finish with a user-confirmed read-back. If you are not in an interview, remove the trailing <!-- erfana:grill-open --> marker and stop again."}'
         exit 0
     }
 }
