@@ -23,3 +23,6 @@ temp/
 # Python bytecode cache
 __pycache__/
 *.pyc
+
+# Local-only working files (reports, scratch); never committed
+.local/
