@@ -47,3 +47,13 @@ Up to seven `PASS:` lines (one per check; checks 5, 6, and 7 are skipped if `hoo
 - Negative lookahead `(?![/-])` excludes `skills/`, `hooks/`, `commands/` path uses but does not catch every theoretical false positive — if an author writes `4 hooks_v2` or similar, the check passes. Acceptable trade-off vs. false-positive risk.
 - `docs_to_scan` covers 7 files (above). Files outside this list — e.g. `SECURITY.md`, `skills/managing-skills/guides/embedded-prompts-guide.md` — carry plugin-shape claims that are NOT CI-blocked. v4.2.2 swept these manually; consider extending `docs_to_scan` if a class of plugin-shape claim drifts repeatedly outside the current 7-file scope.
 - **Per-skill phase and gate counts are not a Gate-15 claim class at all.** The seven checks cover version, per-skill nested agent counts, shared agents, skills, hooks, slash commands, and per-gate detail files – nothing else. The prominent current instance: `skills/managing-issues/SKILL.md` frontmatter claims "13 phased quality gates plus 3 embedded autonomous review sub-gates", and the same phase/gate arithmetic is restated across roughly forty files in that skill – `SKILL.md`, `operations/`, `phases/`, `reference/`, `examples/`. No check compares any of it to `ls skills/managing-issues/phases/`, and most of those files are outside `docs_to_scan` regardless. Adding or removing a phase or a sub-gate is therefore a manual sweep, not a gated one.
+
+## Check 8: Qwen Code version agreement (v7.1.0)
+
+Three places can name a Qwen version and drift apart: `scripts/_lib/host_matrix.py` (the source of truth, and what `docs/hosts.md` is generated from), the npm pin in `.github/workflows/verify.yml`, and any version stated in the scanned prose. The gate fails when any of them disagrees with `HOSTS['qwen-code']['tested_version']`.
+
+The alias tables and the agent-frontmatter allowlist in `host_matrix.py` were transcribed out of one specific Qwen bundle, and the smoke test checksums that bundle. A stale pin means CI certifies a Qwen nobody read.
+
+Because the pin and the transcription are enforced equal, this check can never fire from CI alone – that is what the weekly `qwen-canary` workflow is for. It runs the smoke test against `@latest`, never blocks, and opens or updates one `qwen-drift` issue when the two diverge.
+
+`docs/hosts.md` and `CONTRIBUTING.md` joined `docs_to_scan` in the same release (7 docs to 9).

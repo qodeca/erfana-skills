@@ -65,3 +65,17 @@ The phrase regex requires a self-referential determiner (`your`/`its`/`internal`
 - `skills/managing-skills/validation/agent-pre-release-checklist.md` — Section 13 (per-agent Claude 5 frontmatter requirements)
 - `skills/managing-skills/templates/shared-agent-template.md` — Model Selection Guide (orchestrator → opus high, validator → sonnet low, etc.)
 - `skills/managing-skills/guides/claude-5-patterns.md` — current pattern reference for what this gate detects
+
+## Cross-host frontmatter rules (v7.1.0)
+
+These are `FAIL`, not warnings, because each one makes a skill or an agent silently absent on Qwen Code – a missing capability, not a style nit.
+
+| Rule | Failure mode on Qwen |
+|---|---|
+| Agent `name` at most 50 characters | The converter drops the agent with no error. |
+| Agent `name` identifier-shaped (`[A-Za-z0-9_-]+`) | Same. |
+| Agent `name` not a reserved word (`self`, `system`, `user`, `model`, `tool`, `config`, `default`, `main`) | Same. Read from `QWEN_RESERVED_AGENT_NAMES` in `scripts/_lib/host_matrix.py`. |
+| Skill `allowed-tools` / `argument-hint` is a string, not a YAML flow sequence | Qwen's strict validator throws `"Agent Skills allowed-tools must be a string."` and the caller skips the **entire skill**. Claude Code accepts both forms, so the flow shape is latent here and fatal there. |
+| `skills/fact-checking/SKILL.md` keeps `disable-model-invocation: true` | Not a host rule – a `CLAUDE.md` hard constraint that had no enforcement. Fact-check runs are user-requested only. |
+
+Agent description length stays a **warning**: no agent-description limit was found anywhere in the Qwen bundle, and the only verified cap is 1024 characters for *skill* descriptions in the strict validator. The long agent descriptions are long because they carry `<example>` blocks, which are what drive agent selection on Claude Code.

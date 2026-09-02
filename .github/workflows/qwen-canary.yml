@@ -1,0 +1,84 @@
+# SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Weekly drift canary for the second host.
+#
+# verify.yml pins Qwen Code to the exact bundle scripts/_lib/host_matrix.py was
+# transcribed from, and Gate 15 enforces that pin. That is correct for a gate --
+# it certifies a version somebody actually read -- but it means the pin and the
+# transcription are always equal, so the version-drift check can never fire in
+# CI. Without this job, "supported host" is anchored to one frozen release with
+# nothing that ever moves it.
+#
+# This job runs the same smoke test against @latest. It is never required and
+# never blocks a merge: a red canary is a signal to re-read the Qwen bundle and
+# bump host_matrix.py, not a broken build.
+
+name: Qwen drift canary
+
+on:
+  schedule:
+    # Mondays, 05:17 UTC. Off the hour on purpose - scheduled workflows queue
+    # behind everyone else's on-the-hour crons.
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: '22'
+      - name: Install Qwen Code (latest)
+        run: npm install -g --ignore-scripts @qwen-code/qwen-code@latest
+      - name: Record the version under test
+        id: version
+        run: |
+          set -euo pipefail
+          latest=$(npm view @qwen-code/qwen-code version)
+          pinned=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); from _lib.host_matrix import HOSTS; print(HOSTS['qwen-code']['tested_version'])")
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "pinned=$pinned" >> "$GITHUB_OUTPUT"
+          echo "Qwen Code latest=$latest, erfana transcribed=$pinned"
+      - name: Smoke test against latest
+        id: smoke
+        continue-on-error: true
+        run: bash scripts/qwen-smoke.sh --require 2>&1 | tee smoke.log
+      - name: Open or update the drift issue
+        if: steps.smoke.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.version.outputs.latest }}
+          PINNED: ${{ steps.version.outputs.pinned }}
+        run: |
+          set -euo pipefail
+          title="Qwen Code drift: smoke test fails on ${LATEST}"
+          body=$(printf '%s\n' \
+            "The weekly canary ran \`scripts/qwen-smoke.sh --require\` against Qwen Code \`${LATEST}\`." \
+            "" \
+            "erfana's host matrix was transcribed from \`${PINNED}\`." \
+            "" \
+            "Re-read the tool alias tables and the agent-frontmatter allowlist out of the new bundle, update \`scripts/_lib/host_matrix.py\`, then bump the pin in \`.github/workflows/verify.yml\`. Gate 15 fails until the two agree." \
+            "" \
+            "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            "" \
+            '```' \
+            "$(tail -40 smoke.log)" \
+            '```')
+          existing=$(gh issue list --label qwen-drift --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body" --label qwen-drift
+          fi

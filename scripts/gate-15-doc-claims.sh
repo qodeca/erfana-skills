@@ -60,6 +60,11 @@ docs_to_scan = [
     # Added with Gate 18: the generated registry states its own skill count in
     # prose, which Gate 18 does not parse (it reads table rows only).
     'docs/skill-registry.md',
+    # Added v7.1.0 with the second host: both carry plugin-shape counts, and
+    # docs/hosts.md is the single source of truth other docs link to, so a
+    # stale count there propagates rather than sitting in one file.
+    'docs/hosts.md',
+    'CONTRIBUTING.md',
 ]
 
 # === Check 1: CLAUDE.md "Current version: **vX.Y.Z**" matches plugin.json ===
@@ -242,6 +247,39 @@ if os.path.isdir('docs/gates'):
             if flagged:
                 break
     passes.append(f'docs/gates/*.md count {gate_files_count} aligns with all "X per-gate detail files" / "gates/01-X" claims')
+
+# === Check 8: the Qwen Code version is stated once, in host_matrix.py ===
+#
+# Three places name a Qwen version and can drift apart: host_matrix.py (the
+# source of truth, and what docs/hosts.md is generated from), the npm pin in
+# the CI workflow, and any version stated in prose. A stale pin means CI is
+# certifying a Qwen the alias table was never read out of.
+sys.path.insert(0, 'scripts')
+from _lib.host_matrix import HOSTS
+
+tested = HOSTS['qwen-code']['tested_version']
+if tested:
+    version_sites = []
+    for wf in sorted(glob(".github/workflows/*.yml")):
+        for m in re.finditer(r'@qwen-code/qwen-code@([0-9]+\.[0-9]+\.[0-9]+)', open(wf).read()):
+            version_sites.append((wf, m.group(1), m.group(0)))
+    for doc in docs_to_scan:
+        if not os.path.isfile(doc):
+            continue
+        for m in re.finditer(r'Qwen Code v?([0-9]+\.[0-9]+\.[0-9]+)', open(doc).read()):
+            version_sites.append((doc, m.group(1), m.group(0)))
+    for where, found, snippet in version_sites:
+        if found != tested:
+            errors.append(
+                f'{where}: "{snippet}" disagrees with scripts/_lib/host_matrix.py '
+                f'tested_version ({tested}). The alias table and the frontmatter '
+                f'rules were transcribed out of one Qwen bundle; bump both together '
+                f'or CI certifies a version nobody read.'
+            )
+    passes.append(
+        f'Qwen Code version {tested} agrees across host_matrix.py, '
+        f'{len(version_sites)} stated site(s)'
+    )
 
 # === Output ===
 if errors:

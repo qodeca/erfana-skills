@@ -333,6 +333,26 @@ else
   failures=$((failures + 1))
 fi
 
+# The probe must be per-hook, not blanket. post-compact-reminder reads no stdin
+# and calls no jq (it is git plus a heredoc), so a blanket probe would replace a
+# working hook with nothing on exactly the jq-less box it was written for.
+jq_dir="$(mktemp -d)"
+for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm sleep kill git; do
+  tool_path="$(command -v "$tool" 2>/dev/null || true)"
+  [ -n "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+done
+set +e
+pcr_out=$(PATH="$jq_dir" bash "$DISPATCH" post-compact-reminder < /dev/null 2>/dev/null)
+pcr_rc=$?
+set -e
+rm -rf "$jq_dir"
+if [ "$pcr_rc" -eq 0 ] && printf '%s' "$pcr_out" | grep -q 'CRITICAL REMINDERS'; then
+  echo "  PASS: jq probe - post-compact-reminder still runs on a jq-less PATH"
+else
+  echo "  FAIL: jq probe - post-compact-reminder was skipped without jq; it needs none"
+  failures=$((failures + 1))
+fi
+
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
 STATUS_SENTINEL_FILES=(

@@ -116,6 +116,25 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
     # 12.7 (v6.3.0): reasoning-display instructions
     report_reasoning_display(fp, text, '12.7')
 
+    # Cross-host skill frontmatter (v7.1.0). Qwen Code runs a strict validator
+    # over skill frontmatter and throws "Agent Skills allowed-tools must be a
+    # string." on a YAML flow sequence -- the caller then skips the entire
+    # skill. Claude Code accepts both forms, so the flow shape is latent here
+    # and fatal there. Same for argument-hint.
+    for key in ('allowed-tools', 'argument-hint'):
+        if key in m and not isinstance(m[key], str):
+            print(f'FAIL: {fp} {key} is a {type(m[key]).__name__}, not a string. '
+                  f"Qwen Code's strict validator rejects the whole skill; use a "
+                  f'comma-separated string.')
+            ok = False
+
+    # CLAUDE.md hard constraint, previously enforced by nothing: fact-check runs
+    # are user-requested only.
+    if m.get('name') == 'fact-checking' and m.get('disable-model-invocation') is not True:
+        print(f'FAIL: {fp} must keep `disable-model-invocation: true` '
+              f'(CLAUDE.md hard constraint; fact-check runs are user-invoked only)')
+        ok = False
+
     print(f'  {fp} → name={m.get("name", "?")}')
 
 # Agents: require name + description; invariant: name == filename basename.
@@ -125,6 +144,11 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
 # Match: `temperature: 0.7` (line-start, key:value)
 # Skip: `... "temperature:" ...` (mention inside string)
 DEPRECATED_API = re.compile(r'^\s{0,4}(temperature|top_p|top_k|budget_tokens)\s*:\s*\S', re.IGNORECASE | re.MULTILINE)
+
+# Cross-host agent-name rules, sourced from the one module that knows the hosts.
+sys.path.insert(0, 'scripts')
+from _lib.host_matrix import QWEN_AGENT_NAME_MAX, QWEN_RESERVED_AGENT_NAMES
+AGENT_NAME_SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
 
 if os.path.isdir('agents'):
     for fp in sorted(glob.glob('agents/*.md')):
@@ -164,6 +188,25 @@ if os.path.isdir('agents'):
 
         # Item 13.5 (v6.3.0): reasoning-display instructions
         report_reasoning_display(fp, text, '13.5')
+
+        # Cross-host agent name rules (v7.1.0). Qwen Code's converter drops an
+        # agent whose name is over 50 characters, is not identifier-shaped, or
+        # collides with one of its reserved names -- silently, with no error,
+        # so the agent simply is not there. These are FAILs, not warnings: a
+        # missing agent is a missing capability, not a style nit.
+        agent_name = m.get('name') or ''
+        if len(agent_name) > QWEN_AGENT_NAME_MAX:
+            print(f'FAIL: {fp} name is {len(agent_name)} chars (Qwen Code drops '
+                  f'agents over {QWEN_AGENT_NAME_MAX}); shorten it')
+            ok = False
+        if agent_name and not AGENT_NAME_SHAPE.match(agent_name):
+            print(f'FAIL: {fp} name "{agent_name}" is not identifier-shaped '
+                  f'(letters, digits, hyphen, underscore); Qwen Code drops it')
+            ok = False
+        if agent_name.lower() in QWEN_RESERVED_AGENT_NAMES:
+            print(f'FAIL: {fp} name "{agent_name}" is a Qwen Code reserved agent '
+                  f'name ({", ".join(QWEN_RESERVED_AGENT_NAMES)}); rename it')
+            ok = False
 
         print(f'  {fp} → name={m.get("name", "?")}')
 

@@ -223,3 +223,121 @@ if [ -n "$PS_BIN" ]; then
 else
     echo "  SKIP: no PowerShell on PATH (.ps1 syntax check skipped)"
 fi
+
+# 7. Cross-host hook contract (v7.1.0). Four rules that four shipped files
+# already state as Gate 14's job. They were prose-only until now; re-adding a
+# timeout key or dropping a Qwen alias passed the whole suite.
+#
+#   7a. No `timeout` key anywhere in hooks.json. The field is seconds on
+#       Claude Code (default 600) and milliseconds on Qwen (default 60000), so
+#       no single value is correct on both. The bound lives in dispatch.sh.
+#   7b. Every matcher that names a Claude-only tool also names its Qwen
+#       canonical counterpart, read from scripts/_lib/host_matrix.py. Without
+#       it the hook simply never fires on Qwen.
+#   7c. Matchers are plain `|`-separated tool names. A real regex is matched
+#       by substring on Qwen and would widen coverage silently.
+#   7d. Every stderr line preceding an `exit 2` is a literal. Qwen parses
+#       exit-2 stderr as JSON when it can, so interpolating a filename into a
+#       block message would let attacker-controlled text emit a JSON body and
+#       change the hook's decision.
+python3 <<'PYEOF'
+import json, os, re, sys
+
+sys.path.insert(0, "scripts")
+from _lib.host_matrix import matcher_partners, NO_QWEN_COUNTERPART
+
+ok = True
+data = json.load(open("hooks/hooks.json"))
+
+# 7a
+def find_timeout(node, path="hooks.json"):
+    global ok
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "timeout":
+                print(f"  FAIL: {path} carries a 'timeout' key ({v!r}); the field "
+                      f"is seconds on Claude Code and milliseconds on Qwen Code, "
+                      f"so no value is correct on both. Bound the hook in "
+                      f"hooks/dispatch.sh instead.")
+                ok = False
+            find_timeout(v, f"{path}.{k}")
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            find_timeout(v, f"{path}[{i}]")
+
+find_timeout(data)
+if ok:
+    print("  PASS: no 'timeout' key in hooks.json (unit differs per host)")
+
+# 7b + 7c
+PLAIN_MATCHER = re.compile(r'^[A-Za-z0-9_|-]*$')
+matcher_ok = True
+for event, entries in data.get("hooks", {}).items():
+    for entry in entries:
+        matcher = entry.get("matcher", "")
+        if not matcher:
+            continue
+        if not PLAIN_MATCHER.match(matcher):
+            print(f"  FAIL: {event} matcher {matcher!r} is not a plain "
+                  f"'|'-separated list of tool names. Qwen Code substring-matches "
+                  f"a matcher it cannot resolve as an alias, so regex syntax "
+                  f"widens coverage there without widening it here.")
+            matcher_ok = False
+            continue
+        missing = matcher_partners(matcher)
+        if missing:
+            print(f"  FAIL: {event} matcher {matcher!r} names a Claude-only tool "
+                  f"without its Qwen counterpart; add {'|'.join(missing)} "
+                  f"(source: scripts/_lib/host_matrix.py CLAUDE_TO_QWEN_TOOL). "
+                  f"Tools with no Qwen equivalent are exempt: "
+                  f"{', '.join(NO_QWEN_COUNTERPART)}.")
+            matcher_ok = False
+if matcher_ok:
+    print("  PASS: every matcher is plain and dual-named per host_matrix.py")
+ok = ok and matcher_ok
+
+# 7d
+literal_ok = True
+for name in sorted(os.listdir("hooks")):
+    if not name.endswith(".sh"):
+        continue
+    lines = open(os.path.join("hooks", name)).read().split("\n")
+    for i, line in enumerate(lines):
+        if not re.search(r'^\s*exit\s+2\s*$', line):
+            continue
+        # Walk back over the stderr lines that produce this block's message.
+        for j in range(i - 1, max(i - 6, -1), -1):
+            prev = lines[j]
+            if ">&2" not in prev:
+                break
+            if "$" in prev:
+                print(f"  FAIL: hooks/{name}:{j+1} interpolates a value into a "
+                      f"stderr line that precedes 'exit 2'. Qwen Code parses "
+                      f"exit-2 stderr as JSON when it parses, so interpolated "
+                      f"text can emit a JSON body and change the decision. "
+                      f"Keep block messages literal.")
+                literal_ok = False
+if literal_ok:
+    print("  PASS: every exit-2 block message is a literal (no $ expansion)")
+ok = ok and literal_ok
+
+sys.exit(0 if ok else 1)
+PYEOF
+
+# 8. The bound that replaced the timeout key must actually be in the launcher.
+# A grep for the watchdog is weak on its own -- Gate 16 owns the wall-clock
+# proof -- but it catches a silent revert of dispatch.sh to a plain exec.
+if ! grep -q 'HOOK_TIMEOUT_SECONDS' "$HOOKS_DIR/dispatch.sh"; then
+  echo "  FAIL: hooks/dispatch.sh has no HOOK_TIMEOUT_SECONDS bound; removing"
+  echo "        the hooks.json timeout key leaves the host default (600 s on"
+  echo "        Claude Code) as the only limit"
+  exit 1
+fi
+if ! grep -qE 'kill -(TERM|KILL) "-\$' "$HOOKS_DIR/dispatch.sh"; then
+  echo "  FAIL: hooks/dispatch.sh does not kill a process group. Hooks spawn"
+  echo "        jq and grep children that inherit stdout, and both hosts wait"
+  echo "        for the stream to close rather than for the process to exit,"
+  echo "        so a leaf-only kill bounds nothing."
+  exit 1
+fi
+echo "  PASS: dispatch.sh carries the process-group watchdog"
