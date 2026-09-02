@@ -11,7 +11,7 @@ Arguments reach this command through the two lines below. Each host fills in one
 - claude-code: $ARGUMENTS
 - qwen-code: {{args}}
 
-Resolve this before anything else. Exactly one line carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
+Resolve this before anything else. At most one of the two lines carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
 
 Fan out a set of review subagents over a target, each reviewing it through one lens (architecture, security, performance, UI, …) against the newest best practices researched online, then collect every subagent's findings in the main context and present one unified, severity-ranked report.
 

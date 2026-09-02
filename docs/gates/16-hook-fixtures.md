@@ -61,7 +61,7 @@ It is invoked from `scripts/run-all-gates.sh` directly after Gate 14 (`hooks val
 
 ## Adding a new fixture
 
-1. Drop a JSON file under `tests/hooks/verify-completion/<name>.json` (or `tests/hooks/grill-guard/<name>.json` / `tests/hooks/ms-grill-guard/<name>.json` for the skill-scoped hooks) containing the Stop-hook payload (`stop_hook_active` and `last_assistant_message`).
+1. Drop a JSON file under `tests/hooks/verify-completion/<name>.json` (or `tests/hooks/grill-guard/<name>.json` / `tests/hooks/ms-grill-guard/<name>.json` for the two interview guards) containing the Stop-hook payload (`stop_hook_active` and `last_assistant_message`).
 2. Add a corresponding row to the `CASES` (or `GRILL_CASES` / `MS_GRILL_CASES`) array in `scripts/gate-16-hook-fixtures.sh`:
 
    ```bash

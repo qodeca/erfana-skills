@@ -25,6 +25,8 @@ The names **"Erfana"** and **"Qodeca"**, the Qodeca and Erfana logos, and any as
 
 **"Playwright"** is a trademark of **Microsoft Corporation**. Erfana Skills ships agents that author and review Playwright tests and is not affiliated with, sponsored by, or endorsed by Microsoft. References to Playwright describe the tooling used only (nominative use).
 
+**"Qwen"** and **"Qwen Code"** are trademarks of **their respective owners**. Erfana Skills is an independent, third-party plugin that Qwen Code can convert and run at install time, and is not affiliated with, sponsored by, or endorsed by the owners of those marks. References to Qwen Code describe compatibility only (nominative use).
+
 ## Logos and brand assets
 
 The repository ships no brand-asset bundle. The only mark it ships is the GitHub social-preview logo under `docs/assets/social-preview/`. Treat the Erfana and Qodeca marks as trademarks per the rules above – do not present them as your own brand.

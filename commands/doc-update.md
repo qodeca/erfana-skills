@@ -11,7 +11,7 @@ Arguments reach this command through the two lines below. Each host fills in one
 - claude-code: $ARGUMENTS
 - qwen-code: {{args}}
 
-Resolve this before anything else. Exactly one line carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
+Resolve this before anything else. At most one of the two lines carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
 
 Bring all project documentation back in sync with the current state of the code, based on what has recently changed. This is a full-repo sweep by default, run after finishing a task or as periodic housekeeping.
 

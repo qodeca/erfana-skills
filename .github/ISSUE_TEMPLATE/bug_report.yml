@@ -26,6 +26,17 @@ body:
         3. See ...
     validations:
       required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      description: Which coding agent were you running erfana in? Pick "Both" only if you reproduced it on each.
+      options:
+        - Claude Code
+        - Qwen Code
+        - Both
+    validations:
+      required: true
   - type: input
     id: skill
     attributes:
@@ -37,9 +48,9 @@ body:
     id: env
     attributes:
       label: Environment
-      description: Claude Code version, OS, plugin version (`/plugin list`).
+      description: Host version, OS, and plugin version (`/plugin list` on Claude Code, `qwen extensions list` on Qwen Code).
       placeholder: |
-        - Claude Code:
+        - Host version:
         - OS:
         - erfana version:
     validations:

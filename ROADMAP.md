@@ -123,6 +123,20 @@ Single-maintainer admin merge (PR #71) per `CLAUDE.md ## Release process` Step 7
 
 See `CHANGELOG.md` v4.2.13 for the full surface, `BACKLOG.md` for the tracked cross-skill follow-up, and `docs/known-caveats.md` for the no-staged-rollout caveat entry.
 
+## Shipped in v7.1.0
+
+Second supported host. erfana now runs on Qwen Code as well as Claude Code, from the same repository and the same tag – Qwen converts Claude Code plugins at install time, so there is no second package, no second manifest, no build step and no second release train.
+
+| # | Task | Notes |
+|---|---|---|
+| X1 | Host matrix + [`docs/hosts.md`](docs/hosts.md) | `scripts/_lib/host_matrix.py` holds the machine-readable half – host rows, tool alias tables, the agent-frontmatter allowlist, and a checksum of the Qwen bundle chunk they were read from. Gates 2, 14 and 15 read that module, so a prose claim and a gate rule cannot drift apart. `docs/hosts.md` is the single source of truth every other doc links to. |
+| X2 | Safety hooks actually run on Qwen | `hooks/dispatch.sh` gained a per-hook `jq` probe and a bounded, process-group-killing launcher; the `timeout` key was removed from `hooks/hooks.json` because it means seconds on one host and milliseconds on the other, so the five-second bound lives in the launcher instead. |
+| X3 | Interview guards promoted to plugin-root Stop hooks | `grill-guard` and `ms-grill-guard` moved out of SKILL.md `hooks:` frontmatter into `hooks/hooks.json`. Qwen's skill parser does not extract that frontmatter, so a skill-scoped registration was dead on one of the two hosts. The open-marker sentinel alone now scopes them to a live interview. |
+| X4 | Host-portable prose in agents and commands | ~202 pseudo tool calls in Claude syntax rewritten as plain intent across 32 agent files, and every argument-taking slash command now carries both hosts' argument placeholders plus a rule for telling which one the host filled in. The three Anthropic-only authoring rules (sampling parameters, fixed thinking budgets, reasoning display) are now labelled as Anthropic-only rather than universal law. |
+| X5 | Cross-host enforcement in the gates and CI | Gate 14 gained the `timeout` ban, the matcher-counterpart rule, a no-regex-matcher rule and literal-stderr checking; Gate 2 gained the rules that decide whether a skill or agent exists at all on Qwen; Gate 15 gained a version-agreement check across the host matrix, the CI pin and prose. New CI jobs: a pinned `qwen-compat` run of `scripts/qwen-smoke.sh`, a Windows PowerShell replay of the Gate 16 hook fixtures, and a weekly non-blocking canary against Qwen's latest release. |
+
+Tested against Qwen Code 0.22.3, the version pinned in `scripts/_lib/host_matrix.py`. What the checks prove is the loader and the conversion, not the executor: no erfana skill has been run end to end inside a Qwen session, and `model: opus` reaching Qwen verbatim is unverified. Both are recorded in `docs/hosts.md` and `docs/known-caveats.md`.
+
 ## Forward-looking – sibling cascade (no schedule yet, no target version)
 
 Concrete trigger: the Modernize operation is the cascade primitive for the remaining sibling skills – after the v7.0.0 design removal that is `using-erfana` alone, per [`docs/modernization-registry.md`](docs/modernization-registry.md) (every other skill has a recorded pass or redesign; `grill-me` was imported already-shaped in v4.2.3; `managing-reports` additionally owes the nested-agent architectural cascade below). Items intentionally deferred (separate plan):
