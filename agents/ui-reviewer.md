@@ -34,7 +34,7 @@ description: |
   </example>
 type: reviewer
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: visual-design-review, color-system-audit, typography-audit, spacing-audit, animation-review, design-token-compliance, design-qa, figma-design-review
+capabilities: [visual-design-review, color-system-audit, typography-audit, spacing-audit, animation-review, design-token-compliance, design-qa, figma-design-review]
 model: opus
 color: rose
 ---

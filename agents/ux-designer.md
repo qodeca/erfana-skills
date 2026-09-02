@@ -24,7 +24,7 @@ description: |
   <commentary>Token architecture definition (structure, naming, tiers) is a core ux-designer responsibility. Token values (colors, sizes, spacing) are filled by ui-designer.</commentary>
   </example>
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: ux-design, accessibility-design, platform-compliance, design-system-review
+capabilities: [ux-design, accessibility-design, platform-compliance, design-system-review]
 model: opus
 color: purple
 permissionMode: acceptEdits

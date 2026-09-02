@@ -25,7 +25,7 @@ description: |
   </example>
 type: reviewer
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: heuristic-evaluation, accessibility-audit, platform-compliance, design-system-review, figma-design-review
+capabilities: [heuristic-evaluation, accessibility-audit, platform-compliance, design-system-review, figma-design-review]
 model: opus
 color: teal
 effort: xhigh

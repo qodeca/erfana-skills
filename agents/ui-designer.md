@@ -31,7 +31,7 @@ description: |
   <commentary>Visual consistency and creative direction require systematic visual design thinking – trigger ui-designer.</commentary>
   </example>
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: visual-design, color-systems, typography, design-systems, animation-design, design-qa, creative-direction
+capabilities: [visual-design, color-systems, typography, design-systems, animation-design, design-qa, creative-direction]
 model: opus
 color: fuchsia
 permissionMode: acceptEdits
