@@ -29,7 +29,7 @@ Orchestrator contract for the article lifecycle. The orchestrator delegates cont
 3. **Path safety and approval.** Every article path is built and moved only via `references/slug-and-paths.md`. Every irreversible move or delete (publish, archive) requires displaying the resolved absolute source and destination paths for explicit human approval before it runs.
 4. **Bilingual.** `language` is an array (`[polish]`, `[english]`, or `[polish, english]`). Per-language quality metrics, file layout, and the language array live in `references/bilingual.md`.
 5. **Questionnaire ownership.** Subagents CANNOT call `AskUserQuestion`. The orchestrator owns every questionnaire; agents that need input return `needs_user_input` and the orchestrator asks, then resumes the agent with the answer.
-6. **No deprecated APIs.** No `temperature`, `top_p`, `top_k`, or fixed `thinking: {budget_tokens}` anywhere. Choose behaviour via model and effort, not sampling knobs.
+6. **No deprecated APIs on Anthropic models.** No `temperature`, `top_p`, `top_k`, or fixed `thinking: {budget_tokens}` in anything this skill ships. Choose behaviour via model and effort, not sampling knobs. The ban is an Anthropic 400-error constraint, not a universal rule - see `../managing-skills/guides/cross-model-guide.md`.
 7. **Rule injection.** The orchestrator reads `references/content-trust.md`, `references/slug-and-paths.md`, and `references/bilingual.md` and injects the binding rules into each agent's task prompt at delegation; the shared agents embed only the one-line core principle, so the orchestrator is responsible for passing the full controls.
 
 ---

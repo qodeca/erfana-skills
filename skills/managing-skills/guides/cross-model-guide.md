@@ -2,6 +2,8 @@
 
 Skills should work across different Claude models. This guide explains the differences and how to design for compatibility.
 
+**Scope.** "Cross-model" here means across Claude tiers - Haiku, Sonnet, Opus, Fable. It is not a cross-vendor guide. erfana also runs on Qwen Code, where the model behind the host is not an Anthropic one, and three rules below do not transfer: see "Non-Anthropic hosts" at the end of this file and [`../../../docs/hosts.md`](../../../docs/hosts.md).
+
 **Last revised:** 2026-08-02 (v6.3.0 — Claude 5 family added; model table and effort guidance recalibrated. See `claude-5-patterns.md` for the full Claude 5 authoring pattern set.)
 
 ---
@@ -220,3 +222,35 @@ Details: [if needed]
 2. **Test with Sonnet** — your baseline for "good enough"
 3. **Verify on Opus 5** — ensure the skill doesn't over-constrain a strong model
 4. **When in doubt** — explicit guidance for pinned small models; goal + boundaries for the rest
+
+---
+
+## Non-Anthropic hosts
+
+erfana runs on Qwen Code as well as Claude Code, so a skill authored here may
+execute against a model this guide never mentions. Three rules stated elsewhere
+as authoring law are constraints of the Anthropic target, not properties of
+language models, and they do not transfer.
+
+| Rule | Where it comes from | Off Anthropic |
+|---|---|---|
+| No `temperature` / `top_p` / `top_k` | A 400 error on Claude Opus 4.7 and later | The opposite advice. Qwen's own model card prescribes `temperature=1.0, top_p=0.95, top_k=20`. |
+| No fixed `thinking: {budget_tokens: N}` | Unsupported on the Claude 5 family | A schema constraint of one API, meaningless elsewhere. |
+| Never ask a model to surface its reasoning | The `reasoning_extraction` refusal classifier on Fable 5 and Opus 5 | No such classifier. DeepSeek returns reasoning as a first-class `reasoning_content` field; Qwen emits `<think>` blocks by default. |
+
+All three stay binding for anything this plugin ships, because what it ships
+runs on Anthropic models too. Keep them; just do not present them to a skill
+author as universal truths, and do not carry them into advice about another
+model family.
+
+Two more differences worth knowing when a skill lands on a second host:
+
+- **`effort` does not survive.** Qwen's converter re-serialises agent
+  frontmatter from a fixed allowlist and drops `effort` along with
+  `capabilities`. Design so that losing the effort hint degrades the agent
+  rather than breaking it.
+- **`model: opus` does not resolve.** The value reaches Qwen verbatim, where a
+  silent fallback to the host default is indistinguishable from resolution. Do
+  not build a skill whose correctness depends on a specific pinned tier.
+
+Host differences in full: [`../../../docs/hosts.md`](../../../docs/hosts.md).
