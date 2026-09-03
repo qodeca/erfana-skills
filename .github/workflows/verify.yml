@@ -73,6 +73,13 @@ jobs:
           node-version: '22'
       - name: Install Qwen Code (pinned)
         run: npm install -g --ignore-scripts @qwen-code/qwen-code@0.22.3
+      # The converted-agent frontmatter check needs a YAML parser, and it is the
+      # only thing proving Qwen did not silently drop an agent's frontmatter -
+      # the count check passes on file count alone. It ran today only because
+      # the runner image happens to ship PyYAML in system python; do not rely on
+      # that. The smoke test also hard-fails on a missing parser under --require.
+      - name: Install PyYAML
+        run: pip install pyyaml
       - name: Qwen install + conversion smoke test
         run: bash scripts/qwen-smoke.sh --require
 

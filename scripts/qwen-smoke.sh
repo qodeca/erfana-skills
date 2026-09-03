@@ -81,6 +81,17 @@ fi
 TMPHOME="$(mktemp -d "${TMPDIR:-/tmp}/erfana-qwen-smoke.XXXXXX")"
 cleanup() { rm -rf "$TMPHOME"; }
 trap cleanup EXIT
+# Python resolves its per-user site-packages under $HOME, so switching HOME
+# hides everything the maintainer pip-installed with --user - including PyYAML,
+# which the converted-agent frontmatter check needs. Capture the real path
+# first and put it on PYTHONPATH, otherwise that check reports "pyyaml not
+# installed" on a machine where it plainly is. Same class of bug as the bundle
+# lookup below: the hermetic HOME breaking the script's own tooling.
+REAL_USER_SITE="$(python3 -c 'import site; print(site.getusersitepackages())' 2>/dev/null || true)"
+if [ -n "$REAL_USER_SITE" ] && [ -d "$REAL_USER_SITE" ]; then
+  export PYTHONPATH="${REAL_USER_SITE}${PYTHONPATH:+:$PYTHONPATH}"
+fi
+
 export HOME="$TMPHOME"
 export XDG_CONFIG_HOME="$TMPHOME/.config"
 
@@ -149,7 +160,7 @@ fi
 # Qwen rewrites all 87 agent frontmatter blocks. A YAML failure there drops an
 # agent silently, so check each converted file still parses with a name and a
 # description rather than trusting the count alone.
-python3 - "$EXT" <<'PYEOF'
+ERFANA_SMOKE_REQUIRE="$REQUIRE" python3 - "$EXT" <<'PYEOF' || note_fail "converted-agent frontmatter check failed"
 import glob
 import os
 import sys
@@ -157,6 +168,15 @@ import sys
 try:
     import yaml
 except ImportError:
+    # Same reasoning as the alias-table check further down: this is the only
+    # thing proving Qwen did not silently drop an agent's frontmatter - the
+    # count check above passes on file count alone - so under --require a
+    # missing parser is a failure, not a shrug. It passed in CI only because
+    # the runner image happens to ship PyYAML in system python.
+    if os.environ.get('ERFANA_SMOKE_REQUIRE') == '1':
+        print("  FAIL: pyyaml not installed, so no converted agent was parsed.")
+        print("        Under --require that is a failure: pip install pyyaml.")
+        sys.exit(1)
     print("  SKIP: pyyaml not installed; converted-agent frontmatter not parsed")
     sys.exit(0)
 
@@ -185,7 +205,6 @@ if bad:
     sys.exit(1)
 print("  PASS: every converted agent still parses with a name and a description")
 PYEOF
-[ $? -eq 0 ] || failures=$((failures + 1))
 
 # hooks.json must survive untouched: Qwen substitutes ${CLAUDE_PLUGIN_ROOT} in
 # memory when it loads the file, never on disk. A byte difference here means

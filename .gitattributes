@@ -14,6 +14,10 @@
 # compared byte-for-byte against their converted copies during the Qwen smoke
 # test, and a CRLF checkout would make every one of those comparisons fail.
 
+# Fallback so a future extensionless helper or an unlisted extension is
+# still normalised. The explicit rules below win where they apply.
+* text=auto
+
 *.sh    text eol=lf
 *.ps1   text eol=lf
 *.json  text eol=lf

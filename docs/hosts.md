@@ -96,7 +96,7 @@ themselves need no host branch:
 | Exit 2 plus a message on stderr | Block the tool call |
 | Exit 0 plus `{"decision":"block","reason":"..."}` on stdout | Block the stop |
 | Exit 0, no output | Allow |
-| Killed by the watchdog | **Allow.** A killed hook exits 142 or dies by signal, and neither is read as a block |
+| Killed by the watchdog | **Allow.** The watchdog sends SIGTERM, so the hook exits 143; Qwen's own timeout produces 142. Neither is 2, so neither is read as a block |
 
 That last row is the one to remember: the hooks fail open. A hook that cannot
 run does not protect you. `hooks/dispatch.sh` emits a diagnostic to stderr when

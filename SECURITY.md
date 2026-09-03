@@ -43,7 +43,7 @@ diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no o
 
 - Skill `allowed-tools` is **inert** on Qwen. Its extension parser reads a camelCase `allowedTools` key, so erfana's hyphenated key is never read and every erfana skill runs unrestricted there. On Claude Code the restriction applies as written.
 - Both `PreToolUse` hooks parse their payload with `jq` and reach their allow branch when the parse yields nothing. Without `jq` on `PATH` – the stock macOS default – they inspect nothing. `hooks/dispatch.sh` emits a diagnostic, but on exit 0 that diagnostic may not be surfaced. **Install `jq` if you rely on these hooks.**
-- Hooks are bounded to five seconds inside `dispatch.sh`, and a killed hook exits 142 or dies by signal – never 2 – so neither host reads it as a block. A hook killed by the watchdog therefore **allows** the tool call. This is the same direction as the pre-v7.1.0 behaviour, but it is now the only bound.
+- Hooks are bounded to five seconds inside `dispatch.sh`, and a killed hook exits 143 (SIGTERM) or dies by signal – never 2 – so neither host reads it as a block. A hook killed by the watchdog therefore **allows** the tool call. This is the same direction as the pre-v7.1.0 behaviour, but it is now the only bound.
 
 **`--consent` is for CI only.** `scripts/qwen-smoke.sh` passes `--consent` to skip Qwen's install security prompt, which is appropriate for a job installing this repository's own working tree into a throwaway profile. Published install instructions deliberately omit it. Do not use it to install a fork or an untrusted marketplace – the prompt it skips is the one that tells you what you are about to trust.
 

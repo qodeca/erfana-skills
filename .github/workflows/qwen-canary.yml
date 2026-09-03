@@ -42,11 +42,15 @@ jobs:
           node-version: '22'
       - name: Install Qwen Code (latest)
         run: npm install -g --ignore-scripts @qwen-code/qwen-code@latest
+      - name: Install PyYAML
+        # Same reason as the qwen-compat job: without it the converted-agent
+        # frontmatter check has nothing to parse with.
+        run: pip install pyyaml
       - name: Record the version under test
         id: version
         run: |
           set -euo pipefail
-          latest=$(npm view @qwen-code/qwen-code version)
+          latest=$(qwen --version 2>/dev/null | tr -d '[:space:]')
           pinned=$(python3 -c "import sys; sys.path.insert(0, 'scripts'); from _lib.host_matrix import HOSTS; print(HOSTS['qwen-code']['tested_version'])")
           echo "latest=$latest" >> "$GITHUB_OUTPUT"
           echo "pinned=$pinned" >> "$GITHUB_OUTPUT"
@@ -54,6 +58,11 @@ jobs:
       - name: Smoke test against latest
         id: smoke
         continue-on-error: true
+        # `shell: bash` is load-bearing. The default for a `run:` step is
+        # `bash -e {0}` with no pipefail, so `cmd | tee` reports tee's exit
+        # status - always 0 - and this step concluded success no matter what
+        # the smoke test did. The whole workflow was decorative.
+        shell: bash
         run: bash scripts/qwen-smoke.sh --require 2>&1 | tee smoke.log
       - name: Open or update the drift issue
         if: steps.smoke.outcome == 'failure'
@@ -73,9 +82,12 @@ jobs:
             "" \
             "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
             "" \
-            '```' \
+            '~~~' \
             "$(tail -40 smoke.log)" \
-            '```')
+            '~~~')
+          gh label create qwen-drift --force \
+            --color B60205 \
+            --description "Qwen Code drifted from the transcribed bundle" > /dev/null
           existing=$(gh issue list --label qwen-drift --state open --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
