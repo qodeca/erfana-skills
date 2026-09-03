@@ -48,6 +48,15 @@ bash scripts/qwen-smoke.sh           # only if you have the qwen CLI installed
 
 The smoke test installs the working tree into a throwaway Qwen profile and checks that the conversion produced something usable. It is deliberately not part of `run-all-gates.sh` – that runner has to stay executable with only bash and Python – and it skips cleanly when `qwen` is not on your `PATH`, so it is optional locally. CI runs it with `--require`, which turns the skip into a failure.
 
+To actually *use* your branch on Qwen while working on it, link it instead of installing a copy:
+
+```bash
+qwen extensions link .        # your edits are reflected live; no reinstall per change
+qwen extensions uninstall erfana
+```
+
+Note what neither the gates nor the smoke test cover: they verify that the plugin **loads and converts**, never that a skill behaves correctly once a model runs it. If you change skill or agent behaviour, exercise it in a real Qwen session before opening the PR.
+
 ### Name the action, not the tool
 
 Agent and skill bodies must not contain Claude Code tool-call syntax – no `Grep(pattern="x", output_mode="content")`, no `Read(file_path="...")`, no `Bash(command="npm test")`. Those tool names do not exist on Qwen Code, whose equivalents are named differently and take different arguments, so a body written that way instructs the model to call something that is not there.

@@ -165,6 +165,16 @@ On Qwen Code the choice does not exist – its converter registers only the bare
 
 ## How updates work
 
+### Qwen Code
+
+```
+qwen extensions update erfana
+```
+
+Or `qwen extensions update --all`. Qwen installs erfana from the **latest GitHub release tag**, not from a branch – `qwen extensions list` shows the tag it resolved – so a change reaches you when it is released, not when it is merged.
+
+### Claude Code
+
 Third-party marketplaces like this one have **auto-update off by default** – only Anthropic's own marketplaces auto-update without asking ([docs](https://code.claude.com/docs/en/discover-plugins#configure-auto-updates)). So by default you pull new releases manually:
 
 ```
