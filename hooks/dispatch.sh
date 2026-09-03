@@ -135,7 +135,7 @@ fi
 # Run "$@" with stdin from the buffered payload, bounded to
 # HOOK_TIMEOUT_SECONDS, killing the whole process group on expiry.
 run_bounded() {
-  local pid pgid watchdog rc=0
+  local pid pgid watchdog kill_target rc=0
 
   # No temp file means no buffered payload to redirect from. Run the hook
   # directly on the inherited stdin: unbounded, but a running hook that can
@@ -174,15 +174,30 @@ run_bounded() {
   # Stop hooks plus a PreToolUse hook on every Bash/Write/Edit that is a steady
   # trickle of stray sleeps for the whole session.
   set -m
+  #
+  # The signal target depends on whether job control actually isolated the child.
+  # Where it did (macOS, Linux - measured), signal the GROUP: hooks spawn jq and
+  # grep children that inherit stdout, and both hosts wait for the stream to
+  # close rather than for the process to exit, so a leaf-only kill bounds
+  # nothing. Where it did not (Git Bash), "-$pgid" can name the group we are
+  # ourselves in - on windows-latest that SIGTERMed the entire Gate 16 run,
+  # exit 143 with the buffered output lost. There the bound is leaf-only and a
+  # wedged grandchild is NOT bounded; that limitation is recorded in
+  # docs/known-caveats.md rather than papered over.
+  if [ "$JOB_CONTROL_ISOLATES" -eq 1 ]; then
+    kill_target="-$pgid"
+  else
+    kill_target="$pid"
+  fi
   (
     sleep "$HOOK_TIMEOUT_SECONDS"
-    # kill -0 first: if the group is already gone its leader's pid can have been
-    # recycled, and a blind signal would land on an unrelated group.
-    kill -0 "-$pgid" 2>/dev/null || exit 0
-    kill -TERM "-$pgid" 2>/dev/null || true
+    # kill -0 first: if the target is already gone its pid can have been
+    # recycled, and a blind signal would land on something unrelated.
+    kill -0 "$kill_target" 2>/dev/null || exit 0
+    kill -TERM "$kill_target" 2>/dev/null || true
     sleep 1
-    kill -0 "-$pgid" 2>/dev/null || exit 0
-    kill -KILL "-$pgid" 2>/dev/null || true
+    kill -0 "$kill_target" 2>/dev/null || exit 0
+    kill -KILL "$kill_target" 2>/dev/null || true
   ) >/dev/null 2>&1 &
   watchdog=$!
   set +m

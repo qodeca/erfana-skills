@@ -289,8 +289,21 @@ run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY
 # Watchdog: a hook whose background child holds stdout open must still be cut
 # off. Asserted as an upper bound, not an exact duration - a wall-clock
 # equality check is flaky on a loaded CI runner.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) GROUP_KILL_AVAILABLE=0 ;;
+  *) GROUP_KILL_AVAILABLE=1 ;;
+esac
+
 SLOW_FIXTURE="tests/hooks/_fixtures/slow-hook.sh"
-if [ ! -f "$SLOW_FIXTURE" ]; then
+if [ "$GROUP_KILL_AVAILABLE" -eq 0 ]; then
+  # Git Bash's job control does not reliably put the hook in its own process
+  # group, so dispatch.sh signals the leaf there rather than the group - a
+  # deliberate, documented weakening. Asserting the group guarantee here would
+  # assert something the platform does not provide; worse, the group kill it
+  # would provoke lands on this gate's own group and takes the run down with
+  # exit 143 and no output.
+  echo "  SKIP: watchdog - Windows bounds the leaf, not the group (see docs/known-caveats.md)"
+elif [ ! -f "$SLOW_FIXTURE" ]; then
   echo "  FAIL: $SLOW_FIXTURE is missing (watchdog cannot be proven)"
   failures=$((failures + 1))
 else
@@ -345,6 +358,9 @@ else
 # The shipped default. Every case above sets ERFANA_HOOK_TIMEOUT, so the 5
 # seconds that replaced the hooks.json timeout key was asserted by nothing:
 # raising the default to 600 passed the whole suite.
+if [ "$GROUP_KILL_AVAILABLE" -eq 0 ]; then
+  echo "  SKIP: default bound - same reason as the watchdog case above"
+else
 def_start=$(date +%s)
 set +e
 def_out=$(bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
@@ -361,6 +377,7 @@ elif [ "$def_elapsed" -gt 20 ]; then
   failures=$((failures + 1))
 else
   echo "  PASS: default bound - no env override, wedged hook killed in ${def_elapsed}s"
+fi
 fi
 
 # The bound must not be disarmable from the environment. ERFANA_HOOK_TIMEOUT=0
