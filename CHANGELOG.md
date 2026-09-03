@@ -3,7 +3,7 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [7.1.0] - 2026-09-02
+## [7.1.0] - 2026-09-03
 
 Qwen Code becomes a supported host. One package, converted at install time – no second manifest, no build step, no second release train. Everything the two hosts do differently is recorded in [`docs/hosts.md`](docs/hosts.md), generated from `scripts/_lib/host_matrix.py`.
 
