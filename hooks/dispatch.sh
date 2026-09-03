@@ -76,6 +76,14 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # destructive command went through. An override is useful for testing, so keep
 # it, but floor it at 1 second and cap it at 60 and ignore anything that is not
 # a plain integer.
+# Whether `set -m` reliably puts the hook in its own process group. Verified
+# true on macOS bash 3.2 and Linux bash 5 (child pid == pgid, distinct from
+# ours). Not relied on under MSYS/Cygwin, where it does not hold.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) JOB_CONTROL_ISOLATES=0 ;;
+  *) JOB_CONTROL_ISOLATES=1 ;;
+esac
+
 HOOK_TIMEOUT_SECONDS=5
 if [ -n "${ERFANA_HOOK_TIMEOUT:-}" ]; then
   case "$ERFANA_HOOK_TIMEOUT" in
@@ -185,12 +193,19 @@ run_bounded() {
   # the user the launcher's internals on every timeout is noise.
   wait "$pid" 2>/dev/null || rc=$?
 
-  # Tear down the child's group even on a clean exit. Without this, a hook that
-  # backgrounds work and returns leaves a grandchild holding stdout, and the
-  # watchdog is already gone - so the caller blocks on a stream that never
-  # closes, unbounded. That contradicts this file's own stated guarantee. No
-  # shipped hook forks that way today; the guarantee should hold anyway.
-  kill -TERM "-$pgid" 2>/dev/null || true
+  # Tear down the child's group even on a clean exit, so a hook that backgrounds
+  # work and returns cannot leave a grandchild holding stdout after the watchdog
+  # is gone. No shipped hook forks that way, but the guarantee should hold.
+  #
+  # NOT on Windows. Git Bash's job control does not reliably give the child its
+  # own process group, so "-$pgid" can name the group we are ourselves in - and
+  # unlike the watchdog, which only fires on a timeout, this runs on EVERY
+  # dispatch. It killed the whole Gate 16 run on windows-latest (exit 143, no
+  # output). The watchdog's own group kill is left alone: it is rare, and it is
+  # the only thing that bounds a wedged hook.
+  if [ "$JOB_CONTROL_ISOLATES" -eq 1 ]; then
+    kill -TERM "-$pgid" 2>/dev/null || true
+  fi
 
   kill -TERM "-$watchdog" 2>/dev/null || true
   wait "$watchdog" 2>/dev/null || true
