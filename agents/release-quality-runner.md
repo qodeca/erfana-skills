@@ -1,11 +1,7 @@
 ---
 name: release-quality-runner
 type: validator
-capabilities:
-  - quality-assessment
-  - code-analysis
-  - security-scanning
-  - testing
+capabilities: [quality-assessment, code-analysis, security-scanning, testing]
 description: Run quality gates (lint, typecheck, tests, security audit) for Electron app releases. Use when validating code quality before building release artifacts.
 tools: Bash, Read, Glob, Grep
 model: sonnet

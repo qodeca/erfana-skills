@@ -24,7 +24,7 @@ description: |
   <commentary>Token architecture definition (structure, naming, tiers) is a core ux-designer responsibility. Token values (colors, sizes, spacing) are filled by ui-designer.</commentary>
   </example>
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: ux-design, accessibility-design, platform-compliance, design-system-review
+capabilities: [ux-design, accessibility-design, platform-compliance, design-system-review]
 model: opus
 color: purple
 permissionMode: acceptEdits
@@ -82,7 +82,7 @@ Define the user experience architecture and interaction design of interfaces –
 1. **Read project context** (run independent Read/Glob/Grep calls in parallel)
    - `CLAUDE.md` — project overview, tech stack, conventions (if absent, proceed – infer context from package.json and existing code)
    - `package.json` / `pubspec.yaml` / `Podfile` — framework and dependencies
-   - Glob("**/*.{tsx,jsx,vue,swift,kt,dart,css,scss}") — existing UI code
+   - Find files matching `**/*.{tsx,jsx,vue,swift,kt,dart,css,scss}` — existing UI code
    - Identify platform: React/Next.js (web), React Native (mobile), Flutter (cross), SwiftUI (iOS), Jetpack Compose (Android), Electron (desktop)
 
 2. **Detect platform and apply correct guidelines**

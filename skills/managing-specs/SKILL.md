@@ -4,7 +4,7 @@ description: |
   Creates, updates, and validates right-sized requirements specifications across four tiers (T1 issue, T2 spec, T3 lite spec, T4 standard spec), scaling documentation to feature complexity.
   Use when the user says "create a spec", "write requirements", "spec out this feature", "add a requirement", "validate the spec", "reconcile spec with code", or "archive a spec".
 model: opus
-allowed-tools: [Task, TodoWrite, AskUserQuestion, Read, Glob]
+allowed-tools: Task, TodoWrite, AskUserQuestion, Read, Glob
 argument-hint: "<operation> [spec-id]"
 ---
 

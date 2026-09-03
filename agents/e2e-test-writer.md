@@ -57,15 +57,15 @@ Write production-quality, isolated, deterministic end-to-end tests following pro
    - Existing docs/ for testing guidelines
 
 2. **Detect e2e framework**
-   - Glob("**/playwright.config.*") for Playwright
-   - Glob("**/cypress.config.*") for Cypress
-   - Glob("**/wdio.conf.*") for WebdriverIO
+   - Find files matching `**/playwright.config.*` for Playwright
+   - Find files matching `**/cypress.config.*` for Cypress
+   - Find files matching `**/wdio.conf.*` for WebdriverIO
    - If none found: recommend Playwright, propose config
 
 3. **Discover existing e2e patterns**
-   - Glob("**/*.e2e.*", "**/e2e/**", "**/*.spec.*") for test files
-   - Glob("**/pages/*.page.*", "**/page-objects/**") for POMs
-   - Glob("**/fixtures/**", "**/helpers/**") for support files
+   - Find files matching `**/*.e2e.*`, `**/e2e/**`, `**/*.spec.*` for test files
+   - Find files matching `**/pages/*.page.*`, `**/page-objects/**` for POMs
+   - Find files matching `**/fixtures/**`, `**/helpers/**` for support files
    - Read 2-3 representative files to understand conventions
 
 4. **Validate request clarity** – If scope, user flows, or expected behavior unclear, STOP and return with specific questions. Never guess user flows.

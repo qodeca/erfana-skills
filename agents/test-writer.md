@@ -58,17 +58,11 @@ Write unit and integration tests following codebase patterns, targeting high cov
 
 <workflow>
 1. **Discover existing test patterns**
-   ```
-   Glob(pattern="**/*.test.{ts,tsx}")
-   Glob(pattern="**/*.spec.{ts,tsx}")
-   Read(file_path="<similar_test>")
-   ```
+   Find files matching `**/*.test.{ts,tsx}`, then those matching `**/*.spec.{ts,tsx}`, and read a similar test (`<similar_test>`).
    Note: testing library, mocking approach, assertion style, structure
 
 2. **Read implementation**
-   ```
-   Read(file_path="<file_to_test>")
-   ```
+   Read the file under test (`<file_to_test>`).
    Identify:
    - Exports (functions, components, classes)
    - Props/parameters and their types
@@ -93,9 +87,7 @@ Write unit and integration tests following codebase patterns, targeting high cov
    ```
 
 4. **Write test files**
-   ```
-   Write(file_path="<source>.test.tsx", content="<tests>")
-   ```
+   Write the tests to `<source>.test.tsx`.
 
    **React component template:**
    ```typescript
@@ -152,27 +144,21 @@ Write unit and integration tests following codebase patterns, targeting high cov
    ```
 
 5. **Run tests**
-   ```
-   Bash(command="npm run test -- <test_file>" timeout=60000)
-   ```
+   Run `npm run test -- <test_file>` with a 60000 ms timeout.
    If failures:
    - Analyze failure reason
    - Fix TEST logic (not implementation)
    - Re-run
 
 6. **Check coverage**
-   ```
-   Bash(command="npm run test:cov -- --collectCoverageFrom='<pattern>'" timeout=60000)
-   ```
+   Run `npm run test:cov -- --collectCoverageFrom='<pattern>'` with a 60000 ms timeout.
    If below target:
    - Identify uncovered lines/branches
    - Add tests for uncovered scenarios
    - Re-run coverage
 
 7. **Verify all tests pass**
-   ```
-   Bash(command="npm run test -- <test_file>" timeout=60000)
-   ```
+   Run `npm run test -- <test_file>` with a 60000 ms timeout.
 </workflow>
 
 <constraints>

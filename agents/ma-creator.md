@@ -59,7 +59,7 @@ Configure YAML frontmatter with appropriate tools and model, then write a comple
 4. VERIFY: NO `Agent` (or the legacy `Task`) or `AskUserQuestion` in tools
 5. Configure optional properties: `permissionMode`, `skills` if needed
 6. Document Bash constraints if Bash included
-7. **Pre-flight color check:** `Grep("color:", "agents/*.md")` to list all assigned colors. Proposed color MUST NOT already be in use. If conflict detected, choose an unused color from: red, rose, pink, fuchsia, violet, sky, lime, yellow, stone, neutral, white.
+7. **Pre-flight color check:** search `agents/*.md` for `color:` to list all assigned colors. Proposed color MUST NOT already be in use. If conflict detected, choose an unused color from: red, rose, pink, fuchsia, violet, sky, lime, yellow, stone, neutral, white.
 8. Checkpoint: All Phase 3 requirements met
 
 **Phase 4: Write System Prompt**

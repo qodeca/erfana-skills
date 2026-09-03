@@ -31,24 +31,15 @@ Prepare production releases with user-friendly notes, version updates, and quali
 
 <workflow>
 1. **Verify clean state**
-   ```
-   Bash(command="git status --porcelain")
-   ```
+   Run `git status --porcelain`.
    Verify: working directory clean, on main branch
 
 2. **Analyze commits**
-   ```
-   Bash(command="git log [previous]..HEAD --oneline")
-   Bash(command="git log [previous]..HEAD --pretty=format:'%h %s' --no-merges")
-   ```
+   Run `git log [previous]..HEAD --oneline`, then `git log [previous]..HEAD --pretty=format:'%h %s' --no-merges`.
    Categorize: feat, fix, docs, refactor, other
 
 3. **Run quality gates**
-   ```
-   Bash(command="npm run lint")
-   Bash(command="npm run typecheck")
-   Bash(command="npm run test")
-   ```
+   Run `npm run lint`, then `npm run typecheck`, then `npm run test`.
    ALL must pass to continue
 
 4. **Generate release notes**
@@ -65,27 +56,17 @@ Prepare production releases with user-friendly notes, version updates, and quali
    ```
 
 5. **Update version**
-   ```
-   Read(file_path="package.json")
-   Edit(file_path="package.json", old_string="\"version\": \"[prev]\"", new_string="\"version\": \"[new]\"")
-   ```
+   Read `package.json`, then replace the exact string `"version": "[prev]"` with `"version": "[new]"`.
 
 6. **Update CLAUDE.md**
-   ```
-   Read(file_path="CLAUDE.md")
-   Edit(file_path="CLAUDE.md", old_string="**Version**: [prev]", new_string="**Version**: [new]")
-   ```
+   Read `CLAUDE.md`, then replace the exact string `**Version**: [prev]` with `**Version**: [new]`.
 
 7. **Build project**
-   ```
-   Bash(command="npm run build:mac")
-   ```
+   Run `npm run build:mac`.
    Verify build succeeds
 
 8. **Create git tag (optional)**
-   ```
-   Bash(command="git tag v[version]")
-   ```
+   Run `git tag v[version]`.
    Do NOT push until user approves
 </workflow>
 

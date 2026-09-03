@@ -64,34 +64,26 @@ Execute comprehensive code review at user-selected scope and depth, analyzing ag
    - Default to standard level if not specified
 
 2. **Identify target files**
-   Ad-hoc: Parse file paths from request, use Glob if pattern
+   Ad-hoc: Parse file paths from request, expand any file-name pattern to its matches
    Workflow: Use `files_changed` array
-   ```
-   Glob(pattern="<user_pattern>")
-   Read(file_path="<target_file>")
-   ```
+   - Find the files matching `<user_pattern>`
+   - Read each `<target_file>`
 
 3. **Security scan (ALL levels, NEVER skip)**
-   ```
-   Grep(pattern="api[_-]?key|secret|password|token", -i=true)
-   Grep(pattern="eval\\(|innerHTML|dangerouslySetInnerHTML")
-   Grep(pattern="exec\\(.*\\$|spawn\\(.*\\$")
-   ```
+   - Search the code for `api[_-]?key|secret|password|token`, case-insensitive
+   - Search the code for `eval\\(|innerHTML|dangerouslySetInnerHTML`
+   - Search the code for `exec\\(.*\\$|spawn\\(.*\\$`
 
    **Electron-specific (if applicable):**
-   ```
-   Grep(pattern="nodeIntegration:\\s*true")
-   Grep(pattern="contextIsolation:\\s*false")
-   Grep(pattern="shell\\.openExternal")
-   ```
+   - Search the code for `nodeIntegration:\\s*true`
+   - Search the code for `contextIsolation:\\s*false`
+   - Search the code for `shell\\.openExternal`
    CRITICAL if insecure config found
 
 4. **TypeScript safety (standard+)**
-   ```
-   Grep(pattern=": any(?![a-zA-Z])")
-   Grep(pattern="as [A-Z]")
-   Grep(pattern="!\\.")
-   ```
+   - Search the code for `: any(?![a-zA-Z])`
+   - Search the code for `as [A-Z]`
+   - Search the code for `!\\.`
    HIGH for untyped any, MEDIUM for assertions
 
 5. **Anti-pattern detection (ALL levels)**
@@ -106,10 +98,8 @@ Execute comprehensive code review at user-selected scope and depth, analyzing ag
    - LSP (deep): Inconsistent subclass behavior
    - ISP (deep): Interfaces >10 methods → HIGH
    - DIP: Direct instantiation of services → MEDIUM
-   ```
-   Grep(pattern="switch\\s*\\([^)]*type|kind")
-   Grep(pattern="new [A-Z][a-zA-Z]+Service")
-   ```
+   - Search the code for `switch\\s*\\([^)]*type|kind`
+   - Search the code for `new [A-Z][a-zA-Z]+Service`
 
 7. **Complexity analysis (standard+)**
    Count decision points (if, for, while, case, &&, ||, ?:)
@@ -122,22 +112,16 @@ Execute comprehensive code review at user-selected scope and depth, analyzing ag
 
 8. **Framework patterns (standard+)**
    **React:**
-   ```
-   Grep(pattern="if.*use[A-Z]|for.*use[A-Z]")  # Conditional hooks
-   Grep(pattern="dangerouslySetInnerHTML")
-   ```
+   - Search the code for `if.*use[A-Z]|for.*use[A-Z]` – conditional hooks
+   - Search the code for `dangerouslySetInnerHTML`
 
    **Node.js:**
-   ```
-   Grep(pattern="await.*(?!try)")  # Unhandled async
-   Grep(pattern="for.*await|forEach.*await")  # Sequential where parallel
-   ```
+   - Search the code for `await.*(?!try)` – unhandled async
+   - Search the code for `for.*await|forEach.*await` – sequential where parallel
 
 9. **Test coverage (standard+)**
    Match test files to source files
-   ```
-   Bash(command="npm run test:cov -- --collectCoverageFrom='<pattern>'" timeout=60000)
-   ```
+   - Run `npm run test:cov -- --collectCoverageFrom='<pattern>'` with a 60s timeout
    Target: ≥80% lines, ≥70% branches
 
 10. **Documentation (deep)**

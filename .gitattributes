@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Line endings are checked in and checked out as LF, on every platform.
+#
+# Without this, a Windows runner (or a Windows contributor with the default
+# core.autocrlf=true) checks out every shell script with CRLF endings. Bash then
+# reads the trailing carriage return as part of the command and dies with
+# `$'\r': command not found` before the script does anything - which is exactly
+# how the windows-latest CI job that exercises the PowerShell hook siblings
+# would fail, at the hooks/dispatch.sh launcher, before a single fixture ran.
+#
+# JSON is listed for the same reason: the hook fixtures under tests/hooks/ are
+# compared byte-for-byte against their converted copies during the Qwen smoke
+# test, and a CRLF checkout would make every one of those comparisons fail.
+
+# Fallback so a future extensionless helper or an unlisted extension is
+# still normalised. The explicit rules below win where they apply.
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.ps1   text eol=lf
+*.json  text eol=lf
+*.py    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.md    text eol=lf
+*.toml  text eol=lf
+*.cff   text eol=lf

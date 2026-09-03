@@ -1,3 +1,8 @@
+---
+description: One-shot Pyramid-Principle project-status brief for a Product Owner, PM or BA audience - three axes (what we worked on, what we accomplished, where we landed) plus a recommended next step, grounded in git and GitHub state. Read-only, no side effects.
+disable-model-invocation: true
+---
+
 Generate a stakeholder-facing project status summary in executive-brief format following the Pyramid Principle. The reader is a Product Owner / Project Manager / Business Analyst, not a developer. Translate technical artifacts (commits, branches, file diffs, hashes) into outcome language (milestones, capabilities, deliverables, queue items).
 
 # Audience and register

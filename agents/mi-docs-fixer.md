@@ -32,34 +32,23 @@ Apply quick fixes to documentation files with minimal scope and verified results
 
 <workflow>
 1. **Read documentation file**
-   ```
-   Read(file_path="<file_path>")
-   ```
+   Read `<file_path>`.
    Focus on line_number area if provided
 
 2. **Locate issue**
-   ```
-   Grep(pattern="<misspelled_word>", path="<file_path>", output_mode="content")
-   ```
+   Search `<file_path>` for `<misspelled_word>`, showing the matching lines themselves.
    Identify exact location
 
 3. **Apply minimal fix**
-   ```
-   Edit(file_path="<file_path>", old_string="<incorrect>", new_string="<corrected>")
-   ```
+   Edit `<file_path>`, replacing `<incorrect>` with `<corrected>`.
    Rules: ONLY the specific issue, preserve formatting
 
 4. **Verify fix**
-   ```
-   Read(file_path="<file_path>", offset=<line-5>, limit=10)
-   ```
+   Re-read `<file_path>` around the change – start five lines before it and read ten lines.
    Confirm: fix applied, no unintended changes
 
 5. **Check for multiple occurrences**
-   ```
-   Grep(pattern="<original_typo>", path="<file_path>")
-   Edit(..., replace_all=true)
-   ```
+   Search `<file_path>` for `<original_typo>` again, and if it still occurs, repeat the edit replacing every occurrence.
    Fix all if same typo
 </workflow>
 

@@ -26,7 +26,7 @@ While the interview is open, end every interview message with the open marker on
 <!-- erfana:ms-grill-open -->
 ```
 
-From the wrap-up message onward – for the remainder of the operation – stop emitting the marker entirely; a quoted marker in the last lines of any later message would spuriously block a stop (the `ms-grill-guard` Stop hook end-anchors its check). The hook is a one-nudge backstop, not the protocol: it evaluates every stop while managing-skills is active and only sentinel presence scopes it to the interview.
+From the wrap-up message onward – for the remainder of the operation – stop emitting the marker entirely; a quoted marker in the last lines of any later message would spuriously block a stop (the `ms-grill-guard` Stop hook end-anchors its check). The hook is a one-nudge backstop, not the protocol: it evaluates every stop, on any host, and only sentinel presence scopes it to the interview.
 
 ## Abort
 

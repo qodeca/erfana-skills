@@ -1,3 +1,8 @@
+---
+description: The same Pyramid-Principle brief scoped to the current session - same PO, PM or BA audience and three axes, sourced from the in-context conversation with a light read-only git probe. Use after a compaction or when returning to a long-running tab.
+disable-model-invocation: true
+---
+
 Generate a stakeholder-facing summary of the current Claude Code session in executive-brief format following the Pyramid Principle. The reader is a Product Owner / Project Manager / Business Analyst, not a developer. Translate technical artifacts (commits, branches, file diffs, hashes) into outcome language (milestones, capabilities, deliverables, queue items). Source content primarily from this conversation's context with a light read-only git probe for grounding.
 
 # Audience and register

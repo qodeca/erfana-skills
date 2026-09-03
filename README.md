@@ -10,13 +10,16 @@ by [Qodeca](https://github.com/qodeca)
 [![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/qodeca/erfana-skills)](https://github.com/qodeca/erfana-skills/releases/latest)
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
+![Qwen Code compatible](https://img.shields.io/badge/Qwen_Code-compatible-555)
 [![Made by Qodeca](https://img.shields.io/badge/made_by-Qodeca-1f2937)](https://github.com/qodeca)
 
 </div>
 
-Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside Claude Code. 6 orchestration skills plus a process skill, a verification skill, and 87 shared agents, all delegating substantive work via the `Task` tool.
+Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 6 orchestration skills plus a process skill, a verification skill, and 87 shared agents, all delegating substantive work via the `Task` tool.
 
-Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills ships agents that author and review Playwright tests and is not affiliated with or endorsed by Microsoft.
+It ships as a Claude Code plugin and also runs on **Qwen Code**, which converts Claude Code plugins at install time – one repository, one release, two hosts. What differs between them is recorded in [`docs/hosts.md`](docs/hosts.md).
+
+Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills ships agents that author and review Playwright tests and is not affiliated with or endorsed by Microsoft. "Qwen" and "Qwen Code" are trademarks of their respective owners; Erfana Skills is an independent, third-party plugin that Qwen Code can convert and run, and is not affiliated with or endorsed by them.
 
 ---
 
@@ -54,7 +57,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 
 ### Safety hooks (v4.1+)
 
-Four hooks run silently in the background once the plugin is enabled, providing a project-agnostic safety net:
+Six hooks run silently in the background once the plugin is enabled, providing a project-agnostic safety net:
 
 | Hook | When | What it does |
 |---|---|---|
@@ -63,11 +66,11 @@ Four hooks run silently in the background once the plugin is enabled, providing 
 | `post-compact-reminder` | After context compaction | Re-injects load-bearing facts (temporal awareness, honesty discipline, verification rules, agent delegation) plus the current git branch + status snapshot. |
 | `verify-completion` | When the agent considers stopping | Asks the agent to keep working when it claims success without citing executed tests, exit codes, gate output, or screenshots. v4.2.9+ allowlist: messages carrying the `<!-- erfana:status-template -->` sentinel emitted by the status commands bypass the check; Gate 16 enforces sentinel symmetry across the two command files and the hook. Falls back to the unstripped body when the reply has an odd number of code fences so success claims after an unclosed fence stay visible. |
 
-All four are project-agnostic – no personal style preferences. They activate only after the next Claude Code session restart following plugin install or update.
+The first four are the project-agnostic safety net – no personal style preferences. The two interview guards are erfana-specific and fire only while an interview marker is open. They activate only after the next Claude Code session restart following plugin install or update.
 
 **Cross-platform (v4.2.20+).** Each hook ships a `.sh` (macOS/Linux) and a `.ps1` (Windows) sibling, run through the `dispatch.sh` launcher so the safety net works on native Windows too (where Git Bash ships without `jq`). The mechanism and the one uncovered case (a Windows host with no Git Bash) are documented in [`docs/architecture.md`](docs/architecture.md).
 
-**Skill-scoped hooks.** Two skills additionally ship their own Stop hook, active only while that skill is loaded: `grill-me` (`grill-guard`, v6.2.0+) and `managing-skills` (`ms-grill-guard`). Each nudges once when an interview is still open (its open-marker sentinel present); they are declared in the skill's SKILL.md frontmatter, not in `hooks/hooks.json`, and are validated by Gate 16 fixtures plus a guard-drift check.
+**Interview guards.** Two of the six hooks belong to a skill rather than to the safety net: `grill-guard` (for `grill-me`, v6.2.0+) and `ms-grill-guard` (for `managing-skills`). Each nudges once when an interview is still open – that is, while the skill's open-marker sentinel is present in the reply. Since v7.1.0 both are registered in `hooks/hooks.json` like every other hook, not in the skill's SKILL.md `hooks:` frontmatter, because Qwen Code does not read that frontmatter and a skill-scoped registration would have been dead on one of the two supported hosts (see [`docs/hosts.md`](docs/hosts.md)). The sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures plus a guard-drift check.
 
 ### Slash commands
 
@@ -79,7 +82,7 @@ All four are project-agnostic – no personal style preferences. They activate o
 | `/erfana:explain-issue` | Translates a single GitHub issue into a Product Owner / PM / BA brief (accepts a bare number, `#N`, or full URL). Pulls the issue, comments, linked PRs, and referenced files/specs to ground the translation, but stays purely descriptive – no suggested next step. Non-interactive, read-only. Full contract: [`commands/explain-issue.md`](commands/explain-issue.md). |
 | `/erfana:lens-review` | Researched multi-lens code review over any target – `/erfana:lens-review <path \| #PR \| "description"> [--lens a,b,c] [--out file.md]`. Fans out reviewers (up to 10, chosen at runtime), each grounded in cited best practices from the last ~12 months, then returns one severity-ranked, plain-language report (PM/PO-facing, with full technical detail kept for engineers). Manual trigger only; distinct from `/review` by its live research and any-target scope. Full contract: [`commands/lens-review.md`](commands/lens-review.md). |
 
-Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json` and from `skills/<skill>/SKILL.md` `hooks:` frontmatter; commands from `commands/*.md`. Every skill is self-contained – there is no shared content bundle.
+Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json`; commands from `commands/*.md`. Every skill is self-contained – there is no shared content bundle.
 
 > **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `mi-codebase-explorer`, `ma-designer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
 
@@ -100,9 +103,13 @@ Review Anthropic's data-usage and privacy terms before routing sensitive materia
 
 ## Install
 
+The same repository installs on both supported hosts. Nothing is host-specific in the package: Qwen Code converts the Claude Code plugin on your machine at install time, from the same tag Claude Code users install.
+
+### Claude Code
+
 Installing from a **public** marketplace needs no GitHub token or special access.
 
-### 1. Add the marketplace and install
+#### 1. Add the marketplace and install
 
 Inside Claude Code:
 
@@ -113,7 +120,7 @@ Inside Claude Code:
 
 The marketplace registers under the name `erfana-skills` (matches `marketplace.json`). The install line uses `erfana@erfana-skills` – the plugin name `@` the marketplace name.
 
-### 2. Verify
+#### 2. Verify
 
 ```
 /plugin list
@@ -124,6 +131,18 @@ You should see `erfana@erfana-skills` enabled. Then type a trigger phrase like:
 > create an issue for the login bug
 
 `erfana:managing-issues` should activate.
+
+### Qwen Code
+
+From a shell:
+
+```bash
+qwen extensions install qodeca/erfana-skills:erfana
+```
+
+Accept the install prompt Qwen shows, then verify with `qwen extensions list`. There is no second package, no second manifest and no build step – the installer reads this repository's `.claude-plugin/marketplace.json` and converts skills, agents and commands as it copies them.
+
+Two things read differently there: slash commands register **unnamespaced** (`/lens-review`, not `/erfana:lens-review`), and a few frontmatter fields the converter does not carry over are simply ignored. Tested against Qwen Code 0.22.3. The full list of what works, what degrades, and what is not verified yet lives in [`docs/hosts.md`](docs/hosts.md) – including the honest caveat that no erfana skill has been run end to end inside a Qwen session, so the checks that exist prove the loader and the conversion, not the executor.
 
 ### Invocation forms – bare vs. namespaced
 
@@ -137,6 +156,8 @@ Both forms resolve to the same skill:
 Use the **namespaced form** in shared docs, screenshots, and team conversations. The bare form is a built-in Claude Code convenience – it exists for autocomplete brevity but collides with personal or other-plugin skills of the same name. The `/erfana:` prefix prevents that collision and makes the source explicit.
 
 Tracked upstream: [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695) requests a `require-namespace: true` flag to remove the bare form. When that ships, this plugin will adopt it.
+
+On Qwen Code the choice does not exist – its converter registers only the bare form, so a slash command there is `/doc-update`, never `/erfana:doc-update`. See [`docs/hosts.md`](docs/hosts.md).
 
 ---
 
@@ -229,6 +250,15 @@ Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin updat
 
 **Marketplace add hangs / silently fails behind a corporate proxy**
 If your network blocks `api.github.com` or `raw.githubusercontent.com`, marketplace operations fail without a clear error. Ask IT to allowlist both. As a workaround, `git clone` the repo locally and register it as a local-path marketplace: `/plugin marketplace add /absolute/path/to/erfana-skills`. Pull updates manually with `git pull` + `/plugin marketplace update erfana-skills`.
+
+**`qwen extensions install` reports the extension was not found**
+Check the source spelling – it is `qodeca/erfana-skills:erfana`, the repository followed by the plugin name inside its marketplace, not the repository alone. The install is a network operation against GitHub, so the proxy note above applies here too, and Qwen shows a security prompt that has to be accepted before anything is written to `~/.qwen/extensions/`.
+
+**Slash commands appear unnamespaced (`/doc-update`, not `/erfana:doc-update`)**
+Expected on Qwen Code – its converter registers commands without the plugin namespace. Use the bare form there. If a name collides with a Qwen builtin, the builtin takes the bare name and the erfana command is renamed to `erfana.<name>` rather than dropped; see [`docs/hosts.md`](docs/hosts.md).
+
+**Safety hooks do not fire on Qwen Code**
+First check that [`jq`](https://jqlang.github.io/jq/) is installed and on `PATH` – most hooks parse their JSON payload with it, and the `dispatch.sh` launcher skips a hook it cannot run rather than blocking your work, printing a diagnostic to stderr. The hooks fail open by design, so a missing `jq` looks like silence, not an error. `hooks/hooks.json` needs no Qwen-specific declaration; if `jq` is present and hooks still do nothing, restart the Qwen session so the extension is re-read.
 
 **Skill scope precedence**
 If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/managing-issues/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.

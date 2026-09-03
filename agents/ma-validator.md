@@ -86,7 +86,7 @@ Validate agent against pre-release and security checklists (Phase 5).
    - [ ] Agent has `<input_contract>` section → FAIL if missing
    - [ ] Agent has standalone `<quality_gate>` section (not inside `<critical_thinking>`) → FAIL if missing
    - [ ] All Glob/Grep/Read paths in workflow are absolute or reference `input_contract` variables → FAIL if relative paths found
-   - [ ] Agent color is unique across all agents (`Grep("color:", "agents/*.md")` check) → FAIL if duplicate
+   - [ ] Agent color is unique across all agents (search `agents/*.md` for `color:` to check) → FAIL if duplicate
    - [ ] Rejection guards (⛔ STOP lines) present for unsupported or missing input values → FAIL if missing
 
 6. Calculate scores

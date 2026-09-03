@@ -52,34 +52,34 @@ Audit e2e test suites for reliability, maintainability, isolation, and adherence
 
 <workflow>
 1. **Identify scope** -- Determine which e2e test files to review
-   - Glob("**/*.e2e.*", "**/e2e/**", "**/*.spec.*") for test files
-   - Glob("**/playwright.config.*", "**/cypress.config.*") for configs
-   - Glob("**/pages/*.page.*", "**/page-objects/**") for POMs
-   - Glob("**/fixtures/**", "**/helpers/**") for support files
+   - Find test files matching `**/*.e2e.*`, `**/e2e/**`, `**/*.spec.*`
+   - Find config files matching `**/playwright.config.*`, `**/cypress.config.*`
+   - Find POM files matching `**/pages/*.page.*`, `**/page-objects/**`
+   - Find support files matching `**/fixtures/**`, `**/helpers/**`
 
 2. **Read project config** -- Framework, projects, retries, timeouts, reporter setup
 
 3. **Flakiness scan** (ALWAYS RUN FIRST -- highest impact):
-   - Grep("waitForTimeout|sleep|cy\\.wait\\(\\d") for arbitrary waits
+   - Search for `waitForTimeout|sleep|cy\\.wait\\(\\d` to find arbitrary waits
    - Check each hit: is it justified with KNOWN_WAIT comment?
-   - Grep("isVisible\\(\\)|isHidden\\(\\)|isEnabled\\(\\)") for state checks vs assertions
+   - Search for `isVisible\\(\\)|isHidden\\(\\)|isEnabled\\(\\)` to find state checks used instead of assertions
    - Look for trigger-before-wait race conditions (click then waitForResponse sequentially)
 
 4. **Assertion quality scan**:
-   - Grep("toBeTruthy|toBeDefined|toBeGreaterThanOrEqual\\(0\\)") for always-passing patterns
-   - Grep("\\.catch\\(\\s*\\(\\)\\s*=>\\s*\\{\\s*\\}\\)") for error swallowing
+   - Search for `toBeTruthy|toBeDefined|toBeGreaterThanOrEqual\\(0\\)` to find always-passing patterns
+   - Search for `\\.catch\\(\\s*\\(\\)\\s*=>\\s*\\{\\s*\\}\\)` to find error swallowing
    - Verify assertions check user-visible state, not implementation internals
 
 5. **Isolation review**:
-   - Grep("let |var ") at module level for shared mutable state
-   - Grep("beforeAll|before\\(") for shared setup that may leak
+   - Search for `let |var ` at module level to find shared mutable state
+   - Search for `beforeAll|before\\(` to find shared setup that may leak
    - Check for test ordering dependencies (test B only passes if test A runs first)
    - Verify afterEach/afterAll cleanup patterns exist
 
 6. **Selector resilience**:
-   - Grep("nth-child|nth-of-type|:first|:last|:eq\\(") for fragile selectors
-   - Grep("xpath|XPath|\\$x\\(") for XPath usage
-   - Grep("getByText\\(|contains\\(") for text-based selectors (fragile with i18n)
+   - Search for `nth-child|nth-of-type|:first|:last|:eq\\(` to find fragile selectors
+   - Search for `xpath|XPath|\\$x\\(` to find XPath usage
+   - Search for `getByText\\(|contains\\(` to find text-based selectors (fragile with i18n)
    - Verify data-testid or getByRole usage is predominant
 
 7. **POM/helper quality**:
@@ -94,7 +94,7 @@ Audit e2e test suites for reliability, maintainability, isolation, and adherence
    - Check for duplicate coverage with existing unit/integration tests
 
 9. **Data management review**:
-   - Grep for hardcoded test data (literal emails, IDs, names in test bodies)
+   - Search for hardcoded test data (literal emails, IDs, names in test bodies)
    - Verify fixture/factory pattern usage
    - Check cleanup patterns (afterEach, transaction rollback)
    - Check for unique identifiers per test run (Date.now, uuid, randomBytes)
@@ -106,7 +106,7 @@ Audit e2e test suites for reliability, maintainability, isolation, and adherence
     - Check for platform-specific code without guards
 
 11. **Security scan**:
-    - Grep("password|secret|token|api.?key", "-i") in test files for hardcoded credentials
+    - Search test files for `password|secret|token|api.?key`, case-insensitive, to find hardcoded credentials
     - Check process.env usage (proper -- not hardcoded values)
     - Verify no sensitive data in test output or screenshots
 

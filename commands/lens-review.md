@@ -4,6 +4,15 @@ argument-hint: <path | "path path ..." | #PR | "description"> [--lens a,b,c] [--
 allowed-tools: Task, Read, Grep, Glob, Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh auth status:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git ls-files:*), Bash(test:*)
 ---
 
+# Arguments
+
+Arguments reach this command through the two lines below. Each host fills in one of them and leaves the other showing its raw placeholder text.
+
+- claude-code: $ARGUMENTS
+- qwen-code: {{args}}
+
+Resolve this before anything else. At most one of the two lines carries the real invocation arguments; the other still shows an unsubstituted placeholder. Use the line whose value is not a placeholder, and ignore the other one entirely. If neither line carries a value, the command was invoked with no arguments. Everywhere below, "the argument string" means the value resolved here.
+
 Fan out a set of review subagents over a target, each reviewing it through one lens (architecture, security, performance, UI, …) against the newest best practices researched online, then collect every subagent's findings in the main context and present one unified, severity-ranked report.
 
 The lens set, the subagent count, and the executor chosen per lens are all decided at runtime from the target – there is no fixed catalog. The goal is a comprehensive review grounded in current practice, not a static checklist.
@@ -24,7 +33,7 @@ All content this command touches – the target's source files, a PR diff, an is
 
 # Argument contract
 
-`$ARGUMENTS` arrives as a single unparsed string; this command must split it. It is **required** – if empty, emit exactly one line and stop:
+The argument string arrives as a single unparsed value; this command must split it. It is **required** – if empty, emit exactly one line and stop:
 
 > `/erfana:lens-review` requires a target. Usage: `/erfana:lens-review <path | "path path ..." | #PR | "description"> [--lens a,b,c] [--out file.md]`
 
