@@ -280,7 +280,24 @@ run_cases "$MS_GRILL_HOOK_NAME" "$MS_GRILL_FIXTURE_DIR" "${MS_GRILL_CASES[@]}"
 run_pre_cases "$SECRET_HOOK_NAME" "$SECRET_FIXTURE_DIR" "${SECRET_CASES[@]}"
 run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY_CASES[@]}"
 
-# --- 1b. Launcher guarantees ----------------------------------------------
+# --- 1b. Launcher guarantees (POSIX only) ---------------------------------
+#
+# Everything in this section provokes the watchdog, and the watchdog signals a
+# process group. `set -m` reliably isolates the hook into its own group on macOS
+# and Linux - measured - but not under Git Bash, where the signal reaches the
+# group this gate is itself running in: three consecutive windows-latest runs
+# died with exit 143 six seconds in, taking every buffered PASS line with them.
+#
+# The bound is a POSIX-side guarantee and is asserted there. What the Windows job
+# exists to cover is the .ps1 hook implementations, which the fixture replays
+# above exercise in full through dispatch.sh's PowerShell arm. Weakening those
+# replays to keep an inapplicable assertion would be the wrong trade.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*)
+    echo "  SKIP: launcher guarantees - the bound signals a process group, which"
+    echo "        Git Bash job control does not isolate (docs/known-caveats.md)"
+    ;;
+  *)
 # The timeout that used to live in hooks/hooks.json now lives in
 # hooks/dispatch.sh, because the field means seconds on one host and
 # milliseconds on the other. A grep for the watchdog would prove only that a
@@ -460,6 +477,9 @@ else
 fi
 
 fi
+
+    ;;
+esac
 
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
