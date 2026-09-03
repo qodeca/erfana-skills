@@ -1,5 +1,7 @@
 # erfana v6.0.0
 
+> **Historical.** These are the release notes as published on 2026-06-13. Every count and claim below was accurate for v6.0.0 and is not maintained: the design half of the plugin was removed in v7.0.0 (15 skills to 9) and the hook count changed in v7.1.0 (4 to 6). For the current shape see [`../README.md`](../README.md); for the history see [`../CHANGELOG.md`](../CHANGELOG.md).
+
 The first public release. **erfana** is an open-source Claude Code plugin — a design and orchestration toolkit: 15 skills, 87 shared agents, 5 slash commands, and 4 safety hooks, licensed **GPL-3.0-only**.
 
 ## Install

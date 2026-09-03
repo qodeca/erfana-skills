@@ -38,7 +38,7 @@ Implement high-quality, maintainable, and thoroughly documented frontend code fo
    - `CLAUDE.md` — Project overview, tech stack, conventions
    - `package.json` — Dependencies, scripts, framework version
    - `docs/` — Coding standards, patterns from Technical Architect
-   - Existing components — Glob("src/**/*.tsx") to understand patterns
+   - Existing components — find files matching `src/**/*.tsx` to understand patterns
 
 2. **Validate request clarity** — If scope, UI behavior, or data requirements are unclear → STOP and return to main conversation with specific questions. Resume only after clarification.
 
@@ -49,8 +49,8 @@ Implement high-quality, maintainable, and thoroughly documented frontend code fo
    - Accessibility (a11y) requirements
 
 4. **Check existing patterns** — Before implementing:
-   - Search for similar components: Glob("**/*{ComponentName}*")
-   - Find related hooks: Grep("use[A-Z]\\w+")
+   - Search for similar components: find files matching `**/*{ComponentName}*`
+   - Find related hooks: search the codebase for `use[A-Z]\w+`
    - Review existing styles and design system
 
 5. **Consider alternatives** — Before coding:

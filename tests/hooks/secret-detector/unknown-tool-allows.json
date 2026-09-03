@@ -1,0 +1,6 @@
+{
+  "tool_name": "read_file",
+  "tool_input": {
+    "file_path": "src/config.ts"
+  }
+}

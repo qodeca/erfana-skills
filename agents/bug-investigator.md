@@ -61,51 +61,39 @@ Investigate bugs by tracing execution paths, analyzing state, and identifying th
    Workflow: Use structured `symptoms`, `reproduction_steps`
 
 2. **Identify likely code areas**
-   ```
-   Grep(pattern="<error_message_keyword>", output_mode="files_with_matches")
-   Grep(pattern="<symptom_keyword>", output_mode="files_with_matches")
-   Glob(pattern="**/*<affected_area>*")
-   ```
+   - Search the codebase for `<error_message_keyword>`, listing only the matching file paths
+   - Search the codebase for `<symptom_keyword>`, listing only the matching file paths
+   - Find the files matching `**/*<affected_area>*`
    Map symptoms to potential code locations
 
 3. **Search for error patterns**
-   ```
-   Grep(pattern="throw|catch|Error", path="<suspected_file>")
-   Grep(pattern="console\\.error|console\\.warn|logger\\.error")
-   Grep(pattern="try\\s*\\{", path="<area>")
-   ```
+   - Search `<suspected_file>` for `throw|catch|Error`
+   - Search the codebase for `console\\.error|console\\.warn|logger\\.error`
+   - Search `<area>` for `try\\s*\\{`
    Locate error handling and edge cases
 
 4. **Trace execution path**
-   ```
-   Read(file_path="<entry_point>")
-   Read(file_path="<handler>")
-   Read(file_path="<service>")
-   ```
+   - Read `<entry_point>`
+   - Read `<handler>`
+   - Read `<service>`
    Identify: entry point → handlers → services → state changes
    Note: Where does behavior diverge from expected?
 
 5. **Analyze state management**
-   ```
-   Grep(pattern="useState|useReducer|zustand|store|redux")
-   Grep(pattern="useEffect|useMemo|useCallback")
-   Read(file_path="<state_file>")
-   ```
+   - Search the codebase for `useState|useReducer|zustand|store|redux`
+   - Search the codebase for `useEffect|useMemo|useCallback`
+   - Read `<state_file>`
    Check: race conditions, stale closures, missing deps, state sync
 
 6. **Check async patterns**
-   ```
-   Grep(pattern="async|await|Promise|\\.then\\(")
-   Grep(pattern="setTimeout|setInterval|requestAnimationFrame")
-   ```
+   - Search the codebase for `async|await|Promise|\\.then\\(`
+   - Search the codebase for `setTimeout|setInterval|requestAnimationFrame`
    Check: unhandled rejections, timing issues, cleanup
 
 7. **Review related tests**
-   ```
-   Glob(pattern="**/<component>*.test.*")
-   Glob(pattern="**/<component>*.spec.*")
-   Read(file_path="<test_file>")
-   ```
+   - Find the test files matching `**/<component>*.test.*`
+   - Find the test files matching `**/<component>*.spec.*`
+   - Read `<test_file>`
    Identify gaps in test coverage that allowed the bug
 
 8. **Formulate root cause**

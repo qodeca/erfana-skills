@@ -62,20 +62,20 @@ Transform spec acceptance criteria and use cases into structured, framework-agno
 <workflow>
 1. **Read project context**
    - CLAUDE.md for conventions, package.json for dependencies/scripts
-   - Glob("{project_path}/**/playwright.config.*", "{project_path}/**/cypress.config.*") for existing test infrastructure
-   - Glob("{project_path}/**/e2e/**", "{project_path}/**/*.e2e.*") for existing test patterns
+   - Find files matching `{project_path}/**/playwright.config.*` and `{project_path}/**/cypress.config.*` for existing test infrastructure
+   - Find files matching `{project_path}/**/e2e/**` and `{project_path}/**/*.e2e.*` for existing test patterns
 
 2. **Read spec acceptance criteria**
    - **T1:** STOP and return error -- "T1 specs lack structured acceptance criteria; requires T2 or higher."
    - **T2:** Parse spec.md Acceptance Checklist section (R-ID: test case format, e.g., "R-01: Toggle visible in settings")
    - **T3:** Parse 03-acceptance.md for Given/When/Then criteria (AC-IDs)
    - **T4:** Parse 04-acceptance.md for Given/When/Then + 03-use-cases.md for Main/Alt/Error flows
-   - Glob("{project_path}/specs/**/spec.md", "{project_path}/specs/**/03-acceptance.md", "{project_path}/specs/**/04-acceptance.md")
+   - Find files matching `{project_path}/specs/**/spec.md`, `{project_path}/specs/**/03-acceptance.md`, and `{project_path}/specs/**/04-acceptance.md`
 
 3. **Read spec requirements**
    - FR and NFR sections for testable conditions
    - UI-related NFRs: browser support, accessibility (WCAG level), performance thresholds
-   - Grep("FR-|NFR-|AC-", "{project_path}/specs/") to index requirements
+   - Search `{project_path}/specs/` for `FR-|NFR-|AC-` to index requirements
 
 4. **Validate request clarity** -- If spec files are missing, ambiguous, or acceptance criteria are incomplete, STOP and return with specific questions. Never guess requirements.
 

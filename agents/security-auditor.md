@@ -62,33 +62,25 @@ Perform comprehensive security audit focusing on OWASP Top 10, secrets detection
    - Otherwise → Ad-hoc mode, infer scope/depth from request
 
 2. **Run npm audit (ALL depths)**
-   ```
-   Bash(command="npm audit --json" timeout=60000)
-   ```
+   - Run `npm audit --json` with a 60s timeout
    Parse results by severity, note critical/high in production deps
 
 3. **Scan for secrets (ALL depths)**
-   ```
-   Grep(pattern="api[_-]?key|secret|password|token|credential", -i=true)
-   Grep(pattern="['\"][a-zA-Z0-9]{32,}['\"]")
-   Grep(pattern="-----BEGIN.*PRIVATE KEY-----")
-   ```
+   - Search the code for `api[_-]?key|secret|password|token|credential`, case-insensitive
+   - Search the code for `['\"][a-zA-Z0-9]{32,}['\"]`
+   - Search the code for `-----BEGIN.*PRIVATE KEY-----`
    CRITICAL if matches found (verify not false positive)
 
 4. **Check dangerous patterns (ALL depths)**
-   ```
-   Grep(pattern="eval\\(|Function\\(|innerHTML|dangerouslySetInnerHTML")
-   Grep(pattern="child_process|exec\\(|spawn\\(|execSync")
-   Grep(pattern="\\$\\{.*\\}.*exec|\\$\\{.*\\}.*spawn")
-   ```
+   - Search the code for `eval\\(|Function\\(|innerHTML|dangerouslySetInnerHTML`
+   - Search the code for `child_process|exec\\(|spawn\\(|execSync`
+   - Search the code for `\\$\\{.*\\}.*exec|\\$\\{.*\\}.*spawn`
 
 5. **Electron security (if applicable, ALL depths)**
-   ```
-   Grep(pattern="nodeIntegration:\\s*true")
-   Grep(pattern="contextIsolation:\\s*false")
-   Grep(pattern="webSecurity:\\s*false")
-   Grep(pattern="shell\\.openExternal")
-   ```
+   - Search the code for `nodeIntegration:\\s*true`
+   - Search the code for `contextIsolation:\\s*false`
+   - Search the code for `webSecurity:\\s*false`
+   - Search the code for `shell\\.openExternal`
    CRITICAL if insecure Electron config found
 
 6. **Input validation review (standard+)**
@@ -97,17 +89,13 @@ Perform comprehensive security audit focusing on OWASP Top 10, secrets detection
    - Check: sanitization before use in SQL/shell/HTML
 
 7. **Path traversal check (standard+)**
-   ```
-   Grep(pattern="readFile|writeFile|unlink|rmdir|access")
-   Grep(pattern="path\\.join.*req\\.|path\\.resolve.*req\\.")
-   ```
+   - Search the code for `readFile|writeFile|unlink|rmdir|access`
+   - Search the code for `path\\.join.*req\\.|path\\.resolve.*req\\.`
    Verify: `..` prevention, path normalization
 
 8. **IPC security review (comprehensive)**
-   ```
-   Grep(pattern="ipcMain\\.handle|ipcMain\\.on")
-   Grep(pattern="ipcRenderer\\.invoke|ipcRenderer\\.send")
-   ```
+   - Search the code for `ipcMain\\.handle|ipcMain\\.on`
+   - Search the code for `ipcRenderer\\.invoke|ipcRenderer\\.send`
    Verify: parameter validation, no shell execution, proper error handling
 
 9. **OWASP Top 10 checklist (comprehensive)**

@@ -23,13 +23,24 @@ try {
     exit 0
 }
 
+# Mirrors the case block in secret-detector.sh: Claude Code sends the display
+# name (Write, Edit), Qwen Code sends the canonical snake_case name
+# (write_file, edit), and both have to be accepted.
+#
+# Note this is NOT a byte-for-byte mirror, and cannot be. PowerShell `switch`
+# matches case-insensitively by default, so the 'Write' and 'Edit' arms here
+# already accepted 'write_file'... no - they already accepted 'WRITE' and
+# 'edit', which is why the .ps1 was covering Qwen edits while the .sh was not.
+# The arms below are written out anyway so the two files read alike and a
+# reader does not have to know PowerShell's default to see the intent.
 $tool = [string]$obj.tool_name
 $content = ''
 switch ($tool) {
-    'Write'     { $content = [string]$obj.tool_input.content }
-    'Edit'      { $content = [string]$obj.tool_input.new_string }
-    'MultiEdit' { $content = (@($obj.tool_input.edits | ForEach-Object { [string]$_.new_string }) -join "`n") }
-    default     { exit 0 }
+    'Write'      { $content = [string]$obj.tool_input.content }
+    'write_file' { $content = [string]$obj.tool_input.content }
+    'Edit'       { $content = [string]$obj.tool_input.new_string }
+    'MultiEdit'  { $content = (@($obj.tool_input.edits | ForEach-Object { [string]$_.new_string }) -join "`n") }
+    default      { exit 0 }
 }
 
 if ([string]::IsNullOrEmpty($content)) { exit 0 }

@@ -62,7 +62,7 @@ Conduct systematic reviews of solution design artifacts using established evalua
 <workflow>
 1. **Scope the review** (run independent Read/Glob/Grep calls in parallel)
    - Read `CLAUDE.md`, `package.json` -- project context, tech stack
-   - Glob("specs/solution/**", "specs/spec-t*/**") -- identify solution artifacts
+   - Find files matching `specs/solution/**` and `specs/spec-t*/**` -- identify solution artifacts
    - Determine review depth: focused (single artifact), standard (full solution), deep (cross-artifact coherence)
 
 2. **Inventory solution artifacts**

@@ -42,26 +42,16 @@ Analyze git changes and create conventional commit messages following project st
 
 <workflow>
 1. **Check git status**
-   ```
-   Bash(command="git status --porcelain")
-   ```
+   Run `git status --porcelain`.
    Verify changes exist. If no changes, return error message.
 
 2. **Get staged changes**
-   ```
-   Bash(command="git diff --staged --stat")
-   Bash(command="git diff --staged")
-   ```
-   If nothing staged, check unstaged:
-   ```
-   Bash(command="git diff --stat")
-   ```
+   Run `git diff --staged --stat`, then `git diff --staged`.
+   If nothing staged, check unstaged by running `git diff --stat`.
    Analyze: files added/modified/deleted, lines changed, nature of changes
 
 3. **Review recent commits**
-   ```
-   Bash(command="git log --oneline -5")
-   ```
+   Run `git log --oneline -5`.
    Note: existing style, prefixes, scope patterns, project conventions
 
 4. **Determine commit type**

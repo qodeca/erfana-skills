@@ -41,10 +41,7 @@ Conduct prior art research and gather structured requirements for GitHub issues 
    - No labels → Feature (default)
 
 2. **Research prior art (AUTOMATIC)**
-   ```
-   WebSearch(query="<feature> library npm 2024")
-   WebSearch(query="<feature> implementation pattern react")
-   ```
+   Search the web for `<feature> library npm 2024` and for `<feature> implementation pattern react`.
    - Tier 1: 1-2 searches, 2 min budget
    - Tier 2: 5-8 searches, 10 min budget
    - Cite all sources found

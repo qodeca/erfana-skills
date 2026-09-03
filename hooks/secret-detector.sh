@@ -19,11 +19,20 @@ INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 CONTENT=""
 
+# The payload names the tool differently per host: Claude Code sends the
+# display name (Write, Edit), Qwen Code sends the canonical snake_case name
+# (write_file, edit). Both arms are required. Widening the hooks.json matcher
+# alone would not help - the matcher decides whether this hook runs at all,
+# and this case decides whether it reads anything once it does. Before both
+# were fixed, every Qwen write and edit reached disk unscanned.
+#
+# MultiEdit is Claude-only; Qwen has no multi-edit tool, so there is nothing
+# to add beside it. Fixtures for both shapes: tests/hooks/secret-detector/.
 case "$TOOL" in
-  Write)
+  Write|write_file)
     CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty' 2>/dev/null || true)
     ;;
-  Edit)
+  Edit|edit)
     CONTENT=$(echo "$INPUT" | jq -r '.tool_input.new_string // empty' 2>/dev/null || true)
     ;;
   MultiEdit)

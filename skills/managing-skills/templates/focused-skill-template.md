@@ -147,6 +147,8 @@ See `skills/grill-me/SKILL.md` for the canonical example. Notable choices:
 - The skill body IS the workflow: opening protocol → depth → coverage map → question loop → mandatory late rounds → exit gate
 - A rationalization table naming the concrete ways the workflow gets cut short
 - 1 reference doc (`references/question-stems.md`) carrying the reusable depth
-- A skill-scoped Stop hook declared in frontmatter as the backstop
+- A Stop hook as the backstop – registered in the plugin-root `hooks/hooks.json`, not in SKILL.md `hooks:` frontmatter
 
 This shape — terse SKILL.md + heavy `references/question-stems.md` (260 lines of reusable question stems) — is the focused-skill ideal.
+
+**Where a skill's hook is registered.** Declare it in `hooks/hooks.json` at the plugin root, with the script under `hooks/`. Do **not** use SKILL.md `hooks:` frontmatter: Qwen Code's skill parser does not extract that field at all, so a guard declared there is dead on one of the two hosts erfana supports. The trade-off is that a plugin-root hook evaluates every stop rather than only the stops inside its own skill, so the hook has to scope itself – `grill-guard` keys on an open-marker sentinel the skill emits and does nothing when the marker is absent. Host differences are recorded in the repository's `docs/hosts.md`; the wiring rules (no `timeout` key, matchers naming both hosts' tool vocabulary, literal block messages) are enforced by Gate 14.

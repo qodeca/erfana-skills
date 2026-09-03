@@ -4,12 +4,6 @@ description: Use when the user wants to stress-test a plan or design through rel
 when_to_use: |
   Trigger phrases: "grill me", "quick grill", "grill me lightly", "stress-test this plan", "stress test my design", "interview me about this", "get grilled on my design", "ask me hard questions", "challenge my plan", "challenge my design", "poke holes in this", "walk the decision tree".
 allowed-tools: Read, Glob, Grep, AskUserQuestion
-hooks:
-  Stop:
-    - hooks:
-        - type: command
-          command: bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" ../skills/grill-me/hooks/grill-guard
-          timeout: 5
 ---
 
 # erfana:grill-me
@@ -125,7 +119,7 @@ While the interview is open, end every message with this exact marker on its own
 <!-- erfana:grill-open -->
 ```
 
-The final wrap-up (after the user confirms the read-back) omits the marker – that is the entire close signal. A skill-scoped Stop hook blocks one stop attempt per turn that still carries the marker; it is a backstop, not the protocol. If the user aborts ("stop grilling"), acknowledge and drop the marker in that same message – an abort is always honored.
+The final wrap-up (after the user confirms the read-back) omits the marker – that is the entire close signal. A Stop hook blocks one stop attempt per turn that still carries the marker. It evaluates every stop, on any host; the marker alone – not the registration – is what scopes it to an open interview. It is a backstop, not the protocol. If the user aborts ("stop grilling"), acknowledge and drop the marker in that same message – an abort is always honored.
 
 ## Terminal state
 

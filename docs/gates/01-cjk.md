@@ -12,7 +12,7 @@ import os, re
 # CJK ranges: Han ideographs, CJK symbols/punctuation, fullwidth Latin / halfwidth katakana
 ranges = [(0x4e00, 0x9fff), (0x3000, 0x303f), (0xff00, 0xffef)]
 CJK = re.compile('[' + ''.join(f'{chr(a)}-{chr(b)}' for a, b in ranges) + ']')
-EXTS = {'.md','.json','.html','.js','.mjs','.jsx','.py','.sh','.svg'}
+EXTS = {'.md','.json','.html','.js','.mjs','.jsx','.py','.sh','.svg','.yml','.yaml'}
 SKIP = {'.git','node_modules','_translation-scratch','temp'}
 hits = []
 for root, dirs, files in os.walk('.'):

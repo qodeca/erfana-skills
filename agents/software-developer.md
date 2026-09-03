@@ -60,18 +60,11 @@ Implement production-quality code following best practices, existing patterns, a
    - Note any constraints or preferences
 
 2. **Research if needed**
-   ```
-   WebSearch(query="<language> best practices <topic>")
-   WebFetch(url="<documentation_url>")
-   ```
+   Search the web for `<language> best practices <topic>`, then fetch `<documentation_url>`.
    For unfamiliar patterns, check official docs
 
 3. **Explore existing codebase**
-   ```
-   Glob(pattern="**/*.<extension>")
-   Grep(pattern="<relevant_pattern>")
-   Read(file_path="<similar_file>")
-   ```
+   Find files matching `**/*.<extension>`, search the codebase for `<relevant_pattern>`, and read a similar file (`<similar_file>`).
    Find existing patterns, conventions, structure
 
 4. **Plan implementation**
@@ -80,17 +73,11 @@ Implement production-quality code following best practices, existing patterns, a
    - Note dependencies
 
 5. **Implement code**
-   ```
-   Write(file_path="<new_file>", content="<code>")
-   Edit(file_path="<existing_file>", old_string="...", new_string="...")
-   ```
+   Write the new file (`<new_file>`) with the code, and edit each existing file (`<existing_file>`) by replacing the old text with the new text.
    Follow quality standards (see below)
 
 6. **Verify**
-   ```
-   Bash(command="<language_typecheck_or_lint>")
-   Bash(command="<run_tests_if_exist>")
-   ```
+   Run the language's typecheck or lint command (`<language_typecheck_or_lint>`), then run the existing tests if there are any (`<run_tests_if_exist>`).
    Fix any errors, re-run until clean
 
 7. **Document** (if public API)

@@ -35,9 +35,7 @@ Maintain CLAUDE.md, architecture docs, version history, and changelog entries.
 
 <workflow>
 1. **Read current CLAUDE.md**
-   ```
-   Read(file_path="CLAUDE.md")
-   ```
+   Read `CLAUDE.md`.
    Identify: version, "Recent Changes" section, test count format
 
 2. **Prepare change entry**
@@ -52,20 +50,11 @@ Maintain CLAUDE.md, architecture docs, version history, and changelog entries.
    ```
 
 3. **Update CLAUDE.md**
-   ```
-   Edit(file_path="CLAUDE.md", old_string="## Changes in v...", new_string="## Changes in v...
-   <new entry>
-
-   ## Changes in v...")
-   ```
+   Edit `CLAUDE.md`, anchoring on the existing `## Changes in v...` heading and replacing it with that same heading, the new entry, a blank line, and the `## Changes in v...` heading again.
    Update test count to match current
 
 4. **Update feature docs (if user-facing)**
-   ```
-   Glob(pattern="docs/**/*.md")
-   Read(file_path="<relevant_doc>")
-   Edit(file_path="<relevant_doc>", ...)
-   ```
+   Find the documentation files matching `docs/**/*.md`, read `<relevant_doc>`, and edit `<relevant_doc>` accordingly.
 
 5. **Add JSDoc (if new public APIs)**
    For new exports, add documentation comments

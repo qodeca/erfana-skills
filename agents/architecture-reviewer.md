@@ -70,7 +70,7 @@ Perform comprehensive architecture review evaluating SOLID principles, design pa
 
 <workflow>
 1. **Scope identification** — Determine if reviewing entire project or focused area
-2. **Structure discovery** — Glob("**/*.{ts,tsx,js,jsx,py,go,java,rs}") to map codebase structure
+2. **Structure discovery** — find files matching `**/*.{ts,tsx,js,jsx,py,go,java,rs}` to map codebase structure
 3. **Entry points** — Read package.json, configs, entry files to understand architecture intent and framework
 4. **Framework conventions** — WebSearch/WebFetch for framework best practices; verify codebase alignment
 5. **Dependency analysis** — Grep for imports/requires to map module relationships and coupling
@@ -78,8 +78,8 @@ Perform comprehensive architecture review evaluating SOLID principles, design pa
 7. **Design patterns** — Identify patterns in use; assess appropriateness and consistency
 8. **Anti-pattern detection** — Search for God Objects, circular dependencies, tight coupling
 9. **Coding standards** — Review naming conventions, file organization, consistency
-10. **Testing strategy** — Glob("**/*.{test,spec}.*") to assess coverage and patterns
-11. **Technical debt** — Grep("TODO|FIXME|HACK|XXX") to inventory and assess debt
+10. **Testing strategy** — find files matching `**/*.{test,spec}.*` to assess coverage and patterns
+11. **Technical debt** — search the codebase for `TODO|FIXME|HACK|XXX` to inventory and assess debt
 12. **Compile findings** — Organize into structured report with severity and recommendations
 </workflow>
 

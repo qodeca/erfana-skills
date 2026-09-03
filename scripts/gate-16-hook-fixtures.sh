@@ -4,17 +4,19 @@
 # Gate 16 — hook fixtures + sentinel symmetry (verify-completion +
 # grill-guard + ms-grill-guard).
 #
-# Four responsibilities:
+# Five responsibilities:
 #   1. For each tests/hooks/verify-completion/*.json fixture, pipe it through
 #      hooks/verify-completion.sh and assert whether stdout carries the
 #      `{"decision":"block"...}` payload (the Stop-hook block signal).
 #      Exit code is always 0 per the Stop-hook protocol — the block decision
 #      is communicated via stdout JSON, not exit status — so the gate
 #      asserts on stdout shape rather than exit code.
-#   2. Same replay for the skill-scoped Stop hooks: grill-guard
-#      (skills/grill-me/hooks/) against tests/hooks/grill-guard/*.json and
-#      ms-grill-guard (skills/managing-skills/hooks/) against
-#      tests/hooks/ms-grill-guard/*.json — end-anchored open-marker blocking.
+#   2. Same replay for the two interview guards, both plugin-root Stop hooks
+#      since v7.1.0: grill-guard against tests/hooks/grill-guard/*.json and
+#      ms-grill-guard against tests/hooks/ms-grill-guard/*.json —
+#      end-anchored open-marker blocking. They moved out of skill frontmatter
+#      because Qwen Code's extension skill parser does not read hooks: there,
+#      so a skill-scoped registration was dead on one of the two hosts.
 #   3. Sentinel symmetry across four sentinel families:
 #        - `<!-- erfana:status-template -->` must appear in
 #          commands/project-status.md, commands/session-status.md, and
@@ -22,17 +24,27 @@
 #        - `<!-- erfana:explain-template -->` must appear in
 #          commands/explain-issue.md and hooks/verify-completion.{sh,ps1}.
 #        - `<!-- erfana:grill-open -->` must appear in
-#          skills/grill-me/SKILL.md and skills/grill-me/hooks/grill-guard.{sh,ps1}.
+#          skills/grill-me/SKILL.md and hooks/grill-guard.{sh,ps1}.
 #        - `<!-- erfana:ms-grill-open -->` must appear in
 #          skills/managing-skills/SKILL.md,
 #          skills/managing-skills/references/interview-protocol.md, and
-#          skills/managing-skills/hooks/ms-grill-guard.{sh,ps1}.
+#          hooks/ms-grill-guard.{sh,ps1}.
 #      If any one is missing, the corresponding hook behaviour would silently
 #      break (a clean-data report would block, or the grill backstop would
 #      never fire).
 #   4. Guard-drift check: ms-grill-guard.sh must equal grill-guard.sh
 #      modulo header comments, the sentinel literal, and the block-reason
 #      JSON — a machinery fix must never land in one family only.
+#   5. PreToolUse replay for secret-detector and bash-safety against
+#      tests/hooks/secret-detector/*.json and tests/hooks/bash-safety/*.json.
+#      Different protocol from the Stop hooks: these block with exit 2 plus a
+#      `BLOCKED:` line on stderr, so the gate asserts on the exit code.
+#      Each family carries the same payload in both host shapes, because the
+#      PreToolUse payload names the tool differently on each host — Claude Code
+#      sends the display name (`Write`, `Bash`), Qwen sends the canonical name
+#      (`write_file`, `run_shell_command`). Before v7.1.0 there were no
+#      PreToolUse fixtures at all, so a hook that silently stopped inspecting
+#      one host's payloads would have failed nothing.
 #
 # Standalone runner — invoked by scripts/run-all-gates.sh; can also be
 # run directly while iterating on hook or fixture changes.
@@ -48,10 +60,14 @@ cd "$(dirname "$0")/.."
 DISPATCH="hooks/dispatch.sh"
 HOOK_NAME="verify-completion"
 FIXTURE_DIR="tests/hooks/verify-completion"
-GRILL_HOOK_NAME="../skills/grill-me/hooks/grill-guard"
+GRILL_HOOK_NAME="grill-guard"
 GRILL_FIXTURE_DIR="tests/hooks/grill-guard"
-MS_GRILL_HOOK_NAME="../skills/managing-skills/hooks/ms-grill-guard"
+MS_GRILL_HOOK_NAME="ms-grill-guard"
 MS_GRILL_FIXTURE_DIR="tests/hooks/ms-grill-guard"
+SECRET_HOOK_NAME="secret-detector"
+SECRET_FIXTURE_DIR="tests/hooks/secret-detector"
+BASH_SAFETY_HOOK_NAME="bash-safety"
+BASH_SAFETY_FIXTURE_DIR="tests/hooks/bash-safety"
 STATUS_SENTINEL='<!-- erfana:status-template -->'
 EXPLAIN_SENTINEL='<!-- erfana:explain-template -->'
 GRILL_SENTINEL='<!-- erfana:grill-open -->'
@@ -62,20 +78,21 @@ if [ ! -x "$DISPATCH" ]; then
   exit 1
 fi
 for impl in "hooks/${HOOK_NAME}.sh" "hooks/${HOOK_NAME}.ps1" \
-            "skills/grill-me/hooks/grill-guard.sh" "skills/grill-me/hooks/grill-guard.ps1" \
-            "skills/managing-skills/hooks/ms-grill-guard.sh" "skills/managing-skills/hooks/ms-grill-guard.ps1"; do
+            "hooks/grill-guard.sh" "hooks/grill-guard.ps1" \
+            "hooks/ms-grill-guard.sh" "hooks/ms-grill-guard.ps1"; do
   if [ ! -f "$impl" ]; then
     echo "  FAIL: $impl is missing (cross-platform sibling required)"
     exit 1
   fi
 done
-for exec_impl in "skills/grill-me/hooks/grill-guard.sh" "skills/managing-skills/hooks/ms-grill-guard.sh"; do
+for exec_impl in "hooks/grill-guard.sh" "hooks/ms-grill-guard.sh"; do
   if [ ! -x "$exec_impl" ]; then
     echo "  FAIL: $exec_impl is not executable"
     exit 1
   fi
 done
-for dir in "$FIXTURE_DIR" "$GRILL_FIXTURE_DIR" "$MS_GRILL_FIXTURE_DIR"; do
+for dir in "$FIXTURE_DIR" "$GRILL_FIXTURE_DIR" "$MS_GRILL_FIXTURE_DIR" \
+           "$SECRET_FIXTURE_DIR" "$BASH_SAFETY_FIXTURE_DIR"; do
   if [ ! -d "$dir" ]; then
     echo "  FAIL: $dir is missing"
     exit 1
@@ -99,13 +116,17 @@ declare -a CASES=(
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
-# Grill-guard fixtures (skill-scoped Stop hook): end-anchored open-marker
-# blocking. Same replay protocol as verify-completion.
+# Grill-guard fixtures (plugin-root Stop hook): end-anchored open-marker
+# blocking. Same replay protocol as verify-completion. The guard evaluates
+# every stop; the marker alone scopes it to an open interview.
 declare -a GRILL_CASES=(
   "open-blocks|block|end-anchored open marker on a mid-interview message must block"
   "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
   "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
   "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
+  "open-inside-indented-code-fence|pass|marker inside a fence indented under a list item is stripped and passes"
+  "open-inside-tilde-code-fence|pass|marker inside a balanced ~~~ fence is stripped and passes"
+  "open-mentioned-in-inline-code|pass|backticked prose mention of the marker is not an open marker and passes"
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
@@ -116,14 +137,53 @@ declare -a MS_GRILL_CASES=(
   "no-marker-passes|pass|wrap-up message without the marker passes (the close signal)"
   "open-quoted-mid-prose|pass|marker quoted mid-prose is not end-anchored and passes"
   "open-inside-trailing-code-fence|pass|marker inside a balanced trailing fence is stripped and passes"
+  "open-inside-indented-code-fence|pass|marker inside a fence indented under a list item is stripped and passes"
+  "open-inside-tilde-code-fence|pass|marker inside a balanced ~~~ fence is stripped and passes"
+  "open-mentioned-in-inline-code|pass|backticked prose mention of the marker is not an open marker and passes"
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
+)
+
+# PreToolUse fixtures (secret-detector, bash-safety). A different protocol from
+# the Stop hooks above: a PreToolUse hook blocks with exit 2 plus a message on
+# stderr, and allows with exit 0 and no output. Both hosts read it that way -
+# Claude Code natively, and Qwen via `exitCode === 2` -> parse stderr ->
+# `{decision:"deny"}` when the text is not JSON.
+#
+# Each family carries the same payload in both host shapes, because the
+# PreToolUse payload names the tool differently on each: Claude Code sends the
+# display name (`Write`, `Bash`), Qwen sends the canonical name (`write_file`,
+# `run_shell_command`). A hook that switches on that value therefore has to
+# accept both, and until it does the Qwen-shaped payload silently sails past.
+#
+# What these fixtures CANNOT test is matcher dispatch - piping a payload
+# straight into a hook bypasses the host's matcher entirely. That the matcher
+# resolves on both hosts is Gate 14's job, via the dual-naming rule it reads
+# from scripts/_lib/host_matrix.py. Bodies here, wiring there.
+declare -a SECRET_CASES=(
+  "claude-write-secret-blocks|deny|Claude-shaped Write carrying an AWS key must block"
+  "claude-edit-secret-blocks|deny|Claude-shaped Edit carrying an AWS key must block"
+  "claude-multiedit-secret-blocks|deny|Claude-shaped MultiEdit carrying an AWS key must block"
+  "claude-write-clean-allows|allow|Claude-shaped Write with no secret passes"
+  "qwen-write-file-secret-blocks|deny|Qwen-shaped write_file carrying the same key must block identically"
+  "qwen-edit-secret-blocks|deny|Qwen-shaped edit carrying the same key must block identically"
+  "qwen-write-file-clean-allows|allow|Qwen-shaped write_file with no secret passes"
+  "skipped-path-allows|allow|a .md path is skipped by design; pinned so the skip cannot widen unnoticed"
+  "unknown-tool-allows|allow|a tool the hook does not inspect passes without reading content"
+)
+
+declare -a BASH_SAFETY_CASES=(
+  "claude-bash-destructive-blocks|deny|Claude-shaped Bash running a documented injection signature must block"
+  "claude-bash-safe-allows|allow|an ordinary listing command passes"
+  "qwen-shell-destructive-blocks|deny|Qwen-shaped run_shell_command with the same command must block identically"
+  "qwen-shell-safe-allows|allow|Qwen-shaped safe command passes"
+  "empty-command-allows|allow|a payload with no command fails open rather than blocking everything"
 )
 
 failures=0
 
 run_cases() {
   local hook="$1" dir="$2"; shift 2
-  local case_line name expect desc fixture out has_block
+  local case_line name expect desc fixture out has_block rc
   for case_line in "$@"; do
     IFS='|' read -r name expect desc <<< "$case_line"
     fixture="$dir/$name.json"
@@ -133,8 +193,23 @@ run_cases() {
       continue
     fi
 
-    # Hook always exits 0; we assert on stdout shape.
+    # Hook always exits 0 in the happy path; we assert on stdout shape. But the
+    # command substitution must not run bare under `set -e`: a hook that exits
+    # non-zero for ANY reason takes the whole gate down with no FAIL line and no
+    # fixture name, and because stdout is block-buffered on CI the earlier PASS
+    # lines are lost too. That is what the intermittent windows-latest exit 143
+    # was: PowerShell cold start occasionally overran the 5-second watchdog, the
+    # watchdog killed the hook, and 143 propagated out of here. run_pre_cases
+    # already guards this way; run_cases did not.
+    set +e
     out=$(bash "$DISPATCH" "$hook" < "$fixture")
+    rc=$?
+    set -e
+    if [ "$rc" -ne 0 ]; then
+      echo "  FAIL: $name → hook exited $rc (expected 0): $desc"
+      failures=$((failures + 1))
+      continue
+    fi
 
     has_block=no
     if echo "$out" | grep -q '"decision":"block"'; then
@@ -166,9 +241,270 @@ run_cases() {
   done
 }
 
+# PreToolUse replay: assert on the exit code, not on stdout. `set -e` is active,
+# so the invocation is guarded - an exit 2 here is the expected outcome for half
+# these cases, not a gate crash.
+run_pre_cases() {
+  local hook="$1" dir="$2"; shift 2
+  local case_line name expect desc fixture err rc
+  for case_line in "$@"; do
+    IFS='|' read -r name expect desc <<< "$case_line"
+    fixture="$dir/$name.json"
+    if [ ! -f "$fixture" ]; then
+      echo "  FAIL: missing fixture: $fixture"
+      failures=$((failures + 1))
+      continue
+    fi
+
+    set +e
+    err=$(bash "$DISPATCH" "$hook" < "$fixture" 2>&1 >/dev/null)
+    rc=$?
+    set -e
+
+    case "$expect" in
+      deny)
+        if [ "$rc" -eq 2 ] && printf '%s' "$err" | grep -q '^BLOCKED:'; then
+          echo "  PASS: $name → deny (exit 2 + stderr): $desc"
+        elif [ "$rc" -eq 2 ]; then
+          echo "  FAIL: $name → exit 2 but no 'BLOCKED:' reason on stderr: $desc"
+          failures=$((failures + 1))
+        else
+          echo "  FAIL: $name → expected exit 2, got $rc: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      allow)
+        if [ "$rc" -eq 0 ]; then
+          echo "  PASS: $name → allow (exit 0): $desc"
+        else
+          echo "  FAIL: $name → expected exit 0, got $rc: $desc"
+          failures=$((failures + 1))
+        fi
+        ;;
+      *)
+        echo "  FAIL: $name has unknown expected outcome '$expect'"
+        failures=$((failures + 1))
+        ;;
+    esac
+  done
+}
+
+# These replays test hook LOGIC, not the bound - the bound has its own dedicated
+# cases in section 1b. Give them headroom: on windows-latest each fixture spawns
+# powershell.exe, whose cold start occasionally overran the shipped 5-second
+# default, and a killed hook then failed the gate for a reason that had nothing
+# to do with what the fixture asserts. 30 is inside dispatch.sh's 60-second clamp.
+export ERFANA_HOOK_TIMEOUT=30
+
 run_cases "$HOOK_NAME" "$FIXTURE_DIR" "${CASES[@]}"
 run_cases "$GRILL_HOOK_NAME" "$GRILL_FIXTURE_DIR" "${GRILL_CASES[@]}"
 run_cases "$MS_GRILL_HOOK_NAME" "$MS_GRILL_FIXTURE_DIR" "${MS_GRILL_CASES[@]}"
+run_pre_cases "$SECRET_HOOK_NAME" "$SECRET_FIXTURE_DIR" "${SECRET_CASES[@]}"
+run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY_CASES[@]}"
+
+# Back to the shipped default so section 1b measures what users actually get.
+unset ERFANA_HOOK_TIMEOUT
+
+# --- 1b. Launcher guarantees (POSIX only) ---------------------------------
+#
+# Everything in this section provokes the watchdog, and the watchdog signals a
+# process group. `set -m` reliably isolates the hook into its own group on macOS
+# and Linux - measured - but not under Git Bash, where the signal reaches the
+# group this gate is itself running in: three consecutive windows-latest runs
+# died with exit 143 six seconds in, taking every buffered PASS line with them.
+#
+# The bound is a POSIX-side guarantee and is asserted there. What the Windows job
+# exists to cover is the .ps1 hook implementations, which the fixture replays
+# above exercise in full through dispatch.sh's PowerShell arm. Weakening those
+# replays to keep an inapplicable assertion would be the wrong trade.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*)
+    echo "  SKIP: launcher guarantees - the bound signals a process group, which"
+    echo "        Git Bash job control does not isolate (docs/known-caveats.md)"
+    ;;
+  *)
+# The timeout that used to live in hooks/hooks.json now lives in
+# hooks/dispatch.sh, because the field means seconds on one host and
+# milliseconds on the other. A grep for the watchdog would prove only that a
+# string exists; these two checks prove the behaviour.
+
+# Watchdog: a hook whose background child holds stdout open must still be cut
+# off. Asserted as an upper bound, not an exact duration - a wall-clock
+# equality check is flaky on a loaded CI runner.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) GROUP_KILL_AVAILABLE=0 ;;
+  *) GROUP_KILL_AVAILABLE=1 ;;
+esac
+
+SLOW_FIXTURE="tests/hooks/_fixtures/slow-hook.sh"
+if [ "$GROUP_KILL_AVAILABLE" -eq 0 ]; then
+  # Git Bash's job control does not reliably put the hook in its own process
+  # group, so dispatch.sh signals the leaf there rather than the group - a
+  # deliberate, documented weakening. Asserting the group guarantee here would
+  # assert something the platform does not provide; worse, the group kill it
+  # would provoke lands on this gate's own group and takes the run down with
+  # exit 143 and no output.
+  echo "  SKIP: watchdog - Windows bounds the leaf, not the group (see docs/known-caveats.md)"
+elif [ ! -f "$SLOW_FIXTURE" ]; then
+  echo "  FAIL: $SLOW_FIXTURE is missing (watchdog cannot be proven)"
+  failures=$((failures + 1))
+else
+  # Read the launcher's stdout through a command substitution rather than
+  # discarding it. This is the whole point: command substitution waits for the
+  # STREAM to close, not for the process to exit, so a leaf-only kill leaves the
+  # fixture's background child holding the pipe and the elapsed check bites.
+  # With >/dev/null here the test passed even after the process-group kill was
+  # replaced with a leaf kill - it proved nothing, which is how a broken bound
+  # would have shipped.
+  wd_start=$(date +%s)
+  set +e
+  wd_out=$(ERFANA_HOOK_TIMEOUT=2 bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
+    < "$FIXTURE_DIR/stop-hook-active.json" 2>/dev/null)
+  wd_rc=$?
+  set -e
+  wd_elapsed=$(( $(date +%s) - wd_start ))
+  : "${wd_out:=}"
+  if [ "$wd_rc" -eq 0 ]; then
+    echo "  FAIL: watchdog - slow hook exited 0; it was never killed"
+    failures=$((failures + 1))
+  elif [ "$wd_rc" -eq 127 ]; then
+    # 127 is "command not found". Without this arm the test passes when the
+    # fixture is missing - which is exactly what happened on the first Windows
+    # CI run, before slow-hook.ps1 existed: nothing ran, the launcher exited
+    # non-zero in 0s, and "non-zero inside ten seconds" accepted it.
+    echo "  FAIL: watchdog - exit 127; the fixture did not run, so nothing was bounded"
+    failures=$((failures + 1))
+  elif [ "$wd_elapsed" -lt 1 ]; then
+    echo "  FAIL: watchdog - returned in ${wd_elapsed}s; the hook cannot have started"
+    failures=$((failures + 1))
+  elif [ "$wd_elapsed" -gt 10 ]; then
+    echo "  FAIL: watchdog - slow hook took ${wd_elapsed}s; the bound did not hold"
+    failures=$((failures + 1))
+  else
+    echo "  PASS: watchdog - wedged hook killed in ${wd_elapsed}s (exit $wd_rc), stream closed"
+  fi
+fi
+
+# The jq probe lives in dispatch.sh's non-Windows arm only: the .ps1 hooks parse
+# with ConvertFrom-Json and need no jq, so asserting the probe on Windows would
+# assert behaviour that is deliberately absent there.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) SKIP_JQ_PROBE=1 ;;
+  *) SKIP_JQ_PROBE=0 ;;
+esac
+
+if [ "$SKIP_JQ_PROBE" -eq 1 ]; then
+  echo "  SKIP: jq probe - Windows takes the PowerShell arm, which needs no jq"
+else
+
+# The shipped default. Every case above sets ERFANA_HOOK_TIMEOUT, so the 5
+# seconds that replaced the hooks.json timeout key was asserted by nothing:
+# raising the default to 600 passed the whole suite.
+if [ "$GROUP_KILL_AVAILABLE" -eq 0 ]; then
+  echo "  SKIP: default bound - same reason as the watchdog case above"
+else
+def_start=$(date +%s)
+set +e
+def_out=$(bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
+  < "$FIXTURE_DIR/stop-hook-active.json" 2>/dev/null)
+def_rc=$?
+set -e
+def_elapsed=$(( $(date +%s) - def_start ))
+: "${def_out:=}"
+if [ "$def_rc" -eq 0 ] || [ "$def_rc" -eq 127 ]; then
+  echo "  FAIL: default bound - slow hook exited $def_rc; the shipped default did not kill it"
+  failures=$((failures + 1))
+elif [ "$def_elapsed" -gt 20 ]; then
+  echo "  FAIL: default bound - took ${def_elapsed}s; the shipped 5s default is not in effect"
+  failures=$((failures + 1))
+else
+  echo "  PASS: default bound - no env override, wedged hook killed in ${def_elapsed}s"
+fi
+fi
+
+# The bound must not be disarmable from the environment. ERFANA_HOOK_TIMEOUT=0
+# made the watchdog SIGTERM every hook before it could decide - exit 143, which
+# neither host reads as a block - so any parent process could switch the whole
+# safety net off. An unwritable TMPDIR did the same by aborting the launcher
+# before the hook started.
+for disarm in "ERFANA_HOOK_TIMEOUT=0" "ERFANA_HOOK_TIMEOUT=-5" "ERFANA_HOOK_TIMEOUT=notanumber" "TMPDIR=/nonexistent-erfana-xyz"; do
+  set +e
+  ( export "${disarm?}"; bash "$DISPATCH" secret-detector \
+      < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" >/dev/null 2>&1 )
+  disarm_rc=$?
+  set -e
+  if [ "$disarm_rc" -eq 2 ]; then
+    echo "  PASS: not disarmable by ${disarm} - secret-detector still blocks"
+  else
+    echo "  FAIL: ${disarm} disarmed secret-detector (exit ${disarm_rc}, expected 2)"
+    failures=$((failures + 1))
+  fi
+done
+
+# jq probe: every .sh hook parses its payload with jq, and without jq the parse
+# yields an empty string and the hook takes its allow branch - the safety net
+# off with no signal. stock macOS ships no jq. The launcher must say so.
+jq_dir="$(mktemp -d)"
+for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm ps sleep kill; do
+  tool_path="$(command -v "$tool" 2>/dev/null || true)"
+  # command -v returns the bare name for a shell builtin (kill is a builtin on
+  # Git Bash, with no binary anywhere), and ln on a non-path then fails and, under
+  # set -e, takes the whole gate down. Only link real files.
+  [ -n "$tool_path" ] && [ -f "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+done
+jq_probe_ok=1
+for hook_script in hooks/*.sh; do
+  hook_name="$(basename "$hook_script" .sh)"
+  [ "$hook_name" = "dispatch" ] && continue
+  # Only hooks that actually parse with jq should be probed; the carve-out is
+  # asserted separately below.
+  grep -q 'jq ' "$hook_script" || continue
+  set +e
+  jq_err=$(PATH="$jq_dir" bash "$DISPATCH" "$hook_name" \
+    < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" 2>&1 >/dev/null)
+  jq_rc=$?
+  set -e
+  if [ "$jq_rc" -eq 0 ] && printf '%s' "$jq_err" | grep -q 'jq not found'; then
+    continue
+  fi
+  echo "  FAIL: jq probe - ${hook_name} parses with jq but was not skipped with a"
+  echo "        diagnostic on a jq-less PATH (exit $jq_rc: $jq_err). Without the"
+  echo "        probe it takes its allow branch and the control is off in silence."
+  jq_probe_ok=0
+  failures=$((failures + 1))
+done
+rm -rf "$jq_dir"
+if [ "$jq_probe_ok" -eq 1 ]; then
+  echo "  PASS: jq probe - every jq-parsing hook is skipped with a visible diagnostic"
+fi
+
+# The probe must be per-hook, not blanket. post-compact-reminder reads no stdin
+# and calls no jq (it is git plus a heredoc), so a blanket probe would replace a
+# working hook with nothing on exactly the jq-less box it was written for.
+jq_dir="$(mktemp -d)"
+for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm sleep kill git; do
+  tool_path="$(command -v "$tool" 2>/dev/null || true)"
+  # command -v returns the bare name for a shell builtin (kill is a builtin on
+  # Git Bash, with no binary anywhere), and ln on a non-path then fails and, under
+  # set -e, takes the whole gate down. Only link real files.
+  [ -n "$tool_path" ] && [ -f "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+done
+set +e
+pcr_out=$(PATH="$jq_dir" bash "$DISPATCH" post-compact-reminder < /dev/null 2>/dev/null)
+pcr_rc=$?
+set -e
+rm -rf "$jq_dir"
+if [ "$pcr_rc" -eq 0 ] && printf '%s' "$pcr_out" | grep -q 'CRITICAL REMINDERS'; then
+  echo "  PASS: jq probe - post-compact-reminder still runs on a jq-less PATH"
+else
+  echo "  FAIL: jq probe - post-compact-reminder was skipped without jq; it needs none"
+  failures=$((failures + 1))
+fi
+
+fi
+
+    ;;
+esac
 
 # --- 2. Sentinel symmetry -------------------------------------------------
 # Status family: project-status, session-status, and the hook.
@@ -189,8 +525,8 @@ EXPLAIN_SENTINEL_FILES=(
 # that end-anchors on it (both implementations).
 GRILL_SENTINEL_FILES=(
   "skills/grill-me/SKILL.md"
-  "skills/grill-me/hooks/grill-guard.sh"
-  "skills/grill-me/hooks/grill-guard.ps1"
+  "hooks/grill-guard.sh"
+  "hooks/grill-guard.ps1"
 )
 # ms-grill family: the managing-skills orchestrator prose, the static
 # interview protocol that governs the marker, and the skill-scoped Stop hook
@@ -198,8 +534,8 @@ GRILL_SENTINEL_FILES=(
 MS_GRILL_SENTINEL_FILES=(
   "skills/managing-skills/SKILL.md"
   "skills/managing-skills/references/interview-protocol.md"
-  "skills/managing-skills/hooks/ms-grill-guard.sh"
-  "skills/managing-skills/hooks/ms-grill-guard.ps1"
+  "hooks/ms-grill-guard.sh"
+  "hooks/ms-grill-guard.ps1"
 )
 
 check_sentinel() {
@@ -233,16 +569,25 @@ check_sentinel "$MS_GRILL_SENTINEL" "ms-grill" "${MS_GRILL_SENTINEL_FILES[@]}"
 normalize_guard() {
   grep -v '^#' "$1" | grep -v '"decision":"block"' | sed 's/erfana:ms-grill-open/erfana:grill-open/'
 }
-if diff <(normalize_guard "skills/grill-me/hooks/grill-guard.sh") \
-        <(normalize_guard "skills/managing-skills/hooks/ms-grill-guard.sh") >/dev/null; then
-  echo "  PASS: guard machinery identical across grill-guard.sh and ms-grill-guard.sh"
+guard_drift_ok=1
+if ! diff <(normalize_guard "hooks/grill-guard.ps1") \
+          <(normalize_guard "hooks/ms-grill-guard.ps1") >/dev/null; then
+  echo "  FAIL: guard drift - grill-guard.ps1 and ms-grill-guard.ps1 differ beyond"
+  echo "        sentinel/reason/header. The .ps1 pair is what runs on Windows, and"
+  echo "        it was outside this check entirely."
+  failures=$((failures + 1))
+  guard_drift_ok=0
+fi
+if diff <(normalize_guard "hooks/grill-guard.sh") \
+        <(normalize_guard "hooks/ms-grill-guard.sh") >/dev/null && [ "$guard_drift_ok" -eq 1 ]; then
+  echo "  PASS: guard machinery identical across both .sh and both .ps1 siblings"
 else
   echo "  FAIL: guard drift - grill-guard.sh and ms-grill-guard.sh differ beyond sentinel/reason/header"
   failures=$((failures + 1))
 fi
 
 SENTINEL_CHECK_COUNT=$((${#STATUS_SENTINEL_FILES[@]} + ${#EXPLAIN_SENTINEL_FILES[@]} + ${#GRILL_SENTINEL_FILES[@]} + ${#MS_GRILL_SENTINEL_FILES[@]}))
-FIXTURE_COUNT=$((${#CASES[@]} + ${#GRILL_CASES[@]} + ${#MS_GRILL_CASES[@]}))
+FIXTURE_COUNT=$((${#CASES[@]} + ${#GRILL_CASES[@]} + ${#MS_GRILL_CASES[@]} + ${#SECRET_CASES[@]} + ${#BASH_SAFETY_CASES[@]}))
 
 if [ $failures -ne 0 ]; then
   echo "  FAIL: $failures failure(s) total"

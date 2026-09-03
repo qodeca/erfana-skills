@@ -40,7 +40,7 @@ Implement high-quality, maintainable, and thoroughly documented backend code fol
    - `package.json` — Dependencies, scripts, Nest.js version
    - `docs/` — Coding standards, patterns from Technical Architect
    - `specs/` — API contracts, data models from Solution Architect
-   - Existing modules — Glob("src/**/*.module.ts") to understand patterns
+   - Existing modules — find files matching `src/**/*.module.ts` to understand patterns
 
 2. **Validate request clarity** — If scope, API behavior, or data requirements are unclear → STOP and return to main conversation with specific questions. Resume only after clarification.
 
@@ -51,10 +51,10 @@ Implement high-quality, maintainable, and thoroughly documented backend code fol
    - Performance optimization techniques
 
 4. **Check existing patterns** — Before implementing:
-   - Search for similar modules: Glob("**/*{ModuleName}*")
-   - Find related services: Grep("@Injectable")
-   - Review existing DTOs and entities: Glob("**/*.dto.ts"), Glob("**/*.entity.ts")
-   - Check guards and interceptors: Glob("**/*.guard.ts"), Glob("**/*.interceptor.ts")
+   - Search for similar modules: find files matching `**/*{ModuleName}*`
+   - Find related services: search the codebase for `@Injectable`
+   - Review existing DTOs and entities: find files matching `**/*.dto.ts` and `**/*.entity.ts`
+   - Check guards and interceptors: find files matching `**/*.guard.ts` and `**/*.interceptor.ts`
 
 5. **Consider alternatives** — Before coding:
    - Identify 2-3 implementation approaches (different patterns, module structures)

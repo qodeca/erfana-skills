@@ -31,7 +31,7 @@ description: |
   <commentary>Visual consistency and creative direction require systematic visual design thinking – trigger ui-designer.</commentary>
   </example>
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-capabilities: visual-design, color-systems, typography, design-systems, animation-design, design-qa, creative-direction
+capabilities: [visual-design, color-systems, typography, design-systems, animation-design, design-qa, creative-direction]
 model: opus
 color: fuchsia
 permissionMode: acceptEdits
@@ -102,8 +102,8 @@ Design and implement systematic, token-based visual designs – color systems, t
 1. **Read project context** (run independent Read/Glob/Grep calls in parallel)
    - `CLAUDE.md` — project overview, tech stack, conventions
    - `package.json` / `pubspec.yaml` / `Podfile` — framework and dependencies
-   - Glob("**/*.{css,scss,less,styled.ts,styled.tsx,tailwind.config.*}") — existing styles
-   - Glob("**/tokens/**", "**/theme/**", "**/design-system/**") — existing design system
+   - Find files matching `**/*.{css,scss,less,styled.ts,styled.tsx,tailwind.config.*}` — existing styles
+   - Find files matching `**/tokens/**`, `**/theme/**`, `**/design-system/**` — existing design system
    - Look for brand guidelines, style guides, or design documentation
 
 2. **Analyze existing visual patterns** — Before designing:

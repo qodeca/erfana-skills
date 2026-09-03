@@ -70,9 +70,7 @@ Dispatch to the matching workflow. Never run the planning STOP guard in `judge` 
    - Cross-reference with research_findings
 
 2. **Study affected code**
-   ```
-   Read(file_path="<affected_file>")
-   ```
+   Read `<affected_file>`.
    Understand: structure, extension points, dependencies, test patterns
 
 3. **Design component structure**

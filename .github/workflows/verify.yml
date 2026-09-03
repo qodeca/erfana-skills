@@ -35,6 +35,19 @@ jobs:
         env:
           DISABLE_AUTOUPDATER: '1'
         run: claude plugin validate . --strict
+      - name: Generated host table is in sync
+        # scripts/gen-hosts-table.sh says "running this must produce no diff",
+        # and nothing checked it - so a hand-edited install command or "how it
+        # consumes" cell survived. Gate 15 only compares the version string.
+        run: |
+          set -euo pipefail
+          bash scripts/gen-hosts-table.sh
+          if ! git diff --quiet -- docs/hosts.md; then
+            echo "::error::docs/hosts.md is out of sync with scripts/_lib/host_matrix.py - run bash scripts/gen-hosts-table.sh"
+            git --no-pager diff -- docs/hosts.md
+            exit 1
+          fi
+          echo "host table in sync"
       - name: REUSE license-metadata compliance
         run: reuse lint
       - name: Doc count guard (README agent count matches agents/*.md)
@@ -50,6 +63,58 @@ jobs:
             exit 1
           fi
           echo "agent count in sync: ${AGENTS}"
+
+  # Cross-host: prove the plugin still converts and loads on Qwen Code.
+  # A separate job from `gates` so a Qwen-side breakage is diagnosable at a
+  # glance and can be de-required without weakening the main gate suite.
+  #
+  # The pin is deliberate and Gate 15 enforces it against
+  # scripts/_lib/host_matrix.py: the alias tables and frontmatter rules in that
+  # module were transcribed out of this exact bundle, so testing a different
+  # Qwen would certify a version nobody read. The weekly qwen-canary workflow
+  # is what moves the pin forward.
+  qwen-compat:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: '22'
+      - name: Install Qwen Code (pinned)
+        run: npm install -g --ignore-scripts @qwen-code/qwen-code@0.22.3
+      # The converted-agent frontmatter check needs a YAML parser, and it is the
+      # only thing proving Qwen did not silently drop an agent's frontmatter -
+      # the count check passes on file count alone. It ran today only because
+      # the runner image happens to ship PyYAML in system python; do not rely on
+      # that. The smoke test also hard-fails on a missing parser under --require.
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Qwen install + conversion smoke test
+        run: bash scripts/qwen-smoke.sh --require
+
+  # Windows is the only place the .ps1 hooks actually execute. On ubuntu, Gate
+  # 14 can merely tokenize them; here Git Bash is present, dispatch.sh takes its
+  # MINGW branch, and Gate 16 replays the fixtures through PowerShell.
+  #
+  # Scoped to Gate 16, not run-all-gates.sh: there is no claude CLI and no
+  # reuse here, and Gate 18 needs full git history. The exec-bit assertions are
+  # no-ops on NTFS.
+  powershell:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - name: Hook fixtures through the PowerShell implementations
+        run: bash scripts/gate-16-hook-fixtures.sh
 
   secret-scan:
     runs-on: ubuntu-latest

@@ -32,30 +32,20 @@ Explore codebase structure and find files and patterns related to issue implemen
 
 <workflow>
 1. **Search for file patterns**
-   ```
-   Glob(pattern="**/*<search_term>*.tsx")
-   Glob(pattern="**/*<search_term>*.ts")
-   ```
+   Find files whose paths match `**/*<search_term>*.tsx`, then those matching `**/*<search_term>*.ts`.
    Record matching paths, sort by relevance
 
 2. **Search for code patterns**
-   ```
-   Grep(pattern="<search_term>", output_mode="files_with_matches")
-   Grep(pattern="class.*<term>|function.*<term>|const.*<term>")
-   ```
+   Search the codebase for `<search_term>`, listing only the matching file paths.
+   Search again for `class.*<term>|function.*<term>|const.*<term>`.
    Note frequency to identify core files
 
 3. **Analyze project structure**
-   ```
-   Glob(pattern="src/renderer/src/components/**/*.tsx")
-   Glob(pattern="src/main/services/**/*.ts")
-   ```
+   Find files matching `src/renderer/src/components/**/*.tsx`, then those matching `src/main/services/**/*.ts`.
    Map where similar code lives
 
 4. **Read key files (top 3-5)**
-   ```
-   Read(file_path="<relevant_file>")
-   ```
+   Read each relevant file (`<relevant_file>`).
    Extract: structure, imports, state management, styling, test patterns
 
 5. **Identify existing patterns**
@@ -125,7 +115,7 @@ On failure:
 <critical_thinking>
 Alternatives:
 - No matches → Broaden terms, try alternatives
-- Too broad → Add directory constraints, use Grep
+- Too broad → Add directory constraints, narrow the search pattern
 - Invalid paths → Filter to valid only, note discrepancy
 
 Edge cases:
