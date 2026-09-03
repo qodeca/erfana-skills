@@ -30,6 +30,9 @@ Validates the `verify-completion` Stop hook and the plugin-root `grill-guard` an
    | `open-quoted-mid-prose.json` | pass | marker quoted mid-prose is not end-anchored and never misfires |
    | `open-inside-trailing-code-fence.json` | pass | marker inside a balanced trailing fence is stripped before matching |
    | `stop-hook-active.json` | pass | `stop_hook_active: true` skips the check unconditionally |
+   | `open-inside-indented-code-fence.json` | pass | a fence indented under a list item is still a fence - anchoring on a bare backtick fence false-blocked it |
+   | `open-inside-tilde-code-fence.json` | pass | a `~~~` fence is a fence too, and was unknown to the scrub |
+   | `open-mentioned-in-inline-code.json` | pass | a backticked prose mention is prose. The block reason tells the model to remove the trailing marker, so a model that complied and said so re-triggered the guard on its own report |
 
    **ms-grill-guard replays** (v6.4.0). The same eight scenarios replay from `tests/hooks/ms-grill-guard/*.json` through `bash hooks/dispatch.sh ms-grill-guard`, with the `<!-- erfana:ms-grill-open -->` literal.
 
@@ -96,7 +99,7 @@ If either sentinel literal ever changes:
 1. Update the `GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
 2. Update the marker literal in `skills/grill-me/SKILL.md` (Sentinel section).
 3. Update the match in `hooks/grill-guard.sh` (`grep -qF`) and `grill-guard.ps1` (`.Contains`).
-4. Update the four `tests/hooks/grill-guard/*.json` fixtures that embed the literal.
+4. Update the eight `tests/hooks/grill-guard/*.json` fixtures that embed the literal.
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.
 
 **Ms-grill family** (`<!-- erfana:ms-grill-open -->`, v6.4.0):
@@ -104,7 +107,7 @@ If either sentinel literal ever changes:
 1. Update the `MS_GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
 2. Update the marker literal in `skills/managing-skills/SKILL.md` ("Requirements interrogation") and `skills/managing-skills/references/interview-protocol.md` (Sentinel section).
 3. Update the match in `hooks/ms-grill-guard.sh` (`grep -qF`) and `ms-grill-guard.ps1` (`.Contains`) — the guard-drift normalizer's `sed` mapping in the gate script must track the new literal too.
-4. Update the four `tests/hooks/ms-grill-guard/*.json` fixtures that embed the literal.
+4. Update the eight `tests/hooks/ms-grill-guard/*.json` fixtures that embed the literal.
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.
 
 ## PreToolUse fixtures and launcher guarantees (v7.1.0)

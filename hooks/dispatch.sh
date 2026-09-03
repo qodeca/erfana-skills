@@ -68,21 +68,74 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Seconds. Means the same thing on every OS and every host, which is the whole
 # point of bounding here instead of in hooks.json.
-HOOK_TIMEOUT_SECONDS="${ERFANA_HOOK_TIMEOUT:-5}"
+#
+# CLAMPED, not trusted. Moving the bound out of hooks.json also moved it from a
+# file the host owns into a variable any parent process can set, and
+# ERFANA_HOOK_TIMEOUT=0 made the watchdog SIGTERM every hook before it could
+# decide - exit 143, which neither host reads as a block, so the write or the
+# destructive command went through. An override is useful for testing, so keep
+# it, but floor it at 1 second and cap it at 60 and ignore anything that is not
+# a plain integer.
+HOOK_TIMEOUT_SECONDS=5
+if [ -n "${ERFANA_HOOK_TIMEOUT:-}" ]; then
+  case "$ERFANA_HOOK_TIMEOUT" in
+    ''|*[!0-9]*)
+      echo "dispatch.sh: ignoring non-integer ERFANA_HOOK_TIMEOUT=${ERFANA_HOOK_TIMEOUT}" >&2
+      ;;
+    *)
+      if [ "$ERFANA_HOOK_TIMEOUT" -lt 1 ]; then
+        echo "dispatch.sh: ERFANA_HOOK_TIMEOUT=${ERFANA_HOOK_TIMEOUT} would disarm the hook; using 1" >&2
+        HOOK_TIMEOUT_SECONDS=1
+      elif [ "$ERFANA_HOOK_TIMEOUT" -gt 60 ]; then
+        echo "dispatch.sh: ERFANA_HOOK_TIMEOUT=${ERFANA_HOOK_TIMEOUT} exceeds the 60s cap; using 60" >&2
+        HOOK_TIMEOUT_SECONDS=60
+      else
+        HOOK_TIMEOUT_SECONDS="$ERFANA_HOOK_TIMEOUT"
+      fi
+      ;;
+  esac
+fi
 
 # Buffer the payload rather than letting the child inherit our stdin. Enabling
 # job control below changes how a backgrounded job's stdin is set up, and a
 # hook that reads an empty payload fails open silently -- exactly the failure
 # this launcher exists to make visible.
-PAYLOAD="$(mktemp "${TMPDIR:-/tmp}/erfana-hook.XXXXXX")"
-cleanup() { rm -f "$PAYLOAD"; }
-trap cleanup EXIT
-cat > "$PAYLOAD"
+#
+# A launcher-internal failure must never resolve to "allow" for a hook whose job
+# is to block, so mktemp failing is not fatal: an unwritable TMPDIR, a full disk
+# or a read-only /tmp in a hardened container used to abort the launcher before
+# the hook ever started, and exit 1 is a non-blocking error on both hosts. Try
+# TMPDIR, then /tmp, and if neither works run the hook with stdin inherited -
+# unbounded, but running.
+PAYLOAD=""
+for candidate_dir in "${TMPDIR:-/tmp}" /tmp; do
+  PAYLOAD="$(mktemp "${candidate_dir%/}/erfana-hook.XXXXXX" 2>/dev/null || true)"
+  [ -n "$PAYLOAD" ] && break
+done
+
+cleanup() { [ -n "$PAYLOAD" ] && rm -f "$PAYLOAD"; }
+# SIGKILL cannot be trapped, but everything else can: without these the payload
+# - which for secret-detector IS the candidate secret - survives in TMPDIR.
+trap cleanup EXIT INT TERM HUP
+
+if [ -n "$PAYLOAD" ]; then
+  cat > "$PAYLOAD"
+else
+  echo "dispatch.sh: no writable temp dir; running ${HOOK} unbounded with inherited stdin" >&2
+fi
 
 # Run "$@" with stdin from the buffered payload, bounded to
 # HOOK_TIMEOUT_SECONDS, killing the whole process group on expiry.
 run_bounded() {
   local pid pgid watchdog rc=0
+
+  # No temp file means no buffered payload to redirect from. Run the hook
+  # directly on the inherited stdin: unbounded, but a running hook that can
+  # still block beats a launcher that fails open.
+  if [ -z "$PAYLOAD" ]; then
+    "$@"
+    return $?
+  fi
 
   set -m
   "$@" < "$PAYLOAD" &
@@ -115,14 +168,29 @@ run_bounded() {
   set -m
   (
     sleep "$HOOK_TIMEOUT_SECONDS"
+    # kill -0 first: if the group is already gone its leader's pid can have been
+    # recycled, and a blind signal would land on an unrelated group.
+    kill -0 "-$pgid" 2>/dev/null || exit 0
     kill -TERM "-$pgid" 2>/dev/null || true
     sleep 1
+    kill -0 "-$pgid" 2>/dev/null || exit 0
     kill -KILL "-$pgid" 2>/dev/null || true
   ) >/dev/null 2>&1 &
   watchdog=$!
   set +m
 
-  wait "$pid" || rc=$?
+  # 2>/dev/null: with job control on, bash announces the reap on stderr
+  # ("Terminated: 15   \"$@\" < \"$PAYLOAD\""). The exit code is 143 so neither
+  # host reads it as a block, but Claude Code surfaces hook stderr, and showing
+  # the user the launcher's internals on every timeout is noise.
+  wait "$pid" 2>/dev/null || rc=$?
+
+  # Tear down the child's group even on a clean exit. Without this, a hook that
+  # backgrounds work and returns leaves a grandchild holding stdout, and the
+  # watchdog is already gone - so the caller blocks on a stream that never
+  # closes, unbounded. That contradicts this file's own stated guarantee. No
+  # shipped hook forks that way today; the guarantee should hold anyway.
+  kill -TERM "-$pgid" 2>/dev/null || true
 
   kill -TERM "-$watchdog" 2>/dev/null || true
   wait "$watchdog" 2>/dev/null || true

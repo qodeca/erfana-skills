@@ -294,13 +294,21 @@ if [ ! -f "$SLOW_FIXTURE" ]; then
   echo "  FAIL: $SLOW_FIXTURE is missing (watchdog cannot be proven)"
   failures=$((failures + 1))
 else
+  # Read the launcher's stdout through a command substitution rather than
+  # discarding it. This is the whole point: command substitution waits for the
+  # STREAM to close, not for the process to exit, so a leaf-only kill leaves the
+  # fixture's background child holding the pipe and the elapsed check bites.
+  # With >/dev/null here the test passed even after the process-group kill was
+  # replaced with a leaf kill - it proved nothing, which is how a broken bound
+  # would have shipped.
   wd_start=$(date +%s)
   set +e
-  ERFANA_HOOK_TIMEOUT=2 bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
-    < "$FIXTURE_DIR/stop-hook-active.json" >/dev/null 2>&1
+  wd_out=$(ERFANA_HOOK_TIMEOUT=2 bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
+    < "$FIXTURE_DIR/stop-hook-active.json" 2>/dev/null)
   wd_rc=$?
   set -e
   wd_elapsed=$(( $(date +%s) - wd_start ))
+  : "${wd_out:=}"
   if [ "$wd_rc" -eq 0 ]; then
     echo "  FAIL: watchdog - slow hook exited 0; it was never killed"
     failures=$((failures + 1))
@@ -334,6 +342,46 @@ if [ "$SKIP_JQ_PROBE" -eq 1 ]; then
   echo "  SKIP: jq probe - Windows takes the PowerShell arm, which needs no jq"
 else
 
+# The shipped default. Every case above sets ERFANA_HOOK_TIMEOUT, so the 5
+# seconds that replaced the hooks.json timeout key was asserted by nothing:
+# raising the default to 600 passed the whole suite.
+def_start=$(date +%s)
+set +e
+def_out=$(bash "$DISPATCH" ../tests/hooks/_fixtures/slow-hook \
+  < "$FIXTURE_DIR/stop-hook-active.json" 2>/dev/null)
+def_rc=$?
+set -e
+def_elapsed=$(( $(date +%s) - def_start ))
+: "${def_out:=}"
+if [ "$def_rc" -eq 0 ] || [ "$def_rc" -eq 127 ]; then
+  echo "  FAIL: default bound - slow hook exited $def_rc; the shipped default did not kill it"
+  failures=$((failures + 1))
+elif [ "$def_elapsed" -gt 20 ]; then
+  echo "  FAIL: default bound - took ${def_elapsed}s; the shipped 5s default is not in effect"
+  failures=$((failures + 1))
+else
+  echo "  PASS: default bound - no env override, wedged hook killed in ${def_elapsed}s"
+fi
+
+# The bound must not be disarmable from the environment. ERFANA_HOOK_TIMEOUT=0
+# made the watchdog SIGTERM every hook before it could decide - exit 143, which
+# neither host reads as a block - so any parent process could switch the whole
+# safety net off. An unwritable TMPDIR did the same by aborting the launcher
+# before the hook started.
+for disarm in "ERFANA_HOOK_TIMEOUT=0" "ERFANA_HOOK_TIMEOUT=-5" "ERFANA_HOOK_TIMEOUT=notanumber" "TMPDIR=/nonexistent-erfana-xyz"; do
+  set +e
+  ( export "${disarm?}"; bash "$DISPATCH" secret-detector \
+      < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" >/dev/null 2>&1 )
+  disarm_rc=$?
+  set -e
+  if [ "$disarm_rc" -eq 2 ]; then
+    echo "  PASS: not disarmable by ${disarm} - secret-detector still blocks"
+  else
+    echo "  FAIL: ${disarm} disarmed secret-detector (exit ${disarm_rc}, expected 2)"
+    failures=$((failures + 1))
+  fi
+done
+
 # jq probe: every .sh hook parses its payload with jq, and without jq the parse
 # yields an empty string and the hook takes its allow branch - the safety net
 # off with no signal. stock macOS ships no jq. The launcher must say so.
@@ -345,17 +393,30 @@ for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm ps sl
   # set -e, takes the whole gate down. Only link real files.
   [ -n "$tool_path" ] && [ -f "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
 done
-set +e
-jq_err=$(PATH="$jq_dir" bash "$DISPATCH" secret-detector \
-  < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" 2>&1 >/dev/null)
-jq_rc=$?
-set -e
-rm -rf "$jq_dir"
-if [ "$jq_rc" -eq 0 ] && printf '%s' "$jq_err" | grep -q 'jq not found'; then
-  echo "  PASS: jq probe - missing jq skips the hook with a visible diagnostic"
-else
-  echo "  FAIL: jq probe - expected exit 0 plus a 'jq not found' diagnostic, got exit $jq_rc: $jq_err"
+jq_probe_ok=1
+for hook_script in hooks/*.sh; do
+  hook_name="$(basename "$hook_script" .sh)"
+  [ "$hook_name" = "dispatch" ] && continue
+  # Only hooks that actually parse with jq should be probed; the carve-out is
+  # asserted separately below.
+  grep -q 'jq ' "$hook_script" || continue
+  set +e
+  jq_err=$(PATH="$jq_dir" bash "$DISPATCH" "$hook_name" \
+    < "$SECRET_FIXTURE_DIR/claude-write-secret-blocks.json" 2>&1 >/dev/null)
+  jq_rc=$?
+  set -e
+  if [ "$jq_rc" -eq 0 ] && printf '%s' "$jq_err" | grep -q 'jq not found'; then
+    continue
+  fi
+  echo "  FAIL: jq probe - ${hook_name} parses with jq but was not skipped with a"
+  echo "        diagnostic on a jq-less PATH (exit $jq_rc: $jq_err). Without the"
+  echo "        probe it takes its allow branch and the control is off in silence."
+  jq_probe_ok=0
   failures=$((failures + 1))
+done
+rm -rf "$jq_dir"
+if [ "$jq_probe_ok" -eq 1 ]; then
+  echo "  PASS: jq probe - every jq-parsing hook is skipped with a visible diagnostic"
 fi
 
 # The probe must be per-hook, not blanket. post-compact-reminder reads no stdin
@@ -446,9 +507,18 @@ check_sentinel "$MS_GRILL_SENTINEL" "ms-grill" "${MS_GRILL_SENTINEL_FILES[@]}"
 normalize_guard() {
   grep -v '^#' "$1" | grep -v '"decision":"block"' | sed 's/erfana:ms-grill-open/erfana:grill-open/'
 }
+guard_drift_ok=1
+if ! diff <(normalize_guard "hooks/grill-guard.ps1") \
+          <(normalize_guard "hooks/ms-grill-guard.ps1") >/dev/null; then
+  echo "  FAIL: guard drift - grill-guard.ps1 and ms-grill-guard.ps1 differ beyond"
+  echo "        sentinel/reason/header. The .ps1 pair is what runs on Windows, and"
+  echo "        it was outside this check entirely."
+  failures=$((failures + 1))
+  guard_drift_ok=0
+fi
 if diff <(normalize_guard "hooks/grill-guard.sh") \
-        <(normalize_guard "hooks/ms-grill-guard.sh") >/dev/null; then
-  echo "  PASS: guard machinery identical across grill-guard.sh and ms-grill-guard.sh"
+        <(normalize_guard "hooks/ms-grill-guard.sh") >/dev/null && [ "$guard_drift_ok" -eq 1 ]; then
+  echo "  PASS: guard machinery identical across both .sh and both .ps1 siblings"
 else
   echo "  FAIL: guard drift - grill-guard.sh and ms-grill-guard.sh differ beyond sentinel/reason/header"
   failures=$((failures + 1))

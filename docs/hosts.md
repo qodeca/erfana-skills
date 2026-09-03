@@ -33,6 +33,12 @@ its own allowlist, and writes a `qwen-extension.json` beside it. The conversion
 happens on the user's machine, after the release, from the same tag Claude Code
 users install.
 
+It also runs a variable-replacement pass over **every** `.md` in the tree, not
+only agent frontmatter: `${CLAUDE_PLUGIN_ROOT}` becomes the extension path,
+`` ```! `` fences become `!{...}`, and `~/.claude/` becomes `~/.qwen/`. Diffing
+the converted tree against the repo will surface those rewrites; they are
+expected, not corruption.
+
 Do **not** add a `qwen-extension.json` to the repository root. Qwen checks for a
 native manifest first, and finding one would make it skip the Claude-plugin
 conversion entirely – the repository would install worse, not better.
@@ -124,7 +130,7 @@ would live upstream or would cost Claude Code users something.
   Code uses them.
 - **The post-compaction reminder runs but its output is discarded.**
 - **Commands register unnamespaced** – `/doc-update`, not `/erfana:doc-update` –
-  so a name collision with a Qwen builtin would shadow them silently.
+  so a name collision with a Qwen builtin renames the extension command to `erfana.<name>` rather than dropping it - the builtin takes the bare name, but the erfana command stays reachable under the dotted form.
 - **`$ARGUMENTS` is not substituted.** Qwen uses `{{args}}` and otherwise
   appends the raw invocation to the end of the prompt. Each argument-taking
   command carries both tokens and a rule for telling which one the host filled

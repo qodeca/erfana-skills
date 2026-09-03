@@ -16,7 +16,7 @@
 
 # Fallback so a future extensionless helper or an unlisted extension is
 # still normalised. The explicit rules below win where they apply.
-* text=auto
+* text=auto eol=lf
 
 *.sh    text eol=lf
 *.ps1   text eol=lf

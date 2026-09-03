@@ -35,6 +35,19 @@ jobs:
         env:
           DISABLE_AUTOUPDATER: '1'
         run: claude plugin validate . --strict
+      - name: Generated host table is in sync
+        # scripts/gen-hosts-table.sh says "running this must produce no diff",
+        # and nothing checked it - so a hand-edited install command or "how it
+        # consumes" cell survived. Gate 15 only compares the version string.
+        run: |
+          set -euo pipefail
+          bash scripts/gen-hosts-table.sh
+          if ! git diff --quiet -- docs/hosts.md; then
+            echo "::error::docs/hosts.md is out of sync with scripts/_lib/host_matrix.py - run bash scripts/gen-hosts-table.sh"
+            git --no-pager diff -- docs/hosts.md
+            exit 1
+          fi
+          echo "host table in sync"
       - name: REUSE license-metadata compliance
         run: reuse lint
       - name: Doc count guard (README agent count matches agents/*.md)

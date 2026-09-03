@@ -66,7 +66,7 @@ Six hooks run silently in the background once the plugin is enabled, providing a
 | `post-compact-reminder` | After context compaction | Re-injects load-bearing facts (temporal awareness, honesty discipline, verification rules, agent delegation) plus the current git branch + status snapshot. |
 | `verify-completion` | When the agent considers stopping | Asks the agent to keep working when it claims success without citing executed tests, exit codes, gate output, or screenshots. v4.2.9+ allowlist: messages carrying the `<!-- erfana:status-template -->` sentinel emitted by the status commands bypass the check; Gate 16 enforces sentinel symmetry across the two command files and the hook. Falls back to the unstripped body when the reply has an odd number of code fences so success claims after an unclosed fence stay visible. |
 
-All four are project-agnostic – no personal style preferences. They activate only after the next Claude Code session restart following plugin install or update.
+The first four are the project-agnostic safety net – no personal style preferences. The two interview guards are erfana-specific and fire only while an interview marker is open. They activate only after the next Claude Code session restart following plugin install or update.
 
 **Cross-platform (v4.2.20+).** Each hook ships a `.sh` (macOS/Linux) and a `.ps1` (Windows) sibling, run through the `dispatch.sh` launcher so the safety net works on native Windows too (where Git Bash ships without `jq`). The mechanism and the one uncovered case (a Windows host with no Git Bash) are documented in [`docs/architecture.md`](docs/architecture.md).
 
@@ -255,7 +255,7 @@ If your network blocks `api.github.com` or `raw.githubusercontent.com`, marketpl
 Check the source spelling – it is `qodeca/erfana-skills:erfana`, the repository followed by the plugin name inside its marketplace, not the repository alone. The install is a network operation against GitHub, so the proxy note above applies here too, and Qwen shows a security prompt that has to be accepted before anything is written to `~/.qwen/extensions/`.
 
 **Slash commands appear unnamespaced (`/doc-update`, not `/erfana:doc-update`)**
-Expected on Qwen Code – its converter registers commands without the plugin namespace. Use the bare form there. If a name collides with a Qwen builtin, the builtin wins silently; see [`docs/hosts.md`](docs/hosts.md).
+Expected on Qwen Code – its converter registers commands without the plugin namespace. Use the bare form there. If a name collides with a Qwen builtin, the builtin takes the bare name and the erfana command is renamed to `erfana.<name>` rather than dropped; see [`docs/hosts.md`](docs/hosts.md).
 
 **Safety hooks do not fire on Qwen Code**
 First check that [`jq`](https://jqlang.github.io/jq/) is installed and on `PATH` – most hooks parse their JSON payload with it, and the `dispatch.sh` launcher skips a hook it cannot run rather than blocking your work, printing a diagnostic to stderr. The hooks fail open by design, so a missing `jq` looks like silence, not an error. `hooks/hooks.json` needs no Qwen-specific declaration; if `jq` is present and hooks still do nothing, restart the Qwen session so the extension is re-read.

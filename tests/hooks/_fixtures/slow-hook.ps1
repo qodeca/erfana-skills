@@ -13,6 +13,6 @@
 # and outlives the foreground process, so a watchdog that signals only the leaf
 # leaves the stream open and bounds nothing.
 
-Start-Job -ScriptBlock { Start-Sleep -Seconds 120 } | Out-Null
+Start-Job -ScriptBlock { Start-Sleep -Seconds 30 } | Out-Null
 Write-Output "slow-hook: started, now wedging"
-Start-Sleep -Seconds 120
+Start-Sleep -Seconds 30

@@ -116,11 +116,15 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
     # 12.7 (v6.3.0): reasoning-display instructions
     report_reasoning_display(fp, text, '12.7')
 
-    # Cross-host skill frontmatter (v7.1.0). Qwen Code runs a strict validator
-    # over skill frontmatter and throws "Agent Skills allowed-tools must be a
-    # string." on a YAML flow sequence -- the caller then skips the entire
-    # skill. Claude Code accepts both forms, so the flow shape is latent here
-    # and fatal there. Same for argument-hint.
+    # Cross-host skill frontmatter (v7.1.0). Qwen Code's agent-plugin skill
+    # parser throws "Agent Skills allowed-tools must be a string." on a YAML
+    # flow sequence and the caller then skips the ENTIRE skill. That parser is
+    # reached only for a manifest declaring format "agent-plugins-v1"; erfana
+    # installs as format "qwen", so today the flow shape is latent on BOTH
+    # hosts -- one upstream change from deleting a skill, not currently fatal.
+    # argument-hint is a weaker case: Qwen silently ignores a non-string rather
+    # than throwing. Both are kept as FAILs because a string costs nothing and
+    # the failure mode is a skill that is simply absent.
     for key in ('allowed-tools', 'argument-hint'):
         if key in m and not isinstance(m[key], str):
             print(f'FAIL: {fp} {key} is a {type(m[key]).__name__}, not a string. '
@@ -130,7 +134,7 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
 
     # CLAUDE.md hard constraint, previously enforced by nothing: fact-check runs
     # are user-requested only.
-    if m.get('name') == 'fact-checking' and m.get('disable-model-invocation') is not True:
+    if fp == 'skills/fact-checking/SKILL.md' and m.get('disable-model-invocation') is not True:
         print(f'FAIL: {fp} must keep `disable-model-invocation: true` '
               f'(CLAUDE.md hard constraint; fact-check runs are user-invoked only)')
         ok = False
@@ -150,8 +154,14 @@ sys.path.insert(0, 'scripts')
 from _lib.host_matrix import QWEN_AGENT_NAME_MAX, QWEN_RESERVED_AGENT_NAMES
 AGENT_NAME_SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
 
-if os.path.isdir('agents'):
-    for fp in sorted(glob.glob('agents/*.md')):
+# Nested per-skill agents (skills/*/agents/*.md) were outside this loop, so the
+# Qwen name rules - the ones whose failure mode is "the agent silently is not
+# there" - covered 87 of the 98 shipped agents. They also escaped the
+# name==basename invariant.
+AGENT_GLOBS = ['agents/*.md', 'skills/*/agents/*.md']
+agent_files = sorted(set(fp for g in AGENT_GLOBS for fp in glob.glob(g)))
+if agent_files:
+    for fp in agent_files:
         text = read_text(fp)
         if text is None:
             ok = False
@@ -160,14 +170,15 @@ if os.path.isdir('agents'):
         if m is None:
             ok = False
             continue
-        if 'name' not in m:
-            print(f'FAIL: {fp} missing name field')
+        if not isinstance(m.get('name'), str) or not m['name'].strip():
+            print(f'FAIL: {fp} name is missing, empty or not a string '
+                  f'({m.get("name")!r}); both hosts drop the agent')
             ok = False
         if 'description' not in m:
             print(f'FAIL: {fp} missing description field')
             ok = False
         expected = os.path.basename(fp)[:-3]
-        if m.get('name') and m.get('name') != expected:
+        if isinstance(m.get('name'), str) and m['name'] and m['name'] != expected:
             print(f'FAIL: {fp} name "{m.get("name")}" does not match basename "{expected}"')
             ok = False
 
@@ -194,7 +205,7 @@ if os.path.isdir('agents'):
         # collides with one of its reserved names -- silently, with no error,
         # so the agent simply is not there. These are FAILs, not warnings: a
         # missing agent is a missing capability, not a style nit.
-        agent_name = m.get('name') or ''
+        agent_name = m['name'] if isinstance(m.get('name'), str) else ''
         if len(agent_name) > QWEN_AGENT_NAME_MAX:
             print(f'FAIL: {fp} name is {len(agent_name)} chars (Qwen Code drops '
                   f'agents over {QWEN_AGENT_NAME_MAX}); shorten it')
@@ -276,8 +287,16 @@ print(f'PASS: detector fixtures — {len(expected)} expected detections hit, no 
 PYEOF
 
 echo "=== Gate 3 — JSON parse ==="
+# The failing command must NOT be the left operand of `&&`: that suppresses
+# `set -e`, so a malformed manifest printed its parse error and the suite
+# carried on to report ALL GATES PASSED. Same shape as the Gate 4 widening.
 for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
-    python3 -m json.tool "$f" > /dev/null && echo "  PASS: $f"
+    if python3 -m json.tool "$f" > /dev/null; then
+        echo "  PASS: $f"
+    else
+        echo "  FAIL: $f is not valid JSON"
+        exit 1
+    fi
 done
 
 echo "=== Gate 4 — script syntax ==="

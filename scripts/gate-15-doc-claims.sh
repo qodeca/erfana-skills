@@ -250,34 +250,71 @@ if os.path.isdir('docs/gates'):
 
 # === Check 8: the Qwen Code version is stated once, in host_matrix.py ===
 #
-# Three places name a Qwen version and can drift apart: host_matrix.py (the
-# source of truth, and what docs/hosts.md is generated from), the npm pin in
-# the CI workflow, and any version stated in prose. A stale pin means CI is
-# certifying a Qwen the alias table was never read out of.
+# The first version matched only `Qwen Code v?X.Y.Z` across docs_to_scan, which
+# read three of eight sites: the bold form in CLAUDE.md, the table cell in
+# docs/hosts.md, "Qwen 0.22.3" without "Code" in CHANGELOG.md and
+# known-caveats.md, and ROADMAP.md (not scanned at all) all drifted freely while
+# the gate reported agreement. It also never compared host_matrix.py's own three
+# version fields to each other.
+#
+# It was simultaneously too strict: a legitimate historical sentence ("fixed
+# upstream in Qwen Code 0.23.1", "0.21.0 and earlier are unsupported") would
+# hard-fail a release. Lines carrying a historical marker are exempt.
 sys.path.insert(0, 'scripts')
-from _lib.host_matrix import HOSTS
+from _lib.host_matrix import HOSTS, QWEN_BUNDLE
 
 tested = HOSTS['qwen-code']['tested_version']
 if tested:
+    # 8a: host_matrix.py must agree with itself first.
+    observed = QWEN_BUNDLE.get('observed_version')
+    if observed and observed != tested:
+        errors.append(
+            f'scripts/_lib/host_matrix.py: QWEN_BUNDLE observed_version {observed} '
+            f'disagrees with HOSTS tested_version {tested}. The alias tables were '
+            f'read out of the observed bundle; testing a different version certifies '
+            f'a transcription nobody made.'
+        )
+    minimum = HOSTS['qwen-code'].get('min_version')
+    if minimum and tuple(int(x) for x in minimum.split('.')) > tuple(int(x) for x in tested.split('.')):
+        errors.append(
+            f'scripts/_lib/host_matrix.py: min_version {minimum} is newer than '
+            f'tested_version {tested}'
+        )
+
+    # 8b: every stated site.
+    VERSION_FILES = sorted(set(docs_to_scan) | {
+        'ROADMAP.md', 'CHANGELOG.md', 'docs/known-caveats.md',
+    })
+    HISTORICAL = re.compile(
+        r'\b(and (?:earlier|older)|or earlier|before|upstream in|fixed in|'
+        r'previously|used to|no longer|prior to)\b', re.I)
+    QWEN_VERSION = re.compile(r'Qwen(?:\s+Code)?\b[^\n]{0,40}?\b(\d+\.\d+\.\d+)')
+
     version_sites = []
     for wf in sorted(glob(".github/workflows/*.yml")):
-        for m in re.finditer(r'@qwen-code/qwen-code@([0-9]+\.[0-9]+\.[0-9]+)', open(wf).read()):
+        for m in re.finditer(r'@qwen-code/qwen-code@(\d+\.\d+\.\d+)', open(wf).read()):
             version_sites.append((wf, m.group(1), m.group(0)))
-    for doc in docs_to_scan:
+    for doc in VERSION_FILES:
         if not os.path.isfile(doc):
             continue
-        for m in re.finditer(r'Qwen Code v?([0-9]+\.[0-9]+\.[0-9]+)', open(doc).read()):
-            version_sites.append((doc, m.group(1), m.group(0)))
+        for line in open(doc).read().split('\n'):
+            if HISTORICAL.search(line):
+                continue
+            for m in QWEN_VERSION.finditer(line):
+                version_sites.append((doc, m.group(1), m.group(0).strip()))
+
     for where, found, snippet in version_sites:
         if found != tested:
             errors.append(
                 f'{where}: "{snippet}" disagrees with scripts/_lib/host_matrix.py '
                 f'tested_version ({tested}). The alias table and the frontmatter '
                 f'rules were transcribed out of one Qwen bundle; bump both together '
-                f'or CI certifies a version nobody read.'
+                f'or CI certifies a version nobody read. (A sentence about a '
+                f'different version that is deliberately historical needs a marker '
+                f'word such as "and earlier" or "upstream in".)'
             )
     passes.append(
-        f'Qwen Code version {tested} agrees across host_matrix.py, '
+        f'Qwen Code version {tested} agrees across host_matrix.py and '
         f'{len(version_sites)} stated site(s)'
     )
 

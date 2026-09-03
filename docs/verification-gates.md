@@ -52,7 +52,7 @@ erfana runs on a second host, Qwen Code. The rules that keep one package working
 | 14 | Every stderr line preceding an `exit 2` is a literal, because Qwen parses exit-2 stderr as JSON and an interpolated value could rewrite the decision | hard |
 | 14 | `dispatch.sh` carries the timeout bound and kills a process group, not a leaf | hard |
 | 2 | Agent `name` at most 50 characters, identifier-shaped, and not a Qwen reserved word – otherwise the converter drops the agent silently | hard |
-| 2 | Skill `allowed-tools` / `argument-hint` is a string, not a YAML flow sequence – Qwen's strict validator throws on the sequence form and skips the entire skill | hard |
+| 2 | Skill `allowed-tools` / `argument-hint` is a string, not a YAML flow sequence – Qwen's agent-plugin skill parser throws on the sequence form and skips the entire skill (latent for erfana today; see [`docs/gates/02-frontmatter.md`](gates/02-frontmatter.md)) | hard |
 | 2 | `skills/fact-checking/SKILL.md` keeps `disable-model-invocation: true` (a `CLAUDE.md` hard constraint that nothing enforced before) | hard |
 | 15 | Qwen version agreement across `host_matrix.py`, the CI npm pin, and any version stated in scanned prose | hard |
 | 15 | `docs/hosts.md` and `CONTRIBUTING.md` joined `docs_to_scan`, so their plugin-shape counts are CI-blocked too | hard |

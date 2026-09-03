@@ -15,6 +15,6 @@
 # to check the "N safety hooks" prose claims, and a fixture in that directory
 # would inflate the count.
 
-sleep 120 &
+sleep 30 &
 echo "slow-hook: started, now wedging"
-sleep 120
+sleep 30

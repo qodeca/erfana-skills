@@ -151,8 +151,11 @@ CLAUDE_TO_QWEN_TOOL = {
 }
 
 # Claude-only names with no Qwen tool behind them. Naming one in a matcher is
-# not an error - it simply never fires on Qwen - but it must be a deliberate
-# choice rather than an oversight, so the gate reports it.
+# not an error - it simply never fires on Qwen. Gate 14 does NOT report these
+# separately: they map to None in CLAUDE_TO_QWEN_TOOL, which is structurally
+# indistinguishable from Edit's "already resolves as a display-name alias", so
+# matcher_partners() returns nothing for either. The list documents the
+# distinction for a reader; it does not drive a check.
 NO_QWEN_COUNTERPART = ["MultiEdit", "SlashCommand"]
 
 # --- Agent frontmatter -----------------------------------------------------
@@ -166,6 +169,9 @@ NO_QWEN_COUNTERPART = ["MultiEdit", "SlashCommand"]
 
 AGENT_FRONTMATTER_KEPT = [
     "name", "description", "color", "tools", "model",
+    # Kept by VALUE but renamed: permissionMode -> approvalMode, with
+    # acceptEdits -> auto-edit and bypassPermissions -> yolo. No erfana agent
+    # sets it, so nothing turns on this today.
     "permissionMode", "hooks", "mcpServers", "skills", "disallowedTools",
 ]
 
@@ -193,10 +199,15 @@ QWEN_AGENT_NAME_MAX = 50
 # Claude spelling anyway - Claude Code enforces it, and renaming would trade a
 # real restriction for a cosmetic one.
 #
-# The separate STRICT validator (used for managed, not extension, skills) throws
-# on a non-string allowed-tools and the caller then skips the whole skill. That
-# is why skills/managing-specs/SKILL.md uses a comma string rather than a YAML
-# flow sequence: latent today, one upstream change from silently deleting a
+# A DIFFERENT parser, parseAgentPluginSkill, reads the hyphenated `allowed-tools`
+# and throws "Agent Skills allowed-tools must be a string." on a non-string,
+# after which the caller skips the whole skill. It is reached only through
+# loadAgentPluginSkills(), i.e. when the manifest declares
+# format "agent-plugins-v1". erfana installs as format "qwen", so that path is
+# not taken today. (The managed-skill parser is a third thing again: it reads
+# camelCase `allowedTools` and requires an ARRAY - the opposite requirement.)
+# skills/managing-specs/SKILL.md therefore uses a comma string as insurance:
+# latent on both hosts today, one upstream change from silently deleting a
 # skill.
 
 SKILL_FRONTMATTER_READ_BY_QWEN = [
@@ -231,3 +242,33 @@ def matcher_partners(matcher: str) -> list:
         if partner and partner not in alternatives:
             missing.append(partner)
     return missing
+
+
+# Every tool name a matcher may legitimately name, on either host: the Qwen
+# canonicals and their aliases, plus the Claude names above and the handful of
+# Claude tools with no Qwen tool behind them.
+#
+# Gate 14 needs this because `CLAUDE_TO_QWEN_TOOL` alone can only fire on a
+# literal key. A typo (`Bsah`), a wrong case (`WRITE`, which Claude matches
+# case-sensitively so the hook fires on neither host), or a Claude tool absent
+# from the table all sailed through the dual-naming rule while it reported
+# success. Anything not in this set is either a mistake or a name the matrix has
+# not learned yet - both worth stopping on.
+KNOWN_MATCHER_NAMES = set(CLAUDE_TO_QWEN_TOOL) | {
+    alias for aliases in TOOL_ALIASES.values() for alias in aliases
+} | set(TOOL_ALIASES) | {
+    # Claude tools that exist but need no Qwen partner and are not aliases of a
+    # Qwen canonical. Extend deliberately.
+    "BashOutput",
+    "KillShell",
+    "MultiEdit",
+    "SlashCommand",
+    "TodoWrite",
+    "ListMcpResources",
+    "ReadMcpResource",
+}
+
+# Matchers that mean "every tool" on both hosts. Not tool names, and exempt from
+# the plain-name rule - a hook that legitimately wants every tool must stay
+# expressible.
+WILDCARD_MATCHERS = {"", "*"}
