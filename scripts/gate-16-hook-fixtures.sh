@@ -304,6 +304,16 @@ else
   if [ "$wd_rc" -eq 0 ]; then
     echo "  FAIL: watchdog - slow hook exited 0; it was never killed"
     failures=$((failures + 1))
+  elif [ "$wd_rc" -eq 127 ]; then
+    # 127 is "command not found". Without this arm the test passes when the
+    # fixture is missing - which is exactly what happened on the first Windows
+    # CI run, before slow-hook.ps1 existed: nothing ran, the launcher exited
+    # non-zero in 0s, and "non-zero inside ten seconds" accepted it.
+    echo "  FAIL: watchdog - exit 127; the fixture did not run, so nothing was bounded"
+    failures=$((failures + 1))
+  elif [ "$wd_elapsed" -lt 1 ]; then
+    echo "  FAIL: watchdog - returned in ${wd_elapsed}s; the hook cannot have started"
+    failures=$((failures + 1))
   elif [ "$wd_elapsed" -gt 10 ]; then
     echo "  FAIL: watchdog - slow hook took ${wd_elapsed}s; the bound did not hold"
     failures=$((failures + 1))
@@ -312,13 +322,28 @@ else
   fi
 fi
 
+# The jq probe lives in dispatch.sh's non-Windows arm only: the .ps1 hooks parse
+# with ConvertFrom-Json and need no jq, so asserting the probe on Windows would
+# assert behaviour that is deliberately absent there.
+case "$(uname -s 2>/dev/null || echo unknown)" in
+  MINGW*|MSYS*|CYGWIN*) SKIP_JQ_PROBE=1 ;;
+  *) SKIP_JQ_PROBE=0 ;;
+esac
+
+if [ "$SKIP_JQ_PROBE" -eq 1 ]; then
+  echo "  SKIP: jq probe - Windows takes the PowerShell arm, which needs no jq"
+else
+
 # jq probe: every .sh hook parses its payload with jq, and without jq the parse
 # yields an empty string and the hook takes its allow branch - the safety net
 # off with no signal. stock macOS ships no jq. The launcher must say so.
 jq_dir="$(mktemp -d)"
 for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm ps sleep kill; do
   tool_path="$(command -v "$tool" 2>/dev/null || true)"
-  [ -n "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+  # command -v returns the bare name for a shell builtin (kill is a builtin on
+  # Git Bash, with no binary anywhere), and ln on a non-path then fails and, under
+  # set -e, takes the whole gate down. Only link real files.
+  [ -n "$tool_path" ] && [ -f "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
 done
 set +e
 jq_err=$(PATH="$jq_dir" bash "$DISPATCH" secret-detector \
@@ -339,7 +364,10 @@ fi
 jq_dir="$(mktemp -d)"
 for tool in bash sed grep awk cat basename tr dirname date uname mktemp rm sleep kill git; do
   tool_path="$(command -v "$tool" 2>/dev/null || true)"
-  [ -n "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
+  # command -v returns the bare name for a shell builtin (kill is a builtin on
+  # Git Bash, with no binary anywhere), and ln on a non-path then fails and, under
+  # set -e, takes the whole gate down. Only link real files.
+  [ -n "$tool_path" ] && [ -f "$tool_path" ] && ln -sf "$tool_path" "$jq_dir/$tool"
 done
 set +e
 pcr_out=$(PATH="$jq_dir" bash "$DISPATCH" post-compact-reminder < /dev/null 2>/dev/null)
@@ -351,6 +379,8 @@ if [ "$pcr_rc" -eq 0 ] && printf '%s' "$pcr_out" | grep -q 'CRITICAL REMINDERS';
 else
   echo "  FAIL: jq probe - post-compact-reminder was skipped without jq; it needs none"
   failures=$((failures + 1))
+fi
+
 fi
 
 # --- 2. Sentinel symmetry -------------------------------------------------

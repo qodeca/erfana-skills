@@ -241,12 +241,13 @@ done
 # A transcription rots silently, so pin it to the chunk it came from. esbuild
 # content-hashes chunk filenames, so locate the file by content rather than by
 # name.
-python3 - <<'PYEOF'
+ERFANA_SMOKE_REQUIRE="$REQUIRE" python3 - <<'PYEOF' || note_fail "alias-table provenance check failed"
 import glob
 import hashlib
 import os
 import re
 import shutil
+import subprocess
 import sys
 
 sys.path.insert(0, 'scripts')
@@ -272,6 +273,26 @@ def bundle_roots():
             pass
         # <prefix>/bin/qwen -> <prefix>/lib/chunks
         yield os.path.join(os.path.dirname(os.path.dirname(exe)), 'lib', 'chunks')
+        # Walk up from the entry point looking for a chunks/ dir. npm lays a
+        # global install out differently per platform and per Node manager, and
+        # the CI runner's hostedtoolcache path matches none of the fixed roots
+        # below - which is how this check silently skipped itself in CI while
+        # passing locally.
+        probe = os.path.dirname(exe)
+        for _ in range(4):
+            yield os.path.join(probe, 'lib', 'chunks')
+            yield os.path.join(probe, 'chunks')
+            probe = os.path.dirname(probe)
+    npm_root = shutil.which('npm')
+    if npm_root:
+        try:
+            out = subprocess.run([npm_root, 'root', '-g'], capture_output=True,
+                                 text=True, timeout=30)
+            if out.returncode == 0 and out.stdout.strip():
+                yield os.path.join(out.stdout.strip(), '@qwen-code', 'qwen-code',
+                                   'lib', 'chunks')
+        except (OSError, subprocess.SubprocessError):
+            pass
     for root in ('/usr/local/lib/node_modules/@qwen-code/qwen-code/lib/chunks',
                  '/opt/homebrew/lib/node_modules/@qwen-code/qwen-code/lib/chunks'):
         yield root
@@ -279,6 +300,16 @@ def bundle_roots():
 qwen_bin = next((r for r in bundle_roots() if os.path.isdir(r)), None)
 
 if qwen_bin is None:
+    # A skip here is invisible failure: the checksum is the only thing that makes
+    # a stale transcription in host_matrix.py announce itself, and the weekly
+    # canary is built on top of it. Under --require - which is what CI passes -
+    # not finding the bundle is a failure, not a shrug.
+    if os.environ.get('ERFANA_SMOKE_REQUIRE') == '1':
+        print("  FAIL: Qwen bundle chunks not found, so the alias tables in")
+        print("        scripts/_lib/host_matrix.py were not checked against")
+        print("        anything. Under --require that is a failure: add this")
+        print("        install layout to bundle_roots() in scripts/qwen-smoke.sh.")
+        sys.exit(1)
     print("  SKIP: Qwen bundle chunks not found; alias-table provenance unchecked")
     sys.exit(0)
 
