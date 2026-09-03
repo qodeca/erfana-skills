@@ -183,7 +183,7 @@ failures=0
 
 run_cases() {
   local hook="$1" dir="$2"; shift 2
-  local case_line name expect desc fixture out has_block
+  local case_line name expect desc fixture out has_block rc
   for case_line in "$@"; do
     IFS='|' read -r name expect desc <<< "$case_line"
     fixture="$dir/$name.json"
@@ -193,8 +193,23 @@ run_cases() {
       continue
     fi
 
-    # Hook always exits 0; we assert on stdout shape.
+    # Hook always exits 0 in the happy path; we assert on stdout shape. But the
+    # command substitution must not run bare under `set -e`: a hook that exits
+    # non-zero for ANY reason takes the whole gate down with no FAIL line and no
+    # fixture name, and because stdout is block-buffered on CI the earlier PASS
+    # lines are lost too. That is what the intermittent windows-latest exit 143
+    # was: PowerShell cold start occasionally overran the 5-second watchdog, the
+    # watchdog killed the hook, and 143 propagated out of here. run_pre_cases
+    # already guards this way; run_cases did not.
+    set +e
     out=$(bash "$DISPATCH" "$hook" < "$fixture")
+    rc=$?
+    set -e
+    if [ "$rc" -ne 0 ]; then
+      echo "  FAIL: $name → hook exited $rc (expected 0): $desc"
+      failures=$((failures + 1))
+      continue
+    fi
 
     has_block=no
     if echo "$out" | grep -q '"decision":"block"'; then
@@ -274,11 +289,21 @@ run_pre_cases() {
   done
 }
 
+# These replays test hook LOGIC, not the bound - the bound has its own dedicated
+# cases in section 1b. Give them headroom: on windows-latest each fixture spawns
+# powershell.exe, whose cold start occasionally overran the shipped 5-second
+# default, and a killed hook then failed the gate for a reason that had nothing
+# to do with what the fixture asserts. 30 is inside dispatch.sh's 60-second clamp.
+export ERFANA_HOOK_TIMEOUT=30
+
 run_cases "$HOOK_NAME" "$FIXTURE_DIR" "${CASES[@]}"
 run_cases "$GRILL_HOOK_NAME" "$GRILL_FIXTURE_DIR" "${GRILL_CASES[@]}"
 run_cases "$MS_GRILL_HOOK_NAME" "$MS_GRILL_FIXTURE_DIR" "${MS_GRILL_CASES[@]}"
 run_pre_cases "$SECRET_HOOK_NAME" "$SECRET_FIXTURE_DIR" "${SECRET_CASES[@]}"
 run_pre_cases "$BASH_SAFETY_HOOK_NAME" "$BASH_SAFETY_FIXTURE_DIR" "${BASH_SAFETY_CASES[@]}"
+
+# Back to the shipped default so section 1b measures what users actually get.
+unset ERFANA_HOOK_TIMEOUT
 
 # --- 1b. Launcher guarantees (POSIX only) ---------------------------------
 #
