@@ -21,7 +21,7 @@
       ],
       "homepage": "https://github.com/qodeca/erfana-skills",
       "repository": "https://github.com/qodeca/erfana-skills",
-      "description": "A Claude Code orchestration toolkit: six orchestration skills (Modernize op + Display op in managing-issues) + one process skill (grill-me) + one verification skill (fact-checking) + 87 shared agents (per-agent effort/model overrides, including fc-* quartet) + using-erfana router + six safety hooks + five slash commands (doc-update, project-status, session-status, lens-review, explain-issue)"
+      "description": "An orchestration toolkit for Claude Code and Qwen Code: six orchestration skills (Modernize op + Display op in managing-issues) + one process skill (grill-me) + one verification skill (fact-checking) + 87 shared agents (per-agent effort/model overrides, including fc-* quartet) + using-erfana router + six safety hooks + five slash commands (doc-update, project-status, session-status, lens-review, explain-issue)"
     }
   ]
 }

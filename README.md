@@ -2,7 +2,7 @@
 
 # Erfana Skills
 
-**An open-source Claude Code orchestration toolkit (GPL-3.0-only).**
+**An open-source orchestration toolkit for Claude Code and Qwen Code (GPL-3.0-only).**
 
 by [Qodeca](https://github.com/qodeca)
 
@@ -293,7 +293,7 @@ Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-onl
 
 Erfana Skills is part of the **Erfana** family from Qodeca:
 
-- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the Claude Code plugin, not the app.
+- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the coding-agent plugin, not the app.
 - **[8cli](https://github.com/qodeca/8cli)** – an AI-first, JSON-native CLI for remotely managing n8n instances.
 
 Built by **[Qodeca](https://qodeca.com)** – [qodeca.com](https://qodeca.com) · [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)
