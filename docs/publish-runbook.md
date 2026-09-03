@@ -4,7 +4,7 @@
 
 ## The `main-protection` ruleset
 
-Rulesets are not part of a repository's tree, so they do not travel with a clone, a fork, or a fresh `git init`. On `main` this one enforces `deletion` + `non_fast_forward` + `required_signatures` + `pull_request` (squash-only merges, code-owner review required, 0 required approvals, dismiss stale reviews on push), with an admin (`RepositoryRole`) bypass so the solo maintainer can `--admin` merge. `CODEOWNERS` ships in the tree, so code-owner review resolves to `@marcinobel`.
+Rulesets are not part of a repository's tree, so they do not travel with a clone, a fork, or a fresh `git init`. On `main` this one enforces `deletion` + `non_fast_forward` + `required_signatures` + `pull_request` + `required_status_checks` (squash-only merges, code-owner review required, 0 required approvals, dismiss stale reviews on push), with an admin (`RepositoryRole`) bypass so the solo maintainer can `--admin` merge. `CODEOWNERS` ships in the tree, so code-owner review resolves to `@marcinobel`.
 
 ### Copy it from an existing repo (drift-free)
 
@@ -21,7 +21,7 @@ gh api repos/<owner>/<target-repo>/rulesets --method POST --input /tmp/main-rule
 # Verify it landed.
 gh api repos/<owner>/<target-repo>/rulesets \
   --jq '.[] | {name, enforcement, rules: [.rules[].type]}'
-# expect: main-protection / active / [deletion, non_fast_forward, required_signatures, pull_request]
+# expect: main-protection / active / [deletion, non_fast_forward, pull_request, required_signatures, required_status_checks]
 ```
 
 ### Or POST it from scratch
@@ -48,13 +48,19 @@ gh api repos/<owner>/<target-repo>/rulesets --method POST --input - <<'JSON'
         "required_approving_review_count": 0,
         "required_review_thread_resolution": false,
         "required_reviewers": []
+    }},
+    { "type": "required_status_checks", "parameters": {
+        "strict_required_status_checks_policy": true,
+        "required_status_checks": [{ "context": "gates" }, { "context": "secret-scan" }]
     }}
   ]
 }
 JSON
 ```
 
-Optional hardening (not enabled today): add a `required_status_checks` rule so the `gates` and `secret-scan` CI jobs must pass before merge – `{"type":"required_status_checks","parameters":{"strict_required_status_checks_policy":true,"required_status_checks":[{"context":"gates"},{"context":"secret-scan"}]}}`.
+`required_status_checks` is **enabled**, with `gates` and `secret-scan` as the required contexts (it is in the POST body above). It was optional when this runbook was written; it is not any more.
+
+`verify.yml` gained two more jobs in v7.1.0 – `qwen-compat` and `powershell` – which are deliberately **not** required. A required check that has never reported blocks merges indefinitely, so add either only after it has reported green on a PR into `main`. Until then, read `MAINTAINER.md`'s host-demotion rule ("de-require `qwen-compat`") as conditional: there is nothing to de-require yet.
 
 ### The `develop` branch
 

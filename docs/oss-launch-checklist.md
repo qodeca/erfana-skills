@@ -11,7 +11,7 @@ The open-source release was published on 2026-06-13 and shipped as v6.0.0: `qode
 - [x] Add repo **description** + **topics** (`claude-code`, `claude-code-plugin`, `agents`, `design`, `automation`).
 - [x] Enable **Discussions** (the issue-template `config.yml` already links to it).
 - [ ] **Wire CLA-assistant** (GitHub App) to the repo and point it at `CLA.md`. `CLA.md` is counsel-reviewed and live; the agreement must be wired **before any external contribution is merged**.
-- [ ] Harden Actions: require approval for **fork-PR workflows** (`GITHUB_TOKEN` is already read-only via `verify.yml` top-level `permissions: contents: read`).
+- [ ] Harden Actions: require approval for **fork-PR workflows** (`GITHUB_TOKEN` is already read-only via `verify.yml` top-level `permissions: contents: read`). More urgent since v7.1.0: `qwen-compat` now installs a third-party CLI and runs it against the PR's own working tree, so a fork PR reaches more runner surface than it did at launch. The trigger is `pull_request`, not `pull_request_target`, and no secrets are exposed - but the exposure grew.
 - [ ] Upload a **1280x640 social-preview image** — prepared at [`docs/assets/social-preview/erfana-social-preview.png`](assets/social-preview/erfana-social-preview.png) (source `card.html` alongside); upload via repo Settings → General → Social preview.
 - [ ] Add **`good first issue`** and **`help wanted`** labels and tag a few starter issues.
 
@@ -33,5 +33,5 @@ Self-hosting the `qodeca/erfana-skills` marketplace is the canonical install pat
 
 ## Data protection
 
-- [ ] Update the repo **topics** on GitHub: drop `design` (the design skills were removed in v7.0.0) and consider adding `orchestration`. The completed checkbox above records the topics as set at launch; the live repo still carries `design`. This is a GitHub settings action, not a file change.
+- [ ] Update the repo **topics and description** on GitHub. Topics: drop `design` (the design skills were removed in v7.0.0) and consider adding `orchestration` and `qwen-code` (v7.1.0 made Qwen Code a supported host). The **description was corrected on 2026-09-03** and now names both hosts and drops "design". The completed checkbox above records the topics as set at launch; the live repo still carries `design`. GitHub settings actions, not file changes. The completed checkbox above records the topics as set at launch; the live repo still carries `design`. This is a GitHub settings action, not a file change.
 - [ ] Document the lawful basis + retention + access restriction for the **archived private repo** `qodeca/erfana-skills-archive` (GitHub reports it at roughly 200 MB packed). Its history still holds employee headshots, the qodeca brandbook PDFs, and committer identities. **Moving data to an archive is not erasure under GDPR** – the obligation is live and unaffected by the public repo being clean.

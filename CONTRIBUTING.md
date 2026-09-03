@@ -77,7 +77,7 @@ If a scanner flags a known false positive, add a narrow allowlist (gitleaks: an 
 - [ ] Cross-host rules respected: no `timeout` key in `hooks/hooks.json`, and a hook matcher naming a Claude-only tool also names its Qwen counterpart (Gate 14 enforces both).
 - [ ] Agent and skill prose names the action, not the tool – no Claude tool-call syntax in a body, and Claude tool names left untouched in frontmatter `tools:`.
 - [ ] Any claim about how the two hosts differ links to [`docs/hosts.md`](docs/hosts.md) instead of restating it, and `bash scripts/qwen-smoke.sh` was run if you have the `qwen` CLI.
-- [ ] If you added, removed, or renamed a skill: `bash scripts/gen-skill-registry.sh` re-run and `docs/skill-registry.md` committed (Gate 18 hard-fails on a drifted skill list).
+- [ ] If you added, removed, or renamed a skill: **do not** regenerate `docs/skill-registry.md` in this PR. The registry records each skill's latest commit subject, and a squash-merge rewrites that subject - so a regen bundled with skill edits captures the pre-squash text and Gate 18 hard-fails the moment the PR lands. A maintainer runs `bash scripts/gen-skill-registry.sh` as a separate registry-only PR afterwards.
 - [ ] Once the CLA-assistant check is enabled, it is green.
 
 ## Code of style

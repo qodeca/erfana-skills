@@ -65,6 +65,8 @@ Six hooks run silently in the background once the plugin is enabled, providing a
 | `secret-detector` | Before Write/Edit/MultiEdit | Blocks ~20 secret/token patterns before they hit disk – AWS, OpenAI, Anthropic, GitHub, GitLab, Hugging Face, Sentry, Postman, Slack, npm, Stripe, Google, Azure, database URIs, JWTs, PEM keys. Skips test fixtures, examples, markdown docs. |
 | `post-compact-reminder` | After context compaction | Re-injects load-bearing facts (temporal awareness, honesty discipline, verification rules, agent delegation) plus the current git branch + status snapshot. |
 | `verify-completion` | When the agent considers stopping | Asks the agent to keep working when it claims success without citing executed tests, exit codes, gate output, or screenshots. v4.2.9+ allowlist: messages carrying the `<!-- erfana:status-template -->` sentinel emitted by the status commands bypass the check; Gate 16 enforces sentinel symmetry across the two command files and the hook. Falls back to the unstripped body when the reply has an odd number of code fences so success claims after an unclosed fence stay visible. |
+| `grill-guard` | When the agent considers stopping | Blocks one stop attempt while `grill-me`'s open-marker sentinel is still in the reply – a backstop for the coverage-map interview, not the protocol itself. |
+| `ms-grill-guard` | When the agent considers stopping | The same, for `managing-skills`' requirements interview and its own sentinel. |
 
 The first four are the project-agnostic safety net – no personal style preferences. The two interview guards are erfana-specific and fire only while an interview marker is open. They activate only after the next Claude Code session restart following plugin install or update.
 

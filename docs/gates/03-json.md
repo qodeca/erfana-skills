@@ -5,8 +5,14 @@ Every JSON config the plugin ships must parse cleanly. Catches typos and trailin
 ## Implementation
 
 ```bash
-python3 -m json.tool .claude-plugin/plugin.json > /dev/null && echo "PASS: plugin.json"
-python3 -m json.tool .claude-plugin/marketplace.json > /dev/null && echo "PASS: marketplace.json"
+for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json; do
+    if python3 -m json.tool "$f" > /dev/null; then
+        echo "  PASS: $f"
+    else
+        echo "  FAIL: $f is not valid JSON"
+        exit 1
+    fi
+done
 ```
 
 ## Pass criteria
