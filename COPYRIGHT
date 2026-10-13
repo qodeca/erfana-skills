@@ -29,3 +29,15 @@ Per-file copyright and license information follows the REUSE specification
 (<https://reuse.software>): SPDX identifiers in script headers, `.license`
 sidecar files for binary assets, and glob rules in [`REUSE.toml`](REUSE.toml).
 Run `reuse lint` to verify coverage.
+
+## Third-party material
+
+`skills/handoff/` is adapted from the `handoff` skill in
+[mattpocock/skills](https://github.com/mattpocock/skills), copyright (c) 2026
+Matt Pocock, under the MIT License. The upstream files kept verbatim in
+`skills/handoff/references/` remain MIT-licensed; the adapted
+`skills/handoff/SKILL.md` carries both the MIT notice and Qodeca's
+`GPL-3.0-only` changes. The MIT text is in
+[`LICENSES/MIT.txt`](LICENSES/MIT.txt) and, with the upstream copyright line,
+in `skills/handoff/references/LICENSE-upstream.txt`; provenance is recorded in
+`skills/handoff/references/UPSTREAM.md`.

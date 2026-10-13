@@ -15,3 +15,24 @@ path = "**"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2025-2026 Qodeca sp. z o.o."
 SPDX-License-Identifier = "GPL-3.0-only"
+
+# Third-party: the handoff skill is adapted from mattpocock/skills (MIT).
+# REUSE.toml uses the last matching annotation, so these entries replace the
+# catch-all above for the files they name. Provenance:
+# skills/handoff/references/UPSTREAM.md.
+[[annotations]]
+path = "skills/handoff/SKILL.md"
+precedence = "aggregate"
+SPDX-FileCopyrightText = ["2026 Matt Pocock", "2026 Qodeca sp. z o.o."]
+SPDX-License-Identifier = "MIT AND GPL-3.0-only"
+
+[[annotations]]
+path = [
+    "skills/handoff/references/LICENSE-upstream.txt",
+    "skills/handoff/references/handoff-guide.md",
+    "skills/handoff/references/phase-boundaries.md",
+    "skills/handoff/references/claude-handoff-variant.md",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Matt Pocock"
+SPDX-License-Identifier = "MIT"
