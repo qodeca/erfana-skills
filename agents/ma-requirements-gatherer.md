@@ -45,7 +45,7 @@ Analyze user request for agent creation/update and generate structured questionn
 3. Select question set based on operation
    **For CREATE operations**, identify gaps in:
    - Agent purpose and trigger phrase
-   - Trigger type (MUST BE USED vs passive)
+   - Invocation (user-facing, routed by a "Use when…" description, vs skill-internal, spawned by name from a skill)
    - Tools required (Read, Write, Grep, Glob, Bash, etc.)
    - Model selection (haiku vs sonnet vs opus)
    - Permission level (default vs elevated)
@@ -183,8 +183,8 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "MUST BE USED (Recommended)", "description": "Orchestrator must use this agent for coverage analysis - ensures consistent behavior"},
-          {"label": "Passive", "description": "Orchestrator can choose when to use - more flexible but may be overlooked"}
+          {"label": "Skill-internal (Recommended)", "description": "A skill spawns it by name for coverage analysis; description is one short 'Used by <skill> to …' line"},
+          {"label": "User-facing", "description": "Claude delegates to it when a request matches its 'Use when …' description"}
         ],
         "multiSelect": false,
         "maps_to": "trigger_strategy"
@@ -225,7 +225,7 @@ On failure: Log which criteria failed, return partial state with issues.
 ```json
 {
   "operation": "CREATE",
-  "user_request": "Create a MUST BE USED agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
+  "user_request": "Create a user-facing agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
   "clarity_issues": []
 }
 ```
@@ -239,7 +239,7 @@ On failure: Log which criteria failed, return partial state with issues.
       "operation": "CREATE",
       "clear_items": [
         "Purpose: validate API schemas",
-        "Trigger: MUST BE USED",
+        "Invocation: user-facing",
         "Tools: Read, Grep",
         "Model: haiku",
         "Output format: JSON"
@@ -353,8 +353,8 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "MUST BE USED (Recommended)", "description": "Ensures consistent deployment process"},
-          {"label": "Passive", "description": "Orchestrator decides when to use"}
+          {"label": "User-facing (Recommended)", "description": "Claude delegates deployments to it when a request matches its 'Use when …' description"},
+          {"label": "Skill-internal", "description": "Only a named skill spawns it; description is one short 'Used by <skill> to …' line"}
         ],
         "multiSelect": false,
         "maps_to": "trigger_strategy"

@@ -60,7 +60,7 @@ Validate agent against pre-release and security checklists (Phase 5).
 
 4. Verify critical items
    - Filename matches `name` field exactly
-   - Description is trigger-shaped: an action-oriented "Use proactively…/Use when…" clause OR 2-4 `<example>` blocks (both forms valid; fail only if neither is present)
+   - Description says when to use the agent in calm prose: "<what it does>. Use when …" (≤300 chars) or "Used by <skill> to …" for skill-internal agents (≤160 chars); fail if there is no "when" signal, warn on "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, `<example>` blocks, or excess length
    - Tools explicitly listed (not omitted)
    - Critical thinking section present with complete structure
    - No secrets in system prompt
@@ -346,9 +346,9 @@ On failure: Log which criteria failed, return structured error with partial resu
       },
       {
         "section": "YAML Frontmatter",
-        "item": "Description has no trigger signal (neither a 'Use proactively…/Use when…' clause nor <example> blocks)",
+        "item": "Description has no 'when' signal (no 'Use when…' or 'Used by <skill> to…' clause)",
         "severity": "high",
-        "fix": "Add a trigger: either an action-oriented 'Use proactively…/Use when…' clause or 2-4 <example> blocks",
+        "fix": "Add a plain 'Use when…' clause (or 'Used by <skill> to…' for a skill-internal agent), keeping the description ≤300 chars",
         "file_line": "line 3"
       },
       {
@@ -374,7 +374,7 @@ On failure: Log which criteria failed, return structured error with partial resu
         "priority": "P1",
         "category": "metadata",
         "finding": "Description lacks a trigger signal",
-        "action": "Add a 'Use proactively…/Use when…' clause or <example> blocks to enable auto-delegation",
+        "action": "Add a plain 'Use when…' clause to enable auto-delegation",
         "effort": "low"
       },
       {

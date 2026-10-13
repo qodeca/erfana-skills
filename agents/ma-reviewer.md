@@ -40,7 +40,7 @@ Review existing agent files for quality and compliance with current standards.
    Check frontmatter presence and format:
    - Has YAML delimiters (---)
    - Has required fields: name, description, tools, model
-   - Description is trigger-shaped: prose "Use proactively…/Use when…" clause OR 2-4 `<example>` blocks (both forms valid)
+   - Description is calm prose that says when to use the agent: "<what it does>. Use when …" (≤300 chars) or "Used by <skill> to …" for skill-internal agents (≤160 chars)
    - Tools list is non-empty
    - Model is valid (alias haiku/sonnet/opus/inherit or a full 4.x model ID)
 
@@ -77,7 +77,8 @@ Review existing agent files for quality and compliance with current standards.
 
 4. Anti-pattern detection
    Scan for common issues:
-   - Missing trigger signal in description (neither a prose "Use proactively…/Use when…" clause nor `<example>` blocks)
+   - Missing "when" signal in description (no "Use when…" or "Used by <skill> to…" clause)
+   - Outdated description style: "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, `<example>` blocks, or over the length limit (P1 – it over-triggers on Claude 5 models and costs context in every session)
    - Tools listed but not used in workflow
    - Vague success criteria ("ensure quality")
    - Missing error handling in workflow
@@ -173,7 +174,7 @@ ALWAYS:
 
 MUST:
 - Parse frontmatter and XML sections correctly
-- Check for a trigger signal (prose "Use proactively…/Use when…" clause or `<example>` blocks)
+- Check the description for a plain "when" signal and for outdated pressure language or `<example>` blocks
 - Verify tools listed are actually used
 - Validate critical_thinking has all three subsections
 - Return pass/fail status with score
@@ -351,7 +352,7 @@ Results of testing.
         "section": "frontmatter/description",
         "location": "line 3",
         "current": "Tests code quality",
-        "expected": "Description with a trigger signal (prose 'Use proactively…/Use when…' clause or 2-4 <example> blocks)",
+        "expected": "Calm description with a 'when' signal, e.g. 'Reviews code quality. Use after a code change.'",
         "rationale": "A trigger signal ensures the agent is invoked correctly by the orchestrator"
       },
       {
@@ -392,7 +393,7 @@ Results of testing.
     {
       "priority": "P0",
       "title": "Add a trigger signal to the description",
-      "action": "Give the description a 'Use proactively…/Use when…' clause or 2-4 <example> blocks, e.g. 'Expert code reviewer. Use proactively after writing or modifying source files to find quality and security issues.'",
+      "action": "Give the description a plain 'Use when…' clause, e.g. 'Reviews code for quality and security. Use after writing or modifying source files.'",
       "impact": "Ensures orchestrator invokes agent correctly"
     },
     {
@@ -463,7 +464,7 @@ Results of testing.
       },
       {
         "section": "description",
-        "description": "Includes a trigger signal (prose 'Use proactively…/Use when…' clause or <example> blocks)"
+        "description": "Includes a plain 'when' signal in calm prose (no pressure language or <example> blocks)"
       }
     ],
     "issues": []
