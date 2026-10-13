@@ -41,9 +41,23 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 |---|---|
 | `erfana:fact-checking` | Validate markdown analysis documents against source materials by extracting atomic factual claims, tracing each to its source passage, classifying findings by severity (Critical / Error / Warning / Info), and applying user-approved corrections. Five-phase orchestrator (Setup → Extraction → Verification → Interactive review → Fix application) backed by four `fc-*` plugin-root agents. Manual-only via `/erfana:fact-checking <target-file>` (`disable-model-invocation: true`); not auto-discovered. Phase 3.1 implements adaptive fan-out (sequential single-call below ~50 claims; orchestrator-side parallel batching of ~25-claim chunks capped at ~8 workers, run in waves, at ≥50 claims) that reconciles by dispatched claim id and re-dispatches only failed/partial chunks (v4.6.0). All ingested document/source text is treated as untrusted data, and fix application anchors on verbatim text. Migrated from a prior Qodeca consulting project, Modernize-passed in v4.2.7, and lens-review-hardened in v4.6.0. Brand-agnostic. |
 
+### Prompting skills (2)
+
+| Sub-skill | Single concern |
+|---|---|
+| `erfana:prompt` | Interview the user one decision at a time and write or improve a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1. SKILL.md holds the question protocol and the Claude 5 wording principles; `references/` holds the interview ledger and branches, the composable templates, and model guidance with the official URLs and a review date to recheck against. Authors prompts only – never executes the task a prompt describes. |
+| `erfana:draft-goal` | Turn an intention into a `/goal` completion condition the goal evaluator can judge from the transcript (one outcome, numbered checks with visible evidence, exclusions, owner-decisions clause, turn bound) and print it for the user to paste – never runs `/goal` itself. `references/` holds the goal mechanics (checked against the Claude Code docs, with Qwen Code differences) and weak-to-strong condition patterns. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0); wording is new, so it carries the repository's default GPL-3.0-only licence with a credit paragraph in SKILL.md. |
+
+### Session closeout skills (2)
+
+| Sub-skill | Single concern |
+|---|---|
+| `erfana:ship` | Git closeout – commit, push, pull request, optional merge – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
+| `erfana:handoff` | Write a portable handoff document to the OS temp directory for another agent or person. `disable-model-invocation: true`. Adapted from `mattpocock/skills` (MIT); upstream files are kept verbatim under `references/` and licensed MIT in `REUSE.toml`, provenance in `references/UPSTREAM.md`. |
+
 ### Bootstrap (1)
 
-`erfana:using-erfana` – auto-loaded meta-router. Top-level decision (orchestration vs process vs verification) before sub-skill dispatch.
+`erfana:using-erfana` – auto-loaded meta-router. Top-level decision (orchestration vs process vs verification vs prompting) before sub-skill dispatch.
 
 Each sub-skill `SKILL.md` stays trigger-shaped (frontmatter `description:` is a "Use when..." statement, ≤500 chars per Gate 2 soft-warn). Adding a new skill repeats the pattern.
 
@@ -64,6 +78,10 @@ erfana-skills/
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ only – its grill-guard lives in plugin-root hooks/ since v7.1.0
 │   ├── fact-checking/       ← verification skill (v4.2.7+); references/ + examples.md
+│   ├── prompt/              ← prompting skill; references/ (interview, templates, model guidance)
+│   ├── draft-goal/          ← prompting skill; references/ (goal mechanics, condition patterns)
+│   ├── ship/                ← session-closeout skill (user-invoked only)
+│   ├── handoff/             ← session-closeout skill (user-invoked only); references/ holds MIT upstream files
 │   └── using-erfana/        ← bootstrap meta-router
 ├── hooks/                   ← six safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+; interview guards promoted to plugin root v7.1.0+)
 ├── commands/                ← slash commands (v4.1+: doc-update; v4.2.5+: project-status; v4.2.6+: session-status; v4.2.11+: lens-review; v4.2.14+: explain-issue)
@@ -159,7 +177,7 @@ Sibling files cite their parent for navigability; Gate 7 enforces both direction
 
 ## Cross-skill flow
 
-The bootstrap (`skills/using-erfana/SKILL.md`) routes between the orchestration track and two single-skill branches: a process branch (`grill-me`, v4.2.3+) and a verification branch (`fact-checking`, v4.2.7+). Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
+The bootstrap (`skills/using-erfana/SKILL.md`) routes between the orchestration track and single-skill branches: a process branch (`grill-me`, v4.2.3+), a verification branch (`fact-checking`, v4.2.7+), and a prompting branch (`prompt`, `draft-goal`). `ship` and `handoff` are listed there but run only when the user invokes them. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
 
 ### Orchestration flow
 
@@ -191,7 +209,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - `when_to_use:` multi-line trigger phrases (specific triggers per Anthropic; ≥3 quoted activation phrases is the plugin-convention Gate 2 v4.2.0+ heuristic for activation reliability, refined v4.2.1).
    - `allowed-tools:` minimal set.
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
-   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`).
+   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `ship`, and `handoff`).
    - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the Model Selection Guide in `skills/managing-skills/templates/shared-agent-template.md`.
 3. **Body structure** (per superpowers canonical order):
    - Core principle (one sentence)
@@ -224,7 +242,7 @@ Note on agents: v4.0.0 added `agents/` (75 files at the time, rising to 76 when 
 
 ## See also
 
-- [`CLAUDE.md`](../CLAUDE.md) – repository layout table, hard constraints, release process
+- [`CLAUDE.md`](../.claude/CLAUDE.md) – repository layout table, hard constraints; the release process lives in [`.claude/skills/releasing-erfana/SKILL.md`](../.claude/skills/releasing-erfana/SKILL.md)
 - [`hosts.md`](hosts.md) – the single source of truth for host differences: which hosts are supported, how Qwen Code converts the plugin at install time, the tool-name vocabulary rules, what degrades there, and how to verify a host.
 - [`skill-registry.md`](skill-registry.md) – generated inventory of every shipped skill and the last commit that touched it; regenerate with `scripts/gen-skill-registry.sh`, policed by Gate 18.
 - [`verification-gates.md`](verification-gates.md) – index for the 12 gates (all hard); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+), Gate 18 (skill-registry sync against git history – list drift and impossible dates hard, lagging dates warn, v6.6.1+)

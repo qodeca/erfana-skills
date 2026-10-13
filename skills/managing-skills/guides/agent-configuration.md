@@ -30,17 +30,19 @@ When agents are used as standalone files (shared agents in agents/), they use YA
 
 ### Description Patterns (Critical for Auto-Delegation)
 
-**Pattern:** `<TRIGGER> <action> <domain>. <when to use>.`
+**Pattern:** `<What it does>. Use when <situation>.` – or, for an agent only a skill spawns, `Used by <skill> to <job>.`
+
+Every agent description loads into every session, and Claude 5-generation models delegate readily, so keep descriptions short and calm: no "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks.
 
 ```yaml
-# Pattern 1: Mandatory trigger (high priority)
-description: MUST BE USED for writing production code after architecture approval.
+# User-facing agent (≤300 chars)
+description: Writes production code from an approved architecture. Use when implementation starts after design sign-off.
 
-# Pattern 2: Proactive trigger (opportunistic)
-description: Use PROACTIVELY when documentation becomes stale. Updates README and docs.
+# Skill-internal agent (≤160 chars)
+description: Used by managing-issues to update documentation after implementation.
 
-# Pattern 3: Combined triggers (both mandatory AND proactive)
-description: MUST BE USED for security audits. Use PROACTIVELY before production releases.
+# Close siblings: one routing clause
+description: Audits code for security vulnerabilities. Use for security-focused reviews; for general quality use code-reviewer.
 
 # Bad examples
 description: Helps with code.  # Too vague
@@ -210,7 +212,7 @@ When an agent has Write or Edit in its tools, add explicit `<file_restrictions>`
 
 ---
 name: code-reviewer
-description: MUST BE USED to review code changes for quality, security, and best practices. Use PROACTIVELY before merging pull requests.
+description: Reviews code changes for quality, security, and best practices. Use before merging a pull request.
 tools: Read, Grep, Glob
 model: sonnet
 permissionMode: default

@@ -1,6 +1,6 @@
 ---
 name: fc-verify-claims
-description: MUST BE USED to verify extracted claims against source documents for hallucination detection. Use PROACTIVELY during fact-checking verification phase.
+description: "Used by fact-checking to verify extracted claims against source documents."
 tools: Read, Grep, Glob
 model: opus
 effort: xhigh

@@ -12,7 +12,7 @@ CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR
 
 **Layout reference**:
 
-- Skills: `skills/<name>/SKILL.md` (9 skills – 6 orchestration + 1 process + 1 verification + 1 bootstrap).
+- Skills: `skills/<name>/SKILL.md` (13 skills – 6 orchestration + 1 process + 1 verification + 2 prompting + 2 session closeout + 1 bootstrap).
 - Shared agents: `agents/*.md` (87 shared agents at plugin root, scanned by Gate 2 + Gate 7 from v4.0.0).
 - Per-skill nested agents: `skills/<name>/agents/*.md` (orchestration skills only – `managing-reports/` 11, others 0; `managing-articles` hoisted its agents to plugin-root `article-*` in v4.3.0).
 - Hooks: `hooks/hooks.json` + 6 safety hooks, each a `.sh` (macOS/Linux) + `.ps1` (Windows) pair routed through the `dispatch.sh` launcher, which also enforces the shared timeout (cross-platform, v4.2.20+; plugin-root interview guards and cross-host wiring, v7.1.0+; validated by Gate 14, v4.1+).
@@ -57,7 +57,7 @@ erfana runs on a second host, Qwen Code. The rules that keep one package working
 | 15 | Qwen version agreement across `host_matrix.py`, the CI npm pin, and any version stated in scanned prose | hard |
 | 15 | `docs/hosts.md` and `CONTRIBUTING.md` joined `docs_to_scan`, so their plugin-shape counts are CI-blocked too | hard |
 
-Agent description length stays a **warning** on Gate 2: no agent-description limit exists in the Qwen bundle, and the long descriptions carry the `<example>` blocks that drive agent selection on Claude Code.
+Agent description length stays a **warning** on Gate 2: no agent-description limit exists in the Qwen bundle. Descriptions are kept short by convention instead (≤300 characters user-facing, ≤160 skill-internal, no `<example>` blocks), because Claude Code loads every agent description into every session.
 
 ## Run all gates
 

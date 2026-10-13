@@ -139,9 +139,7 @@ Aliases resolve to the current Claude 4.x family (Opus 4.8, Sonnet 4.6, Haiku 4.
 ```yaml
 ---
 name: agent-name                    # Required, must match filename
-description: |                      # Required, example-based triggers
-  Use this agent when...
-  <example>...</example>
+description: What it does. Use when…  # Required; calm prose, no <example> blocks
 tools: Read, Grep, Glob             # Optional; plugin convention lists explicitly for least privilege
 disallowedTools: Write, Edit        # Optional denylist ("inherit all except these"); applied before tools
 model: sonnet                       # Optional (defaults to inherit); plugin convention has user select via Q&A
@@ -157,18 +155,15 @@ skills: skill-name                  # Optional: auto-load skills
 
 **`tools` vs `disallowedTools`:** omitting `tools` inherits every tool; listing it is an allowlist. `disallowedTools` is a denylist – the cleanest way to express "inherit everything except X" (e.g. inherit all but `Write`, `Edit`). If both are set, `disallowedTools` is applied first, then `tools` is resolved. `tools` and `model` are optional in the spec (`model` defaults to `inherit`); explicit tool lists and user-selected models are a plugin convention for least privilege and predictability, not an Anthropic requirement.
 
-### Description Patterns (example-based triggers)
+### Description patterns (calm prose)
 ```yaml
-description: |
-  Use this agent when the user asks to "<action>", "<synonym>", or describes <need>.
-
-  <example>
-  Context: <triggering situation>
-  user: "<natural user message>"
-  assistant: "<response>"
-  <commentary><why trigger></commentary>
-  </example>
+# User-facing agent: 1–2 sentences, ≤300 chars
+description: <What the agent does>. Use when <routing situation>.
+# Skill-internal agent: one sentence, ≤160 chars
+description: Used by <skill> to <job>.
 ```
+
+Every agent description loads into every session, so keep it short. No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks.
 
 ### Color Reference
 

@@ -207,7 +207,7 @@ If research is inconclusive or a "When NOT to Create" scenario matches, escalate
 1. Delegate to `ma-designer` agent with requirements + research
 2. Agent designs:
    - Name (kebab-case, ≤64 chars)
-   - Description that is trigger-shaped: action-oriented prose ("Use proactively…" / "Use when…") or an opening line + 2-4 `<example>` blocks (both forms are valid)
+   - Description in calm prose: 1–2 sentences saying what the agent does and when to use it ("Use when…"); one sentence naming the spawning skill for skill-internal agents. No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks – the description loads into every session
    - Model selection (returns `needs_user_input` for user choice)
 
 **Handle needs_user_input:**
@@ -216,7 +216,7 @@ If research is inconclusive or a "When NOT to Create" scenario matches, escalate
 
 **Quality Gate (verify before passing to next phase):**
 - [ ] Name follows kebab-case, ≤64 chars
-- [ ] Description is trigger-shaped: action-oriented prose ("Use proactively…" / "Use when…") or 2-4 `<example>` blocks
+- [ ] Description is calm prose with a "Use when…" clause (≤300 chars; ≤160 for skill-internal agents), no `<example>` blocks or "MUST BE USED / Use PROACTIVELY"
 - [ ] Model selected by user
 
 **Retry Logic:**

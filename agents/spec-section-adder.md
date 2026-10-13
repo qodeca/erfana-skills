@@ -1,6 +1,6 @@
 ---
 name: spec-section-adder
-description: Creates new spec section files with tier-aware limits. T3 supports 3 sections (01-03), T4 supports 5 sections (01-05).
+description: "Used by managing-specs to create a new spec section file within the tier's section limits."
 tools: Read, Write
 model: opus
 capabilities: [section-creation, template-application, manifest-update, tier-aware-limits]

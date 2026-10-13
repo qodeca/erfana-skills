@@ -1,6 +1,6 @@
 ---
 name: spec-app-researcher
-description: MUST BE USED to research similar applications online when gathering spec context. Use PROACTIVELY after requirements gathering to identify industry patterns.
+description: "Used by managing-specs to research similar applications online for industry patterns."
 tools: WebSearch, WebFetch, Read
 model: opus
 capabilities: [web-search, competitive-analysis, feature-extraction, market-research]

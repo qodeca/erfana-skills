@@ -1,6 +1,6 @@
 ---
 name: spec-init
-description: Creates initial spec manifest and structure for all tiers (T1-T4)
+description: "Used by managing-specs to create the initial spec manifest and structure for any tier (T1–T4)."
 tools: Read, Write, Bash
 model: opus
 capabilities: [spec-initialization, manifest-creation, tier-aware-setup, content-generation]

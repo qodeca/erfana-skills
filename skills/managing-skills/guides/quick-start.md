@@ -65,7 +65,7 @@ All agents **SHOULD** use XML tags. XML tags help Claude parse and follow struct
 
 ---
 name: validate-input
-description: MUST BE USED to validate input data. Use PROACTIVELY before processing.
+description: Used by <skill> to validate input data before processing.
 tools: Read, Glob
 model: sonnet
 ---

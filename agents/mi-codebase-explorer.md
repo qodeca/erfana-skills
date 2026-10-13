@@ -1,6 +1,6 @@
 ---
 name: mi-codebase-explorer
-description: MUST BE USED for codebase navigation at Phase 3. Use PROACTIVELY to find files and patterns before planning.
+description: "Used by managing-issues (Implement Phase 3) to find relevant files and patterns before planning."
 capabilities: [codebase-exploration, file-search, pattern-matching]
 tools: Read, Grep, Glob
 model: opus

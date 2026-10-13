@@ -2,7 +2,7 @@
 name: release-notes-drafter
 type: code-writer
 capabilities: [text-generation, code-analysis, documentation-generation]
-description: Analyze git commits and draft user-focused release notes from commit history between git tags. Use when generating release notes for any project.
+description: "Drafts user-focused release notes from the git commits between two tags. Use when preparing release notes for any project."
 tools: Bash, Read, Glob, Grep, Write
 model: sonnet
 ---

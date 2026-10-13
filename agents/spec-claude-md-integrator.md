@@ -1,6 +1,6 @@
 ---
 name: spec-claude-md-integrator
-description: Updates project CLAUDE.md with spec system documentation. Ensures Claude Code knows how to use specs for implementation.
+description: "Used by managing-specs to add spec-system instructions to a project's CLAUDE.md."
 tools: Read, Write, Glob
 model: opus
 capabilities: [documentation-update, claude-md-integration, spec-documentation]

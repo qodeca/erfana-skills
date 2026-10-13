@@ -1,6 +1,6 @@
 ---
 name: mi-issue-drafter
-description: MUST BE USED to draft a Claude Code-friendly GitHub issue body. Use immediately after requirements are gathered and the duplicate check clears in the Create operation, to fill a bug or enhancement template from a structured requirements object.
+description: "Used by managing-issues (Create) to draft a GitHub issue body from gathered requirements."
 capabilities: [issue-drafting, template-application]
 tools: Read
 model: opus

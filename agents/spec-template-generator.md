@@ -1,6 +1,6 @@
 ---
 name: spec-template-generator
-description: MUST BE USED to generate multi-file spec from gathered data when creating specifications. Use PROACTIVELY after pattern analysis to produce structured documentation.
+description: "Used by managing-specs to generate the multi-file spec from gathered data."
 tools: Read, Write
 model: opus
 capabilities: [documentation-generation, template-filling, requirements-structuring, use-case-writing, multi-file-output]

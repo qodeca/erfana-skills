@@ -1,6 +1,6 @@
 ---
 name: fc-discover-sources
-description: MUST BE USED to scan project structure for source material directories during fact-checking. Use PROACTIVELY when discovering verification sources.
+description: "Used by fact-checking to find the source-material directories that claims are verified against."
 tools: Read, Glob, Grep
 model: sonnet
 effort: medium

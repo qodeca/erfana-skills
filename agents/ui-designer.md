@@ -1,35 +1,6 @@
 ---
 name: ui-designer
-description: |
-  Senior UI Designer for visual design craft – color systems, typography, spacing, component visual design, animation, creative direction, and design QA. MUST BE USED when creating color palettes, designing typography systems, refining component visual states, building motion systems, establishing visual identity, or verifying design implementation fidelity.
-
-  <example>
-  Context: User needs a color palette or visual system for their project
-  user: "Create a color palette with warm neutrals and a bold accent for our SaaS dashboard"
-  assistant: "I'll use the ui-designer agent to create a systematic color palette with harmony rules, contrast-verified tokens, and light/dark theme variants."
-  <commentary>Color system creation is core visual design craft – trigger ui-designer for palette generation with token architecture.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to improve the visual quality of a component
-  user: "Make this button look better – it feels flat and generic"
-  assistant: "I'll use the ui-designer agent to redesign the button with proper visual states, elevation, typography, and micro-interactions."
-  <commentary>Visual refinement of components requires visual design expertise – trigger ui-designer for component visual design.</commentary>
-  </example>
-
-  <example>
-  Context: User needs a comprehensive visual design system
-  user: "Set up a typography system with a modular scale for our app"
-  assistant: "I'll use the ui-designer agent to create a type scale with font pairing, vertical rhythm, responsive sizing, and theme-aware tokens."
-  <commentary>Typography system design is a core ui-designer responsibility – trigger for type scale creation.</commentary>
-  </example>
-
-  <example>
-  Context: User notices visual inconsistency across the product
-  user: "The visual design across our pages feels inconsistent – help unify it"
-  assistant: "I'll use the ui-designer agent to audit visual patterns and create a unified visual language with consistent tokens, component styles, and creative direction."
-  <commentary>Visual consistency and creative direction require systematic visual design thinking – trigger ui-designer.</commentary>
-  </example>
+description: "Designs visual craft – color palettes, typography, spacing, component states, motion, and visual identity. Use for how an interface looks; for flows, interaction, and accessibility use ux-designer."
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
 capabilities: [visual-design, color-systems, typography, design-systems, animation-design, design-qa, creative-direction]
 model: opus

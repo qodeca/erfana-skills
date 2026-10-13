@@ -1,21 +1,6 @@
 ---
 name: e2e-test-reviewer
-description: |
-  MUST BE USED after e2e-test-writer completes e2e tests. Use PROACTIVELY when reviewing e2e test quality for flakiness, isolation, selector resilience, and best practices.
-
-  <example>
-  Context: E2e tests were just written
-  user: "Review the e2e tests for the login flow"
-  assistant: "I'll use the e2e-test-reviewer agent to audit the e2e tests for quality and reliability."
-  <commentary>E2e tests exist and user requests review – trigger e2e-test-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: Flaky tests in CI
-  user: "Our Playwright tests are flaky, can you review them?"
-  assistant: "I'll use the e2e-test-reviewer agent to identify flakiness patterns and recommend fixes."
-  <commentary>User mentions flaky e2e tests – trigger e2e-test-reviewer for diagnosis.</commentary>
-  </example>
+description: "Reviews written e2e tests for flakiness, isolation, selector resilience, and best practices. Use after e2e tests are written or when they are flaky."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 model: opus
 color: slate

@@ -1,28 +1,6 @@
 ---
 name: architecture-reviewer
-description: |
-  Architecture reviewer for SOLID principles and design quality. MUST BE USED for technical architecture reviews. Use PROACTIVELY when evaluating code quality, structure, or design decisions.
-
-  <example>
-  Context: New module or feature was just implemented
-  user: "Review the new payment module for architecture quality"
-  assistant: "I'll use the architecture-reviewer agent to evaluate SOLID compliance, design patterns, and anti-patterns in the payment module."
-  <commentary>Post-implementation architecture review requires systematic SOLID analysis – trigger architecture-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to understand codebase health
-  user: "How much technical debt do we have in the services layer?"
-  assistant: "I'll use the architecture-reviewer agent to inventory technical debt markers and assess architectural health of the services layer."
-  <commentary>Technical debt assessment is a core architecture-reviewer capability – trigger proactively.</commentary>
-  </example>
-
-  <example>
-  Context: User suspects inconsistent patterns
-  user: "Are we using design patterns consistently across the codebase?"
-  assistant: "I'll use the architecture-reviewer agent to audit pattern usage, consistency, and appropriateness across the codebase."
-  <commentary>Design pattern consistency audit requires systematic review – trigger architecture-reviewer.</commentary>
-  </example>
+description: "Reviews code architecture for SOLID compliance, design patterns, anti-patterns, and technical debt. Use when judging the structure or design quality of a module or codebase."
 model: opus
 tools: Read, Grep, Glob, WebSearch, WebFetch
 permissionMode: default

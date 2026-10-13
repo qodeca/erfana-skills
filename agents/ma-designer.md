@@ -1,21 +1,6 @@
 ---
 name: ma-designer
-description: |
-  Use this agent when designing agent name, description, color, and model selection after requirements are gathered (Phase 2).
-
-  <example>
-  Context: Phase 1 research is complete and requirements are gathered
-  user: "Requirements are ready – design the agent for reviewing database migrations"
-  assistant: "I'll use the ma-designer agent to design the name, description, and model selection."
-  <commentary>Phase 1 complete – Phase 2 designs the agent identity and metadata.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to name and describe a new agent
-  user: "I need a good name and trigger description for my security scanning agent"
-  assistant: "I'll use the ma-designer agent to generate a name, example-based triggers, and model recommendation."
-  <commentary>Agent naming and description design is the designer's core responsibility.</commentary>
-  </example>
+description: "Used by managing-agents (Phase 2) to design an agent's name, description, color, and model."
 tools: Read, Glob, Grep
 effort: high
 model: sonnet
@@ -37,7 +22,7 @@ Design agent name, description, and model selection following Claude Code best p
 |-------|------|----------|------------|
 | operation | string | Yes | "CREATE" or "UPDATE" |
 | purpose | string | Yes | Agent's primary responsibility |
-| trigger_type | string | Yes | "auto" or "manual" or "both" |
+| trigger_type | string | Yes | "auto", "manual", "both", or "skill-internal" (ma-requirements-gatherer asks with these same values) |
 | permission_level | string | Yes | "read-only" or "read-edit" or "full" |
 | domain | string | No | Specific domain (e.g., "code-review", "testing") |
 | existing_agent_path | string | No | Path to agent file (for UPDATE only) |
@@ -70,44 +55,28 @@ Design agent name, description, and model selection following Claude Code best p
    - "Analyze security" → "security-analyzer"
    - "Generate documentation" → "documentation-generator"
 
-4. Compose a trigger-shaped description (choose one of two valid forms)
-   The description MUST say *when* to use the agent, not just what it does. Pick the form that fits:
+4. Compose a calm, short description
+   The description says what the agent does and *when* to use it, in plain prose. Claude Code lists every agent description in every session, and Claude 5-generation models delegate readily, so keep it short and free of pressure language.
 
-   **Prose form** (matches Anthropic's current subagents docs): an action-oriented role + an explicit trigger clause.
-   - "auto": "<Role>. Use proactively when the user asks to <action>, <synonym>, or <need>."
-   - "manual": "<Role>. Use for <action> when <condition>."
-   - "both": "<Role>. Use proactively when the user asks to <action> or when <proactive condition>."
+   This is the single mapping from `trigger_type` to description pattern (ma-requirements-gatherer collects `trigger_type` with these same four values).
 
-   **Example-block form**: opening line (same trigger clause as above) + 2-4 `<example>` blocks, each with:
-   - Context: situation that should trigger the agent
-   - user: natural user message (realistic phrasing)
-   - assistant: response acknowledging the task
-   - `<commentary>`: why the agent should trigger
+   **User-facing agent** (1–2 sentences, ≤300 characters):
+   - "auto": "<What it does>. Use when the user asks to <action> or <need>."
+   - "manual": "<What it does>. Use for <action> when <condition>."
+   - "both": "<What it does>. Use when the user asks to <action> or when <condition>."
 
-   Requirements (either form):
+   **Skill-internal agent** (spawned by name from a skill; one sentence, ≤160 characters):
+   - "skill-internal": "Used by <skill> to <job>."
+
+   Requirements:
    - Third-person or imperative voice (no "I can help...", no "You can use...")
-   - A clear trigger signal (the "Use proactively…/Use when…" clause, or 2-4 example blocks)
-   - For the example form: 2 minimum, 4 for complex agents; show different phrasings and both explicit + proactive scenarios
-   - Max 2048 characters total
+   - A plain "when" signal ("Use when…" or "Used by <skill> to…")
+   - If a close sibling agent exists, one clause that routes between them (e.g. "for usability audits use ux-reviewer")
+   - No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks
 
    Example (auto trigger):
    ```yaml
-   description: |
-     Use this agent when the user asks to "review React code", "check component quality", or has completed a React implementation.
-
-     <example>
-     Context: User finished implementing a React component
-     user: "I've finished the dashboard component, can you review it?"
-     assistant: "I'll use the react-code-reviewer agent to review the component."
-     <commentary>User completed React implementation – trigger review agent.</commentary>
-     </example>
-
-     <example>
-     Context: User asks about React best practices in their code
-     user: "Are my hooks following best practices?"
-     assistant: "I'll use the react-code-reviewer agent to check hooks usage."
-     <commentary>User asks about React patterns – proactively trigger reviewer.</commentary>
-     </example>
+   description: Reviews React code for patterns, accessibility, and test coverage. Use after a React implementation or when the user asks for a React code review.
    ```
 
 5. Recommend model based on complexity
@@ -152,9 +121,9 @@ Design agent name, description, and model selection following Claude Code best p
 9. Validate against best practices
    - Name follows kebab-case convention
    - Name length ≤64 characters
-   - Description is trigger-shaped (prose "Use proactively…/Use when…" clause or 2-4 `<example>` blocks)
+   - Description is calm prose with a "when" clause; no "MUST BE USED", "Use PROACTIVELY", or `<example>` blocks
    - Description is third-person or imperative voice
-   - Description length ≤1024 characters
+   - Description length ≤300 characters (≤160 for skill-internal agents)
    - No "and" in name (violates Single Responsibility)
 
 10. Return design with user confirmation request
@@ -170,7 +139,7 @@ NEVER:
 
 ALWAYS:
 - Validate name follows kebab-case before returning
-- Ensure description is trigger-shaped (prose "Use proactively…/Use when…" clause or opening line + 2-4 `<example>` blocks)
+- Ensure description is calm, short prose with a "when" clause (≤300 chars; ≤160 for skill-internal agents)
 - Check for name conflicts with existing agents
 - Return needs_user_input for model selection (orchestrator asks user)
 - Use third-person voice in descriptions
@@ -189,7 +158,7 @@ Alternatives:
 - Generate single best name vs provide 3 options: chose single with justification, include alternatives if ambiguous
 - Auto-select model vs ask user: chose ask user (needs_user_input) for explicit control
 - Check all agent files vs use grep for names only: chose grep for efficiency
-- Prose "use proactively" triggers vs example-block triggers: both are valid and supported by Anthropic docs; pick prose for simple agents and example blocks when concrete matching scenarios add routing value. The hard requirement is a trigger signal, not a particular form.
+- Calm prose vs pressure language or example blocks: chose calm prose. Anthropic's Claude 5 guidance says to dial back aggressive language and use "Use this tool when…" phrasing; examples constrain routing, and every description costs context in every session.
 
 Edge cases:
 - What if purpose doesn't map to clean verb-noun pattern? → Provide 2-3 alternatives with explanations
@@ -286,7 +255,7 @@ Adapt:
 Before returning, ALL must be true:
 - [ ] All inputs validated; existing agents researched for conflicts and patterns
 - [ ] Name generated in kebab-case (lowercase, hyphens only, ≤64 characters)
-- [ ] Description is trigger-shaped (prose "Use proactively…/Use when…" clause or opening line + 2-4 `<example>` blocks), third-person or imperative (no "I can help...", no "You can use..."), ≤1024 characters
+- [ ] Description is calm prose with a "when" clause (no "MUST BE USED", "Use PROACTIVELY", or `<example>` blocks), third-person or imperative (no "I can help...", no "You can use..."), ≤300 characters (≤160 for skill-internal agents)
 - [ ] Model recommendation provided with justification based on complexity analysis
 - [ ] If conflicts found, variants suggested; if similar agents found, cited for consistency
 - [ ] Returning needs_user_input for model selection (orchestrator must ask)
@@ -327,7 +296,7 @@ On failure: Return error with specific validation issues and suggested correctio
   "context": {
     "design": {
       "name": "react-code-reviewer",
-      "description": "Use this agent when the user asks to \"review React code\", \"check component quality\", or has completed a React implementation.\n\n<example>\nContext: User finished implementing a React component\nuser: \"I've finished the dashboard component, can you review it?\"\nassistant: \"I'll use the react-code-reviewer agent to review the component.\"\n<commentary>User completed React implementation – trigger review agent.</commentary>\n</example>\n\n<example>\nContext: User asks about React patterns\nuser: \"Are my hooks following best practices?\"\nassistant: \"I'll use the react-code-reviewer agent to check hooks usage.\"\n<commentary>User asks about React patterns – proactively trigger reviewer.</commentary>\n</example>",
+      "description": "Reviews React code for patterns, accessibility, and test coverage. Use after a React implementation or when the user asks for a React code review.",
       "recommended_model": "sonnet",
       "recommendation_reason": "Code review requires balanced analysis of patterns and best practices without needing opus-level reasoning",
       "alternatives": null,
@@ -418,7 +387,7 @@ On failure: Return error with specific validation issues and suggested correctio
   "context": {
     "design": {
       "name": "system-architect",
-      "description": "MUST BE USED for designing system architecture including database schema, API contracts, and security patterns. Use PROACTIVELY before implementing complex features or major refactors.",
+      "description": "Designs system architecture – database schema, API contracts, and security patterns. Use before implementing complex features or major refactors.",
       "recommended_model": "opus",
       "recommendation_reason": "Architecture design with security considerations requires complex reasoning and critical decision-making that opus excels at",
       "alternatives": [
@@ -472,7 +441,7 @@ On failure: Return error with specific validation issues and suggested correctio
   "context": {
     "design": {
       "name": "documentation-generator",
-      "description": "MUST BE USED for generating documentation including API references, guides, and code examples. Supports multiple output formats and templates.",
+      "description": "Generates documentation – API references, guides, and code examples. Use when docs need writing or refreshing.",
       "recommended_model": "sonnet",
       "recommendation_reason": "Documentation generation is a balanced task requiring good writing and code understanding",
       "alternatives": null,
@@ -516,7 +485,7 @@ On failure: Return error with specific validation issues and suggested correctio
   ],
   "suggested_corrections": {
     "name": "code-validator",
-    "description": "MUST BE USED for validating code quality against linting rules and best practices. Runs static analysis and reports issues."
+    "description": "Validates code quality against linting rules and best practices. Use when code needs a static-analysis check."
   }
 }
 ```

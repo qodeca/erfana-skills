@@ -1,6 +1,6 @@
 ---
 name: fc-extract-claims
-description: MUST BE USED to extract atomic factual claims from markdown analysis documents for hallucination detection. Use PROACTIVELY during fact-checking workflows.
+description: "Used by fact-checking to extract atomic factual claims from a markdown document."
 tools: Read
 model: opus
 effort: high

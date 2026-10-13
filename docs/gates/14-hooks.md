@@ -30,7 +30,7 @@ When `hooks/` does not exist, the gate is a no-op (`PASS: no hooks/ directory`).
 3. Add the entry to `hooks/hooks.json` under the appropriate event – matcher pattern + `command: bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" <name>`. The `dispatch.sh` launcher selects the `.ps1` on Windows or the `.sh` elsewhere.
 4. Add behavioural fixtures where practical so the `.ps1` is exercised on Windows (see Gate 16 for the verify-completion fixture pattern, which replays through `dispatch.sh`).
 5. Run `bash scripts/gate-14-hooks.sh` to verify all eight checks pass (use `PYTHONUTF8=1` on Windows native Python).
-6. If the hook adds a new behavioural surface (blocks a previously-allowed pattern, changes a Stop-protocol decision), trigger staged rollout per `CLAUDE.md` "Release cadence" – tag `vX.Y.Z-rc.1`, soak with the maintainer's pilot machine for 48 hours per the documented policy, then promote.
+6. If the hook adds a new behavioural surface (blocks a previously-allowed pattern, changes a Stop-protocol decision), trigger staged rollout per [`.claude/skills/releasing-erfana/SKILL.md`](../../.claude/skills/releasing-erfana/SKILL.md) "Staged rollout" – tag `vX.Y.Z-rc.1`, soak with the maintainer's pilot machine for 48 hours per the documented policy, then promote.
 
 > The single bare `.sh`/`.py`/`.js`/`.mjs`/`.ts` form (no launcher) is still accepted for a hook that genuinely only ever runs on Unix, but the safety bundle standardises on the `dispatch.sh` + `.sh`/`.ps1` pair so it works on every maintainer's machine.
 

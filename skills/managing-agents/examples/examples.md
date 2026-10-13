@@ -106,7 +106,7 @@ For production-ready agent templates, see `agent-templates.md`.
 ```yaml
 ---
 name: test-orchestrator
-description: Orchestrate multiple testing workflows. Use PROACTIVELY for complex test scenarios.
+description: Orchestrates multiple testing workflows. Use for complex test scenarios.
 tools:
   - Agent     # ❌ Violates rule: subagents cannot spawn further subagents
   - Read

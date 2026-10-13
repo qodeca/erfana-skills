@@ -1,6 +1,6 @@
 ---
 name: react-code-reviewer
-description: MUST BE USED after react-developer completes code changes. Use PROACTIVELY when reviewing React implementations for patterns, accessibility, Zod validation, documentation, and test coverage.
+description: "Reviews React code for patterns, accessibility, Zod validation, documentation, and test coverage. Use after React frontend changes, such as work by react-developer."
 tools: Read, Grep, Glob, WebSearch, WebFetch
 model: opus
 ---

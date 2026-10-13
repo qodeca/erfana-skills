@@ -1,6 +1,6 @@
 ---
 name: ms-designer
-description: MUST BE USED to design skill structure based on validated requirements. Use PROACTIVELY after requirements validation.
+description: "Used by managing-skills to design skill structure from validated requirements."
 tools: Read, Glob, Grep
 model: opus
 effort: medium

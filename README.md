@@ -2,7 +2,7 @@
 
 # Erfana Skills
 
-**An open-source Claude Code orchestration toolkit (GPL-3.0-only).**
+**An open-source orchestration toolkit for Claude Code and Qwen Code (GPL-3.0-only).**
 
 by [Qodeca](https://github.com/qodeca)
 
@@ -47,6 +47,22 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | Skill | What it does | Triggers |
 |---|---|---|
 | `erfana:fact-checking` | Validates markdown analysis documents against source materials (interviews, vendor docs, knowledge-base) to catch AI hallucinations – extracts atomic factual claims, traces each to its source passage, classifies findings by severity (Critical / Error / Warning / Info), and applies user-approved corrections. Five-phase orchestrator (Setup → Extraction → Verification → Interactive review → Fix application) backed by four `fc-*` plugin-root agents. Manual-only via `/erfana:fact-checking <target-file>`; not auto-discovered. Treats every ingested document as untrusted data, reconciles parallel verification by claim id, and anchors fixes on verbatim text. Migrated from a Qodeca consulting project, Modernize-passed in v4.2.7, lens-review-hardened in v4.6.0. | "fact-check this document", "verify against sources", "validate analysis", "check for hallucinations", "verify document" |
+
+### Prompting skills
+
+| Skill | What it does | Triggers |
+|---|---|---|
+| `erfana:prompt` | Interviews you one decision at a time, confirms a brief, and writes or improves a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1 – packaged for chat, a Claude project, Claude Code, or the API, with setup notes (starting effort level, settings) and proposed evaluation cases. The prompts it writes follow Anthropic's guidance for Claude 5-generation models: calm instructions with reasons, positive phrasing, examples only where they earn their place, and effort settings instead of thinking rituals. | "write a prompt", "improve my prompt", "help me prompt Claude", "review this system prompt" |
+| `erfana:draft-goal` | Turns what you want done into a `/goal` completion condition that Claude Code's goal evaluator can judge from the conversation – one outcome, numbered checks whose proof is shown, explicit exclusions, an owner-decisions clause so a recommendation you decline stops blocking the goal, and a turn bound – and prints it once, ready to paste. It writes the condition only; you run `/goal`. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0), with new wording. | "draft a goal", "help me write a /goal", "tighten my goal", "why does my goal never finish" |
+
+### Session closeout skills
+
+Both run only when you type them, because they act outside the conversation.
+
+| Skill | What it does | Invocation |
+|---|---|---|
+| `erfana:ship` | Takes the current work as far as you say: commit, push, open or update the pull request, or merge it (then delete the branch and close the linked issue). Reads the project's own branch and PR rules first and stops where they forbid a step; never force-pushes; merges only after checks pass. | `/erfana:ship [commit \| push \| pr \| merge]` (default `pr`) |
+| `erfana:handoff` | Writes a handoff document to the OS temp directory so another agent, harness, directory, or colleague can continue the work – references existing specs, issues, and diffs instead of copying them, redacts secrets, and suggests which skills to load next. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). | `/erfana:handoff [what the next session is for]` |
 
 ### Bootstrap and shared agents
 
@@ -164,6 +180,16 @@ On Qwen Code the choice does not exist – its converter registers only the bare
 ---
 
 ## How updates work
+
+### Qwen Code
+
+```
+qwen extensions update erfana
+```
+
+Or `qwen extensions update --all`. Qwen installs erfana from the **latest GitHub release tag**, not from a branch – `qwen extensions list` shows the tag it resolved – so a change reaches you when it is released, not when it is merged.
+
+### Claude Code
 
 Third-party marketplaces like this one have **auto-update off by default** – only Anthropic's own marketplaces auto-update without asking ([docs](https://code.claude.com/docs/en/discover-plugins#configure-auto-updates)). So by default you pull new releases manually:
 
@@ -293,7 +319,7 @@ Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-onl
 
 Erfana Skills is part of the **Erfana** family from Qodeca:
 
-- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the Claude Code plugin, not the app.
+- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the coding-agent plugin, not the app.
 - **[8cli](https://github.com/qodeca/8cli)** – an AI-first, JSON-native CLI for remotely managing n8n instances.
 
 Built by **[Qodeca](https://qodeca.com)** – [qodeca.com](https://qodeca.com) · [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)

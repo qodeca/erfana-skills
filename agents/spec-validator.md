@@ -1,6 +1,6 @@
 ---
 name: spec-validator
-description: MUST BE USED to validate spec completeness and quality. Validates content quality, registry consistency, cross-references, and manifest accuracy. Supports tier-aware validation (T1-T2 Lite, T3 Lite, T4 Standard).
+description: "Used by managing-specs to validate spec completeness, quality, cross-references, and registry consistency."
 tools: Read, Glob
 model: opus
 capabilities: [quality-assessment, completeness-checking, consistency-validation, traceability-verification, multi-file-validation, registry-validation, cross-reference-validation, tier-aware-validation]

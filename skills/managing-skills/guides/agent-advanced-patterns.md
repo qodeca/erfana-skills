@@ -14,7 +14,7 @@ Advanced techniques for agent design: anti-patterns, system prompt writing, and 
 |--------------|---------|-----|
 | Task tool in agent | Agents cannot spawn agents | Remove Task, orchestrate in skill |
 | AskUserQuestion in agent | Silently filtered, won't work | Gather requirements before delegation |
-| No trigger phrase in description | Won't auto-delegate | Add "MUST BE USED" or "Use PROACTIVELY" |
+| No "when" in description | Won't auto-delegate | Add a plain "Use when…" clause (or "Used by <skill> to…") |
 | Omitting `tools` field | Inherits ALL tools (security risk) | Explicitly list required tools |
 
 ### High Priority

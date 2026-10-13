@@ -1,6 +1,6 @@
 ---
 name: spec-content-updater
-description: Updates existing requirements or section content. Handles granular modifications, preserves history, validates cross-references after changes.
+description: "Used by managing-specs to edit existing requirements or section content and recheck cross-references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-update, section-update, cross-reference-validation, change-tracking]

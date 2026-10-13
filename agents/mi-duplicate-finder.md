@@ -1,6 +1,6 @@
 ---
 name: mi-duplicate-finder
-description: MUST BE USED to search existing GitHub issues for duplicates before a new issue is drafted. Use immediately after requirements are gathered in the Create operation, to run a read-only gh search and return candidate matches.
+description: "Used by managing-issues (Create) to search existing GitHub issues for duplicates before drafting."
 capabilities: [gh-cli, duplicate-detection, code-search]
 tools: Read, Bash
 model: opus

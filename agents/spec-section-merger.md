@@ -1,6 +1,6 @@
 ---
 name: spec-section-merger
-description: MUST BE USED to merge spec updates with existing content. Use PROACTIVELY after update content is generated.
+description: "Used by managing-specs to merge generated updates into existing spec content."
 tools: Read, Write
 model: opus
 capabilities: [content-merging, conflict-resolution, version-control, backup-management]

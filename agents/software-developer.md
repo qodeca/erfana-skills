@@ -1,6 +1,6 @@
 ---
 name: software-developer
-description: Software developer for general-purpose coding. MUST BE USED when implementing code without a specialized developer agent. Use PROACTIVELY for Python, Go, Rust, shell, or multi-language tasks.
+description: "Implements code in Python, Go, Rust, shell, or mixed-language projects. Use for coding tasks that no specialized developer agent (react-developer, nest-developer) covers."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch
 model: opus
 permissionMode: bypassPermissions

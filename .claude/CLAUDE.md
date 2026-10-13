@@ -1,22 +1,23 @@
 # CLAUDE.md – erfana-skills
 
-Maintainer-facing entry point for Claude Code (or any maintainer agent) working on this repo. End-user instructions live in `README.md`. Architectural conventions: [`docs/architecture.md`](docs/architecture.md). Gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) + [`docs/gates/`](docs/gates/). Caveats: [`docs/known-caveats.md`](docs/known-caveats.md).
+Maintainer-facing entry point for Claude Code (or any maintainer agent) working on this repo. End-user instructions live in `README.md`. Architectural conventions: [`docs/architecture.md`](../docs/architecture.md). Gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) + [`docs/gates/`](../docs/gates/). Caveats: [`docs/known-caveats.md`](../docs/known-caveats.md).
 
 ## What this is
 
-The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
+The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v7.1.0**. The plugin ships 9 auto-discovered skills + 87 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v8.0.0**. The plugin ships 13 auto-discovered skills + 87 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
 
-**Skills (9)** – all invoke as `/erfana:<name>`:
+**Skills (13)** – all invoke as `/erfana:<name>`:
 
 - Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `managing-reports`, `managing-articles` (per-skill agent notes below).
 - `managing-articles` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
 - `managing-reports` ships 11 internal validation agents.
 - `managing-skills` opens every operation with a coverage-map requirements interview: Create always interviews via the shared `grill-planner` agent + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
-- Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
+- Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (2): `prompt` and `draft-goal`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
+- `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
 
-**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings). Wired through `hooks/hooks.json` with `${CLAUDE_PLUGIN_ROOT}` paths, validated by Gate 14: `bash-safety` (PreToolUse/Bash – destructive commands, force-push, IMDS, `curl|bash`, …), `secret-detector` (PreToolUse/Write|Edit – cloud/API tokens + PEM keys), `post-compact-reminder` (PostCompact – re-injects load-bearing facts + git snapshot), `verify-completion` (Stop – blocks success-without-evidence claims; allowlists the `<!-- erfana:status-template -->` / `<!-- erfana:explain-template -->` sentinels per Gate 16). **Cross-platform (v4.2.20+):** each hook ships a `.sh` (macOS/Linux) **and** a `.ps1` (Windows) sibling, dispatched by `hooks/dispatch.sh`; Gate 14 enforces both siblings exist and Gate 16 replays the verify-completion fixtures through the OS-native implementation. Mechanism + behavioural detail: [`docs/architecture.md`](docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](docs/gates/16-hook-fixtures.md). The remaining two are the interview guards `grill-guard` (v6.2.0+) and `ms-grill-guard` (v6.4.0+), both Stop hooks that block one stop attempt while an open-marker sentinel is present. **They moved out of SKILL.md `hooks:` frontmatter into `hooks/hooks.json` in v7.1.0**, because Qwen Code does not extract that frontmatter and a skill-scoped registration was dead on one of the two supported hosts. They now evaluate every stop; the sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures + sentinel symmetry + a guard-drift identity check. **No `timeout` key appears in `hooks.json`** – the field means seconds on Claude Code and milliseconds on Qwen, so the 5-second bound lives in `dispatch.sh`; see [`docs/hosts.md`](docs/hosts.md).
+**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings): `bash-safety`, `secret-detector`, `post-compact-reminder`, `verify-completion`, and the interview guards `grill-guard` / `ms-grill-guard` (Stop hooks that block one stop while their open-marker sentinel is present; they evaluate every stop, so the sentinel alone scopes them). All are registered in `hooks/hooks.json` and launched by `hooks/dispatch.sh`, each with a `.sh` and a `.ps1` sibling. Registration rules are under Hard constraints (Gate 14); behaviour and fixtures: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md).
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
@@ -24,12 +25,13 @@ Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references
 
 ## Hard constraints (non-negotiable)
 
-Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail lives in [`docs/gates/`](docs/gates/).
+Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail lives in [`docs/gates/`](../docs/gates/).
 
 - **Zero CJK characters anywhere** in `*.md`, `*.json`, `*.html`, `*.js`, `*.mjs`, `*.jsx`, `*.py`, `*.sh`, `*.svg`, `*.yml`, `*.yaml`, `.gitignore`. UTF-8 only. (Gate 1)
 - **Plugin package id is `erfana`**; the copyright holder / maintainer is `Qodeca sp. z o.o.` (`github.com/qodeca`). Legacy brand `qodesign` is forbidden across the paths Gate 11 scans – `skills/`, `.claude-plugin/`, `README.md`, `LICENSE`, `CHANGELOG.md`, `SECURITY.md`, `.github/`. One whitelisted exception: `CHANGELOG.md` (history). (Gate 11)
-- **SKILL.md `name:` = folder name** for all nine skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:managing-issues`) and bare (`/managing-issues`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Gate 2)
+- **SKILL.md `name:` = folder name** for all thirteen skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:managing-issues`) and bare (`/managing-issues`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Gate 2)
 - **Agent `name:` = filename basename** (no `.md`) for every `agents/*.md`. (Gate 2)
+- **Agent descriptions are calm and short.** `agents/*.md` `description:` says what the agent does and when to use it in plain prose – ≤300 chars for user-facing agents, one ≤160-char "Used by <skill> to …" sentence for skill-internal ones. No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks: Claude Code lists every agent description in every session. Guidance: `skills/managing-agents/guides/system-prompt-design.md`. (Convention, not gate-enforced.)
 - **Skill descriptions are trigger-shaped**, not workflow summaries. Frontmatter `description:` answers "when to use this skill"; workflow goes in the body. Soft-warn over 500 chars. (Gate 2)
 - **Cross-references in `skills/*/SKILL.md` and `skills/*/references/*.md` must resolve** from the skill's directory. No dead paths, no absolute paths to other home directories. (Gate 7)
 - **Plugin manifests are valid JSON.** `plugin.json` keeps `name: erfana` + string `repository` field (not an object). `marketplace.json` plugin source starts with `./`. (Gate 2)
@@ -43,7 +45,7 @@ Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail 
 
 ## Repository layout
 
-Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](docs/architecture.md).
+Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](../docs/architecture.md).
 
 ## Critical commands
 
@@ -65,11 +67,11 @@ It installs the working tree into a throwaway Qwen profile (hermetic – it expo
 
 REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
 
-Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 12 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
+Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) plus the 12 per-gate detail files under [`docs/gates/`](../docs/gates/). Architectural conventions: [`docs/architecture.md`](../docs/architecture.md).
 
-Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](docs/verification-gates.md) `## Quick spot-checks`.
+Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](../docs/verification-gates.md) `## Quick spot-checks`.
 
-The skill registry ([`docs/skill-registry.md`](docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
+The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
 
 ```bash
 bash scripts/gen-skill-registry.sh
@@ -81,44 +83,14 @@ and the regenerated file committed alongside it. Gate 18 hard-fails when the reg
 
 ## Release process
 
-For every release:
-1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, registry, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
-2. Bump `version` in `.claude-plugin/plugin.json` only (semver). `plugin.json` is the single source of truth – the marketplace entry carries no `version` (Claude Code resolves `plugin.json` `version` first per the [version-resolution order](https://code.claude.com/docs/en/plugin-marketplaces), so a duplicate in `marketplace.json` would only mask it).
-3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent. Then regenerate the skill registry – `bash scripts/gen-skill-registry.sh` – and commit it, so the shipped `docs/skill-registry.md` is accurate as of the release rather than lagging (Gate 18 warns between releases; this step is what clears the warning). Regenerate it **last**, after every skill-source PR has already squash-merged into `develop`, so each row's subject matches the final squash commit; if a skill lands after this regen, redo the regen as a registry-only change (see the squash caveat above).
-4. Add an entry to `CHANGELOG.md` (Keep a Changelog format). If an `## [Unreleased]` section exists (feature branches may accumulate one), promote it to `## [vX.Y.Z] - <date>` as part of the release. **Re-stamp the date on release day.** An entry written during development carries the date it was drafted, and an rc soak puts days between drafting and shipping – so `CHANGELOG.md`'s heading and `CITATION.cff` `date-released` must both be corrected at step 3, not left at whatever the branch happened to say. Neither is Gate-enforced.
-5. Commit (auto-signed via SSH) and let CI run.
-6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`). `verify.yml` also runs `qwen-compat` and `powershell` (v7.1.0+), which are **not** required checks: add either to the ruleset only after it has reported green on a PR into `main`, since a required check that has never reported blocks merges indefinitely.
-7. **Solo-maintainer flow**: GitHub disallows self-approval, so the release PR merges with `gh pr merge <num> --admin --merge` (the ruleset has a RepositoryRole bypass actor for admin; `--admin` overrides both the required CI checks and the ruleset's squash-only `allowed_merge_methods`, so confirm CI is green first). Two flags that are correct on a feature PR are wrong here: **never `--delete-branch`** (the head branch is `develop`, long-lived), and **never `--squash`** (a squash commit is not a descendant of `develop`, so the two branches lose their shared history and every later release PR re-lists the whole backlog). Feature PRs into `develop` take the opposite form: `gh pr merge <num> --squash --delete-branch`. Bypass becomes unnecessary when a backup maintainer joins.
-8. **After merge** (do NOT skip): `git pull origin main && git tag -s vX.Y.Z -m "..." && git push origin vX.Y.Z`.
-9. Create the GitHub Release: `gh release create vX.Y.Z --notes-file -`. Verify `gh release list` shows the new version with the `Latest` flag; if `--latest` was lost (e.g. back-filling), correct with `gh release edit vX.Y.Z --latest`.
+The full procedure – version bump, prose markers, registry, CHANGELOG, release PR, admin merge, signed tag, GitHub Release, post-release install check, staged (rc) rollout, signed-commit verification – lives in the project skill [`.claude/skills/releasing-erfana/SKILL.md`](skills/releasing-erfana/SKILL.md). Load it before any release step. Rules that hold even without it:
 
-Auto-update is **opt-in** for this third-party marketplace (only Anthropic's own marketplaces auto-update by default). Users who enabled it – per-marketplace in `/plugin`, or org-wide via `"autoUpdate": true` in managed settings – get the update on next session start. Manual fallback: `/plugin marketplace update erfana-skills && /plugin update erfana@erfana-skills`.
+- `plugin.json` `version` is the single source of truth; never add `version` to `marketplace.json`.
+- The release PR (`develop` -> `main`) merges with `gh pr merge <num> --admin --merge` – **never `--squash`** (breaks the shared history of the two branches) and **never `--delete-branch`** (`develop` is long-lived). Feature PRs into `develop` take the opposite form: `--squash --delete-branch`.
+- `main` rejects unsigned commits; tags are signed (`git tag -s`).
+- Use the staged (rc) path for skill-frontmatter rewrites changing trigger phrases, manifest schema migrations, hook additions, or anything that could flip behavior for downstream consumers without warning.
 
-Succession + bus-factor: [`MAINTAINER.md`](MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](BACKLOG.md).
-
-### Staged rollout
-
-Routine releases promote `develop` to `main` via PR. For releases that materially change skill behavior or could regress trigger phrases, use the staged path:
-
-1. On a `feature/` branch off `develop`, edit + bump + CHANGELOG as usual, and land it on `develop`.
-2. Push and tag with `-rc.N` suffix: `git tag -s vX.Y.Z-rc.1 -m "rc.1"`.
-3. Pin 3–5 pilot employees to the rc tag: `/plugin install erfana@erfana-skills@vX.Y.Z-rc.1`.
-4. After 48-hour soak with no reports, retag the same commit as the final version, push, merge feature branch via PR.
-5. Pilot group reverts to auto-update with `/plugin install erfana@erfana-skills`.
-
-The marketplace serves whatever the manifest's `version` field says; rc tags are opt-in (manifest unchanged, no propagation to non-pinned users). Use staged rollout for: skill-frontmatter rewrites changing trigger phrases, manifest schema migrations, hook additions, anything that could flip behavior for downstream consumers without warning.
-
-### Signed commits + signed tags
-
-The `main-protection` ruleset enforces `required_signatures`; unsigned pushes to `main` are rejected. Verify locally:
-
-```bash
-git config --global --get-regexp '^(commit|tag|gpg|user)\.'
-# Expect commit.gpgsign=true, tag.gpgsign=true, gpg.format=ssh
-git log --show-signature -1
-```
-
-A local pass is **necessary but not sufficient** for the green "Verified" badge on GitHub – the cryptographic check can pass while GitHub still returns `verified: false / reason: "no_user"`. The two-stage end-to-end check, the worked example of that failure mode, and new-maintainer key setup all live in [`MAINTAINER.md`](MAINTAINER.md) `## Onboarding a backup maintainer`.
+Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](../ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](../BACKLOG.md).
 
 ## Things to avoid
 
@@ -130,10 +102,10 @@ A local pass is **necessary but not sufficient** for the green "Verified" badge 
 - Drifting a prose count claim from the filesystem when adding/removing skills, hooks, commands, plugin-root agents, or per-skill nested agents. Canonical count sites: the "What this is" summary above, `README.md`, `docs/architecture.md`, `MAINTAINER.md` "Plugin scope". Gate 15 catches drift.
 - Using SSH-based marketplace add in onboarding instructions (known Windows breakage).
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
-- Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
+- Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](../docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
 - Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
 - Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: rule 15 of `skills/managing-issues/SKILL.md`, whose QG-4a / QG-11a checkpoints run their reviews as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
-- Hand-editing [`docs/skill-registry.md`](docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
+- Hand-editing [`docs/skill-registry.md`](../docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
 - Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).
 
@@ -158,4 +130,4 @@ Two rulings that come up:
 
 ## Known caveats
 
-Accepted risks and their rationale live in [`docs/known-caveats.md`](docs/known-caveats.md) – the single running record, including every staged-rollout override. Read it before a release; do not restate or tally its entries here.
+Accepted risks and their rationale live in [`docs/known-caveats.md`](../docs/known-caveats.md) – the single running record, including every staged-rollout override. Read it before a release; do not restate or tally its entries here.

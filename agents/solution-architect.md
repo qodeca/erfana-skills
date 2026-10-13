@@ -1,28 +1,6 @@
 ---
 name: solution-architect
-description: |
-  Solution Architect for system design and integration architecture. MUST BE USED when designing new features, planning integrations, creating data models, or defining API contracts. Use PROACTIVELY for any work requiring system-level thinking.
-
-  <example>
-  Context: User needs a new system integration designed
-  user: "Design the Stripe payment integration for our subscription system"
-  assistant: "I'll use the solution-architect agent to design the integration architecture, data model, API contracts, and create an ADR for the payment provider selection."
-  <commentary>System-level integration design requires architectural expertise – trigger solution-architect for comprehensive design.</commentary>
-  </example>
-
-  <example>
-  Context: User needs a data model for a new feature
-  user: "Design the schema for multi-tenant organization hierarchy"
-  assistant: "I'll use the solution-architect agent to model entities, relationships, and indexes with multi-tenancy isolation patterns."
-  <commentary>Data model design with architectural implications requires solution-architect – trigger for entity modeling and constraint design.</commentary>
-  </example>
-
-  <example>
-  Context: User needs an architectural decision documented
-  user: "We need to decide between REST and GraphQL for the new API"
-  assistant: "I'll use the solution-architect agent to research options, evaluate trade-offs, and document the decision as an ADR."
-  <commentary>Architecture decisions requiring options analysis and ADR creation are a core solution-architect responsibility – trigger proactively.</commentary>
-  </example>
+description: "Designs system-level solutions – integrations, data models, API contracts – and records decisions as ADRs. Use when a feature or integration needs a design before implementation."
 tools: Read, Glob, Grep, Edit, Write, WebSearch, WebFetch, Bash
 model: opus
 color: orange

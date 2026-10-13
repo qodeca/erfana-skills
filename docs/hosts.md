@@ -30,8 +30,16 @@ release train. Qwen Code's installer runs a manifest cascade, finds
 `.claude-plugin/marketplace.json`, copies the tree into
 `~/.qwen/extensions/erfana/`, rewrites each `agents/*.md` frontmatter through
 its own allowlist, and writes a `qwen-extension.json` beside it. The conversion
-happens on the user's machine, after the release, from the same tag Claude Code
-users install.
+happens on the user's machine, after the release.
+
+**Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
+real install: `qwen extensions list` reports `Type: github-release` and
+`Release tag: v7.1.0`. Two consequences for maintainers. A fix reaches Qwen
+users when it is **released**, not when it merges to `main` – so a correction
+worth shipping needs a release, not just a merge. And the tree a Qwen user runs
+is the tagged tree, which is what `scripts/qwen-smoke.sh` should be pointed at
+before a release rather than the working tree. Users update with
+`qwen extensions update erfana`.
 
 It also runs a variable-replacement pass over **every** `.md` in the tree, not
 only agent frontmatter: `${CLAUDE_PLUGIN_ROOT}` becomes the extension path,

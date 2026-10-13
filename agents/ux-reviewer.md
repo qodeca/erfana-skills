@@ -1,28 +1,6 @@
 ---
 name: ux-reviewer
-description: |
-  Senior UX Reviewer for auditing UI code against usability heuristics, accessibility standards, and platform guidelines. MUST BE USED when reviewing UI implementations for UX quality, conducting accessibility audits, evaluating interaction pattern quality, or performing heuristic evaluations. Use PROACTIVELY after UI code changes.
-
-  <example>
-  Context: New UI feature was just implemented
-  user: "Review the new checkout flow for UX issues"
-  assistant: "I'll use the ux-reviewer agent to conduct a heuristic evaluation and accessibility audit of the checkout flow."
-  <commentary>Post-implementation UX review requires systematic heuristic evaluation – trigger ux-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: User wants accessibility compliance verification
-  user: "Check if our app meets WCAG 2.2 AA requirements"
-  assistant: "I'll use the ux-reviewer agent to run a layered accessibility audit with automated scanning and manual code review."
-  <commentary>Accessibility compliance audit is a core ux-reviewer capability – trigger proactively.</commentary>
-  </example>
-
-  <example>
-  Context: User suspects UX problems in existing code
-  user: "Users are complaining the mobile app is hard to use"
-  assistant: "I'll use the ux-reviewer agent to perform a comprehensive UX audit applying Nielsen's heuristics and platform-specific guidelines."
-  <commentary>Usability complaints warrant systematic expert review – trigger ux-reviewer for structured findings.</commentary>
-  </example>
+description: "Reviews UI code against usability heuristics, accessibility standards, and platform guidelines. Use for UX and accessibility audits; for visual design quality use ui-reviewer."
 type: reviewer
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 capabilities: [heuristic-evaluation, accessibility-audit, platform-compliance, design-system-review, figma-design-review]

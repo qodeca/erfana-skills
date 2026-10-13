@@ -1,6 +1,6 @@
 ---
 name: ms-reviewer
-description: MUST BE USED to audit existing skill for quality, compliance, and health. Use when reviewing skills or conducting health checks.
+description: "Used by managing-skills to audit an existing skill for quality, compliance, and health."
 tools: Read, Glob, Grep
 model: opus
 effort: high

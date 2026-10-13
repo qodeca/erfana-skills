@@ -1,6 +1,6 @@
 ---
 name: spec-document-linker
-description: Links external documents to specs and validates registry integrity. Handles LINK_DOCUMENT, LIST_DOCUMENTS, INTEGRITY_CHECK, REBUILD operations.
+description: "Used by managing-specs to link external documents to specs and check registry integrity."
 tools: Read, Write, Glob
 model: opus
 capabilities: [document-linking, integrity-checking, registry-rebuild]

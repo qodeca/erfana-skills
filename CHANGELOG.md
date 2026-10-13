@@ -3,6 +3,28 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [8.0.0] - 2026-10-13
+
+Four new skills, and every agent description rewritten for Claude 5 models. Released as a major version because the description rewrite changes when Claude picks a shared agent: the descriptions no longer tell Claude to use an agent "proactively" or that it "MUST BE USED", so some agents may be chosen less often than before. Nothing is removed – every skill, agent, hook and command from v7.1.0 is still present.
+
+### Added
+
+- **`erfana:prompt`** – interviews the user one decision at a time and writes or improves a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1, packaged for chat, a Claude project, Claude Code, or the API, with setup notes and proposed evaluation cases. The prompts it writes follow Anthropic's current guidance for Claude 5-generation models: calm instructions with reasons, positive phrasing, examples only where they pin a format, effort settings instead of thinking rituals, and no requests for the model's reasoning in the response.
+- **`erfana:draft-goal`** – turns an intention into a `/goal` completion condition the goal evaluator can judge from the transcript: one outcome, numbered checks with visible evidence, exclusions, an owner-decisions clause so a declined recommendation no longer keeps the loop running, and a turn bound. Prints the condition once for the user to paste and never runs `/goal` itself. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0) with new wording; licensed GPL-3.0-only with a credit paragraph.
+- **`erfana:ship`** (user-invoked only) – commit, push, pull request, and optional merge, stopping wherever the project's own rules forbid a step.
+- **`erfana:handoff`** (user-invoked only) – writes a portable handoff document for another agent, harness, directory, or colleague. Adapted from `mattpocock/skills` under the MIT License; the upstream files stay verbatim and MIT-licensed under `skills/handoff/references/`, recorded in `REUSE.toml`, `LICENSES/MIT.txt`, and `COPYRIGHT`.
+- Skill count 9 → 13; `using-erfana`, README, `docs/architecture.md`, and the skill registry list the new skills.
+
+### Changed
+
+- **Agent descriptions are calm and short.** All 87 plugin-root agent descriptions dropped "MUST BE USED", "Use PROACTIVELY" and `<example>` blocks, following Anthropic's Claude 5 guidance. User-facing agents now say what they do and when to use them in one or two sentences; skill-internal agents name the skill that spawns them. Claude Code lists every agent description in every session, so the always-loaded total fell from 44,209 to 9,792 characters (about 11k to 2.5k tokens). Agent bodies are unchanged.
+- **managing-agents and managing-skills teach the new style.** Templates, checklists, design guides and examples no longer recommend pressure language or example blocks, and the managing-agents pre-release checklist no longer makes example-based triggers a hard requirement.
+- **The release procedure moved into a project skill.** The step-by-step release, staged-rollout and signed-commit instructions left `.claude/CLAUDE.md` for `.claude/skills/releasing-erfana/SKILL.md`, which loads only when a maintainer releases; the merge-flag, signing and rc-trigger rules stay in `.claude/CLAUDE.md`. Maintainer-facing only – nothing in the shipped plugin changes.
+
+### Fixed
+
+- **Strict plugin validation failed in CI.** Claude Code 2.1.296 warns that a `CLAUDE.md` at the plugin root is not loaded as project context, and `claude plugin validate . --strict` turns that warning into a failure. The maintainer guide moved to `.claude/CLAUDE.md`, which Claude Code still loads for maintainers; Gate 15 reads its version banner and count claims from the new path.
+
 ## [7.1.0] - 2026-09-03
 
 Qwen Code becomes a supported host. One package, converted at install time – no second manifest, no build step, no second release train. Everything the two hosts do differently is recorded in [`docs/hosts.md`](docs/hosts.md), generated from `scripts/_lib/host_matrix.py`.

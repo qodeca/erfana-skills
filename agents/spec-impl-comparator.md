@@ -1,28 +1,6 @@
 ---
 name: spec-impl-comparator
-description: |
-  Compare spec requirements against project implementation. Read FR/NFR text, grep codebase for evidence, produce deviation report with categories: matches-spec, intentional-deviation, or missing.
-
-  <example>
-  Context: User wants to verify implementation matches spec requirements
-  user: "Compare spec 021 against the actual code"
-  assistant: "I'll use the spec-impl-comparator agent to compare spec requirements against the codebase."
-  <commentary>User explicitly asks to compare spec vs implementation – trigger spec-impl-comparator.</commentary>
-  </example>
-
-  <example>
-  Context: Feature is implemented, user wants to check for deviations
-  user: "Check if the LiteParse implementation matches the spec"
-  assistant: "I'll use the spec-impl-comparator agent to identify any deviations between spec and code."
-  <commentary>User wants deviation detection between spec and code – trigger spec-impl-comparator.</commentary>
-  </example>
-
-  <example>
-  Context: Before archiving a spec, user wants to verify completeness
-  user: "Before archiving spec 009, check what's actually implemented"
-  assistant: "I'll use the spec-impl-comparator agent to audit implementation coverage."
-  <commentary>Pre-archive verification needs implementation comparison – trigger spec-impl-comparator.</commentary>
-  </example>
+description: "Used by managing-specs to compare spec requirements against the codebase and report deviations."
 tools: Read, Grep, Glob
 model: opus
 capabilities: [spec-implementation-comparison, deviation-detection, naming-validation]

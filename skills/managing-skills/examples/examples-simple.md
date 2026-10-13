@@ -162,7 +162,7 @@ This agent must be created as a shared agent, not inside the skill directory.
 ```markdown
 ---
 name: format-json
-description: MUST BE USED to validate and format JSON content. Use PROACTIVELY when JSON formatting is needed.
+description: Used by <skill> to validate and format JSON content.
 tools: Read, Write
 model: haiku
 capabilities: [validation, formatting, json-processing]

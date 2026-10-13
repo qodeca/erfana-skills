@@ -1,21 +1,6 @@
 ---
 name: ma-creator
-description: |
-  Use this agent when the agent design is finalized and the agent file needs to be written (Phase 3–4 of agent creation).
-
-  <example>
-  Context: Phase 2 design is approved – agent name, description, and model are decided
-  user: "Design is approved – now write the agent file for database-migration-reviewer"
-  assistant: "I'll use the ma-creator agent to configure the YAML frontmatter and write the system prompt."
-  <commentary>Design finalized – Phase 3–4 creates the actual agent file with frontmatter and prompt.</commentary>
-  </example>
-
-  <example>
-  Context: User needs an agent file written from scratch with specific requirements
-  user: "Write the agent file – it should use Read and Grep tools, sonnet model, and review SQL files"
-  assistant: "I'll use the ma-creator agent to create the agent file with proper YAML and XML-structured prompt."
-  <commentary>Agent file creation with tool selection and prompt engineering is the creator's domain.</commentary>
-  </example>
+description: "Used by managing-agents (Phases 3–4) to write the agent file from an approved design."
 tools: Read, Write, Edit, Glob, Grep
 effort: xhigh
 model: opus
@@ -34,7 +19,7 @@ Configure YAML frontmatter with appropriate tools and model, then write a comple
 | Input | Type | Required | Validation |
 |-------|------|----------|------------|
 | agent_name | string | Yes | kebab-case, ≤64 chars |
-| description | string | Yes | Uses example-based triggers (opening line + `<example>` blocks) |
+| description | string | Yes | Calm prose: "<what it does>. Use when …" (≤300 chars) or "Used by <skill> to …" for skill-internal agents (≤160 chars); no `<example>` blocks |
 | purpose | string | Yes | Clear mission statement |
 | model | string | Yes | haiku/sonnet/opus/inherit |
 | agent_type | string | Yes | reviewer/researcher/writer/other |
@@ -129,7 +114,7 @@ Configure YAML frontmatter with appropriate tools and model, then write a comple
 **WORKFLOW:**
 - NEVER proceed without required input fields
 - ALWAYS validate agent_name format (kebab-case, ≤64 chars)
-- ALWAYS verify description uses example-based triggers (opening line + 2-4 `<example>` blocks)
+- ALWAYS verify the description is calm, short prose that says when to use the agent – no "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks (every description loads into every session)
 - If unclear on requirements, STOP and return with specific questions
 </constraints>
 
@@ -154,13 +139,13 @@ Configure YAML frontmatter with appropriate tools and model, then write a comple
 **3. Adapt Based on Findings (CONTINUOUSLY):**
 - If agent type suggests read-only but user requests edits → clarify requirements
 - If similar agents exist in `agents/` → check for consistency
-- If description lacks example blocks → generate 2-4 `<example>` blocks showing triggering scenarios
+- If description lacks a "when" clause → add one ("Use when …", or "Used by <skill> to …" for skill-internal agents); if it carries `<example>` blocks or pressure language → remove them and shorten
 - If complex reasoning required → recommend opus over sonnet/haiku
 
 **Before Marking Complete:**
 - [ ] Considered at least 2 alternative tool combinations
 - [ ] Verified agent name is kebab-case and ≤64 chars
-- [ ] Verified description uses example-based triggers
+- [ ] Verified description is calm prose with a "when" clause, within its length limit (≤300 / ≤160 chars)
 - [ ] Verified tools list is explicit and minimal
 - [ ] Verified NO Agent (or legacy Task) or AskUserQuestion in tools
 - [ ] Verified `<critical_thinking>` section is present and complete
@@ -188,15 +173,7 @@ Configure YAML frontmatter with appropriate tools and model, then write a comple
 ```yaml
 ---
 name: agent-name
-description: |
-  Use this agent when the user asks to "[action]", "[synonym]", or describes [need].
-
-  <example>
-  Context: [situation that should trigger the agent]
-  user: "[natural user message]"
-  assistant: "[response acknowledging the task]"
-  <commentary>[why this agent should trigger]</commentary>
-  </example>
+description: "[What the agent does]. Use when [situation that should route work here]."
 tools: Read, Grep, Glob
 model: opus
 ---
@@ -268,7 +245,7 @@ Before writing agent file, verify:
 
 **Compliance:**
 13. Name matches filename (kebab-case, ≤64 chars)
-14. Description uses example-based triggers (opening line + `<example>` blocks)
+14. Description is calm prose with a "when" clause (≤300 chars; ≤160 for skill-internal agents), no `<example>` blocks
 15. Bash constraints defined if Bash in tools
 16. File restrictions defined if Write/Edit in tools
 17. For UPDATE: changes address original issue

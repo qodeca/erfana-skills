@@ -25,22 +25,7 @@ Complete, production-ready agent examples demonstrating different patterns and t
 ```yaml
 ---
 name: architecture-reviewer
-description: |
-  Use this agent when the user asks to "review architecture", "evaluate code structure", or needs assessment of design decisions and technical debt.
-
-  <example>
-  Context: User wants to understand the health of a codebase
-  user: "Can you review the architecture of our backend service?"
-  assistant: "I'll use the architecture-reviewer agent to perform an architecture review."
-  <commentary>User requests architecture review – trigger reviewer agent.</commentary>
-  </example>
-
-  <example>
-  Context: User is concerned about code quality before a major refactor
-  user: "Check if our project follows SOLID principles and identify anti-patterns"
-  assistant: "I'll use the architecture-reviewer agent to evaluate design patterns and principles."
-  <commentary>User asks about design quality – proactively trigger architecture review.</commentary>
-  </example>
+description: "Reviews code architecture for SOLID compliance, design patterns, and technical debt. Use when judging the structure or design quality of a module."
 model: opus
 tools: Read, Grep, Glob, WebSearch, WebFetch
 ---
@@ -148,22 +133,7 @@ Perform architecture review of the specified scope, evaluating quality attribute
 ```yaml
 ---
 name: react-developer
-description: |
-  Use this agent when the user asks to "build a component", "implement a React feature", or needs frontend UI work with modern React patterns.
-
-  <example>
-  Context: User needs a new UI component
-  user: "Create a searchable dropdown component with keyboard navigation"
-  assistant: "I'll use the react-developer agent to implement the component."
-  <commentary>User requests React component implementation – trigger developer agent.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to add a custom hook
-  user: "I need a useDebounce hook for the search input"
-  assistant: "I'll use the react-developer agent to implement the custom hook."
-  <commentary>User asks for React hook – trigger frontend developer.</commentary>
-  </example>
+description: "Implements React frontend features with current patterns. Use for React component and UI coding tasks."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, WebSearch
 model: opus
 permissionMode: acceptEdits
@@ -288,8 +258,7 @@ Implement high-quality, maintainable, and thoroughly documented frontend code fo
 ```yaml
 ---
 name: solution-architect
-description: Solution Architect for system design and integration architecture. MUST BE USED when designing new features, planning integrations, creating data models, or defining API contracts. Use PROACTIVELY for any work requiring system-level thinking.
-# (Prose trigger form – valid; the <example>-block form is equally acceptable)
+description: Designs system-level solutions – integrations, data models, API contracts – and records decisions as ADRs. Use when a feature or integration needs a design before implementation.
 tools: Read, Glob, Grep, Edit, Write, WebSearch, WebFetch, Bash
 model: opus
 ---
@@ -387,7 +356,6 @@ Design how system components connect, communicate, and evolve while maintaining 
 ---
 name: codebase-explorer
 description: Fast codebase exploration and analysis. Use when searching for patterns, understanding structure, or answering questions about code.
-# (Prose trigger form – valid; the <example>-block form is equally acceptable)
 model: haiku
 tools: Read, Grep, Glob
 ---

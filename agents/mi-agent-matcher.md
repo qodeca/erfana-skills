@@ -1,6 +1,6 @@
 ---
 name: mi-agent-matcher
-description: Match phase requirements against available agents using capability-based scoring. Returns selection plan for dynamic agent assignment.
+description: "Used by managing-issues (Implement Phase 1) to score available agents against each phase's capability needs."
 capabilities: [requirements-analysis, pattern-matching, validation]
 tools: Read, Glob, Grep
 model: opus

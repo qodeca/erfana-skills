@@ -1,21 +1,6 @@
 ---
 name: ma-validator
-description: |
-  Use this agent when an agent needs validation against pre-release and security checklists (Phase 5), or after any agent modification.
-
-  <example>
-  Context: Agent file was just created or updated
-  user: "Validate the new database-migration-reviewer agent before we ship it"
-  assistant: "I'll use the ma-validator agent to run pre-release and security checklists."
-  <commentary>New agent created – Phase 5 validation ensures it meets quality and security standards.</commentary>
-  </example>
-
-  <example>
-  Context: User modified an existing agent and wants to verify it still passes
-  user: "I changed the tools in my code-reviewer agent – does it still pass validation?"
-  assistant: "I'll use the ma-validator agent to validate the modified agent."
-  <commentary>Agent was modified – re-validation catches regressions in structure or security.</commentary>
-  </example>
+description: "Used by managing-agents (Phase 5) to validate an agent against the pre-release and security checklists."
 tools: Read, Glob, Grep
 effort: medium
 model: sonnet
@@ -75,7 +60,7 @@ Validate agent against pre-release and security checklists (Phase 5).
 
 4. Verify critical items
    - Filename matches `name` field exactly
-   - Description is trigger-shaped: an action-oriented "Use proactively…/Use when…" clause OR 2-4 `<example>` blocks (both forms valid; fail only if neither is present)
+   - Description says when to use the agent in calm prose: "<what it does>. Use when …" (≤300 chars) or "Used by <skill> to …" for skill-internal agents (≤160 chars); fail if there is no "when" signal, warn on "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, `<example>` blocks, or excess length
    - Tools explicitly listed (not omitted)
    - Critical thinking section present with complete structure
    - No secrets in system prompt
@@ -361,9 +346,9 @@ On failure: Log which criteria failed, return structured error with partial resu
       },
       {
         "section": "YAML Frontmatter",
-        "item": "Description has no trigger signal (neither a 'Use proactively…/Use when…' clause nor <example> blocks)",
+        "item": "Description has no 'when' signal (no 'Use when…' or 'Used by <skill> to…' clause)",
         "severity": "high",
-        "fix": "Add a trigger: either an action-oriented 'Use proactively…/Use when…' clause or 2-4 <example> blocks",
+        "fix": "Add a plain 'Use when…' clause (or 'Used by <skill> to…' for a skill-internal agent), keeping the description ≤300 chars",
         "file_line": "line 3"
       },
       {
@@ -389,7 +374,7 @@ On failure: Log which criteria failed, return structured error with partial resu
         "priority": "P1",
         "category": "metadata",
         "finding": "Description lacks a trigger signal",
-        "action": "Add a 'Use proactively…/Use when…' clause or <example> blocks to enable auto-delegation",
+        "action": "Add a plain 'Use when…' clause to enable auto-delegation",
         "effort": "low"
       },
       {

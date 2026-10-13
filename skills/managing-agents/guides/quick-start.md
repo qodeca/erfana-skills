@@ -20,7 +20,7 @@ Five decisions to make:
 | Field | Decision | Example |
 |-------|----------|---------|
 | `name` | kebab-case, matches filename | `code-reviewer` |
-| `description` | Trigger-shaped (when to use) | Prose "Use proactively…/Use when…" or 2-4 `<example>` blocks |
+| `description` | What it does + when to use it | `Reviews code for quality and security. Use after a code change.` |
 | `tools` | Principle of least privilege | `Read, Grep, Glob` |
 | `model` | Match task complexity | `haiku` / `sonnet` / `opus` |
 
@@ -54,22 +54,7 @@ Three ways to test:
 ```markdown
 ---
 name: code-reviewer
-description: |
-  Use this agent when the user asks to "review code", "check code quality", or has completed a code change.
-
-  <example>
-  Context: User finished implementing a feature
-  user: "I've finished the login module, can you review it?"
-  assistant: "I'll use the code-reviewer agent to review the changes."
-  <commentary>User completed code changes – trigger review agent.</commentary>
-  </example>
-
-  <example>
-  Context: User wants feedback on recent commits
-  user: "Check my last few commits for any issues"
-  assistant: "I'll use the code-reviewer agent to analyze recent changes."
-  <commentary>User requests code quality check – trigger reviewer.</commentary>
-  </example>
+description: "Reviews code for quality, security, and maintainability. Use after a code change or when the user asks for a code review."
 tools: Read, Grep, Glob
 model: sonnet
 ---

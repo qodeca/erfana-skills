@@ -1,28 +1,6 @@
 ---
 name: mi-spec-compliance-checker
-description: |
-  Use this agent when the user asks to "check spec compliance", "verify requirements coverage", or needs to compare implementation against originating spec FR/NFR requirements. Trigger during Phase 9 when a spec is linked to the issue.
-
-  <example>
-  Context: Implementation of a spec-linked issue is complete and needs verification
-  user: "Check if the implementation covers all FR and NFR requirements from spec-t3-021"
-  assistant: "I'll use mi-spec-compliance-checker to compare the implementation against spec requirements."
-  <commentary>User explicitly requests spec compliance verification – trigger mi-spec-compliance-checker.</commentary>
-  </example>
-
-  <example>
-  Context: Phase 9 verification detects a linked spec with maturity >= complete
-  user: "Verify that the LiteParse implementation matches all spec requirements"
-  assistant: "I'll run the spec compliance checker to produce a requirement-by-requirement scorecard."
-  <commentary>Spec-linked verification needed during Phase 9 – trigger mi-spec-compliance-checker.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to check naming contracts from a spec
-  user: "Make sure all the naming conventions from spec 021 are followed in the codebase"
-  assistant: "I'll use mi-spec-compliance-checker to validate naming contracts against the implementation."
-  <commentary>Naming contract validation is a specific capability of this agent.</commentary>
-  </example>
+description: "Used by managing-issues (Phase 9 and compliance review) to check an implementation against its spec's FR/NFR requirements."
 capabilities: [spec-compliance-checking, requirements-verification, naming-validation]
 tools: Read, Grep, Glob
 model: opus
