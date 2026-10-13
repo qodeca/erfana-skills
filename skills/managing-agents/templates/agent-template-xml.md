@@ -13,22 +13,7 @@ Modern Claude models respond exceptionally well to XML-structured prompts. This 
 ```markdown
 ---
 name: your-agent-name
-description: |
-  Use this agent when the user asks to "<action>", "<synonym>", or describes <need>. Trigger when <proactive condition>.
-
-  <example>
-  Context: <situation that should trigger the agent>
-  user: "<natural user message>"
-  assistant: "<response acknowledging the task>"
-  <commentary><why this agent should trigger></commentary>
-  </example>
-
-  <example>
-  Context: <different triggering scenario>
-  user: "<different phrasing>"
-  assistant: "<response>"
-  <commentary><why trigger></commentary>
-  </example>
+description: "<What the agent does, in one sentence>. Use when <situation that should route work here>."
 tools: Read, Grep, Glob
 model: sonnet
 color: cyan
@@ -258,22 +243,7 @@ For agents that write code, add a completion checklist:
 ```markdown
 ---
 name: security-auditor
-description: |
-  Use this agent when the user asks to "review security", "audit code for vulnerabilities", "check for OWASP issues", or mentions security concerns in authentication or data handling.
-
-  <example>
-  Context: User wants a security review of auth code
-  user: "Can you check the authentication module for security vulnerabilities?"
-  assistant: "I'll use the security-auditor agent to review the auth module."
-  <commentary>User explicitly requests security review of auth code – trigger security-auditor.</commentary>
-  </example>
-
-  <example>
-  Context: User mentions sensitive data handling
-  user: "We're storing user passwords – make sure we're doing it safely"
-  assistant: "I'll use the security-auditor agent to audit the password handling."
-  <commentary>User mentions sensitive data storage, proactively trigger security audit.</commentary>
-  </example>
+description: "Audits code for security vulnerabilities and OWASP issues, especially in authentication and data handling. Use for a security-focused review."
 tools: Read, Grep, Glob
 model: opus
 ---

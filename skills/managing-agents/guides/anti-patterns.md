@@ -162,7 +162,7 @@ tools:
 ---
 name: pr-reviewer
 description: Reviews pull requests for code quality and style
-# ❌ States WHAT it does but not WHEN to use it – no trigger signal (no "Use proactively…" clause, no <example> blocks)
+# ❌ States WHAT it does but not WHEN to use it – no "Use when…" clause
 ---
 ```
 
@@ -176,30 +176,15 @@ description: Reviews pull requests for code quality and style
 ```yaml
 ---
 name: pr-reviewer
-description: |
-  Use this agent when the user asks to "review a PR", "check pull request", or requests code review feedback.
-
-  <example>
-  Context: User opened a pull request and wants feedback
-  user: "Can you review my PR for the auth refactor?"
-  assistant: "I'll use the pr-reviewer agent to review the pull request."
-  <commentary>User mentions PR review – trigger pr-reviewer agent.</commentary>
-  </example>
-
-  <example>
-  Context: User wants code quality feedback before merging
-  user: "Check the pull request for any issues before I merge"
-  assistant: "I'll use the pr-reviewer agent to analyze the changes."
-  <commentary>User asks about pull request quality – trigger reviewer.</commentary>
-  </example>
-# ✅ Trigger signal present (opening line + example blocks)
+description: Reviews pull requests for code quality and style. Use when the user asks for a PR review or feedback before merging.
+# ✅ What plus when, in calm prose
 ---
 ```
 
-**Trigger pattern (either form is valid):**
-- **Prose form:** an action-oriented role plus an explicit trigger – `Expert PR reviewer. Use proactively when the user asks to "review a PR" / "check pull request".` Matches Anthropic's current subagents docs.
-- **Example-block form:** opening line `Use this agent when the user asks to "<phrase>", "<synonym>", or <proactive condition>.` plus 2–4 `<example>` blocks with Context, user, assistant, and `<commentary>`; show different phrasings and both explicit + proactive scenarios.
-- Either way: include a "when to use" signal, use third-person/imperative voice, and keep it concise (max ~2048 characters total).
+**Trigger pattern:**
+- User-facing agent: 1–2 sentences – what it does, then "Use when…". Add one routing clause when a close sibling exists. Aim for ≤300 characters.
+- Skill-internal agent: one sentence naming the spawning skill – `Used by managing-specs to validate spec completeness and quality.` Aim for ≤160 characters.
+- Avoid "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, and `<example>` blocks: every description loads into every session, and Claude 5-generation models over-trigger on pressure language.
 
 ---
 
@@ -330,7 +315,7 @@ examples/agent-examples.md: 453 lines
 |--------------|----------|-----|
 | Spawn tool (Agent, formerly Task) in agent | Critical | Return needs_user_input for orchestration |
 | Tools field omitted | Critical | Explicitly list required tools only |
-| No trigger signal in description | Critical | Add a "Use proactively…/Use when…" clause or 2–4 `<example>` blocks |
+| No trigger signal in description | Critical | Add a plain "Use when…" clause (internal agents: name the spawning skill) |
 | No critical_thinking | Critical | Add section with alternatives, edge cases, adapt |
 | File over 500 lines | Critical | Split into main file + examples/guides |
 | No Q&A protocol | Critical | Define when/how to gather requirements |

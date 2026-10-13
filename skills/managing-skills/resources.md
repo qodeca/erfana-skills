@@ -202,7 +202,7 @@ tools: Read, Grep, Glob, WebFetch, WebSearch
 ```yaml
 ---
 name: agent-name                    # Required, must match filename
-description: MUST BE USED to...     # Required, for auto-delegation
+description: Used by <skill> to... # Required; calm prose, ≤160 chars for skill-internal agents
 tools: Read, Grep, Glob             # Optional, defaults to all (risky!)
 model: sonnet                       # Optional: haiku, sonnet, opus, inherit
 permissionMode: default             # Optional: default, acceptEdits, bypassPermissions, plan
@@ -213,14 +213,14 @@ skills: skill-name                  # Optional: auto-load skills
 ### Description Patterns
 
 ```yaml
-# Mandatory trigger
-description: MUST BE USED for <action> when <condition>.
+# Skill-internal agent (spawned by name from a skill), ≤160 chars
+description: Used by <skill> to <job>.
 
-# Proactive trigger
-description: Use PROACTIVELY when <situation>. <what it does>.
+# User-facing agent, 1–2 sentences, ≤300 chars
+description: <What it does>. Use when <situation>.
 
-# Combined trigger
-description: MUST BE USED for <action>. Use PROACTIVELY before <event>.
+# Avoid: "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, <example> blocks –
+# every description loads into every session, and Claude 5 models over-trigger on pressure language.
 ```
 
 ---

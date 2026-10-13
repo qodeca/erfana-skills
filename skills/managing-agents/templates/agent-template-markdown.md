@@ -11,22 +11,7 @@ For agents under ~100 lines with straightforward workflows, structured markdown 
 ```markdown
 ---
 name: your-agent-name
-description: |
-  Use this agent when the user asks to "<action>", "<synonym>", or describes <need>.
-
-  <example>
-  Context: <situation that should trigger the agent>
-  user: "<natural user message>"
-  assistant: "<response acknowledging the task>"
-  <commentary><why this agent should trigger></commentary>
-  </example>
-
-  <example>
-  Context: <different triggering scenario>
-  user: "<different phrasing>"
-  assistant: "<response>"
-  <commentary><why trigger></commentary>
-  </example>
+description: "<What the agent does, in one sentence>. Use when <situation that should route work here>."
 tools: Read, Grep, Glob
 model: sonnet
 color: cyan
@@ -137,22 +122,7 @@ Rate each finding 0-100:
 ```markdown
 ---
 name: code-explorer
-description: |
-  Use this agent when the user asks to "explore this codebase", "how does X work", "trace the execution of Y", or needs to understand an existing feature's implementation.
-
-  <example>
-  Context: User wants to understand how authentication works
-  user: "How does the auth flow work in this project?"
-  assistant: "I'll use the code-explorer agent to trace the auth implementation."
-  <commentary>User wants to understand existing feature – trigger code-explorer.</commentary>
-  </example>
-
-  <example>
-  Context: User is about to modify a feature and needs context
-  user: "I need to change the payment processing – walk me through the current implementation"
-  assistant: "I'll use the code-explorer agent to map the payment flow."
-  <commentary>User needs codebase understanding before modification – trigger explorer.</commentary>
-  </example>
+description: "Explores an unfamiliar codebase and traces how a feature or execution path works. Use when the user needs to understand existing code."
 tools: Glob, Grep, Read
 model: sonnet
 color: yellow

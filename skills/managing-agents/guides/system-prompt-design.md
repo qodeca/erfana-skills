@@ -2,7 +2,7 @@
 
 ## Contents
 - Choosing a template: XML vs markdown
-- Description as trigger engine
+- Description as routing signal
 - The XML template; Core principles
 - Examples: Bad vs Good; Common mistakes
 - Scope exclusions; What NOT to focus on; Tone; See also
@@ -24,31 +24,24 @@ Anthropic's own production agents prove markdown works well:
 
 **Rule of thumb:** Start with markdown. Move to XML only if you need nested sections or the agent exceeds 100 lines.
 
-## Description as trigger engine
+## Description as routing signal
 
-Agent descriptions drive auto-delegation routing. A description must be **trigger-shaped** – it has to say *when* to use the agent, not just what it does. Two forms are valid, and you may combine them:
+Agent descriptions drive delegation, and Claude Code lists every agent's description in every session – so each one costs context for every user, all the time. Say what the agent does and when to use it, in plain words, and stop:
 
 ```yaml
-# Prose form (matches Anthropic's current subagents docs)
-description: Expert code reviewer. Use proactively immediately after writing or modifying code to check quality, security, and maintainability.
+# User-facing agent: 1–2 sentences, "Use when…", ≤300 chars
+description: Reviews code for quality, security, and maintainability. Use after a code change or when the user asks for a code review.
 
-# Example-block form (matches Anthropic plugin-dev, hookify, superpowers agents)
-description: |
-  Use this agent when the user asks to "review code", "check quality", or has completed an implementation.
-
-  <example>
-  Context: User finished implementing a feature
-  user: "I've finished the auth module, can you review it?"
-  assistant: "I'll use the code-reviewer agent to review the module."
-  <commentary>User completed implementation – trigger review agent.</commentary>
-  </example>
+# Skill-internal agent (spawned by name from a skill): one sentence, ≤160 chars
+description: Used by managing-specs to validate spec completeness and quality.
 ```
 
-**Both work.** The prose form pairs an action-oriented role with an explicit "Use proactively…/Use when…" trigger – Anthropic's current subagent examples use exactly this. The example-block form lets the router match concrete scenarios semantically. What fails is a description with **no** trigger at all (just "what it does"), regardless of form.
+Claude 5-generation models delegate readily, so the old pressure language now over-triggers rather than helps (Anthropic prompting guidance: "dial back aggressive language… use more normal prompting like 'Use this tool when…'"). Worked examples constrain routing to the shapes they show.
 
-Requirements (either form):
-- A clear "when to use" signal: an action-oriented "Use proactively…/Use when…" clause, **or** 2-4 `<example>` blocks
-- For the example form: each example has Context, user, assistant, `<commentary>`; show different phrasings and triggering scenarios
+Requirements:
+- What it does plus a "Use when…" clause; internal agents name the skill and step that spawns them instead
+- When two agents are close siblings, one clause that routes between them (e.g. "for usability audits use ux-reviewer")
+- No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks
 - Third-person or imperative voice (never "I can help…" / "You can use…")
 
 ## The XML template
