@@ -1,10 +1,10 @@
 # CLAUDE.md – erfana-skills
 
-Maintainer-facing entry point for Claude Code (or any maintainer agent) working on this repo. End-user instructions live in `README.md`. Architectural conventions: [`docs/architecture.md`](docs/architecture.md). Gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) + [`docs/gates/`](docs/gates/). Caveats: [`docs/known-caveats.md`](docs/known-caveats.md).
+Maintainer-facing entry point for Claude Code (or any maintainer agent) working on this repo. End-user instructions live in `README.md`. Architectural conventions: [`docs/architecture.md`](../docs/architecture.md). Gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) + [`docs/gates/`](../docs/gates/). Caveats: [`docs/known-caveats.md`](../docs/known-caveats.md).
 
 ## What this is
 
-The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](docs/architecture.md).
+The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
 Current version: **v7.1.0**. The plugin ships 9 auto-discovered skills + 87 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
 
@@ -16,7 +16,7 @@ Current version: **v7.1.0**. The plugin ships 9 auto-discovered skills + 87 shar
 - `managing-skills` opens every operation with a coverage-map requirements interview: Create always interviews via the shared `grill-planner` agent + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
 
-**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings). Wired through `hooks/hooks.json` with `${CLAUDE_PLUGIN_ROOT}` paths, validated by Gate 14: `bash-safety` (PreToolUse/Bash – destructive commands, force-push, IMDS, `curl|bash`, …), `secret-detector` (PreToolUse/Write|Edit – cloud/API tokens + PEM keys), `post-compact-reminder` (PostCompact – re-injects load-bearing facts + git snapshot), `verify-completion` (Stop – blocks success-without-evidence claims; allowlists the `<!-- erfana:status-template -->` / `<!-- erfana:explain-template -->` sentinels per Gate 16). **Cross-platform (v4.2.20+):** each hook ships a `.sh` (macOS/Linux) **and** a `.ps1` (Windows) sibling, dispatched by `hooks/dispatch.sh`; Gate 14 enforces both siblings exist and Gate 16 replays the verify-completion fixtures through the OS-native implementation. Mechanism + behavioural detail: [`docs/architecture.md`](docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](docs/gates/16-hook-fixtures.md). The remaining two are the interview guards `grill-guard` (v6.2.0+) and `ms-grill-guard` (v6.4.0+), both Stop hooks that block one stop attempt while an open-marker sentinel is present. **They moved out of SKILL.md `hooks:` frontmatter into `hooks/hooks.json` in v7.1.0**, because Qwen Code does not extract that frontmatter and a skill-scoped registration was dead on one of the two supported hosts. They now evaluate every stop; the sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures + sentinel symmetry + a guard-drift identity check. **No `timeout` key appears in `hooks.json`** – the field means seconds on Claude Code and milliseconds on Qwen, so the 5-second bound lives in `dispatch.sh`; see [`docs/hosts.md`](docs/hosts.md).
+**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings). Wired through `hooks/hooks.json` with `${CLAUDE_PLUGIN_ROOT}` paths, validated by Gate 14: `bash-safety` (PreToolUse/Bash – destructive commands, force-push, IMDS, `curl|bash`, …), `secret-detector` (PreToolUse/Write|Edit – cloud/API tokens + PEM keys), `post-compact-reminder` (PostCompact – re-injects load-bearing facts + git snapshot), `verify-completion` (Stop – blocks success-without-evidence claims; allowlists the `<!-- erfana:status-template -->` / `<!-- erfana:explain-template -->` sentinels per Gate 16). **Cross-platform (v4.2.20+):** each hook ships a `.sh` (macOS/Linux) **and** a `.ps1` (Windows) sibling, dispatched by `hooks/dispatch.sh`; Gate 14 enforces both siblings exist and Gate 16 replays the verify-completion fixtures through the OS-native implementation. Mechanism + behavioural detail: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md). The remaining two are the interview guards `grill-guard` (v6.2.0+) and `ms-grill-guard` (v6.4.0+), both Stop hooks that block one stop attempt while an open-marker sentinel is present. **They moved out of SKILL.md `hooks:` frontmatter into `hooks/hooks.json` in v7.1.0**, because Qwen Code does not extract that frontmatter and a skill-scoped registration was dead on one of the two supported hosts. They now evaluate every stop; the sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures + sentinel symmetry + a guard-drift identity check. **No `timeout` key appears in `hooks.json`** – the field means seconds on Claude Code and milliseconds on Qwen, so the 5-second bound lives in `dispatch.sh`; see [`docs/hosts.md`](../docs/hosts.md).
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
@@ -24,7 +24,7 @@ Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references
 
 ## Hard constraints (non-negotiable)
 
-Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail lives in [`docs/gates/`](docs/gates/).
+Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail lives in [`docs/gates/`](../docs/gates/).
 
 - **Zero CJK characters anywhere** in `*.md`, `*.json`, `*.html`, `*.js`, `*.mjs`, `*.jsx`, `*.py`, `*.sh`, `*.svg`, `*.yml`, `*.yaml`, `.gitignore`. UTF-8 only. (Gate 1)
 - **Plugin package id is `erfana`**; the copyright holder / maintainer is `Qodeca sp. z o.o.` (`github.com/qodeca`). Legacy brand `qodesign` is forbidden across the paths Gate 11 scans – `skills/`, `.claude-plugin/`, `README.md`, `LICENSE`, `CHANGELOG.md`, `SECURITY.md`, `.github/`. One whitelisted exception: `CHANGELOG.md` (history). (Gate 11)
@@ -44,7 +44,7 @@ Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail 
 
 ## Repository layout
 
-Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](docs/architecture.md).
+Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills procedure: [`docs/architecture.md`](../docs/architecture.md).
 
 ## Critical commands
 
@@ -66,11 +66,11 @@ It installs the working tree into a throwaway Qwen profile (hermetic – it expo
 
 REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
 
-Full gate definitions: [`docs/verification-gates.md`](docs/verification-gates.md) plus the 12 per-gate detail files under [`docs/gates/`](docs/gates/). Architectural conventions: [`docs/architecture.md`](docs/architecture.md).
+Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) plus the 12 per-gate detail files under [`docs/gates/`](../docs/gates/). Architectural conventions: [`docs/architecture.md`](../docs/architecture.md).
 
-Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](docs/verification-gates.md) `## Quick spot-checks`.
+Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](../docs/verification-gates.md) `## Quick spot-checks`.
 
-The skill registry ([`docs/skill-registry.md`](docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
+The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
 
 ```bash
 bash scripts/gen-skill-registry.sh
@@ -97,11 +97,11 @@ For every release:
     printf '%s' '{"tool_name":"write_file","tool_input":{"file_path":"/tmp/x.ts","content":"k=\"AKIA_EXAMPLE_KEY\""}}' \
       | bash ~/.qwen/extensions/erfana/hooks/dispatch.sh secret-detector
     ```
-    This is still the loader, not the executor: it does not prove a skill behaves correctly inside a session. See [`docs/hosts.md`](docs/hosts.md).
+    This is still the loader, not the executor: it does not prove a skill behaves correctly inside a session. See [`docs/hosts.md`](../docs/hosts.md).
 
 Auto-update is **opt-in** for this third-party marketplace (only Anthropic's own marketplaces auto-update by default). Users who enabled it – per-marketplace in `/plugin`, or org-wide via `"autoUpdate": true` in managed settings – get the update on next session start. Manual fallback: `/plugin marketplace update erfana-skills && /plugin update erfana@erfana-skills`.
 
-Succession + bus-factor: [`MAINTAINER.md`](MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](BACKLOG.md).
+Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](../ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](../BACKLOG.md).
 
 ### Staged rollout
 
@@ -125,7 +125,7 @@ git config --global --get-regexp '^(commit|tag|gpg|user)\.'
 git log --show-signature -1
 ```
 
-A local pass is **necessary but not sufficient** for the green "Verified" badge on GitHub – the cryptographic check can pass while GitHub still returns `verified: false / reason: "no_user"`. The two-stage end-to-end check, the worked example of that failure mode, and new-maintainer key setup all live in [`MAINTAINER.md`](MAINTAINER.md) `## Onboarding a backup maintainer`.
+A local pass is **necessary but not sufficient** for the green "Verified" badge on GitHub – the cryptographic check can pass while GitHub still returns `verified: false / reason: "no_user"`. The two-stage end-to-end check, the worked example of that failure mode, and new-maintainer key setup all live in [`MAINTAINER.md`](../MAINTAINER.md) `## Onboarding a backup maintainer`.
 
 ## Things to avoid
 
@@ -137,10 +137,10 @@ A local pass is **necessary but not sufficient** for the green "Verified" badge 
 - Drifting a prose count claim from the filesystem when adding/removing skills, hooks, commands, plugin-root agents, or per-skill nested agents. Canonical count sites: the "What this is" summary above, `README.md`, `docs/architecture.md`, `MAINTAINER.md` "Plugin scope". Gate 15 catches drift.
 - Using SSH-based marketplace add in onboarding instructions (known Windows breakage).
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
-- Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
+- Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](../docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
 - Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
 - Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: rule 15 of `skills/managing-issues/SKILL.md`, whose QG-4a / QG-11a checkpoints run their reviews as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
-- Hand-editing [`docs/skill-registry.md`](docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
+- Hand-editing [`docs/skill-registry.md`](../docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
 - Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).
 
@@ -165,4 +165,4 @@ Two rulings that come up:
 
 ## Known caveats
 
-Accepted risks and their rationale live in [`docs/known-caveats.md`](docs/known-caveats.md) – the single running record, including every staged-rollout override. Read it before a release; do not restate or tally its entries here.
+Accepted risks and their rationale live in [`docs/known-caveats.md`](../docs/known-caveats.md) – the single running record, including every staged-rollout override. Read it before a release; do not restate or tally its entries here.
