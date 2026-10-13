@@ -69,4 +69,4 @@ JSON
 ## See also
 
 - [`oss-launch-checklist.md`](oss-launch-checklist.md) – the launch obligations that are still open, plus the standing data-protection obligation for the archived private repo.
-- [`../.claude/CLAUDE.md`](../.claude/CLAUDE.md) `## Release process` – the live release flow this protection ruleset shapes (signed commits, code-owner review, admin-merge for the solo maintainer).
+- [`../.claude/skills/releasing-erfana/SKILL.md`](../.claude/skills/releasing-erfana/SKILL.md) – the live release flow this protection ruleset shapes (signed commits, code-owner review, admin-merge for the solo maintainer).
