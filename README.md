@@ -48,6 +48,21 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 |---|---|---|
 | `erfana:fact-checking` | Validates markdown analysis documents against source materials (interviews, vendor docs, knowledge-base) to catch AI hallucinations – extracts atomic factual claims, traces each to its source passage, classifies findings by severity (Critical / Error / Warning / Info), and applies user-approved corrections. Five-phase orchestrator (Setup → Extraction → Verification → Interactive review → Fix application) backed by four `fc-*` plugin-root agents. Manual-only via `/erfana:fact-checking <target-file>`; not auto-discovered. Treats every ingested document as untrusted data, reconciles parallel verification by claim id, and anchors fixes on verbatim text. Migrated from a Qodeca consulting project, Modernize-passed in v4.2.7, lens-review-hardened in v4.6.0. | "fact-check this document", "verify against sources", "validate analysis", "check for hallucinations", "verify document" |
 
+### Prompting skills
+
+| Skill | What it does | Triggers |
+|---|---|---|
+| `erfana:prompt` | Interviews you one decision at a time, confirms a brief, and writes or improves a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1 – packaged for chat, a Claude project, Claude Code, or the API, with setup notes (starting effort level, settings) and proposed evaluation cases. The prompts it writes follow Anthropic's guidance for Claude 5-generation models: calm instructions with reasons, positive phrasing, examples only where they earn their place, and effort settings instead of thinking rituals. | "write a prompt", "improve my prompt", "help me prompt Claude", "review this system prompt" |
+
+### Session closeout skills
+
+Both run only when you type them, because they act outside the conversation.
+
+| Skill | What it does | Invocation |
+|---|---|---|
+| `erfana:ship` | Takes the current work as far as you say: commit, push, open or update the pull request, or merge it (then delete the branch and close the linked issue). Reads the project's own branch and PR rules first and stops where they forbid a step; never force-pushes; merges only after checks pass. | `/erfana:ship [commit \| push \| pr \| merge]` (default `pr`) |
+| `erfana:handoff` | Writes a handoff document to the OS temp directory so another agent, harness, directory, or colleague can continue the work – references existing specs, issues, and diffs instead of copying them, redacts secrets, and suggests which skills to load next. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). | `/erfana:handoff [what the next session is for]` |
+
 ### Bootstrap and shared agents
 
 | Component | What it does |
