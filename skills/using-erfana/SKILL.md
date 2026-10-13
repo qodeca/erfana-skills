@@ -2,7 +2,7 @@
 name: using-erfana
 description: Use at the start of any conversation that mentions an orchestration task – managing Claude Code agents or skills, writing articles, working GitHub issues, producing consulting reports, or writing specifications. Establishes the routing rules across erfana sub-skills.
 when_to_use: |
-  Trigger phrases: "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply Claude 5 patterns", "create issue", "implement issue", "review code", "create spec", "write article", "create report", "grill me", "fact-check this", "write a prompt", "improve my prompt".
+  Trigger phrases: "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply Claude 5 patterns", "create issue", "implement issue", "review code", "create spec", "write article", "create report", "grill me", "fact-check this", "write a prompt", "improve my prompt", "draft a goal".
   Invoke before responding when any of these appear in the user's message.
 ---
 
@@ -42,6 +42,7 @@ The orchestration skills delegate substantive work to agents shipped alongside t
 | Skill | Use when |
 |---|---|
 | `erfana:prompt` | Writing or improving a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1) – interviews the user one decision at a time, confirms a brief, then delivers a paste-ready prompt with setup notes and evaluation cases. It authors prompts; it does not carry out the task a prompt describes. |
+| `erfana:draft-goal` | Turning an intention into a `/goal` completion condition the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, exclusions, an owner-decisions clause, and a turn bound – printed ready to paste. It writes the condition only; the user runs `/goal`. |
 
 ### Session closeout
 
@@ -118,6 +119,9 @@ User message arrives
     │
     ├─ Wants a prompt written or improved for a Claude model?
     │       └─ Yes → erfana:prompt
+    │
+    ├─ Wants a /goal condition drafted or tightened?
+    │       └─ Yes → erfana:draft-goal
     │
     ├─ User typed /erfana:<sub-skill> directly?
     │       └─ Yes → load that skill, execute
