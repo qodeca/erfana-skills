@@ -12,7 +12,7 @@ CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR
 
 **Layout reference**:
 
-- Skills: `skills/<name>/SKILL.md` (12 skills – 6 orchestration + 1 process + 1 verification + 1 prompting + 2 session closeout + 1 bootstrap).
+- Skills: `skills/<name>/SKILL.md` (13 skills – 6 orchestration + 1 process + 1 verification + 2 prompting + 2 session closeout + 1 bootstrap).
 - Shared agents: `agents/*.md` (87 shared agents at plugin root, scanned by Gate 2 + Gate 7 from v4.0.0).
 - Per-skill nested agents: `skills/<name>/agents/*.md` (orchestration skills only – `managing-reports/` 11, others 0; `managing-articles` hoisted its agents to plugin-root `article-*` in v4.3.0).
 - Hooks: `hooks/hooks.json` + 6 safety hooks, each a `.sh` (macOS/Linux) + `.ps1` (Windows) pair routed through the `dispatch.sh` launcher, which also enforces the shared timeout (cross-platform, v4.2.20+; plugin-root interview guards and cross-host wiring, v7.1.0+; validated by Gate 14, v4.1+).

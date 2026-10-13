@@ -53,6 +53,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | Skill | What it does | Triggers |
 |---|---|---|
 | `erfana:prompt` | Interviews you one decision at a time, confirms a brief, and writes or improves a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1 – packaged for chat, a Claude project, Claude Code, or the API, with setup notes (starting effort level, settings) and proposed evaluation cases. The prompts it writes follow Anthropic's guidance for Claude 5-generation models: calm instructions with reasons, positive phrasing, examples only where they earn their place, and effort settings instead of thinking rituals. | "write a prompt", "improve my prompt", "help me prompt Claude", "review this system prompt" |
+| `erfana:draft-goal` | Turns what you want done into a `/goal` completion condition that Claude Code's goal evaluator can judge from the conversation – one outcome, numbered checks whose proof is shown, explicit exclusions, an owner-decisions clause so a recommendation you decline stops blocking the goal, and a turn bound – and prints it once, ready to paste. It writes the condition only; you run `/goal`. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0), with new wording. | "draft a goal", "help me write a /goal", "tighten my goal", "why does my goal never finish" |
 
 ### Session closeout skills
 

@@ -18,6 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
+| draft-goal | uncommitted | not yet committed |
 | handoff | uncommitted | not yet committed |
 | prompt | uncommitted | not yet committed |
 | ship | uncommitted | not yet committed |
@@ -31,7 +32,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | managing-reports | 2026-07-22 | fix(managing-reports): lens-review remediation + v6.1.0 (#16) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 
-12 skills, one row per folder under `skills/`.
+13 skills, one row per folder under `skills/`.
 
 ## Reading the dates
 
