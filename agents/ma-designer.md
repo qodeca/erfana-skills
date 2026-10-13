@@ -22,7 +22,7 @@ Design agent name, description, and model selection following Claude Code best p
 |-------|------|----------|------------|
 | operation | string | Yes | "CREATE" or "UPDATE" |
 | purpose | string | Yes | Agent's primary responsibility |
-| trigger_type | string | Yes | "auto" or "manual" or "both" |
+| trigger_type | string | Yes | "auto", "manual", "both", or "skill-internal" (ma-requirements-gatherer asks with these same values) |
 | permission_level | string | Yes | "read-only" or "read-edit" or "full" |
 | domain | string | No | Specific domain (e.g., "code-review", "testing") |
 | existing_agent_path | string | No | Path to agent file (for UPDATE only) |
@@ -58,13 +58,15 @@ Design agent name, description, and model selection following Claude Code best p
 4. Compose a calm, short description
    The description says what the agent does and *when* to use it, in plain prose. Claude Code lists every agent description in every session, and Claude 5-generation models delegate readily, so keep it short and free of pressure language.
 
-   **User-facing agent** (1–2 sentences, ≤300 characters), by trigger_type:
+   This is the single mapping from `trigger_type` to description pattern (ma-requirements-gatherer collects `trigger_type` with these same four values).
+
+   **User-facing agent** (1–2 sentences, ≤300 characters):
    - "auto": "<What it does>. Use when the user asks to <action> or <need>."
    - "manual": "<What it does>. Use for <action> when <condition>."
    - "both": "<What it does>. Use when the user asks to <action> or when <condition>."
 
    **Skill-internal agent** (spawned by name from a skill; one sentence, ≤160 characters):
-   - "Used by <skill> to <job>."
+   - "skill-internal": "Used by <skill> to <job>."
 
    Requirements:
    - Third-person or imperative voice (no "I can help...", no "You can use...")

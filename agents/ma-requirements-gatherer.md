@@ -45,7 +45,7 @@ Analyze user request for agent creation/update and generate structured questionn
 3. Select question set based on operation
    **For CREATE operations**, identify gaps in:
    - Agent purpose and trigger phrase
-   - Invocation (user-facing, routed by a "Use when…" description, vs skill-internal, spawned by name from a skill)
+   - Trigger type, using ma-designer's `trigger_type` values: "auto", "manual", "both", or "skill-internal" (ma-designer maps each to a description pattern)
    - Tools required (Read, Write, Grep, Glob, Bash, etc.)
    - Model selection (haiku vs sonnet vs opus)
    - Permission level (default vs elevated)
@@ -183,11 +183,13 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "Skill-internal (Recommended)", "description": "A skill spawns it by name for coverage analysis; description is one short 'Used by <skill> to …' line"},
-          {"label": "User-facing", "description": "Claude delegates to it when a request matches its 'Use when …' description"}
+          {"label": "skill-internal (Recommended)", "description": "A skill spawns it by name for coverage analysis"},
+          {"label": "auto", "description": "Claude delegates to it when a user request matches"},
+          {"label": "manual", "description": "Used only when explicitly requested"},
+          {"label": "both", "description": "Matches user requests and a stated condition"}
         ],
         "multiSelect": false,
-        "maps_to": "trigger_strategy"
+        "maps_to": "trigger_type"
       },
       {
         "header": "Tools",
@@ -225,7 +227,7 @@ On failure: Log which criteria failed, return partial state with issues.
 ```json
 {
   "operation": "CREATE",
-  "user_request": "Create a user-facing agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
+  "user_request": "Create an auto-triggered agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
   "clarity_issues": []
 }
 ```
@@ -239,7 +241,7 @@ On failure: Log which criteria failed, return partial state with issues.
       "operation": "CREATE",
       "clear_items": [
         "Purpose: validate API schemas",
-        "Invocation: user-facing",
+        "Trigger type: auto",
         "Tools: Read, Grep",
         "Model: haiku",
         "Output format: JSON"
@@ -353,11 +355,13 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "User-facing (Recommended)", "description": "Claude delegates deployments to it when a request matches its 'Use when …' description"},
-          {"label": "Skill-internal", "description": "Only a named skill spawns it; description is one short 'Used by <skill> to …' line"}
+          {"label": "manual (Recommended)", "description": "Used only when a deployment is explicitly requested"},
+          {"label": "auto", "description": "Claude delegates to it when a user request matches"},
+          {"label": "both", "description": "Matches user requests and a stated condition"},
+          {"label": "skill-internal", "description": "A skill spawns it by name"}
         ],
         "multiSelect": false,
-        "maps_to": "trigger_strategy"
+        "maps_to": "trigger_type"
       },
       {
         "header": "Tools",
