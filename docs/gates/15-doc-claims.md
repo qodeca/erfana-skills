@@ -2,7 +2,7 @@
 
 Verifies that prose claims in **6 docs** about plugin shape stay in sync with the actual filesystem. The `docs_to_scan` list lives at `scripts/gate-15-doc-claims.sh:44`:
 
-1. `CLAUDE.md`
+1. `.claude/CLAUDE.md`
 2. `README.md`
 3. `docs/architecture.md`
 4. `MAINTAINER.md`

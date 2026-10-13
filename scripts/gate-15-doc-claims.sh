@@ -51,7 +51,7 @@ passes = []
 # carry plugin-shape claims that were drifting outside Gate 15's scope. Adding
 # them here makes 75→76 (and similar) sweeps CI-blocking on the next release.
 docs_to_scan = [
-    'CLAUDE.md',
+    '.claude/CLAUDE.md',
     'README.md',
     'docs/architecture.md',
     'MAINTAINER.md',
@@ -69,7 +69,7 @@ docs_to_scan = [
 
 # === Check 1: CLAUDE.md "Current version: **vX.Y.Z**" matches plugin.json ===
 plugin_version = json.load(open('.claude-plugin/plugin.json'))['version']
-claude_md = open('CLAUDE.md').read()
+claude_md = open('.claude/CLAUDE.md').read()
 banner = re.search(r'Current version:\s*\*\*v([0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.]+)?)\*\*', claude_md)
 if not banner:
     errors.append('CLAUDE.md: no "Current version: **vX.Y.Z**" banner found (Gate 15 requires one near the top of the file)')
