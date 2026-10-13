@@ -2,7 +2,7 @@
 name: using-erfana
 description: Use at the start of any conversation that mentions an orchestration task – managing Claude Code agents or skills, writing articles, working GitHub issues, producing consulting reports, or writing specifications. Establishes the routing rules across erfana sub-skills.
 when_to_use: |
-  Trigger phrases: "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply Claude 5 patterns", "create issue", "implement issue", "review code", "create spec", "write article", "create report", "grill me", "fact-check this".
+  Trigger phrases: "create agent", "review agent", "create skill", "review skill", "modernize skill", "apply Claude 5 patterns", "create issue", "implement issue", "review code", "create spec", "write article", "create report", "grill me", "fact-check this", "write a prompt", "improve my prompt".
   Invoke before responding when any of these appear in the user's message.
 ---
 
@@ -36,6 +36,19 @@ The orchestration skills delegate substantive work to agents shipped alongside t
 | Skill | Use when |
 |---|---|
 | `erfana:fact-checking` | Validating a markdown analysis document against source materials (interview transcripts, vendor docs, knowledge-base folders) before sharing with stakeholders – extracts atomic factual claims, traces each to its source passage, classifies findings by severity, and applies user-approved corrections. Manual-only via `/erfana:fact-checking <target-file>`; not auto-discovered. |
+
+### Prompting
+
+| Skill | Use when |
+|---|---|
+| `erfana:prompt` | Writing or improving a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1) – interviews the user one decision at a time, confirms a brief, then delivers a paste-ready prompt with setup notes and evaluation cases. It authors prompts; it does not carry out the task a prompt describes. |
+
+### Session closeout
+
+| Skill | Use when |
+|---|---|
+| `erfana:ship` | Committing, pushing, opening the pull request, and optionally merging the current work. Manual-only via `/erfana:ship [commit \| push \| pr \| merge]`, because it pushes; not auto-discovered. |
+| `erfana:handoff` | Writing a portable handoff document so another agent, harness, directory, or colleague can continue the work. Manual-only via `/erfana:handoff [what the next session is for]`; not auto-discovered. |
 
 More skills will appear here as they ship. The list is canonical – if a skill is not listed, it is not part of this plugin.
 
@@ -102,6 +115,9 @@ User message arrives
     │
     ├─ Validating a markdown analysis document against sources?
     │       └─ Yes → erfana:fact-checking (manual invocation only)
+    │
+    ├─ Wants a prompt written or improved for a Claude model?
+    │       └─ Yes → erfana:prompt
     │
     ├─ User typed /erfana:<sub-skill> directly?
     │       └─ Yes → load that skill, execute
