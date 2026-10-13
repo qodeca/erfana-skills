@@ -181,7 +181,7 @@ agents/
 
 ---
 name: [agent-name]
-description: MUST BE USED to [action] when [condition].
+description: Used by [skill] to [action].
 tools: [tool1, tool2]
 model: sonnet
 ---
@@ -398,7 +398,7 @@ Before using an agent, verify:
 
 ### YAML Frontmatter (Standalone Agents)
 - [ ] **Name:** Matches filename, lowercase with hyphens
-- [ ] **Description:** Contains trigger phrase (MUST BE USED / PROACTIVELY)
+- [ ] **Description:** Calm prose saying when it is used ("Used by <skill> to …" or "Use when …"); no MUST BE USED / PROACTIVELY / `<example>` blocks
 - [ ] **Tools:** Explicitly listed (not omitted)
 
 ---

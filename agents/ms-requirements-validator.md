@@ -1,6 +1,6 @@
 ---
 name: ms-requirements-validator
-description: MUST BE USED to validate gathered requirements for completeness and consistency. Use PROACTIVELY before skill design phase.
+description: "Used by managing-skills to check gathered requirements for completeness and consistency."
 tools: Read, Glob
 model: sonnet
 effort: low

@@ -1,6 +1,6 @@
 ---
 name: mi-docs-fixer
-description: MUST BE USED for quick documentation fixes (typos, links, formatting). Use PROACTIVELY for docs issues.
+description: "Used by managing-issues for quick documentation fixes – typos, links, formatting."
 capabilities: [documentation-generation, file-editing]
 tools: Read, Edit, Grep
 model: opus

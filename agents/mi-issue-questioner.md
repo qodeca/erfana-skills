@@ -1,6 +1,6 @@
 ---
 name: mi-issue-questioner
-description: MUST BE USED to generate clarifying questions for a new GitHub issue. Use immediately after the Create operation classifies the issue type and before drafting, to produce a structured question set the orchestrator asks via AskUserQuestion.
+description: "Used by managing-issues (Create) to generate clarifying questions for a new GitHub issue."
 capabilities: [requirements-analysis, question-generation]
 tools: Read
 model: opus

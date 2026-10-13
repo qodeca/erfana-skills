@@ -1,21 +1,6 @@
 ---
 name: ma-modifier
-description: |
-  Use this agent when the user wants to update, change, or modify an existing agent file safely with backup and validation.
-
-  <example>
-  Context: User wants to change an agent's tools or model
-  user: "Add Bash tool to my coverage-analyzer agent so it can run test commands"
-  assistant: "I'll use the ma-modifier agent to apply the change with backup and validation."
-  <commentary>Existing agent modification – modifier handles backup, edit, and rollback on failure.</commentary>
-  </example>
-
-  <example>
-  Context: User needs to update an agent's workflow or constraints
-  user: "Update the constraints section in my security-scanner agent to disallow network access"
-  assistant: "I'll use the ma-modifier agent to safely modify the constraints section."
-  <commentary>Section-level agent modification – modifier ensures structural integrity after changes.</commentary>
-  </example>
+description: "Used by managing-agents to change an existing agent file with backup and validation."
 tools:
   - Read
   - Write

@@ -1,21 +1,6 @@
 ---
 name: article-reviewer
-description: |
-  MUST BE USED to run a single editorial review pass over article drafts when the managing-articles orchestrator needs categorized findings before publication. Delegate here to review structure, style, fact-verification, and publication requirements in one pass, applying language-conditional metrics and the critical fact rule, and to return severity-ranked findings the orchestrator compiles into a review report. Use whenever drafts, a brief, research results, and a source list exist and the article has not yet been editorially reviewed.
-
-  <example>
-  Context: The orchestrator has a finished draft plus the brief, research results, and sources, and needs an editorial review before it can compile a report.
-  user: "Review the managed-Postgres article draft before we publish."
-  assistant: "Drafts and supporting files are ready. I'll delegate to the article-reviewer agent to check structure, style, facts, and publication requirements and return categorized findings."
-  <commentary>One read-only pass over structure, style, facts, and compliance is exactly this agent's job; the orchestrator hands it the file paths and compiles the returned findings into the report.</commentary>
-  </example>
-
-  <example>
-  Context: A bilingual article has Polish and English drafts and the orchestrator needs each reviewed against its own language metrics.
-  user: "Sprawdz dwujezyczny artykul o RODO przed publikacja."
-  assistant: "Both drafts and the sources file are present. I'll delegate to the article-reviewer agent to review each language against its own metrics and return per-language findings."
-  <commentary>The agent honors the language array and applies Polish signals to the Polish draft and English targets to the English draft, so the orchestrator routes bilingual review here.</commentary>
-  </example>
+description: "Used by managing-articles to run the editorial review of article drafts and return severity-ranked findings."
 tools: Read, Grep, Glob
 model: sonnet
 effort: medium

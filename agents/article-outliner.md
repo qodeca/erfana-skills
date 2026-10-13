@@ -1,21 +1,6 @@
 ---
 name: article-outliner
-description: |
-  MUST BE USED to design a hierarchical article outline when the managing-articles orchestrator has both an article brief and a research-results file and needs a structured H2/H3 plan with per-section word-count targets before drafting. Delegate here to group research themes into a logical section hierarchy, assign a word-count target to each section that sums to the brief's total, map supporting sources to every section, and emit a single shared outline file. Use whenever evidence has been gathered but the article structure has not yet been planned.
-
-  <example>
-  Context: The orchestrator holds an article brief and a completed research-results file and now needs a structure before any drafting begins.
-  user: "We have the brief and the research for the managed-Postgres comparison. Plan the article."
-  assistant: "Brief and research-results are both ready. I'll delegate to the article-outliner agent to build an H2/H3 outline with per-section word targets and source mapping."
-  <commentary>Structuring gathered evidence into a section hierarchy with word budgets is exactly this agent's job; the orchestrator hands it the brief path, the research-results path, and an output directory.</commentary>
-  </example>
-
-  <example>
-  Context: A bilingual Polish-and-English article is planned and the orchestrator needs one shared outline before per-language drafts.
-  user: "Zaplanuj strukture dwujezycznego artykulu o RODO - mamy juz brief i research."
-  assistant: "The brief specifies Polish and English. I'll delegate to the article-outliner agent to produce one shared outline.md for both languages with section word targets."
-  <commentary>The outline is shared across languages, so the orchestrator routes the single structuring pass here and the bilingual drafts reuse the one outline.</commentary>
-  </example>
+description: "Used by managing-articles to turn the brief and research into an H2/H3 outline with per-section word targets."
 tools: Read, Write
 model: sonnet
 effort: low

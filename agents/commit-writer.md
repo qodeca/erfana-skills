@@ -1,6 +1,6 @@
 ---
 name: commit-writer
-description: Commit message writer for conventional commits. MUST BE USED when generating commit messages or preparing PRs. Use PROACTIVELY for any git commit task.
+description: "Writes Conventional Commits messages and pull request descriptions from the current changes. Use when preparing a commit or a PR."
 tools: Bash
 model: opus
 effort: medium

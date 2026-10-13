@@ -1,21 +1,6 @@
 ---
 name: ma-requirements-gatherer
-description: |
-  Use this agent when the user wants to create or update an agent but the requirements are unclear or incomplete.
-
-  <example>
-  Context: User asks to create an agent without specifying tools, model, or trigger strategy
-  user: "Create an agent for analyzing test coverage"
-  assistant: "I'll use the ma-requirements-gatherer agent to identify what details are missing before proceeding."
-  <commentary>User request has gaps – need to gather requirements before design phase.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to update an existing agent but the scope of changes is vague
-  user: "My test-runner agent needs to be improved"
-  assistant: "I'll use the ma-requirements-gatherer agent to clarify what improvements are needed."
-  <commentary>Update request is ambiguous – need structured questionnaire to clarify scope.</commentary>
-  </example>
+description: "Used by managing-agents to find and fill gaps when an agent request is unclear or incomplete."
 tools: Read, Glob
 effort: medium
 model: sonnet
@@ -60,7 +45,7 @@ Analyze user request for agent creation/update and generate structured questionn
 3. Select question set based on operation
    **For CREATE operations**, identify gaps in:
    - Agent purpose and trigger phrase
-   - Trigger type (MUST BE USED vs passive)
+   - Trigger type, using ma-designer's `trigger_type` values: "auto", "manual", "both", or "skill-internal" (ma-designer maps each to a description pattern)
    - Tools required (Read, Write, Grep, Glob, Bash, etc.)
    - Model selection (haiku vs sonnet vs opus)
    - Permission level (default vs elevated)
@@ -198,11 +183,13 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "MUST BE USED (Recommended)", "description": "Orchestrator must use this agent for coverage analysis - ensures consistent behavior"},
-          {"label": "Passive", "description": "Orchestrator can choose when to use - more flexible but may be overlooked"}
+          {"label": "skill-internal (Recommended)", "description": "A skill spawns it by name for coverage analysis"},
+          {"label": "auto", "description": "Claude delegates to it when a user request matches"},
+          {"label": "manual", "description": "Used only when explicitly requested"},
+          {"label": "both", "description": "Matches user requests and a stated condition"}
         ],
         "multiSelect": false,
-        "maps_to": "trigger_strategy"
+        "maps_to": "trigger_type"
       },
       {
         "header": "Tools",
@@ -240,7 +227,7 @@ On failure: Log which criteria failed, return partial state with issues.
 ```json
 {
   "operation": "CREATE",
-  "user_request": "Create a MUST BE USED agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
+  "user_request": "Create an auto-triggered agent for validating API schemas using Read and Grep tools, powered by haiku model, with JSON output format",
   "clarity_issues": []
 }
 ```
@@ -254,7 +241,7 @@ On failure: Log which criteria failed, return partial state with issues.
       "operation": "CREATE",
       "clear_items": [
         "Purpose: validate API schemas",
-        "Trigger: MUST BE USED",
+        "Trigger type: auto",
         "Tools: Read, Grep",
         "Model: haiku",
         "Output format: JSON"
@@ -368,11 +355,13 @@ On failure: Log which criteria failed, return partial state with issues.
         "header": "Trigger",
         "question": "How should this agent be invoked?",
         "options": [
-          {"label": "MUST BE USED (Recommended)", "description": "Ensures consistent deployment process"},
-          {"label": "Passive", "description": "Orchestrator decides when to use"}
+          {"label": "manual (Recommended)", "description": "Used only when a deployment is explicitly requested"},
+          {"label": "auto", "description": "Claude delegates to it when a user request matches"},
+          {"label": "both", "description": "Matches user requests and a stated condition"},
+          {"label": "skill-internal", "description": "A skill spawns it by name"}
         ],
         "multiSelect": false,
-        "maps_to": "trigger_strategy"
+        "maps_to": "trigger_type"
       },
       {
         "header": "Tools",

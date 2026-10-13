@@ -1,6 +1,6 @@
 ---
 name: security-auditor
-description: Security auditor for vulnerability scanning and OWASP compliance. MUST BE USED when auditing code for security issues, secrets, or vulnerabilities. Use PROACTIVELY for any security review task.
+description: "Audits code for security vulnerabilities, exposed secrets, and OWASP issues. Use for a security-focused review of code."
 tools: Read, Bash, Grep, Glob
 model: opus
 effort: xhigh

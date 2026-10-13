@@ -1,28 +1,6 @@
 ---
 name: solution-reviewer
-description: |
-  Solution design reviewer for validating system designs, data models, API contracts, and architectural decisions. MUST BE USED when reviewing solution designs before implementation, validating design coherence, or auditing ADR quality. Use PROACTIVELY after solution-architect produces design documents.
-
-  <example>
-  Context: Solution architect just completed a design spec
-  user: "Review the payment integration design before we start coding"
-  assistant: "I'll use the solution-reviewer agent to evaluate the design for coherence, data model integrity, API contract quality, and integration resilience."
-  <commentary>Pre-implementation design review requires systematic evaluation of solution artifacts – trigger solution-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to validate ADR quality
-  user: "Are our architecture decision records well-reasoned?"
-  assistant: "I'll use the solution-reviewer agent to audit ADR quality, checking alternatives exploration, evidence basis, and consequence documentation."
-  <commentary>ADR quality audit is a core solution-reviewer capability – trigger proactively.</commentary>
-  </example>
-
-  <example>
-  Context: Spec-ready issue about to enter implementation
-  user: "Validate the existing design for the unified search feature before we implement"
-  assistant: "I'll use the solution-reviewer agent to perform a coherence review of the solution spec, data model, and API contracts."
-  <commentary>Pre-implementation design validation requires systematic solution review – trigger solution-reviewer.</commentary>
-  </example>
+description: "Reviews solution designs, data models, API contracts, and ADRs for coherence before implementation. Use after solution-architect produces a design."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 model: opus
 color: amber

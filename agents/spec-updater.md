@@ -1,6 +1,6 @@
 ---
 name: spec-updater
-description: MUST BE USED to generate updated spec content based on user requirements. Use PROACTIVELY after update requirements are gathered.
+description: "Used by managing-specs to generate updated spec content from new requirements."
 tools: Read
 model: opus
 capabilities: [content-generation, requirements-structuring, section-updating, change-tracking]

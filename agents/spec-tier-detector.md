@@ -1,6 +1,6 @@
 ---
 name: spec-tier-detector
-description: Analyzes feature complexity and recommends appropriate spec tier (T1-T4). Use PROACTIVELY at start of any spec creation to determine documentation scope.
+description: "Used by managing-specs to assess feature complexity and recommend a spec tier (T1–T4)."
 tools: Read, Glob, Grep
 model: opus
 capabilities: [complexity-analysis, tier-recommendation, scope-assessment]

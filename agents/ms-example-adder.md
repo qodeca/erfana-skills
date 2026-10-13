@@ -1,6 +1,6 @@
 ---
 name: ms-example-adder
-description: MUST BE USED to add usage examples demonstrating skill behavior. Use PROACTIVELY after skill files are created.
+description: "Used by managing-skills to add usage examples to a newly created skill."
 tools: Read, Write, Edit, Glob
 model: opus
 effort: medium

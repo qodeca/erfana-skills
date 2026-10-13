@@ -1,6 +1,6 @@
 ---
 name: spec-content-mover
-description: Moves requirements between sections or reorders within a section. Handles ID prefix changes, updates all cross-references automatically.
+description: "Used by managing-specs to move or reorder requirements and update their IDs and cross-references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-relocation, cross-reference-update, id-migration]

@@ -1,6 +1,6 @@
 ---
 name: spec-input-parser
-description: MUST BE USED to parse and validate spec input (text/file/URL) when starting requirements gathering. Use PROACTIVELY when user provides initial application description.
+description: "Used by managing-specs to parse and validate the initial spec input (text, file, or URL)."
 tools: Read, WebFetch
 model: opus
 capabilities: [input-validation, text-parsing, file-reading, url-fetching, context-extraction]

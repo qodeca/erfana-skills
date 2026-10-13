@@ -1,6 +1,6 @@
 ---
 name: fc-apply-fixes
-description: MUST BE USED to apply user-approved corrections to markdown analysis documents during fact-checking. Use PROACTIVELY when fixes are approved.
+description: "Used by fact-checking to apply user-approved corrections to the checked markdown document."
 tools: Read, Edit
 model: sonnet
 effort: medium

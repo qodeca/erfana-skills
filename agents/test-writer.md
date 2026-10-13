@@ -1,6 +1,6 @@
 ---
 name: test-writer
-description: Test writer for comprehensive test suite creation. MUST BE USED when writing tests for components, functions, or modules. Use PROACTIVELY for any testing task.
+description: "Writes unit and integration tests for components, functions, or modules. Use when adding test coverage; for end-to-end tests use e2e-test-writer."
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: opus
 effort: medium

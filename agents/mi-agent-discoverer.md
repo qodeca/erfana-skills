@@ -1,6 +1,6 @@
 ---
 name: mi-agent-discoverer
-description: Discover available agents from builtin, shared, and dedicated sources for dynamic phase-to-agent matching.
+description: "Used by managing-issues (Implement Phase 1) and lens-review to list available builtin and shared agents."
 capabilities: [codebase-exploration, file-search, pattern-matching, validation]
 tools: Read, Glob, Grep
 model: opus

@@ -1,6 +1,6 @@
 ---
 name: spec-status
-description: Reports detailed status of a single spec document. Shows sections, requirements counts, validation state, and gaps.
+description: "Used by managing-specs to report the detailed status of one spec – sections, requirement counts, validation state, gaps."
 tools: Read, Glob
 model: opus
 capabilities: [spec-status, gap-analysis, progress-tracking]

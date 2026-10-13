@@ -1,6 +1,6 @@
 ---
 name: mi-issue-displayer
-description: Read-side GitHub issue agent — fetches a single issue by number, lists issues with filters, or searches issues by query/label/state. Returns formatted markdown.
+description: "Used by managing-issues to fetch, list, or search GitHub issues and return formatted markdown."
 capabilities: [github-issue-read, github-issue-list, github-issue-search, format-markdown]
 tools: Read, Bash
 model: opus

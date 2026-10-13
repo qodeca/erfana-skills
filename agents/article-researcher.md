@@ -1,21 +1,6 @@
 ---
 name: article-researcher
-description: |
-  MUST BE USED to conduct and organize web research for an article when the managing-articles orchestrator needs sourced, themed findings written to a results file. Delegate here to run searches and fetches under trust controls, structure findings by theme with a citation per claim, de-duplicate, and emit a single research-results file plus a source list. Use whenever an article brief and research questions exist but the underlying evidence has not yet been gathered, organized, and analyzed.
-
-  <example>
-  Context: The orchestrator has produced an article brief and a list of open research questions and now needs evidence gathered before drafting.
-  user: "Write an article comparing managed Postgres providers for European startups."
-  assistant: "I have the brief and research questions ready. I'll delegate to the article-researcher agent to gather, organize, and analyze sourced findings into a research-results file."
-  <commentary>Evidence-gathering with citations and trust controls is exactly this agent's job; the orchestrator hands it the brief path, the questions, and an output directory.</commentary>
-  </example>
-
-  <example>
-  Context: A bilingual article is planned and the orchestrator needs both Polish and English sources collected and kept separate.
-  user: "Przygotuj dwujezyczny artykul o RODO dla zespolow produktowych."
-  assistant: "The brief specifies Polish and English. I'll delegate to the article-researcher agent to research both languages and return per-language source lists."
-  <commentary>The agent honors the language array, researches Polish-language sources, and keeps per-language source lists, so the orchestrator routes bilingual evidence work here.</commentary>
-  </example>
+description: "Used by managing-articles to gather and organize sourced web research for an article brief."
 tools: Read, Write, WebSearch, WebFetch, Grep, Glob
 model: sonnet
 effort: medium

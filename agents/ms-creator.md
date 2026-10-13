@@ -1,6 +1,6 @@
 ---
 name: ms-creator
-description: MUST BE USED to create skill files following designed structure and templates. Use PROACTIVELY after skill design approval.
+description: "Used by managing-skills to write skill files from an approved design."
 tools: Read, Write, Edit, Glob, Grep
 model: opus
 effort: medium

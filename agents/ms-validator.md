@@ -1,6 +1,6 @@
 ---
 name: ms-validator
-description: MUST BE USED to validate skill against all checklists and quality standards. Use PROACTIVELY after skill creation or modification.
+description: "Used by managing-skills to validate a skill against its checklists and quality standards."
 tools: Read, Glob, Grep
 model: sonnet
 effort: low

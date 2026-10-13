@@ -11,7 +11,7 @@ All agents require YAML frontmatter for Claude Code integration:
 ```yaml
 ---
 name: agent-name
-description: MUST BE USED to <action> when <condition>. Use PROACTIVELY <trigger>.
+description: Used by <skill> to <action>.
 tools: Read, Grep, Glob
 model: sonnet
 capabilities: [capability-1, capability-2]
@@ -23,7 +23,7 @@ capabilities: [capability-1, capability-2]
 | Field | Required | Description |
 |-------|----------|-------------|
 | `name` | Yes | Lowercase, hyphens, max 64 chars (must match filename) |
-| `description` | Yes | Auto-delegation trigger; include "MUST BE USED" or "PROACTIVELY". Combined with `when_to_use`: ≤1,536 chars |
+| `description` | Yes | Says when the agent is used, in calm prose: "Used by <skill> to …" (≤160 chars) or "<What it does>. Use when …" (≤300 chars). No "MUST BE USED", "PROACTIVELY", or `<example>` blocks – every description loads into every session |
 | `tools` | No | Comma-separated list; **omit = inherits ALL tools (security risk)** |
 | `model` | **Recommended** | `haiku`, `sonnet`, `opus`, or `inherit` — see Model Selection Guide in `shared-agent-template.md` |
 | `effort` | **Recommended** | `low`, `medium`, `high`, `xhigh`, `max` — per https://platform.claude.com/docs/en/build-with-claude/effort |
@@ -120,7 +120,7 @@ All agents SHOULD use these XML tags. Claude is trained to parse this structure.
 ```markdown
 ---
 name: [agent-name]
-description: MUST BE USED to [action] when [condition]. Use PROACTIVELY [trigger].
+description: Used by [skill] to [action].
 tools: [tool1, tool2, tool3]
 model: sonnet
 capabilities: [capability-1, capability-2, capability-3]

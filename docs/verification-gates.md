@@ -57,7 +57,7 @@ erfana runs on a second host, Qwen Code. The rules that keep one package working
 | 15 | Qwen version agreement across `host_matrix.py`, the CI npm pin, and any version stated in scanned prose | hard |
 | 15 | `docs/hosts.md` and `CONTRIBUTING.md` joined `docs_to_scan`, so their plugin-shape counts are CI-blocked too | hard |
 
-Agent description length stays a **warning** on Gate 2: no agent-description limit exists in the Qwen bundle, and the long descriptions carry the `<example>` blocks that drive agent selection on Claude Code.
+Agent description length stays a **warning** on Gate 2: no agent-description limit exists in the Qwen bundle. Descriptions are kept short by convention instead (≤300 characters user-facing, ≤160 skill-internal, no `<example>` blocks), because Claude Code loads every agent description into every session.
 
 ## Run all gates
 

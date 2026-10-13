@@ -16,10 +16,11 @@ Complete this checklist before deploying any new or modified agent.
 - [ ] `description` field present
 
 ### Description Quality
-- [ ] Trigger-shaped: an action-oriented "Use proactively…/Use when…" clause OR an opening line + 2-4 `<example>` blocks (both forms valid)
-- [ ] If using `<example>` blocks: each has Context, user, assistant, and `<commentary>`
 - [ ] Specifies WHAT the agent does
-- [ ] Specifies WHEN to use it (prose trigger clause or example scenarios)
+- [ ] Specifies WHEN to use it: a plain "Use when…" clause (skill-internal agents: "Used by <skill> to …")
+- [ ] Calm prose: no "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks
+- [ ] Short: ≤300 characters for user-facing agents, ≤160 for skill-internal agents (every description loads into every session)
+- [ ] Routes between close siblings in one clause where needed (e.g. ui-reviewer vs ux-reviewer)
 - [ ] Third-person or imperative voice only (no "I can help...", no "You can use...")
 - [ ] Shows different phrasings/scenarios (multiple examples, or distinct trigger phrases in prose)
 - [ ] Front-loads the key use case and stays within the ~1,536-char listing budget (combined `description` + `when_to_use` for skills; `description` for agents)
@@ -84,8 +85,8 @@ Complete this checklist before deploying any new or modified agent.
 - [ ] Tools used appropriately
 
 ### Auto-Delegation
-- [ ] Natural language triggers agent correctly (test with the description's trigger phrases – the prose "Use when…" clause or the `<example>` blocks)
-- [ ] Example scenarios in description enable accurate discovery
+- [ ] Natural language triggers agent correctly (test with requests that match the "Use when…" clause)
+- [ ] Does not over-trigger on nearby requests that belong to a sibling agent
 - [ ] No false positives (over-triggering)
 - [ ] No false negatives (under-triggering)
 
@@ -165,7 +166,7 @@ Each check has a severity that affects the weighted score:
 
 **Minimum (hard requirements):**
 - All critical items must pass (description present, critical thinking section, tools explicit, no secrets)
-- Description uses example-based triggers
+- Description states what the agent does and when to use it, in calm prose
 - Zero critical failures overrides any weighted score
 
 **Note:** Collaboration items are conditional – only scored when agent references other agents or is part of a pair.

@@ -1,6 +1,6 @@
 ---
 name: nest-developer
-description: Nest.js Developer for backend applications using modern patterns. MUST BE USED when implementing modules, services, controllers, or Nest.js features. Use PROACTIVELY for any backend coding task.
+description: "Implements Nest.js backend features – modules, services, controllers – with current patterns. Use for Nest.js backend coding tasks."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, WebSearch
 model: opus
 permissionMode: acceptEdits

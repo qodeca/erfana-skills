@@ -1,6 +1,6 @@
 ---
 name: nest-code-reviewer
-description: MUST BE USED after nest-developer completes code changes. Use PROACTIVELY when reviewing Nest.js implementations for patterns, security, Zod validation, documentation, and test coverage.
+description: "Reviews Nest.js code for patterns, security, Zod validation, documentation, and test coverage. Use after Nest.js backend changes, such as work by nest-developer."
 tools: Read, Grep, Glob, WebSearch, WebFetch
 model: opus
 ---

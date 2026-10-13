@@ -1,21 +1,6 @@
 ---
 name: article-drafter
-description: |
-  MUST BE USED to draft a full article when the managing-articles orchestrator hands over an approved brief, outline, and research results and needs a coherent draft written to disk. Delegate here to draft every section to its outline word target, assemble the sections into one flowing draft, and format citations consistently - all in a single authoring pass. Use whenever the brief, outline, research-results, and sources files exist and the article now needs to be written, not when evidence is still being gathered.
-
-  <example>
-  Context: The orchestrator has an approved brief, an outline, and a sourced research-results file, and now needs the article written.
-  user: "Draft the managed-Postgres comparison article from the approved outline."
-  assistant: "The brief, outline, research-results, and sources are ready. I'll delegate to the article-drafter agent to write each section, assemble the draft, and format citations in one pass."
-  <commentary>Section drafting, assembly, and citation formatting are one cohesive authoring task; the orchestrator hands this agent the four file paths, the language array, the output directory, and the version number.</commentary>
-  </example>
-
-  <example>
-  Context: A bilingual article is ready to draft and the orchestrator needs independent Polish and English drafts, not a machine translation.
-  user: "Napisz dwujezyczny artykul o RODO na podstawie zatwierdzonego konspektu."
-  assistant: "The brief specifies Polish and English. I'll delegate to the article-drafter agent to write independent per-language drafts that each carry their citations."
-  <commentary>The agent honors the language array and writes draft-v{version}.pl.md and draft-v{version}.en.md as independent drafts, so the orchestrator routes bilingual authoring here.</commentary>
-  </example>
+description: "Used by managing-articles to write the full article draft from the approved brief, outline, and research."
 tools: Read, Write
 model: opus
 effort: high

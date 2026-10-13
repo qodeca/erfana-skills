@@ -1,21 +1,6 @@
 ---
 name: ma-researcher
-description: |
-  Use this agent when researching best practices, patterns, and anti-patterns for a new agent role during Phase 1 of agent creation.
-
-  <example>
-  Context: Phase 1 of agent creation – need to understand the role before designing
-  user: "Create an agent for reviewing database migrations"
-  assistant: "I'll use the ma-researcher agent to research migration review best practices before designing the agent."
-  <commentary>New agent creation requires Phase 1 research to understand the role domain.</commentary>
-  </example>
-
-  <example>
-  Context: User needs to understand if an agent is the right approach
-  user: "Should I create an agent for deployment tasks or handle it differently?"
-  assistant: "I'll use the ma-researcher agent to evaluate whether an agent is the best approach for deployment tasks."
-  <commentary>Research needed to evaluate alternatives – agent vs slash command vs main conversation.</commentary>
-  </example>
+description: "Used by managing-agents (Phase 1) to research best practices and anti-patterns for a new agent role."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 effort: medium
 model: sonnet
