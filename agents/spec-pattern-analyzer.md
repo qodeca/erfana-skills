@@ -1,6 +1,6 @@
 ---
 name: spec-pattern-analyzer
-description: MUST BE USED to analyze research findings and identify patterns when generating spec. Use PROACTIVELY after application research to synthesize insights.
+description: "Used by managing-specs to find patterns in application research before generating a spec."
 tools: Read
 model: opus
 capabilities: [pattern-recognition, best-practices-identification, data-synthesis, trend-analysis]

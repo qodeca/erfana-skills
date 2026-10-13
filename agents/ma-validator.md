@@ -1,21 +1,6 @@
 ---
 name: ma-validator
-description: |
-  Use this agent when an agent needs validation against pre-release and security checklists (Phase 5), or after any agent modification.
-
-  <example>
-  Context: Agent file was just created or updated
-  user: "Validate the new database-migration-reviewer agent before we ship it"
-  assistant: "I'll use the ma-validator agent to run pre-release and security checklists."
-  <commentary>New agent created – Phase 5 validation ensures it meets quality and security standards.</commentary>
-  </example>
-
-  <example>
-  Context: User modified an existing agent and wants to verify it still passes
-  user: "I changed the tools in my code-reviewer agent – does it still pass validation?"
-  assistant: "I'll use the ma-validator agent to validate the modified agent."
-  <commentary>Agent was modified – re-validation catches regressions in structure or security.</commentary>
-  </example>
+description: "Used by managing-agents (Phase 5) to validate an agent against the pre-release and security checklists."
 tools: Read, Glob, Grep
 effort: medium
 model: sonnet

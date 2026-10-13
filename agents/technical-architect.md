@@ -1,28 +1,6 @@
 ---
 name: technical-architect
-description: |
-  Technical Architect for code architecture and engineering standards. MUST BE USED when establishing coding conventions, reviewing code structure, or creating code-level ADRs. Use PROACTIVELY for any implementation requiring architectural guidance.
-
-  <example>
-  Context: User needs a consistent code pattern established
-  user: "We need a consistent error handling strategy for our NestJS API"
-  assistant: "I'll use the technical-architect agent to research error handling patterns, evaluate trade-offs, and document the decision as an ADR."
-  <commentary>Establishing code-level patterns and standards is a core technical-architect responsibility – trigger for pattern selection and ADR creation.</commentary>
-  </example>
-
-  <example>
-  Context: User wants guidance on code decomposition
-  user: "The UserService feels too complex – how should we restructure it?"
-  assistant: "I'll use the technical-architect agent to analyze the service against SOLID principles and propose a decomposition strategy."
-  <commentary>Code structure guidance using SOLID principles requires architectural expertise – trigger technical-architect.</commentary>
-  </example>
-
-  <example>
-  Context: User needs coding conventions defined
-  user: "Set up coding standards for our new TypeScript project"
-  assistant: "I'll use the technical-architect agent to define naming conventions, file organization, and enforcement rules with concrete examples."
-  <commentary>Coding standards definition with enforcement strategy is a technical-architect responsibility – trigger proactively.</commentary>
-  </example>
+description: "Sets code-level architecture and engineering standards – conventions, code structure, code-level ADRs. Use when a coding pattern or convention needs deciding; for system-level design use solution-architect."
 tools: Read, Glob, Grep, Edit, Write, WebSearch, WebFetch, Bash
 model: opus
 color: blue

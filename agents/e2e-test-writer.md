@@ -1,21 +1,6 @@
 ---
 name: e2e-test-writer
-description: |
-  E2E test writer for end-to-end test suite creation. MUST BE USED when writing Playwright, Cypress, or Selenium e2e tests. Use PROACTIVELY for any e2e testing task.
-
-  <example>
-  Context: User wants e2e tests for a feature
-  user: "Write e2e tests for the login flow"
-  assistant: "I'll use the e2e-test-writer agent to create comprehensive e2e tests for the login flow."
-  <commentary>User explicitly requests e2e tests – trigger e2e-test-writer.</commentary>
-  </example>
-
-  <example>
-  Context: New feature implemented, needs e2e coverage
-  user: "Add Playwright tests for the checkout page"
-  assistant: "I'll use the e2e-test-writer agent to write Playwright e2e tests for checkout."
-  <commentary>User mentions Playwright/e2e testing framework – trigger e2e-test-writer.</commentary>
-  </example>
+description: "Writes end-to-end tests in Playwright, Cypress, or Selenium. Use when adding or extending e2e coverage for a user flow."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch
 model: opus
 effort: medium

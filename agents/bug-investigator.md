@@ -1,6 +1,6 @@
 ---
 name: bug-investigator
-description: Bug investigator for root cause analysis and debugging. MUST BE USED when debugging errors, unexpected behavior, or crashes. Use PROACTIVELY for any debugging task.
+description: "Finds the root cause of errors, crashes, and unexpected behavior through read-only investigation. Use when debugging a failure before deciding on a fix."
 tools: Read, Grep, Glob
 model: opus
 effort: xhigh

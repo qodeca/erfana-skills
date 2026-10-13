@@ -1,6 +1,6 @@
 ---
 name: spec-project-analyzer
-description: MUST BE USED to analyze project directory and extract application context before spec requirements gathering. Use PROACTIVELY when spec skill runs from within a project directory.
+description: "Used by managing-specs to extract application context from the project directory before gathering requirements."
 tools: Read, Glob, Grep
 model: opus
 capabilities: [codebase-exploration, context-extraction, feature-discovery, tech-stack-detection]

@@ -1,6 +1,6 @@
 ---
 name: mi-solution-designer
-description: MUST BE USED for implementation planning at Phase 4, verification at Phase 9, and finding-triage (JUDGE mode) for the embedded reviews at QG-4a/QG-8/QG-11a. Use PROACTIVELY before writing code. Persists designs to specs/designs/ when spec_id provided.
+description: "Used by managing-issues for implementation planning (Phase 4), verification (Phase 9), and triage of embedded-review findings."
 capabilities: [architecture-design, implementation-planning, task-breakdown, acceptance-criteria-verification, design-persistence, cost-benefit-triage, finding-triage]
 tools: Read, Grep, Glob, Write
 model: opus

@@ -1,21 +1,6 @@
 ---
 name: e2e-test-design-reviewer
-description: |
-  MUST BE USED after e2e-test-designer completes a test design specification. Use PROACTIVELY when reviewing test design quality for completeness, traceability, and coverage against requirements.
-
-  <example>
-  Context: Test design specification was just created
-  user: "Review the test design for the checkout flow"
-  assistant: "I'll use the e2e-test-design-reviewer agent to audit the test design for completeness, traceability, and quality."
-  <commentary>Test design exists and user requests review – trigger e2e-test-design-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: Test plan needs validation before implementation
-  user: "Check if the test plan covers all acceptance criteria from the spec"
-  assistant: "I'll use the e2e-test-design-reviewer agent to validate coverage and traceability against the source spec."
-  <commentary>User wants test design validated against requirements – trigger e2e-test-design-reviewer.</commentary>
-  </example>
+description: "Reviews an e2e test design for completeness, traceability, and coverage against the requirements. Use after e2e-test-designer produces a test design."
 tools: Read, Glob, Grep, WebSearch
 model: opus
 color: zinc

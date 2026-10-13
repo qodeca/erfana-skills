@@ -1,6 +1,6 @@
 ---
 name: grill-planner
-description: MUST BE USED to plan a coverage-map requirements interview before skill lifecycle operations. Reads a skill-owned taxonomy, seeds the map from the repo, and returns interview data (map, question bank, budget, seeds) for the orchestrator to run under its static protocol. Use PROACTIVELY at the start of create operations and when the user has particular ideas behind a modify/review/modernize request.
+description: "Used by managing-skills to plan the coverage-map requirements interview before a skill create, modify, review, or modernize."
 tools: Read, Glob, Grep
 model: sonnet
 effort: medium

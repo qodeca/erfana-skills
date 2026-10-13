@@ -1,9 +1,6 @@
 ---
 name: spec-file-verifier
-description: |
-  Read-only verification of individual spec files during creation loop.
-  Validates markdown syntax, required sections, requirement ID format, cross-references, and word count.
-  Reports issues but does NOT fix them.
+description: "Used by managing-specs to verify each spec file during creation; reports issues without fixing them."
 tools: Read, Grep
 model: haiku
 capabilities: [markdown-validation, structure-verification, cross-reference-checking]

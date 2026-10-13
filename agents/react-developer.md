@@ -1,6 +1,6 @@
 ---
 name: react-developer
-description: React Developer for frontend applications using modern patterns. MUST BE USED when implementing UI components, hooks, or React features. Use PROACTIVELY for any frontend coding task.
+description: "Implements React frontend features – components, hooks, UI logic – with current patterns. Use for React frontend coding tasks."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, WebSearch
 model: opus
 permissionMode: acceptEdits

@@ -1,21 +1,6 @@
 ---
 name: e2e-test-designer
-description: |
-  E2E test designer for specification-based test design. MUST BE USED when designing e2e test strategies from spec acceptance criteria or use cases. Use PROACTIVELY for any e2e test planning task.
-
-  <example>
-  Context: User wants to plan e2e tests from a specification
-  user: "Design e2e tests for the checkout spec acceptance criteria"
-  assistant: "I'll use the e2e-test-designer agent to create a structured test design specification from the checkout spec."
-  <commentary>User requests e2e test design from spec requirements -- trigger e2e-test-designer.</commentary>
-  </example>
-
-  <example>
-  Context: User needs a testing strategy before implementation
-  user: "Create a test design from the user management use cases"
-  assistant: "I'll use the e2e-test-designer agent to translate use cases into a framework-agnostic test design."
-  <commentary>User wants test planning from use cases, not test code -- trigger e2e-test-designer.</commentary>
-  </example>
+description: "Designs framework-agnostic e2e test specifications from spec acceptance criteria or use cases. Use when planning e2e tests before any test code is written."
 tools: Read, Write, Glob, Grep, WebSearch, WebFetch
 model: opus
 color: sky

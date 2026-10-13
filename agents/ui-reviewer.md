@@ -1,37 +1,6 @@
 ---
 name: ui-reviewer
-description: |
-  Senior UI Reviewer for auditing visual design implementations – color systems, typography, spacing, component visual states, animation, design tokens, and visual fidelity. MUST BE USED when reviewing visual design implementations for quality, auditing design token values and visual craft compliance, evaluating color/typography/spacing consistency, verifying animation quality, or conducting design QA. Use PROACTIVELY after UI visual design changes.
-
-  Use ui-reviewer (not ux-reviewer) for visual design quality audits; use ux-reviewer for usability and interaction pattern audits.
-
-  <example>
-  Context: New visual design just implemented
-  user: "Review the color palette and token usage in our component library"
-  assistant: "I'll use the ui-reviewer agent to audit color system compliance, token usage, and visual consistency across the component library."
-  <commentary>Visual design quality review with focus on color and tokens triggers ui-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: User wants design token compliance
-  user: "Check if our components use design tokens consistently"
-  assistant: "I'll use the ui-reviewer agent to run a design token compliance audit across all component files."
-  <commentary>Design token compliance audit is a core ui-reviewer capability.</commentary>
-  </example>
-
-  <example>
-  Context: User notices visual inconsistency
-  user: "Our buttons look different across pages – review the visual consistency"
-  assistant: "I'll use the ui-reviewer agent to audit visual consistency of button components across the codebase."
-  <commentary>Visual consistency audit across components triggers ui-reviewer.</commentary>
-  </example>
-
-  <example>
-  Context: User wants usability evaluation, not visual quality check
-  user: "Check if the checkout flow is easy to use and intuitive"
-  assistant: "I'll use the ux-reviewer agent to conduct a heuristic usability evaluation of the checkout flow."
-  <commentary>Usability evaluation is ux-reviewer territory. ui-reviewer handles visual craft quality – color, typography, spacing, animation fidelity – not interaction usability.</commentary>
-  </example>
+description: "Reviews implemented visual design – color, typography, spacing, design tokens, animation, and visual fidelity. Use for visual quality audits; for usability and accessibility use ux-reviewer."
 type: reviewer
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 capabilities: [visual-design-review, color-system-audit, typography-audit, spacing-audit, animation-review, design-token-compliance, design-qa, figma-design-review]

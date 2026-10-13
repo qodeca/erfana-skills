@@ -1,6 +1,6 @@
 ---
 name: spec-content-remover
-description: Removes or deprecates spec requirements. Supports soft delete (deprecate) and hard delete. Checks for orphaned cross-references before removal.
+description: "Used by managing-specs to deprecate or delete requirements after checking for orphaned references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-removal, deprecation, orphan-detection, cross-reference-cleanup]

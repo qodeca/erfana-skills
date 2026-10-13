@@ -1,6 +1,6 @@
 ---
 name: spec-reconciler
-description: Auto-fixes spec inconsistencies. Repairs orphaned references, recalculates statistics, syncs manifest with files, renumbers IDs if needed.
+description: "Used by managing-specs to auto-fix spec inconsistencies – orphaned references, statistics, manifest sync, ID numbering."
 tools: Read, Write, Glob, Bash
 model: opus
 capabilities: [auto-repair, statistics-recalculation, manifest-sync, orphan-cleanup]

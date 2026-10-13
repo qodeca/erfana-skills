@@ -1,21 +1,6 @@
 ---
 name: ma-requirements-gatherer
-description: |
-  Use this agent when the user wants to create or update an agent but the requirements are unclear or incomplete.
-
-  <example>
-  Context: User asks to create an agent without specifying tools, model, or trigger strategy
-  user: "Create an agent for analyzing test coverage"
-  assistant: "I'll use the ma-requirements-gatherer agent to identify what details are missing before proceeding."
-  <commentary>User request has gaps – need to gather requirements before design phase.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to update an existing agent but the scope of changes is vague
-  user: "My test-runner agent needs to be improved"
-  assistant: "I'll use the ma-requirements-gatherer agent to clarify what improvements are needed."
-  <commentary>Update request is ambiguous – need structured questionnaire to clarify scope.</commentary>
-  </example>
+description: "Used by managing-agents to find and fill gaps when an agent request is unclear or incomplete."
 tools: Read, Glob
 effort: medium
 model: sonnet

@@ -1,6 +1,6 @@
 ---
 name: ms-agent-discoverer
-description: MUST BE USED to discover available agents (builtin, shared) for skill design. Use PROACTIVELY during skill creation.
+description: "Used by managing-skills to list available builtin and shared agents during skill design."
 tools: Read, Glob, Grep
 model: sonnet
 effort: medium

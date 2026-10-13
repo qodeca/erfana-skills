@@ -1,21 +1,6 @@
 ---
 name: ma-creator
-description: |
-  Use this agent when the agent design is finalized and the agent file needs to be written (Phase 3–4 of agent creation).
-
-  <example>
-  Context: Phase 2 design is approved – agent name, description, and model are decided
-  user: "Design is approved – now write the agent file for database-migration-reviewer"
-  assistant: "I'll use the ma-creator agent to configure the YAML frontmatter and write the system prompt."
-  <commentary>Design finalized – Phase 3–4 creates the actual agent file with frontmatter and prompt.</commentary>
-  </example>
-
-  <example>
-  Context: User needs an agent file written from scratch with specific requirements
-  user: "Write the agent file – it should use Read and Grep tools, sonnet model, and review SQL files"
-  assistant: "I'll use the ma-creator agent to create the agent file with proper YAML and XML-structured prompt."
-  <commentary>Agent file creation with tool selection and prompt engineering is the creator's domain.</commentary>
-  </example>
+description: "Used by managing-agents (Phases 3–4) to write the agent file from an approved design."
 tools: Read, Write, Edit, Glob, Grep
 effort: xhigh
 model: opus

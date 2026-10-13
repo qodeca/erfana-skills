@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Code reviewer for comprehensive quality analysis. MUST BE USED when reviewing code for security, quality, architecture, or best practices. Use PROACTIVELY for any code review task.
+description: "Reviews code for quality, security, architecture, and best practices. Use for a general code review; for React or Nest.js code, react-code-reviewer and nest-code-reviewer go deeper."
 tools: Read, Grep, Glob, Bash
 model: opus
 effort: xhigh

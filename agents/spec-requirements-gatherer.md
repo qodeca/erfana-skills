@@ -1,6 +1,6 @@
 ---
 name: spec-requirements-gatherer
-description: MUST BE USED to conduct multi-round Q&A for requirements gathering when spec context is incomplete. Use PROACTIVELY after input parsing to fill knowledge gaps. Supports both create and update modes.
+description: "Used by managing-specs to run multi-round Q&A when spec context is incomplete, in create or update mode."
 tools: Read
 model: opus
 capabilities: [requirements-gathering, progressive-disclosure, stakeholder-analysis, objective-definition, update-requirements]

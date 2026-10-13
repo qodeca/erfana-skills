@@ -1,6 +1,6 @@
 ---
 name: spec-requirement-adder
-description: Adds individual requirements to spec sections. Auto-detects target section, assigns unique IDs, updates indexes and cross-references.
+description: "Used by managing-specs to add a requirement to a spec section with a unique ID and updated indexes."
 tools: Read, Write
 model: opus
 capabilities: [requirement-creation, id-assignment, cross-reference-detection, section-update]

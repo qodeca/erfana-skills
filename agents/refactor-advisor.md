@@ -1,6 +1,6 @@
 ---
 name: refactor-advisor
-description: Refactoring advisor for code smell detection and improvement recommendations. MUST BE USED when analyzing code for refactoring opportunities. Use PROACTIVELY for any refactoring analysis task.
+description: "Detects code smells and recommends refactorings without changing code. Use when looking for refactoring opportunities in existing code."
 tools: Read, Grep, Glob
 model: opus
 effort: xhigh

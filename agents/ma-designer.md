@@ -1,21 +1,6 @@
 ---
 name: ma-designer
-description: |
-  Use this agent when designing agent name, description, color, and model selection after requirements are gathered (Phase 2).
-
-  <example>
-  Context: Phase 1 research is complete and requirements are gathered
-  user: "Requirements are ready – design the agent for reviewing database migrations"
-  assistant: "I'll use the ma-designer agent to design the name, description, and model selection."
-  <commentary>Phase 1 complete – Phase 2 designs the agent identity and metadata.</commentary>
-  </example>
-
-  <example>
-  Context: User wants to name and describe a new agent
-  user: "I need a good name and trigger description for my security scanning agent"
-  assistant: "I'll use the ma-designer agent to generate a name, example-based triggers, and model recommendation."
-  <commentary>Agent naming and description design is the designer's core responsibility.</commentary>
-  </example>
+description: "Used by managing-agents (Phase 2) to design an agent's name, description, color, and model."
 tools: Read, Glob, Grep
 effort: high
 model: sonnet

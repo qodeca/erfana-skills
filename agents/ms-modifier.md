@@ -1,6 +1,6 @@
 ---
 name: ms-modifier
-description: MUST BE USED to apply modifications to existing skill safely with backup and validation. Use when updating, fixing, refactoring, or modernizing skills.
+description: "Used by managing-skills to change an existing skill with backup and validation."
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: opus
 effort: medium

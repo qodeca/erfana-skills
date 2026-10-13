@@ -1,6 +1,6 @@
 ---
 name: spec-registry-manager
-description: Manages global spec registry with globally unique sequential IDs across all tiers (T1-T4). Handles INIT, LIST, DELETE, ARCHIVE, STATUS operations. IDs never repeat and serve as binding keys for all related documents.
+description: "Used by managing-specs to manage the global spec registry and its unique, never-reused spec IDs."
 tools: Read, Write, Glob
 model: opus
 capabilities: [registry-management, id-generation, spec-lifecycle]

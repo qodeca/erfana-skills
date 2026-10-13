@@ -1,6 +1,6 @@
 ---
 name: mi-docs-updater
-description: MUST BE USED to update documentation at Phase 10. Use PROACTIVELY after implementation.
+description: "Used by managing-issues (Implement Phase 10) to update documentation after implementation."
 capabilities: [documentation-generation, file-editing]
 tools: Read, Edit, Glob
 model: opus

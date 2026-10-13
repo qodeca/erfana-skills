@@ -1,21 +1,6 @@
 ---
 name: article-reviser
-description: |
-  MUST BE USED to apply review findings to an existing article draft when the managing-articles orchestrator needs a revised draft written to an exact output path. Delegate here to read a review report and the current draft, apply each finding under trust controls, preserve citations and word-count targets, and write the revised draft to the path the orchestrator supplies. Use whenever a draft has been reviewed and the findings now need to be applied as content edits.
-
-  <example>
-  Context: The orchestrator has a draft, a review report, and the exact path to write the revised draft.
-  user: "Apply the reviewer's findings to the draft and produce the revised version."
-  assistant: "I have the draft, the review findings, and the output path. I'll delegate to the article-reviser agent to apply each finding and write the revised draft."
-  <commentary>Applying review findings as content edits to a supplied output path is exactly this agent's job; versioning stays with the orchestrator.</commentary>
-  </example>
-
-  <example>
-  Context: A bilingual article was reviewed and both language drafts need the findings applied independently.
-  user: "Wprowadz poprawki recenzenta do obu wersji jezykowych artykulu."
-  assistant: "The review covers Polish and English. I'll delegate to the article-reviser agent to revise each language's draft to its own output path."
-  <commentary>The agent honors the language array and keeps the Polish and English drafts independent, revising each to its supplied output path.</commentary>
-  </example>
+description: "Used by managing-articles to apply review findings to an article draft and write the revised version."
 tools: Read, Write
 model: sonnet
 effort: medium

@@ -1,6 +1,6 @@
 ---
 name: mi-release-preparer
-description: Prepare production releases. Used standalone or by release management workflows – NOT part of managing-issues implement operation.
+description: "Prepares a production release – release notes, version bump, git tag, and build check. Use when cutting a release; not part of the managing-issues Implement operation."
 capabilities: [git-operations, validation]
 tools: Read, Edit, Bash
 model: opus

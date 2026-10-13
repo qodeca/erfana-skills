@@ -1,21 +1,6 @@
 ---
 name: ma-reviewer
-description: |
-  Use this agent when the user wants a quality audit of an existing agent, or to review an agent for compliance with current standards.
-
-  <example>
-  Context: User wants to check if an existing agent meets current quality standards
-  user: "Review my code-reviewer agent – is it up to current standards?"
-  assistant: "I'll use the ma-reviewer agent to audit it for quality and compliance."
-  <commentary>User requests agent quality review – trigger the reviewer for standards audit.</commentary>
-  </example>
-
-  <example>
-  Context: User suspects an agent has anti-patterns or outdated structure
-  user: "Can you check if my old test-runner agent has any issues?"
-  assistant: "I'll use the ma-reviewer agent to identify anti-patterns and provide remediation guidance."
-  <commentary>Agent health check – reviewer identifies issues and prioritizes fixes.</commentary>
-  </example>
+description: "Used by managing-agents to audit an existing agent for quality and compliance with current standards."
 tools:
   - Read
   - Glob
