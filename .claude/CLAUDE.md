@@ -17,7 +17,7 @@ Current version: **v7.1.0**. The plugin ships 13 auto-discovered skills + 87 sha
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (2): `prompt` and `draft-goal`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
 - `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
 
-**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings). Wired through `hooks/hooks.json` with `${CLAUDE_PLUGIN_ROOT}` paths, validated by Gate 14: `bash-safety` (PreToolUse/Bash – destructive commands, force-push, IMDS, `curl|bash`, …), `secret-detector` (PreToolUse/Write|Edit – cloud/API tokens + PEM keys), `post-compact-reminder` (PostCompact – re-injects load-bearing facts + git snapshot), `verify-completion` (Stop – blocks success-without-evidence claims; allowlists the `<!-- erfana:status-template -->` / `<!-- erfana:explain-template -->` sentinels per Gate 16). **Cross-platform (v4.2.20+):** each hook ships a `.sh` (macOS/Linux) **and** a `.ps1` (Windows) sibling, dispatched by `hooks/dispatch.sh`; Gate 14 enforces both siblings exist and Gate 16 replays the verify-completion fixtures through the OS-native implementation. Mechanism + behavioural detail: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md). The remaining two are the interview guards `grill-guard` (v6.2.0+) and `ms-grill-guard` (v6.4.0+), both Stop hooks that block one stop attempt while an open-marker sentinel is present. **They moved out of SKILL.md `hooks:` frontmatter into `hooks/hooks.json` in v7.1.0**, because Qwen Code does not extract that frontmatter and a skill-scoped registration was dead on one of the two supported hosts. They now evaluate every stop; the sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures + sentinel symmetry + a guard-drift identity check. **No `timeout` key appears in `hooks.json`** – the field means seconds on Claude Code and milliseconds on Qwen, so the 5-second bound lives in `dispatch.sh`; see [`docs/hosts.md`](../docs/hosts.md).
+**Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings): `bash-safety`, `secret-detector`, `post-compact-reminder`, `verify-completion`, and the interview guards `grill-guard` / `ms-grill-guard` (Stop hooks that block one stop while their open-marker sentinel is present; they evaluate every stop, so the sentinel alone scopes them). All are registered in `hooks/hooks.json` and launched by `hooks/dispatch.sh`, each with a `.sh` and a `.ps1` sibling. Registration rules are under Hard constraints (Gate 14); behaviour and fixtures: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md).
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
@@ -83,50 +83,14 @@ and the regenerated file committed alongside it. Gate 18 hard-fails when the reg
 
 ## Release process
 
-For every release:
-1. Changes reach `develop` first via `feature/...` branches (CI-gated). Steps 2-5 (bump, markers, registry, CHANGELOG) land on `develop`; the release itself is a PR from `develop` into `main`.
-2. Bump `version` in `.claude-plugin/plugin.json` only (semver). `plugin.json` is the single source of truth – the marketplace entry carries no `version` (Claude Code resolves `plugin.json` `version` first per the [version-resolution order](https://code.claude.com/docs/en/plugin-marketplaces), so a duplicate in `marketplace.json` would only mask it).
-3. **Sync prose version markers** – update `Current version: **vX.Y.Z**` at line ~9 of this file so it matches. Gate 15 enforces. Also bump `CITATION.cff` (`version` + `date-released`) – not Gate-enforced, sync by hand. `MAINTAINER.md` "Current state" header is version-independent. Then regenerate the skill registry – `bash scripts/gen-skill-registry.sh` – and commit it, so the shipped `docs/skill-registry.md` is accurate as of the release rather than lagging (Gate 18 warns between releases; this step is what clears the warning). Regenerate it **last**, after every skill-source PR has already squash-merged into `develop`, so each row's subject matches the final squash commit; if a skill lands after this regen, redo the regen as a registry-only change (see the squash caveat above).
-4. Add an entry to `CHANGELOG.md` (Keep a Changelog format). If an `## [Unreleased]` section exists (feature branches may accumulate one), promote it to `## [vX.Y.Z] - <date>` as part of the release. **Re-stamp the date on release day.** An entry written during development carries the date it was drafted, and an rc soak puts days between drafting and shipping – so `CHANGELOG.md`'s heading and `CITATION.cff` `date-released` must both be corrected at step 3, not left at whatever the branch happened to say. Neither is Gate-enforced.
-5. Commit (auto-signed via SSH) and let CI run.
-6. Open the release PR (`develop` -> `main`). CODEOWNERS auto-requests review from `@marcinobel`. The `main-protection` ruleset requires signed commits, code-owner review, and the passing `verify.yml` status checks (`gates`, `secret-scan`). `verify.yml` also runs `qwen-compat` and `powershell` (v7.1.0+), which are **not** required checks: add either to the ruleset only after it has reported green on a PR into `main`, since a required check that has never reported blocks merges indefinitely.
-7. **Solo-maintainer flow**: GitHub disallows self-approval, so the release PR merges with `gh pr merge <num> --admin --merge` (the ruleset has a RepositoryRole bypass actor for admin; `--admin` overrides both the required CI checks and the ruleset's squash-only `allowed_merge_methods`, so confirm CI is green first). Two flags that are correct on a feature PR are wrong here: **never `--delete-branch`** (the head branch is `develop`, long-lived), and **never `--squash`** (a squash commit is not a descendant of `develop`, so the two branches lose their shared history and every later release PR re-lists the whole backlog). Feature PRs into `develop` take the opposite form: `gh pr merge <num> --squash --delete-branch`. Bypass becomes unnecessary when a backup maintainer joins.
-8. **After merge** (do NOT skip): `git pull origin main && git tag -s vX.Y.Z -m "..." && git push origin vX.Y.Z`.
-9. Create the GitHub Release: `gh release create vX.Y.Z --notes-file -`. Verify `gh release list` shows the new version with the `Latest` flag; if `--latest` was lost (e.g. back-filling), correct with `gh release edit vX.Y.Z --latest`.
-10. **Verify what a user actually gets.** Qwen resolves the **latest GitHub release tag**, so nothing published before step 9 is installable and every earlier check ran against a tree no user will see. Install the published release and confirm the shape: `qwen extensions install qodeca/erfana-skills:erfana` then `qwen extensions list` — expect the new version, the right `Release tag:`, 13 skills, 87 agents, 5 commands. Do **not** pass `--consent`; the prompt it skips is the one a user is meant to read. Then prove a hook still fires from the installed copy, which is the only check that exercises the shipped artifact rather than the repo:
-    ```bash
-    printf '%s' '{"tool_name":"write_file","tool_input":{"file_path":"/tmp/x.ts","content":"k=\"AKIA_EXAMPLE_KEY\""}}' \
-      | bash ~/.qwen/extensions/erfana/hooks/dispatch.sh secret-detector
-    ```
-    This is still the loader, not the executor: it does not prove a skill behaves correctly inside a session. See [`docs/hosts.md`](../docs/hosts.md).
+The full procedure – version bump, prose markers, registry, CHANGELOG, release PR, admin merge, signed tag, GitHub Release, post-release install check, staged (rc) rollout, signed-commit verification – lives in the project skill [`.claude/skills/releasing-erfana/SKILL.md`](skills/releasing-erfana/SKILL.md). Load it before any release step. Rules that hold even without it:
 
-Auto-update is **opt-in** for this third-party marketplace (only Anthropic's own marketplaces auto-update by default). Users who enabled it – per-marketplace in `/plugin`, or org-wide via `"autoUpdate": true` in managed settings – get the update on next session start. Manual fallback: `/plugin marketplace update erfana-skills && /plugin update erfana@erfana-skills`.
+- `plugin.json` `version` is the single source of truth; never add `version` to `marketplace.json`.
+- The release PR (`develop` -> `main`) merges with `gh pr merge <num> --admin --merge` – **never `--squash`** (breaks the shared history of the two branches) and **never `--delete-branch`** (`develop` is long-lived). Feature PRs into `develop` take the opposite form: `--squash --delete-branch`.
+- `main` rejects unsigned commits; tags are signed (`git tag -s`).
+- Use the staged (rc) path for skill-frontmatter rewrites changing trigger phrases, manifest schema migrations, hook additions, or anything that could flip behavior for downstream consumers without warning.
 
 Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking work: [`ROADMAP.md`](../ROADMAP.md) + open GitHub issues. De-scoped items + reasoning: [`BACKLOG.md`](../BACKLOG.md).
-
-### Staged rollout
-
-Routine releases promote `develop` to `main` via PR. For releases that materially change skill behavior or could regress trigger phrases, use the staged path:
-
-1. On a `feature/` branch off `develop`, edit + bump + CHANGELOG as usual, and land it on `develop`.
-2. Push and tag with `-rc.N` suffix: `git tag -s vX.Y.Z-rc.1 -m "rc.1"`.
-3. Pin 3–5 pilot employees to the rc tag: `/plugin install erfana@erfana-skills@vX.Y.Z-rc.1`.
-4. After 48-hour soak with no reports, retag the same commit as the final version, push, merge feature branch via PR.
-5. Pilot group reverts to auto-update with `/plugin install erfana@erfana-skills`.
-
-The marketplace serves whatever the manifest's `version` field says; rc tags are opt-in (manifest unchanged, no propagation to non-pinned users). Use staged rollout for: skill-frontmatter rewrites changing trigger phrases, manifest schema migrations, hook additions, anything that could flip behavior for downstream consumers without warning.
-
-### Signed commits + signed tags
-
-The `main-protection` ruleset enforces `required_signatures`; unsigned pushes to `main` are rejected. Verify locally:
-
-```bash
-git config --global --get-regexp '^(commit|tag|gpg|user)\.'
-# Expect commit.gpgsign=true, tag.gpgsign=true, gpg.format=ssh
-git log --show-signature -1
-```
-
-A local pass is **necessary but not sufficient** for the green "Verified" badge on GitHub – the cryptographic check can pass while GitHub still returns `verified: false / reason: "no_user"`. The two-stage end-to-end check, the worked example of that failure mode, and new-maintainer key setup all live in [`MAINTAINER.md`](../MAINTAINER.md) `## Onboarding a backup maintainer`.
 
 ## Things to avoid
 

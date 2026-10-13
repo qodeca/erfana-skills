@@ -18,6 +18,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 - **Agent descriptions are calm and short.** All 87 plugin-root agent descriptions dropped "MUST BE USED", "Use PROACTIVELY" and `<example>` blocks, following Anthropic's Claude 5 guidance. User-facing agents now say what they do and when to use them in one or two sentences; skill-internal agents name the skill that spawns them. Claude Code lists every agent description in every session, so the always-loaded total fell from 44,209 to 9,792 characters (about 11k to 2.5k tokens). Agent bodies are unchanged.
 - **managing-agents and managing-skills teach the new style.** Templates, checklists, design guides and examples no longer recommend pressure language or example blocks, and the managing-agents pre-release checklist no longer makes example-based triggers a hard requirement.
 
+### Fixed
+
+- **Strict plugin validation failed in CI.** Claude Code 2.1.296 warns that a `CLAUDE.md` at the plugin root is not loaded as project context, and `claude plugin validate . --strict` turns that warning into a failure. The maintainer guide moved to `.claude/CLAUDE.md`, which Claude Code still loads for maintainers; Gate 15 reads its version banner and count claims from the new path.
+
 ## [7.1.0] - 2026-09-03
 
 Qwen Code becomes a supported host. One package, converted at install time – no second manifest, no build step, no second release train. Everything the two hosts do differently is recorded in [`docs/hosts.md`](docs/hosts.md), generated from `scripts/_lib/host_matrix.py`.

@@ -242,7 +242,7 @@ Note on agents: v4.0.0 added `agents/` (75 files at the time, rising to 76 when 
 
 ## See also
 
-- [`CLAUDE.md`](../.claude/CLAUDE.md) – repository layout table, hard constraints, release process
+- [`CLAUDE.md`](../.claude/CLAUDE.md) – repository layout table, hard constraints; the release process lives in [`.claude/skills/releasing-erfana/SKILL.md`](../.claude/skills/releasing-erfana/SKILL.md)
 - [`hosts.md`](hosts.md) – the single source of truth for host differences: which hosts are supported, how Qwen Code converts the plugin at install time, the tool-name vocabulary rules, what degrades there, and how to verify a host.
 - [`skill-registry.md`](skill-registry.md) – generated inventory of every shipped skill and the last commit that touched it; regenerate with `scripts/gen-skill-registry.sh`, policed by Gate 18.
 - [`verification-gates.md`](verification-gates.md) – index for the 12 gates (all hard); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+), Gate 18 (skill-registry sync against git history – list drift and impossible dates hard, lagging dates warn, v6.6.1+)
