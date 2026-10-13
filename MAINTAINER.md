@@ -4,7 +4,7 @@ This document establishes the operational contract for keeping the `qodeca/erfan
 
 ## Current state
 
-This section is intentionally version-independent – treat it as the always-true description of the plugin's maintainership posture. The release cadence (CLAUDE.md `## Release process`) is what advances the version number; this section advances when the *people* or *scope shape* changes, not when a routine release ships.
+This section is intentionally version-independent – treat it as the always-true description of the plugin's maintainership posture. The release process ([`.claude/skills/releasing-erfana/SKILL.md`](.claude/skills/releasing-erfana/SKILL.md)) is what advances the version number; this section advances when the *people* or *scope shape* changes, not when a routine release ships.
 
 - **Primary maintainer**: Marcin Obel (`@marcinobel` on GitHub).
 - **Contact vs. commit identity**: the project's security/contact channel is GitHub private vulnerability reporting (see `SECURITY.md`), not a personal email. Commit author identity is independent and uses whichever email is registered + verified on the maintainer's GitHub account (currently `marcin.obel@gmail.com` for Marcin). GitHub's server-side verifier returns `verified: false / reason: "no_user"` if the commit's author email is not on the account's verified-emails list, even when the local SSH signature is valid. See `## Onboarding a backup maintainer` step 3 for the selection rule.

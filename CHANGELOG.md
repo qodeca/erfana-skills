@@ -17,6 +17,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 - **Agent descriptions are calm and short.** All 87 plugin-root agent descriptions dropped "MUST BE USED", "Use PROACTIVELY" and `<example>` blocks, following Anthropic's Claude 5 guidance. User-facing agents now say what they do and when to use them in one or two sentences; skill-internal agents name the skill that spawns them. Claude Code lists every agent description in every session, so the always-loaded total fell from 44,209 to 9,792 characters (about 11k to 2.5k tokens). Agent bodies are unchanged.
 - **managing-agents and managing-skills teach the new style.** Templates, checklists, design guides and examples no longer recommend pressure language or example blocks, and the managing-agents pre-release checklist no longer makes example-based triggers a hard requirement.
+- **The release procedure moved into a project skill.** The step-by-step release, staged-rollout and signed-commit instructions left `.claude/CLAUDE.md` for `.claude/skills/releasing-erfana/SKILL.md`, which loads only when a maintainer releases; the merge-flag, signing and rc-trigger rules stay in `.claude/CLAUDE.md`. Maintainer-facing only – nothing in the shipped plugin changes.
 
 ### Fixed
 
