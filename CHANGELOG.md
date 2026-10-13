@@ -3,7 +3,9 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [8.0.0] - 2026-10-13
+
+Four new skills, and every agent description rewritten for Claude 5 models. Released as a major version because the description rewrite changes when Claude picks a shared agent: the descriptions no longer tell Claude to use an agent "proactively" or that it "MUST BE USED", so some agents may be chosen less often than before. Nothing is removed – every skill, agent, hook and command from v7.1.0 is still present.
 
 ### Added
 

@@ -104,3 +104,11 @@ Two smaller behaviour changes, recorded so they are not mistaken for bugs: `comm
 What that leaves uncovered is specific, not general: no erfana skill has ever run end to end inside a Qwen Code session. Every check that exists – 12 gates, 40 hook fixtures, the conversion smoke test, three CI jobs – verifies the loader and the wiring. None of them exercises the executor. The soak was the only step that would have, and it is the step that was skipped.
 
 Compensating controls: the gate suite and CI are green on all four jobs; the hook fixtures replay both Claude-shaped and Qwen-shaped payloads; the launcher's fail-open directions are documented above; and Claude Code behaviour is unchanged by construction, since every matcher widening is monotonic and every new gate rule is additive. If a Qwen-side behavioural bug surfaces in the first days after release, this is its most likely origin.
+
+## v8.0.0 agent descriptions and four new skills – shipped without a soak (accepted risk)
+
+1. **Agent selection changes without a measurement.** All 87 shared agent descriptions dropped "MUST BE USED", "Use PROACTIVELY" and `<example>` blocks. Claude picks agents from these descriptions, so an agent that used to fire on its own may now fire less often. No before-and-after selection test exists; if a skill's delegation visibly weakens, the first suspect is the calmer description of the agent it delegates to. This is why the release is a major version.
+2. **The four new skills (`prompt`, `draft-goal`, `ship`, `handoff`) have not run on Qwen Code.** Same limit as the v7.1.0 entry: the Qwen smoke test proves the loader and the conversion, not the executor.
+
+**Staged rollout: waived by explicit maintainer decision (2026-10-13).** Description rewrites that change agent selection are inside the staged-rollout trigger list ("anything that could flip behavior for downstream consumers without warning"). The `rc.1` soak was recommended and declined; v8.0.0 shipped as a routine release. This is the **fifteenth consecutive no-soak release**.
+
