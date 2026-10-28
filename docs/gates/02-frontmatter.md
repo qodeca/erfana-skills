@@ -17,7 +17,7 @@ Frontmatter checks: `skills/*/SKILL.md` and `agents/*.md` (unchanged scope).
 
 Reasoning-display sweep additionally covers part of the instructional-prose surface: `skills/*/agents/*.md`, `skills/*/references/*.md`, `skills/*/templates/*.md`, `skills/*/guides/*.md`, `skills/*/validation/*.md`, `skills/*/examples/*.md`, and `commands/*.md`. Full file text is scanned, so reported line numbers are absolute.
 
-**What the sweep excludes.** The list is a fixed glob set, not a walk of every `.md` under `skills/`. Outside it: the **singular** `skills/<name>/reference/*.md` spelling used by `managing-issues` (23 files); `skills/<name>/phases/*.md` and `operations/*.md`, which have no glob at all – in `managing-issues` that is the 13 phase files and 9 operation files the PR #24 Implement hardening rewrote; and any file nested one level deeper than a listed glob, e.g. `skills/managing-issues/templates/{create,implement}/*.md`. Instructional prose in those files is not scanned for reasoning-display phrasings. The full singular/plural map is in the layout reference at the top of [`../verification-gates.md`](../verification-gates.md).
+**What the sweep excludes.** The list is a fixed glob set, not a walk of every `.md` under `skills/`. Outside it: the **singular** `skills/<name>/reference/*.md` spelling used by `issue` (23 files); `skills/<name>/phases/*.md` and `operations/*.md`, which have no glob at all – in `issue` that is the 13 phase files and 9 operation files the PR #24 Implement hardening rewrote; and any file nested one level deeper than a listed glob, e.g. `skills/issue/templates/{create,implement}/*.md`. Instructional prose in those files is not scanned for reasoning-display phrasings. The full singular/plural map is in the layout reference at the top of [`../verification-gates.md`](../verification-gates.md).
 
 ### File-handling hygiene (v6.3.0)
 
@@ -35,7 +35,7 @@ Every sub-skill and (when present) every agent prints with its name; the fixture
 - `when_to_use` block has fewer than 3 quoted activation phrases (recommended ≥3, Section 12.2)
 - Skill, agent, command, or reference prose instructs reasoning display — Section 12.7 / 13.5 (v6.3.0)
 - Stale `gate2-allow` suppression comment covering no match (v6.3.0)
-- ms-* agent missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the Model Selection Guide in `skills/managing-skills/templates/shared-agent-template.md`
+- ms-* agent missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the Model Selection Guide in `skills/skill/templates/shared-agent-template.md`
 - Agent body contains a deprecated API reference at YAML-key syntax: `temperature:`, `top_p:`, `top_k:` (400 on Claude Opus 4.7 and later), `budget_tokens:` (unsupported on Claude 5 models; Haiku 4.5 exempt) — Section 13.3/13.4, hard-blocking semantically; gate emits WARN to allow incremental fix-up
 
 **Hard FAILs** (block CI):
@@ -61,10 +61,10 @@ The phrase regex requires a self-referential determiner (`your`/`its`/`internal`
 
 ## Reference
 
-- `skills/managing-skills/validation/pre-release-checklist.md` — Section 12 (Claude 5 model patterns) full definitions and weight system
-- `skills/managing-skills/validation/agent-pre-release-checklist.md` — Section 13 (per-agent Claude 5 frontmatter requirements)
-- `skills/managing-skills/templates/shared-agent-template.md` — Model Selection Guide (orchestrator → opus high, validator → sonnet low, etc.)
-- `skills/managing-skills/guides/claude-5-patterns.md` — current pattern reference for what this gate detects
+- `skills/skill/validation/pre-release-checklist.md` — Section 12 (Claude 5 model patterns) full definitions and weight system
+- `skills/skill/validation/agent-pre-release-checklist.md` — Section 13 (per-agent Claude 5 frontmatter requirements)
+- `skills/skill/templates/shared-agent-template.md` — Model Selection Guide (orchestrator → opus high, validator → sonnet low, etc.)
+- `skills/skill/guides/claude-5-patterns.md` — current pattern reference for what this gate detects
 
 ## Cross-host frontmatter rules (v7.1.0)
 
@@ -78,4 +78,4 @@ These are `FAIL`, not warnings, because each one makes a skill or an agent silen
 | Skill `allowed-tools` / `argument-hint` is a string, not a YAML flow sequence | Qwen's agent-plugin skill parser throws `"Agent Skills allowed-tools must be a string."` and the caller skips the **entire skill**. That parser is reached only for a manifest declaring format `agent-plugins-v1`; erfana installs as format `qwen`, so the flow shape is latent on **both** hosts today - one upstream change from silently deleting a skill. `argument-hint` is weaker still: Qwen ignores a non-string rather than throwing. Both stay `FAIL` because a string costs nothing. |
 | `skills/fact-checking/SKILL.md` keeps `disable-model-invocation: true` | Not a host rule – a `CLAUDE.md` hard constraint that had no enforcement. Fact-check runs are user-requested only. |
 
-Agent description length stays a **warning**: Qwen's `SubagentValidator` only *warns* over 1,000 characters ("consider shortening for better readability") and never rejects; the one hard cap is 1,024 characters for *skill* descriptions. Plugin-root agent descriptions are kept far below that anyway: Claude Code lists every agent description in every session, so they follow the calm, short style in `skills/managing-agents/guides/system-prompt-design.md` (≤300 characters for user-facing agents, ≤160 for skill-internal ones, no `<example>` blocks).
+Agent description length stays a **warning**: Qwen's `SubagentValidator` only *warns* over 1,000 characters ("consider shortening for better readability") and never rejects; the one hard cap is 1,024 characters for *skill* descriptions. Plugin-root agent descriptions are kept far below that anyway: Claude Code lists every agent description in every session, so they follow the calm, short style in `skills/agent/guides/system-prompt-design.md` (≤300 characters for user-facing agents, ≤160 for skill-internal ones, no `<example>` blocks).

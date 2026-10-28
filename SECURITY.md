@@ -17,7 +17,7 @@ In scope:
 
 - The `erfana` plugin code in this repository (`.claude-plugin/`, `skills/`, `agents/`, `commands/`, `hooks/`, `docs/`, `scripts/`).
 - Plugin configuration that ships to users (manifests, safety hooks — bash `.sh` + Windows `.ps1` siblings).
-- The 89 shared agents in `agents/`. The orchestration skills (`managing-issues`, `managing-articles`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
+- The 89 shared agents in `agents/`. The orchestration skills (`issue`, `article`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
 - The release pipeline (signed tags, GitHub Actions workflows).
 
 Out of scope:

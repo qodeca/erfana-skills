@@ -29,12 +29,12 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 
 | Skill | What it does | Triggers |
 |---|---|---|
-| `erfana:managing-agents` | Lifecycle management for Claude Code agents – research, design, validation phases. Ships its own validation/review checklists. | "create agent", "review agent", "modify agent" |
-| `erfana:managing-articles` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. | "write article", "research article", "publish article" |
-| `erfana:managing-issues` | Full GitHub-issue lifecycle: create issues, implement them through phased quality gates, and review code or PRs. Runs on `main`-default repos, stack-agnostic, with a skill-wide untrusted-data boundary and confirm-before-destructive git ops. The Implement operation is **autonomous** – it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, resolving every architecture/technical decision by best practice plus judgment. Its reviews are **embedded**: it fans out its own reviewer agents (no manual `/erfana:lens-review`), auto-fixes CRITICAL/HIGH findings inline, and routes MEDIUM/LOW to a judge. It asks a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions – and it still **refuses a detected headless run**, so it is not safe for a `claude -p` / CI session. It saves its progress to one comment on the issue (after asking, on a public repo; without a prompt but announced in one line, on a private one) so an interrupted run can resume. See [`docs/architecture.md`](docs/architecture.md). | "create issue", "implement issue", "review code", "review PR" |
+| `erfana:agent` | Lifecycle management for Claude Code agents – research, design, validation phases. Ships its own validation/review checklists. | "create agent", "review agent", "modify agent" |
+| `erfana:article` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. | "write article", "research article", "publish article" |
+| `erfana:issue` | Full GitHub-issue lifecycle: create issues, implement them through phased quality gates, and review code or PRs. Runs on `main`-default repos, stack-agnostic, with a skill-wide untrusted-data boundary and confirm-before-destructive git ops. The Implement operation is **autonomous** – it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, resolving every architecture/technical decision by best practice plus judgment. Its reviews are **embedded**: it fans out its own reviewer agents (no manual `/erfana:lens-review`), auto-fixes CRITICAL/HIGH findings inline, and routes MEDIUM/LOW to a judge. It asks a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions – and it still **refuses a detected headless run**, so it is not safe for a `claude -p` / CI session. It saves its progress to one comment on the issue (after asking, on a public repo; without a prompt but announced in one line, on a private one) so an interrupted run can resume. See [`docs/architecture.md`](docs/architecture.md). | "create issue", "implement issue", "review code", "review PR" |
 | `erfana:report` | Professional consulting reports with Pyramid Principle, SCQA, Five Cs framework, sentence-case validation. Reviews run six house checks through two shared checker agents (`report-language-checker`, `report-structure-checker`). | "create report", "review report", "validate report" |
-| `erfana:managing-skills` | Lifecycle management for Claude Code skills following Anthropic best practices. Includes the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills. Every operation opens with a coverage-map requirements interview – Create always interviews; Modify/Review/Modernize gate first and interview on yes. | "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns" |
-| `erfana:managing-specs` | 4-tier specification management: T1 issue, T2 spec, T3 lite, T4 standard. Delegates to plugin-root `spec-*` agents, with trust-boundary controls and a transactional single-writer registry (schema v3, auto-migrated on first touch). See [`docs/architecture.md`](docs/architecture.md). | "create spec", "validate spec", "T3 lite spec", "T4 standard" |
+| `erfana:skill` | Lifecycle management for Claude Code skills following Anthropic best practices. Includes the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills. Every operation opens with a coverage-map requirements interview – Create always interviews; Modify/Review/Modernize gate first and interview on yes. | "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns" |
+| `erfana:spec` | 4-tier specification management: T1 issue, T2 spec, T3 lite, T4 standard. Delegates to plugin-root `spec-*` agents, with trust-boundary controls and a transactional single-writer registry (schema v3, auto-migrated on first touch). See [`docs/architecture.md`](docs/architecture.md). | "create spec", "validate spec", "T3 lite spec", "T4 standard" |
 
 ### Process skills
 
@@ -82,13 +82,13 @@ Six hooks run silently in the background once the plugin is enabled, providing a
 | `post-compact-reminder` | After context compaction | Re-injects load-bearing facts (temporal awareness, honesty discipline, verification rules, agent delegation) plus the current git branch + status snapshot. |
 | `verify-completion` | When the agent considers stopping | Asks the agent to keep working when it claims success without citing executed tests, exit codes, gate output, or screenshots. v4.2.9+ allowlist: messages carrying the `<!-- erfana:status-template -->` sentinel emitted by the status commands bypass the check; Gate 16 enforces sentinel symmetry across the two command files and the hook. Falls back to the unstripped body when the reply has an odd number of code fences so success claims after an unclosed fence stay visible. |
 | `grill-guard` | When the agent considers stopping | Blocks one stop attempt while `grill-me`'s open-marker sentinel is still in the reply – a backstop for the coverage-map interview, not the protocol itself. |
-| `ms-grill-guard` | When the agent considers stopping | The same, for `managing-skills`' requirements interview and its own sentinel. |
+| `ms-grill-guard` | When the agent considers stopping | The same, for `skill`' requirements interview and its own sentinel. |
 
 The first four are the project-agnostic safety net – no personal style preferences. The two interview guards are erfana-specific and fire only while an interview marker is open. They activate only after the next Claude Code session restart following plugin install or update.
 
 **Cross-platform (v4.2.20+).** Each hook ships a `.sh` (macOS/Linux) and a `.ps1` (Windows) sibling, run through the `dispatch.sh` launcher so the safety net works on native Windows too (where Git Bash ships without `jq`). The mechanism and the one uncovered case (a Windows host with no Git Bash) are documented in [`docs/architecture.md`](docs/architecture.md).
 
-**Interview guards.** Two of the six hooks belong to a skill rather than to the safety net: `grill-guard` (for `grill-me`, v6.2.0+) and `ms-grill-guard` (for `managing-skills`). Each nudges once when an interview is still open – that is, while the skill's open-marker sentinel is present in the reply. Since v7.1.0 both are registered in `hooks/hooks.json` like every other hook, not in the skill's SKILL.md `hooks:` frontmatter, because Qwen Code does not read that frontmatter and a skill-scoped registration would have been dead on one of the two supported hosts (see [`docs/hosts.md`](docs/hosts.md)). The sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures plus a guard-drift check.
+**Interview guards.** Two of the six hooks belong to a skill rather than to the safety net: `grill-guard` (for `grill-me`, v6.2.0+) and `ms-grill-guard` (for `skill`). Each nudges once when an interview is still open – that is, while the skill's open-marker sentinel is present in the reply. Since v7.1.0 both are registered in `hooks/hooks.json` like every other hook, not in the skill's SKILL.md `hooks:` frontmatter, because Qwen Code does not read that frontmatter and a skill-scoped registration would have been dead on one of the two supported hosts (see [`docs/hosts.md`](docs/hosts.md)). The sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures plus a guard-drift check.
 
 ### Slash commands
 
@@ -148,7 +148,7 @@ You should see `erfana@erfana-skills` enabled. Then type a trigger phrase like:
 
 > create an issue for the login bug
 
-`erfana:managing-issues` should activate.
+`erfana:issue` should activate.
 
 ### Qwen Code
 
@@ -167,8 +167,8 @@ Two things read differently there: slash commands register **unnamespaced** (`/l
 Both forms resolve to the same skill:
 
 ```
-/erfana:managing-issues     # canonical, namespaced (use this)
-/managing-issues            # bare form, also works
+/erfana:issue     # canonical, namespaced (use this)
+/issue            # bare form, also works
 ```
 
 Use the **namespaced form** in shared docs, screenshots, and team conversations. The bare form is a built-in Claude Code convenience – it exists for autocomplete brevity but collides with personal or other-plugin skills of the same name. The `/erfana:` prefix prevents that collision and makes the source explicit.
@@ -232,22 +232,22 @@ Skills compose. The most common chains:
 
 **Feature from idea to merged code**
 
-1. `erfana:managing-specs` – right-size the requirements (T1 issue through T4 standard spec)
-2. `erfana:managing-issues` create – file the issue against the spec
-3. `erfana:managing-issues` implement – autonomous build through 13 phased quality gates, embedded reviews, human only at requirements, UAT and the final git confirm
+1. `erfana:spec` – right-size the requirements (T1 issue through T4 standard spec)
+2. `erfana:issue` create – file the issue against the spec
+3. `erfana:issue` implement – autonomous build through 13 phased quality gates, embedded reviews, human only at requirements, UAT and the final git confirm
 
 Sample opener: *"Spec out the new export feature, then create and implement the issue."*
 
 **Stress-test a plan before implementing** (process skill, v4.2.3+)
 
 1. `erfana:grill-me` – Socratic walk through the decision tree; one question at a time, recommended answer per branch, explores the codebase before asking when the answer is already encoded there. Depth scales to the plan: a small reversible change gets a short pass, anything with a one-way door gets the full sweep
-2. Downstream skill of choice – `erfana:managing-issues` create / `erfana:managing-specs` (T1–T4), depending on what the locked plan is meant to produce
+2. Downstream skill of choice – `erfana:issue` create / `erfana:spec` (T1–T4), depending on what the locked plan is meant to produce
 
 Sample opener: *"Grill me on this rollout plan before we build it – I want to ship X by Friday, here's my draft approach."*
 
 **Publish a researched article**
 
-1. `erfana:managing-articles` – research, outline, draft, review, revise, publish (bilingual Polish/English supported)
+1. `erfana:article` – research, outline, draft, review, revise, publish (bilingual Polish/English supported)
 2. `erfana:fact-checking` – trace every factual claim in the draft back to a source passage before it ships
 
 Sample opener: *"Write a 2500-word article comparing managed Postgres providers, then fact-check it."*
@@ -270,8 +270,8 @@ The registered marketplace name comes from `marketplace.json` (`erfana-skills`).
 **Trigger phrases don't activate the right sub-skill**
 Confirm the plugin is enabled (`/plugin list`) and try a trigger phrase from the skill table above. Each sub-skill has its own keyword set – if your phrasing is far from the listed triggers, name the artifact explicitly ("issue", "spec", "article", "report", "agent", "skill").
 
-**`/erfana:managing-issues` and `/managing-issues` both appear in autocomplete**
-Expected behavior. Plugin skills are registered at both the bare path (`/managing-issues`) and the namespaced path (`/erfana:managing-issues`) – see [Invocation forms](#invocation-forms--bare-vs-namespaced). Use the namespaced form to avoid collisions with personal or other-plugin skills.
+**`/erfana:issue` and `/issue` both appear in autocomplete**
+Expected behavior. Plugin skills are registered at both the bare path (`/issue`) and the namespaced path (`/erfana:issue`) – see [Invocation forms](#invocation-forms--bare-vs-namespaced). Use the namespaced form to avoid collisions with personal or other-plugin skills.
 
 **Plugin updated but Claude Code still uses old behavior**
 Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin update erfana@erfana-skills`, then restart Claude Code. If still stuck, clear the cache: `rm -rf ~/.claude/plugins/cache/` and restart Claude Code.
@@ -289,7 +289,7 @@ Expected on Qwen Code – its converter registers commands without the plugin na
 First check that [`jq`](https://jqlang.github.io/jq/) is installed and on `PATH` – most hooks parse their JSON payload with it, and the `dispatch.sh` launcher skips a hook it cannot run rather than blocking your work, printing a diagnostic to stderr. The hooks fail open by design, so a missing `jq` looks like silence, not an error. `hooks/hooks.json` needs no Qwen-specific declaration; if `jq` is present and hooks still do nothing, restart the Qwen session so the extension is re-read.
 
 **Skill scope precedence**
-If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/managing-issues/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.
+If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/issue/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.
 
 **Local development (testing changes before they hit main)**
 Clone the repo locally, then register it as a local-path marketplace:

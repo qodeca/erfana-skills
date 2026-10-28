@@ -76,9 +76,9 @@ PYEOF
 
 ## Limitations
 
-The pass-2 glob is `skills/*/references/*.md` – **plural**. One skill spells the directory in the singular, `reference/`: `managing-issues` (22 files). Every link inside those files is unchecked. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" therefore holds for the plural spelling only.
+The pass-2 glob is `skills/*/references/*.md` – **plural**. One skill spells the directory in the singular, `reference/`: `issue` (22 files). Every link inside those files is unchecked. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" therefore holds for the plural spelling only.
 
-The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. In `managing-issues` that is 13 phase files, 9 operation files and 5 example files – the bulk of the skill's prose. Only the handful of links in its `SKILL.md` are gate-checked.
+The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. In `issue` that is 13 phase files, 9 operation files and 5 example files – the bulk of the skill's prose. Only the handful of links in its `SKILL.md` are gate-checked.
 
 The Implement hardening (PR #24) added two files inside that blind spot (`reference/run-state-resume.md`, `examples/implement-edge-cases.md`) and roughly forty new cross-links from `operations/` and `phases/`. A **manual link-resolution pass** is the substitute, and is what covered the equivalent gap at v4.2.19 – [`../known-caveats.md`](../known-caveats.md) records both that pass and the gap itself as an accepted risk.
 
