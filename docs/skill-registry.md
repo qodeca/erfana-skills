@@ -18,9 +18,9 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| managing-reports | 2026-10-28 | refactor(managing-reports): rebuild the skill as a brief |
-| managing-skills | 2026-10-28 | docs(managing-skills): update Claude 5 patterns for the 5.5 generation |
-| using-erfana | 2026-10-28 | docs: record the managing-reports rebuild and the shared-agent count ... |
+| managing-skills | 2026-10-28 | docs: rename managing-reports to report across the docs |
+| report | 2026-10-28 | docs: rename managing-reports to report across the docs |
+| using-erfana | 2026-10-28 | docs: rename managing-reports to report across the docs |
 | draft-goal | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | managing-agents | 2026-10-13 | refactor(agents): calm, shorter agent descriptions for Claude 5 model... |
