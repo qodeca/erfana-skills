@@ -34,7 +34,7 @@ The result is an agent file the user agreed to, at the location they chose, that
 - **Interview first**, one decision at a time and skipping what the user already said: what the agent should achieve and for whom, when Claude should hand work to it, what it may read or change, where it should live (project `.claude/agents/`, user `~/.claude/agents/`, or a plugin's `agents/`), and whether it runs alone or as part of a skill.
 - **Check the need.** Using section 1 of the standard, say plainly when the main conversation, a skill, or a slash command would serve better, and let the user decide.
 - **Research only when it adds something.** For an unfamiliar or fast-moving domain, start `ma-researcher` with the agreed purpose; skip it for a well-understood job.
-- **Agree the design** before writing: name, description, tools, model and effort, location, and an outline of the prompt (job, inputs, scope, judgment, way out, output). Show it and change it until the user agrees.
+- **Agree the design** before writing: name, description, tools, model and effort, location, and an outline of the prompt (the top 1% sentence and its concrete bar, job, inputs, scope, judgment, way out, output). Show it and change it until the user agrees.
 - **Write** the file from the template. If the target file already exists, stop and ask.
 - **Review** the new file with `ma-reviewer`, fix every high-severity finding, show the medium ones for the user to accept or fix, and say how to test the agent (section 9 of the standard).
 

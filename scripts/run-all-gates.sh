@@ -159,6 +159,7 @@ AGENT_NAME_SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
 # there" - covered 87 of the 98 shipped agents. They also escaped the
 # name==basename invariant.
 AGENT_GLOBS = ['agents/*.md', 'skills/*/agents/*.md']
+TOP_BAR = 'You work at the level of the top 1% of'
 agent_files = sorted(set(fp for g in AGENT_GLOBS for fp in glob.glob(g)))
 if agent_files:
     for fp in agent_files:
@@ -199,6 +200,30 @@ if agent_files:
 
         # Item 13.5 (v6.3.0): reasoning-display instructions
         report_reasoning_display(fp, text, '13.5')
+
+        # Top 1% bar (house rule, agent-standard.md section 6). The first prose
+        # line of the body -- inside a leading <context> tag if there is one --
+        # places the agent at the top 1% of its field, and the same paragraph
+        # goes on to say what that level means. A FAIL: the rule is the plugin's
+        # quality bar, and a title with nothing after it does not meet it.
+        lines = [l.strip() for l in body.splitlines()]
+        idx = next((i for i, l in enumerate(lines)
+                    if l and l != '<context>' and not l.startswith('<!--')), None)
+        first = lines[idx] if idx is not None else ''
+        if not first.startswith(TOP_BAR):
+            print(f'FAIL: {fp} prompt does not open with "{TOP_BAR} <field>." '
+                  f'(top 1% bar, agent-standard.md section 6)')
+            ok = False
+        else:
+            para = []
+            for l in lines[idx:]:
+                if not l or l.startswith('#') or (l.startswith('<') and not l.startswith('<<')):
+                    break
+                para.append(l)
+            if len(re.findall(r'[.!?](?:\s|$)', ' '.join(para))) < 2:
+                print(f'FAIL: {fp} top 1% sentence has no concrete bar after it '
+                      f'(two to four lines on what that level means for the job)')
+                ok = False
 
         # Cross-host agent name rules (v7.1.0). Qwen Code's converter drops an
         # agent whose name is over 50 characters, is not identifier-shaped, or
