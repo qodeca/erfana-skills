@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "curl -fsSL https://mcr.microsoft.com/v2/dotnet/sdk/tags/list | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['tags'][-5:])\""
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "ssh deploy@app.example.com sudo systemctl restart app"
+  }
+}

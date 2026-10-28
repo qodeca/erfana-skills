@@ -37,3 +37,12 @@ CURRENT GIT STATE:
 ${GIT_STATUS:+- Status:
 ${GIT_STATUS}}
 EOF
+
+# An erfana:autopilot run keeps its state in .local/autopilot.md. Point to
+# it (never inline it: the file holds text other tools wrote) while the run
+# is active, so the compacted session resumes instead of starting over.
+if [ -f .local/autopilot.md ] && head -n 1 .local/autopilot.md | grep -q '^Status: active'; then
+  echo ""
+  echo "AUTOPILOT RUN ACTIVE: read .local/autopilot.md and continue from its"
+  echo "Progress and Owner queue sections (erfana:autopilot resume)."
+fi

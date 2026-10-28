@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "rm -rf \"$TMPDIR/build-cache\" /var/folders/ab/cd123/T/tmp.XyZ"
+  }
+}

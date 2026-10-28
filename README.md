@@ -15,7 +15,7 @@ by [Qodeca](https://github.com/qodeca)
 
 </div>
 
-Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 14 skills – 6 orchestration skills plus process, verification, prompting, and session-closeout skills and a router – and 33 shared agents. Work you steer runs in your conversation; reviews go to separate checker agents that see only the work and the standard.
+Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 18 skills – 6 orchestration skills plus process, verification, prompting, work-session, and session-closeout skills and a router – and 33 shared agents. Work you steer runs in your conversation; reviews go to separate checker agents that see only the work and the standard.
 
 It ships as a Claude Code plugin and also runs on **Qwen Code**, which converts Claude Code plugins at install time – one repository, one release, two hosts. What differs between them is recorded in [`docs/hosts.md`](docs/hosts.md).
 
@@ -56,13 +56,24 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | `erfana:raise-the-bar` | Rewrites a request you are about to give Claude into a more ambitious one: aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields. It keeps only the raises Claude can support in your workspace, names an outside check for each one (tests, data, a reviewer – not Claude grading itself), and prints the rewritten request with any setup it needs. It rewrites the request only; you run it. Adapted from Felix Rieseberg's "How to be more ambitious" tutorial. | "raise the bar", "be more ambitious with this", "aim higher", "what would a top expert do here" |
 | `erfana:draft-goal` | Turns what you want done into a `/goal` completion condition that Claude Code's goal evaluator can judge from the conversation – one outcome, numbered checks whose proof is shown, explicit exclusions, an owner-decisions clause so a recommendation you decline stops blocking the goal, and a turn bound – and prints it once, ready to paste. It writes the condition only; you run `/goal`. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0), with new wording. | "draft a goal", "help me write a /goal", "tighten my goal", "why does my goal never finish" |
 
+### Work-session skills
+
+For long, unattended, or parallel work: pick the work, keep sessions from colliding, run it without babysitting, and get specialists to review the plan.
+
+| Skill | What it does | Trigger phrases |
+|---|---|---|
+| `erfana:autopilot` | Sets up an unattended run: writes the `/goal` condition from the session itself, keeps one state file (`.local/autopilot.md`) with progress and a queue of what needs you, keeps the task list down to open work, and resumes after a restart or compaction. Prints the `/goal` line for you to paste; never starts it itself. | "work unattended", "prepare the goal for this session", "resume the work", "do you need anything from me?" |
+| `erfana:next-batch` | Picks the next issues: skips the ones other sessions claimed, ranks the rest by impact on delivery, groups the top ten by theme, and saves the batch for `autopilot`. Read-only on GitHub. | "pick the next issues", "next batch", "what should we work on next" |
+| `erfana:coordinate` | Keeps parallel sessions on one repository apart: claims issues on GitHub (a `claimed` label plus a marked comment), shows who holds what, releases claims, and exchanges status with sibling sessions on the same machine. | "claim #N", "which issues are taken", "check with the other sessions" |
+| `erfana:expert-panel` | Runs a panel of top-practitioner reviewers over a plan, design, or documents, merges their findings, asks you the decisions, and writes an improved version to a new file. | "fan out top 1% specialists", "expert review of the design", "panel review" |
+
 ### Session closeout skills
 
 Both run only when you type them, because they act outside the conversation.
 
 | Skill | What it does | Invocation |
 |---|---|---|
-| `erfana:ship` | Takes the current work as far as you say: commit, push, open or update the pull request, or merge it (then delete the branch and close the linked issue). Reads the project's own branch and PR rules first and stops where they forbid a step; never force-pushes; merges only after checks pass. | `/erfana:ship [commit \| push \| pr \| merge]` (default `pr`) |
+| `erfana:ship` | Takes the current work as far as you say: commit, push, open or update the pull request, or merge it – waiting up to 30 minutes for the checks, then deleting the branch, closing the linked issue, and cleaning up merged branches and worktrees. `cleanup` runs only the tidy-up and lists what is left. Reads the project's own branch and PR rules first and stops where they forbid a step; never force-pushes; never merges over a failing check. | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` (default `pr`) |
 | `erfana:handoff` | Writes a handoff document to the OS temp directory so another agent, harness, directory, or colleague can continue the work – references existing specs, issues, and diffs instead of copying them, redacts secrets, and suggests which skills to load next. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). | `/erfana:handoff [what the next session is for]` |
 
 ### Bootstrap and shared agents

@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "P=/tmp/a; P=/opt; rm -rf $P/x"
+  }
+}

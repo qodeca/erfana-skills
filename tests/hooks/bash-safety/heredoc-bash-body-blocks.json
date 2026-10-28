@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "bash <<'EOF'\nsudo rm -rf /var/lib/app\nEOF"
+  }
+}

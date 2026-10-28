@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "P=/private/tmp/claude-501/proj/sess/scratchpad/maestro-probe; rm -rf $P/subflows $P/scripts"
+  }
+}

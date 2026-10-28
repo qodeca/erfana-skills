@@ -3,6 +3,7 @@ name: e2e-test-design-reviewer
 description: "Reviews an e2e test design for completeness, traceability, and coverage against the requirements. Use after e2e-test-designer produces a test design."
 tools: Read, Glob, Grep, WebSearch
 model: opus
+effort: medium
 color: zinc
 capabilities: [test-design-audit, coverage-validation, traceability-checking, ieee-829-compliance]
 ---
