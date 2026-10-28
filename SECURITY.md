@@ -17,7 +17,7 @@ In scope:
 
 - The `erfana` plugin code in this repository (`.claude-plugin/`, `skills/`, `agents/`, `commands/`, `hooks/`, `docs/`, `scripts/`).
 - Plugin configuration that ships to users (manifests, safety hooks — bash `.sh` + Windows `.ps1` siblings).
-- The 89 shared agents in `agents/`. The orchestration skills (`issue`, `article`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
+- The 84 shared agents in `agents/`. The orchestration skills (`issue`, `article`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
 - The release pipeline (signed tags, GitHub Actions workflows).
 
 Out of scope:
@@ -32,7 +32,7 @@ From v7.1.0 the same package also installs on Qwen Code, which converts Claude C
 **What is signed is the repository, not the installed bundle.** Release tags and commits are signed, and `git verify-tag` covers what this repo publishes. Qwen rewrites agent frontmatter and writes its own `qwen-extension.json` during conversion, so the tree in `~/.qwen/extensions/erfana/` is not byte-identical to the tag and carries no signature of ours. Verify the source, then verify the conversion did what you expect:
 
 ```bash
-ls ~/.qwen/extensions/erfana/agents/*.md | wc -l   # expect 89
+ls ~/.qwen/extensions/erfana/agents/*.md | wc -l   # expect 84
 ls ~/.qwen/extensions/erfana/skills | wc -l        # expect 9
 diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no output
 ```
