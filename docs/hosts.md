@@ -136,7 +136,7 @@ would live upstream or would cost Claude Code users something.
 - **Agent `effort:` and `capabilities:` are dropped** by the converter, along
   with `type:` and `file_restrictions:`. They stay in the files because Claude
   Code uses them.
-- **The post-compaction reminder runs but its output is discarded.**
+- **The post-compaction reminder runs but its output is discarded.** That includes its pointer to an active `erfana:autopilot` state file, so on Qwen a compacted run resumes only through `/autopilot resume`.
 - **Commands register unnamespaced** – `/doc-update`, not `/erfana:doc-update` –
   so a name collision with a Qwen builtin renames the extension command to `erfana.<name>` rather than dropping it - the builtin takes the bare name, but the erfana command stays reachable under the dotted form.
 - **`$ARGUMENTS` is not substituted.** Qwen uses `{{args}}` and otherwise

@@ -114,7 +114,7 @@ If either sentinel literal ever changes:
 
 Before v7.1.0 `tests/hooks/` was Stop-hook only, so nothing failed if `secret-detector`'s `write_file` arm were deleted again. Two new families close that:
 
-- `tests/hooks/secret-detector/*.json` and `tests/hooks/bash-safety/*.json`, each in a Claude-shaped variant (`"Write"`, `"Bash"`) and a Qwen-shaped one (`"write_file"`, `"edit"`, `"run_shell_command"`). PreToolUse hooks block with **exit 2 plus stderr**, not with stdout JSON, so they replay through `run_pre_cases()` rather than `run_cases()`.
+- `tests/hooks/secret-detector/*.json` and `tests/hooks/bash-safety/*.json`, each in a Claude-shaped variant (`"Write"`, `"Bash"`) and a Qwen-shaped one (`"write_file"`, `"edit"`, `"run_shell_command"`). PreToolUse hooks block with **exit 2 plus stderr**, not with stdout JSON, so they replay through `run_pre_cases()` rather than `run_cases()`. Since v9.1.0 the `bash-safety` family also pins the false positives found in a week of real sessions – safe `rm -rf` in project and temp folders, downloads piped into a parser, heredoc file content – as expect-allow cases, next to expect-block cases for the dangerous neighbours of each, so the hook cannot drift looser or stricter unnoticed.
 - Three new guard fixtures per guard covering the shapes that used to false-block: a fence indented under a list item, a `~~~` fence, and a backticked prose mention of the marker. The last one matters because the block reason literally tells the model to remove the trailing marker – a model that complied and said so re-triggered the guard on its own report.
 
 Section 1b proves the launcher's behaviour rather than the presence of a string:
