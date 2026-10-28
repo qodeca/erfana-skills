@@ -42,6 +42,7 @@ Every sub-skill and (when present) every agent prints with its name; the fixture
 
 - Missing `name` or `description` frontmatter field; frontmatter absent or not a YAML mapping; unreadable file
 - Agent `name` does not match filename basename minus `.md`
+- Agent prompt does not open with the top 1% bar: the first prose line of the body (inside a leading `<context>` tag if there is one) must start with `You work at the level of the top 1% of`, and the same paragraph must carry at least one more sentence saying what that level means for the job (house rule; `skills/agent/references/agent-standard.md` section 6)
 - **Any detector-fixture mismatch** — a false positive on `tests/gate-02-fixtures/valid/*.md`, a missed detection from `tests/gate-02-fixtures/invalid/expected.txt`, or an unexpected extra detection. The fixture contract is hard even while the production rule stays WARN.
 
 ## Detector design (guards against false positives and false negatives)
