@@ -25,7 +25,7 @@ Start from [../templates/create/bug-report.md](../templates/create/bug-report.md
 - **Acceptance criteria as checkboxes**, each one independently verifiable.
 - **User impact**: who is affected, how often, how badly.
 - **Context, not constraints**: link related issues, specs, or discussions; mention related areas to check.
-- **Labels from the repository's set.** Run `gh label list` to see it; the usual ones are `bug`, `enhancement`, `documentation`, `security`, `breaking-change`, `good first issue`, `help wanted`. `bug` later routes Implement to `bug-investigator`, and `refactor` to `refactor-advisor`.
+- **Labels from the repository's set.** Run `gh label list` to see it; the usual ones are `bug`, `enhancement`, `documentation`, `security`, `breaking-change`, `good first issue`, `help wanted`. `bug` later routes Implement to `bug-investigator`, and `refactor` to `architecture-reviewer`.
 
 ## Show it and create it once
 

@@ -71,7 +71,7 @@ A quick status ("spec status") is the same review plus the registry facts: statu
 The result is a spec whose bookkeeping matches its files, and whose content matches the code where the user decided it should.
 
 - **Bookkeeping** (any active spec): recount requirements, criteria, sections, and words; rebuild `requirements_index` and `requirement_sequences`; sync the registry entry's counts. Fix these directly and report each before and after. Content problems found on the way – a duplicate ID, a criterion pointing at a missing requirement, a vague requirement – are proposed as changes for the user to approve, never applied silently.
-- **Against the code** ("reconcile spec with code", T3 and T4): start `spec-impl-comparator` with `specPath` (the spec's `requirements/` folder, absolute) and `projectPath` (the project root), and follow the classification in `downstream.md`. Change nothing until the user has classified each deviation.
+- **Against the code** ("reconcile spec with code", T3 and T4): start `spec-compliance-checker` with `spec_path` (the spec's `requirements/` folder, absolute) and `project_path` (the project root), and follow the classification in `downstream.md`. Change nothing until the user has classified each gap.
 
 ## Archive and list
 

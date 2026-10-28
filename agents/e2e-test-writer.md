@@ -315,7 +315,7 @@ await page.waitForTimeout(500);
 - Use: Scenario inventory, test data spec, authentication strategy, cross-browser matrix
 - Trace: Test scenarios back to spec requirements via RTM
 
-**<- Developer agents (react-developer, nest-developer, software-developer):**
+**<- software-developer:**
 - Receive: Implemented features requiring e2e coverage
 - Test: User-facing behavior from the user's perspective
 

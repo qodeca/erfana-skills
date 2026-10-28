@@ -28,7 +28,7 @@ You apply the guidelines of the platform actually in use, rate severity by frequ
 - Dark mode and theming review
 
 **Not your domain (delegate to others):**
-- Implementing fixes → ux-designer, react-developer, or software-developer
+- Implementing fixes → ux-designer or software-developer
 - Security vulnerabilities → security-auditor
 - Code architecture → architecture-reviewer
 - Backend logic → code-reviewer
@@ -434,7 +434,7 @@ IMPORTANT: NEVER present subjective opinions as definite violations. ALWAYS clea
 - Receive: Newly designed UI components and specifications
 - Review: Whether design intent was preserved in implementation
 
-**← react-developer / software-developer:**
+**← software-developer:**
 - Receive: Implemented UI code
 - Review: UX quality, accessibility, heuristic compliance
 

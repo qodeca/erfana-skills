@@ -37,8 +37,7 @@ You make at least one deliberate, brand-specific choice that keeps the design fr
 - UX audit, heuristic evaluation, usability testing → ux-reviewer
 - Accessibility compliance (WCAG structural audit) → ux-reviewer (you handle visual a11y: contrast, motion, visual indicators)
 - Visual design audit, design QA, design token compliance review → ui-reviewer
-- React/frontend implementation → react-developer
-- Backend implementation → nest-developer or software-developer
+- Frontend and backend implementation → software-developer
 - Code architecture → technical-architect or solution-architect
 - Security review → security-auditor
 </context>
@@ -62,14 +61,14 @@ Design and implement systematic, token-based visual designs – color systems, t
 
 ⛔ **STOP if the request is a UX audit** (heuristic evaluation, usability testing, WCAG structural compliance) — delegate to `ux-reviewer` and explain the boundary.
 
-⛔ **STOP if the request is implementation-only** (build this React component, write this CSS) with no design decisions needed — delegate to `react-developer` or `software-developer`.
+⛔ **STOP if the request is implementation-only** (build this React component, write this CSS) with no design decisions needed — delegate to `software-developer`.
 </input_contract>
 
 <workflow>
 0. **Validate task scope** — Before any other work, confirm the task is within scope:
    - If the task involves user flows, navigation architecture, information architecture, or interaction pattern design → **STOP and delegate to `ux-designer`**. Explain that ui-designer handles the visual layer; ux-designer owns the structural and interaction layer.
    - If the task is an audit or review of an existing design or implementation → **STOP and delegate to `ui-reviewer`** (visual/design QA) or `ux-reviewer` (usability/heuristic/WCAG structural). Explain the distinction.
-   - If the task is pure implementation with no design decisions (e.g., "write this CSS exactly as specified", "build this component exactly as designed") → **STOP and delegate to `react-developer` or `software-developer`**.
+   - If the task is pure implementation with no design decisions (e.g., "write this CSS exactly as specified", "build this component exactly as designed") → **STOP and delegate to `software-developer`**.
    - Otherwise, proceed to step 1.
 
 1. **Read project context** (run independent Read/Glob/Grep calls in parallel)
@@ -752,7 +751,7 @@ Every visual system should have a clear **design personality** – a deliberate 
 - Receive: System constraints, API contracts, data models, performance requirements
 - Design: Visual system within technical feasibility boundaries
 
-**→ react-developer / software-developer:**
+**→ software-developer:**
 - Provide: Visual specifications, component designs, token values, animation specs
 - They implement: Production code following the visual design
 

@@ -70,23 +70,9 @@ BUILTIN_AGENTS = [
   {
     name: "architecture-reviewer",
     type: "reviewer",
-    capabilities: ["architecture-review", "quality-assessment", "anti-pattern-detection", "SOLID-principles"],
+    capabilities: ["architecture-review", "quality-assessment", "anti-pattern-detection", "SOLID-principles", "refactoring-analysis"],
     tools: ["Read", "Grep", "Glob", "WebSearch", "WebFetch"],
     description: "Architecture review and quality assessment specialist"
-  },
-  {
-    name: "react-developer",
-    type: "developer",
-    capabilities: ["code-generation", "file-editing", "test-generation", "frontend-development"],
-    tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "WebFetch", "WebSearch"],
-    description: "React frontend development specialist"
-  },
-  {
-    name: "nest-developer",
-    type: "developer",
-    capabilities: ["code-generation", "file-editing", "test-generation", "backend-development"],
-    tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "WebFetch", "WebSearch"],
-    description: "Nest.js backend development specialist"
   },
   {
     name: "claude-code-guide",
@@ -301,13 +287,13 @@ On failure: Return partial results with detailed warnings.
   ],
   "shared_agents": [
     {
-      "name": "react-code-reviewer",
+      "name": "code-reviewer",
       "type": "reviewer",
-      "capabilities": ["code-review", "quality-assessment", "frontend-development"],
-      "tools": ["Read", "Grep", "Glob"],
-      "description": "React code review specialist",
+      "capabilities": ["code-review", "quality-assessment", "security-scan"],
+      "tools": ["Read", "Grep", "Glob", "Bash"],
+      "description": "General code review, with React and Nest.js checks",
       "model": "opus",
-      "path": "agents/react-code-reviewer.md",
+      "path": "agents/code-reviewer.md",
       "source": "shared"
     }
   ],

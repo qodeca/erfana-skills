@@ -9,9 +9,9 @@ A review is worth what it finds and what it gets right. Report every real defect
 | File | The one file |
 | Component | The component and its styles, logic, and tests |
 | Module | Every file in the folder |
-| Feature | The related files across folders – find them with `issue-codebase-explorer` when the feature is large |
+| Feature | The related files across folders – find them with a read-only exploration (the built-in `Explore` agent on Claude Code, with the phase 3 brief in [implement.md](implement.md) adapted to the feature) when the feature is large |
 | Pull request / branch | `git diff --name-only "$BASE_BRANCH"...HEAD` plus uncommitted changes; for a pull request, `gh pr diff "<number>"` |
-| Codebase | The key files per layer, sampled by `issue-codebase-explorer` |
+| Codebase | The key files per layer, sampled by the same read-only exploration |
 | Compliance | The files the spec's requirements point to |
 
 Infer the scope from the request; ask only when two readings would review different files.
@@ -26,7 +26,7 @@ Infer the scope from the request; ask only when two readings would review differ
 
 ## Reviewers
 
-`code-reviewer` (correctness, quality, tests) and `security-auditor` (injection, auth, secrets, unsafe input) always; `architecture-reviewer` at deep depth or for a module and up; `ux-reviewer` for UI code; `refactor-advisor` when the user asks about structure. Start them in parallel in one message, three to five at a time. Give each the file list, its lens, and the standard in [code-review-standards.md](code-review-standards.md) – not your own suspicions, so it reads the code fresh.
+`code-reviewer` (correctness, quality, tests) and `security-auditor` (injection, auth, secrets, unsafe input) always; `architecture-reviewer` at deep depth, for a module and up, or when the user asks about structure or refactoring; `ux-reviewer` for UI code. Start them in parallel in one message, three to five at a time. Give each the file list, its lens, and the standard in [code-review-standards.md](code-review-standards.md) – not your own suspicions, so it reads the code fresh.
 
 ## Findings
 
@@ -38,4 +38,4 @@ Report: the verdict (blocking issues or not), the counts by severity, the findin
 
 ## Compliance audit
 
-For "audit the code against the spec": find the spec (the user names it, or it is detected from the branch or the issue), then run `issue-spec-compliance-checker`, which maps each functional and non-functional requirement to the code that implements it. For a large spec, split by area (backend, frontend, tests, infrastructure) and run one checker per area in parallel. Report a scorecard: each requirement as met, partly met, missing, or contradicted, with the evidence, then the gaps ranked by risk.
+For "audit the code against the spec": find the spec (the user names it, or it is detected from the branch or the issue), then run `spec-compliance-checker` with `spec_path` (the spec's requirements folder or file) and `project_path` (the project root); it maps each functional and non-functional requirement to the code that implements it. For a large spec, split by area (backend, frontend, tests, infrastructure) and run one checker per area in parallel, passing the area as `scope`. Report a scorecard: each requirement as met, partial, deviated, missing, or not verifiable, with the evidence, then the gaps ranked by risk.

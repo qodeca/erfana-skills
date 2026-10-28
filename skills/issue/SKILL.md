@@ -50,7 +50,7 @@ The run is autonomous between the requirements and UAT: it makes every technical
 
 The result is every real defect in the chosen scope, ranked by severity, each with its file, line, quoted code, and a fix – or a spec-compliance scorecard for a compliance audit.
 
-Settle the scope (file, component, module, feature, pull request, codebase, or compliance against a spec) and the depth, then fan out the reviewers that fit: `code-reviewer` and `security-auditor` always, `architecture-reviewer`, `ux-reviewer`, and `refactor-advisor` when the scope calls for them, `issue-spec-compliance-checker` for a compliance audit. Give each reviewer the files and its lens, not your own conclusions. List every finding first, then rank; confirm each quoted line exists before reporting. A review changes no file.
+Settle the scope (file, component, module, feature, pull request, codebase, or compliance against a spec) and the depth, then fan out the reviewers that fit: `code-reviewer` and `security-auditor` always, `architecture-reviewer` (structure, smells, refactoring) and `ux-reviewer` when the scope calls for them, `spec-compliance-checker` for a compliance audit. Give each reviewer the files and its lens, not your own conclusions. List every finding first, then rank; confirm each quoted line exists before reporting. A review changes no file.
 
 ## Display
 

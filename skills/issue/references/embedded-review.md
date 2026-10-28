@@ -12,13 +12,12 @@ Tier 1 runs only QG-8. The embedded reviews are agent fan-outs started from this
 
 | Reviewer | Include when |
 |---|---|
-| `architecture-reviewer` | Always |
+| `architecture-reviewer` | Always; with the `refactor` label, or when a reviewer flags structural debt, also ask it for a refactoring plan |
 | `solution-reviewer` | Always |
 | `security-auditor` | Always – security is never dropped from a review |
 | `code-reviewer` | Implementation reviews (not the design-only QG-4a) |
 | `test-writer` | Implementation reviews – missing scenarios and coverage gaps |
 | `ux-reviewer` | The change touches the UI |
-| `refactor-advisor` | `refactor` label, or a reviewer flags structural debt |
 
 Start three to five reviewers in one message, in parallel; batch beyond that. A reviewer that stalls is recorded as "not reviewed" and the run continues with the others' findings.
 

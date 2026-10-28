@@ -13,7 +13,7 @@ CI (`.github/workflows/verify.yml`) invokes the same runner on every push and PR
 **Layout reference**:
 
 - Skills: `skills/<name>/SKILL.md` (14 skills – 6 orchestration + 1 process + 1 verification + 3 prompting + 2 session closeout + 1 bootstrap).
-- Shared agents: `agents/*.md` (41 shared agents at plugin root, scanned by Gate 2 + Gate 7 from v4.0.0).
+- Shared agents: `agents/*.md` (33 shared agents at plugin root, scanned by Gate 2 + Gate 7 from v4.0.0).
 - Per-skill nested agents: none. `article` (v4.3.0) and `report` (then `managing-reports`) hoisted theirs to plugin-root `article-*` and `report-*`.
 - Hooks: `hooks/hooks.json` + 6 safety hooks, each a `.sh` (macOS/Linux) + `.ps1` (Windows) pair routed through the `dispatch.sh` launcher, which also enforces the shared timeout (cross-platform, v4.2.20+; plugin-root interview guards and cross-host wiring, v7.1.0+; validated by Gate 14, v4.1+).
 - Interview guards: `grill-guard` (v6.2.0+) and `ms-grill-guard` (v6.4.0+), both Stop hooks validated by Gate 16 (fixtures + sentinel symmetry + guard-drift). Declared in SKILL.md `hooks:` frontmatter until v7.1.0, when they moved into `hooks/hooks.json` – Qwen Code does not extract that frontmatter, so a skill-scoped registration ran on one host only.

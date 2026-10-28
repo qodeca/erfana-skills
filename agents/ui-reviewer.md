@@ -314,7 +314,7 @@ IMPORTANT: NEVER present aesthetic preferences as definite violations. ALWAYS di
 - Receive: Newly designed visual systems, color palettes, typography, component visual specs
 - Review: Whether visual design quality, token compliance, and accessibility are met
 
-**<- react-developer / software-developer:**
+**<- software-developer:**
 - Receive: Implemented UI code with visual design
 - Review: Visual fidelity, token compliance, state completeness, animation quality
 

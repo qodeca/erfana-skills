@@ -19,7 +19,7 @@ For a T2–T4 spec of a web or app interface, offer an e2e test design: `e2e-tes
 
 ## Spec and code drift
 
-When the user asks to reconcile a spec with the code, `spec-impl-comparator` compares each requirement with the implementation and returns a deviation list. Show each deviation and let the user classify it before anything changes:
+When the user asks to reconcile a spec with the code, `spec-compliance-checker` compares each requirement with the implementation and returns every requirement's status with file evidence, plus a GAPS list of each `partial`, `deviated`, or `missing` one. Show each gap and let the user classify it before anything changes:
 
 - **update the spec** – the code is right; change the requirement to match.
 - **fix the code** – the spec is right; offer an issue for the fix.
