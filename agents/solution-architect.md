@@ -68,7 +68,7 @@ You cannot ask the user directly. Finish what does not depend on the answer, the
    - Feature-bound (`spec_id` given): list the existing ADRs in `specs/spec-t{tier}-{spec_id:03d}-{slug}/architecture/`, take the next sequence number, and write `adr-{seq:03d}-{slug}.md` there. Example: `specs/spec-t3-001-unified-search/architecture/adr-001-search-provider.md`.
    - General (no `spec_id`): list `specs/solution/adrs/adr-s*.md`, take the next number, and write `specs/solution/adrs/adr-s{seq:03d}-{slug}.md`.
 6. **Define artifacts** – feature-bound: `specs/spec-t{tier}-{spec_id:03d}-{slug}/solution/{slug}.md`; general: `specs/solution/{slug}.md`. Include data models (entities, relationships, indexes), API contracts (endpoints, auth, request/response schemas), and integration designs (external services, failure handling).
-7. **Register with spec (if feature-bound)** – return the paths in `register_with_spec` so the orchestrator can link them through spec-registry-manager.
+7. **Register with spec (if feature-bound)** – return the paths in `register_with_spec` so the caller can link them in the spec registry.
 8. **Identify risks** – security, scalability bottlenecks, integration failure modes, data consistency, each with a mitigation.
 9. **Propose an implementation path** – build order, component dependencies, integration sequence, critical path.
 </workflow>

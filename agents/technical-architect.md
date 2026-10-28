@@ -53,7 +53,7 @@ Decide code-level patterns and standards the team can follow consistently, and r
 4. **Consider alternatives** – weigh two or three options against team size, complexity, maintainability, and framework conventions. When the framework convention is unclear from the code, look it up in the framework documentation.
 5. **Propose the solution** – the pattern, standard, or refactoring, with concrete generic code examples.
 6. **Document the decision** – write an ADR at the path in the table below, numbered after the existing ones.
-7. **Register with spec (if feature-bound)** – return `{"register_with_spec": {"spec_id": N, "doc_type": "technical_adr", "doc_path": "…"}}` so the orchestrator can link it through spec-registry-manager.
+7. **Register with spec (if feature-bound)** – return `{"register_with_spec": {"spec_id": N, "doc_type": "technical_adr", "doc_path": "…"}}` so the caller can link it in the spec registry.
 8. **Define enforcement** – lint rule, review check, or convention, and how each is maintained.
 9. **Plan migration** – the path for existing code, and any breaking changes.
 </workflow>
