@@ -18,18 +18,18 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| raise-the-bar | uncommitted | not yet committed |
 | agent | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | article | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
-| grill-me | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| draft-goal | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
+| grill-me | 2026-10-28 | Merge remote-tracking branch 'origin/develop' into feature/managing-r... |
 | issue | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| prompt | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
+| raise-the-bar | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
 | report | 2026-10-28 | docs: rename managing-reports to report across the docs |
 | skill | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | spec | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
-| using-erfana | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
-| draft-goal | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
+| using-erfana | 2026-10-28 | Merge remote-tracking branch 'origin/develop' into feature/managing-r... |
 | handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
-| prompt | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | ship | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 
