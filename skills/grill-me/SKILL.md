@@ -81,6 +81,7 @@ After the map is mostly explored, always run – at `short` as one question each
 
 - Premortem: "It's a year from now. This plan shipped and failed spectacularly – why?" Require at least 2 boring failure modes (missed handoff, quiet scope creep, key person left); exotic scenarios crowd out the ones that actually happen. At `short`, one boring failure mode is the floor.
 - Reversibility: "Which of these locked decisions are one-way doors?" A yes at `short` re-sizes the interview upward.
+- Expert gap: "What would the best practitioner in this field do here that this plan does not?" Probe for real instruments instead of approximations, raw data instead of summaries, a target harder than the one set, and a check the team does not grade itself. Each gap the user accepts becomes a new map area; each one they decline goes into the ledger with its reason. At `short`, one gap is the floor.
 
 ## Exit gate
 
