@@ -1,6 +1,6 @@
 ---
 name: mi-requirements-analyzer
-description: "Used by managing-issues (Implement Phase 1) to gather requirements and research prior art."
+description: "Used by erfana:issue (Implement Phase 1) to gather requirements and research prior art."
 capabilities: [code-search, web-search, requirements-analysis, prior-art-research]
 tools: Read, WebSearch, Grep, Glob
 model: opus

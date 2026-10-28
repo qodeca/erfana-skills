@@ -1,6 +1,6 @@
 ---
 name: ms-modifier
-description: "Used by managing-skills to change an existing skill with backup and validation."
+description: "Used by erfana:skill to change an existing skill with backup and validation."
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: opus
 effort: medium

@@ -1,6 +1,6 @@
 ---
 name: report-structure-checker
-description: "Used by the report skill to check a report's structure and executive summary – Pyramid, SCQA, Five C's, linkage, bottom line first – with evidence."
+description: "Used by erfana:report to check a report's structure and executive summary – Pyramid, SCQA, Five C's, linkage, bottom line first – with evidence."
 tools: Read, Grep, Glob
 model: opus
 effort: medium

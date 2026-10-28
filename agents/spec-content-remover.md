@@ -1,6 +1,6 @@
 ---
 name: spec-content-remover
-description: "Used by managing-specs to deprecate or delete requirements after checking for orphaned references."
+description: "Used by erfana:spec to deprecate or delete requirements after checking for orphaned references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-removal, deprecation, orphan-detection, cross-reference-cleanup]

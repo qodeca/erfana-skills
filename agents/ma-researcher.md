@@ -1,6 +1,6 @@
 ---
 name: ma-researcher
-description: "Used by managing-agents (Phase 1) to research best practices and anti-patterns for a new agent role."
+description: "Used by erfana:agent (Phase 1) to research best practices and anti-patterns for a new agent role."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 effort: medium
 model: sonnet

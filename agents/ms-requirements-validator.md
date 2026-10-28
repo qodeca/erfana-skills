@@ -1,6 +1,6 @@
 ---
 name: ms-requirements-validator
-description: "Used by managing-skills to check gathered requirements for completeness and consistency."
+description: "Used by erfana:skill to check gathered requirements for completeness and consistency."
 tools: Read, Glob
 model: sonnet
 effort: low

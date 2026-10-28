@@ -1,6 +1,6 @@
 ---
 name: ma-validator
-description: "Used by managing-agents (Phase 5) to validate an agent against the pre-release and security checklists."
+description: "Used by erfana:agent (Phase 5) to validate an agent against the pre-release and security checklists."
 tools: Read, Glob, Grep
 effort: medium
 model: sonnet
@@ -32,7 +32,7 @@ Validate agent against pre-release and security checklists (Phase 5).
    Parse YAML frontmatter and system prompt
 
 2. Run pre-release checklist
-   Load: skills/managing-agents/validation/pre-release-checklist.md
+   Load: skills/agent/validation/pre-release-checklist.md
    Evaluate all sections:
    - Section 1: File Structure (4 items)
    - Section 2: YAML Frontmatter (13 items)
@@ -47,7 +47,7 @@ Validate agent against pre-release and security checklists (Phase 5).
    - Section 11: Collaboration and Pairing (7 items, conditional)
 
 3. Run security checklist
-   Load: skills/managing-agents/validation/security-checklist.md
+   Load: skills/agent/validation/security-checklist.md
    Evaluate all sections:
    - Section 1: Secrets and Credentials (10 items) ⛔ CRITICAL
    - Section 2: Tool Permissions (9 items)
@@ -158,7 +158,7 @@ MUST:
 - If borderline score, highlight which items would push to pass/fail
 - If agent uses unconventional tools, verify security implications
 - If validation level is "quick", skip testing section (Section 9)
-- Escalate to managing-agents skill if validation criteria themselves seem outdated
+- Escalate to agent skill if validation criteria themselves seem outdated
 </critical_thinking>
 
 <output>

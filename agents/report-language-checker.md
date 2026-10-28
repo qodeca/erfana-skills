@@ -1,6 +1,6 @@
 ---
 name: report-language-checker
-description: "Used by the report skill to check a report's sentence case, style, formatting, and precision against the house rules, with line-level evidence."
+description: "Used by erfana:report to check a report's sentence case, style, formatting, and precision against the house rules, with line-level evidence."
 tools: Read, Grep, Glob
 model: sonnet
 effort: medium

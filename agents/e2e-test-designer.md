@@ -302,7 +302,7 @@ See <quality_gate> for pre-completion checklist.
 </quality_gate>
 
 <collaboration>
-**<- managing-specs (spec acceptance criteria):**
+**<- spec (spec acceptance criteria):**
 - Receive: Spec files (acceptance criteria, use cases, NFRs, requirements)
 - Use as: Primary input for test design -- parse AC Given/When/Then, UC flows, FR/NFR conditions
 

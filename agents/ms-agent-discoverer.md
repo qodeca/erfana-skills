@@ -1,6 +1,6 @@
 ---
 name: ms-agent-discoverer
-description: "Used by managing-skills to list available builtin and shared agents during skill design."
+description: "Used by erfana:skill to list available builtin and shared agents during skill design."
 tools: Read, Glob, Grep
 model: sonnet
 effort: medium

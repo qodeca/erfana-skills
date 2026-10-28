@@ -1,6 +1,6 @@
 ---
 name: ms-reviewer
-description: "Used by managing-skills to audit an existing skill for quality, compliance, and health."
+description: "Used by erfana:skill to audit an existing skill for quality, compliance, and health."
 tools: Read, Glob, Grep
 model: opus
 effort: high
@@ -44,7 +44,7 @@ Audit existing skill for quality, compliance, and health.
 4. Review content (standard+) — include Claude 5 model-pattern sweep
    Check: Workflow clear, examples present, anti-patterns documented
    **Model-pattern detection (added v4.2.0; revised v6.3.0; reference: `guides/claude-5-patterns.md`):**
-   - 12.1 voice: `Grep -nE "I can help|I'll help|You can use" {skill_path}/SKILL.md` → for EACH match, READ ±3 lines of context. If context contains rule-definition markers (`MUST NOT`, `forbidden`, `anti-pattern`, `don't use`, `no first-person`, `(no "I can help`, listed under `## Anti-Patterns`, listed under `**High Priority:**`), mark as N/A (rule definition explicitly forbidding the phrase). Otherwise flag as P1. Goal: avoid every Modernize self-run on managing-skills surfacing false-positives on its own rule definitions (the Critical Architectural Rules block and the Anti-Patterns Summary both quote the banned phrases).
+   - 12.1 voice: `Grep -nE "I can help|I'll help|You can use" {skill_path}/SKILL.md` → for EACH match, READ ±3 lines of context. If context contains rule-definition markers (`MUST NOT`, `forbidden`, `anti-pattern`, `don't use`, `no first-person`, `(no "I can help`, listed under `## Anti-Patterns`, listed under `**High Priority:**`), mark as N/A (rule definition explicitly forbidding the phrase). Otherwise flag as P1. Goal: avoid every Modernize self-run on skill surfacing false-positives on its own rule definitions (the Critical Architectural Rules block and the Anti-Patterns Summary both quote the banned phrases).
    - 12.2 triggers: count quoted phrases in `when_to_use:` block; <3 → flag as P2
    - 12.3 verify scaffolding: `Grep -nE "always verify|double-check before returning|EVERY step.*validation" {skill_path}/SKILL.md` → flag matches as P1 with fix: "strip on routine steps; keep on irreversible only"
    - 12.4 delegation calibration: `Grep -nE "spawn parallel|ALWAYS.*subagent|fan-out|delegate ALL" {skill_path}/SKILL.md` → semantic check per match: is fan-out reserved for genuinely independent, sizeable items (PASSES), or mandated on small/sequential work or as a blanket rule (P2 fail, fix: "run small glue work inline; reserve fan-out for independent sizeable items")? Missing fan-out prose is NOT a finding — Claude 5 delegates readily by default.

@@ -1,6 +1,6 @@
 ---
 name: ms-creator
-description: "Used by managing-skills to write skill files from an approved design."
+description: "Used by erfana:skill to write skill files from an approved design."
 tools: Read, Write, Edit, Glob, Grep
 model: opus
 effort: medium

@@ -1,6 +1,6 @@
 ---
 name: mi-docs-fixer
-description: "Used by managing-issues for quick documentation fixes – typos, links, formatting."
+description: "Used by erfana:issue for quick documentation fixes – typos, links, formatting."
 capabilities: [documentation-generation, file-editing]
 tools: Read, Edit, Grep
 model: opus

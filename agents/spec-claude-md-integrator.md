@@ -1,6 +1,6 @@
 ---
 name: spec-claude-md-integrator
-description: "Used by managing-specs to add spec-system instructions to a project's CLAUDE.md."
+description: "Used by erfana:spec to add spec-system instructions to a project's CLAUDE.md."
 tools: Read, Write, Glob
 model: opus
 capabilities: [documentation-update, claude-md-integration, spec-documentation]

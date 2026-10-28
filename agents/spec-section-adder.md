@@ -1,6 +1,6 @@
 ---
 name: spec-section-adder
-description: "Used by managing-specs to create a new spec section file within the tier's section limits."
+description: "Used by erfana:spec to create a new spec section file within the tier's section limits."
 tools: Read, Write
 model: opus
 capabilities: [section-creation, template-application, manifest-update, tier-aware-limits]

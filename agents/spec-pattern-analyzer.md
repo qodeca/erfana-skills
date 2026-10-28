@@ -1,6 +1,6 @@
 ---
 name: spec-pattern-analyzer
-description: "Used by managing-specs to find patterns in application research before generating a spec."
+description: "Used by erfana:spec to find patterns in application research before generating a spec."
 tools: Read
 model: opus
 capabilities: [pattern-recognition, best-practices-identification, data-synthesis, trend-analysis]

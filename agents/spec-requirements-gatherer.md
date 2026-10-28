@@ -1,6 +1,6 @@
 ---
 name: spec-requirements-gatherer
-description: "Used by managing-specs to run multi-round Q&A when spec context is incomplete, in create or update mode."
+description: "Used by erfana:spec to run multi-round Q&A when spec context is incomplete, in create or update mode."
 tools: Read
 model: opus
 capabilities: [requirements-gathering, progressive-disclosure, stakeholder-analysis, objective-definition, update-requirements]

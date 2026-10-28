@@ -1,6 +1,6 @@
 ---
 name: spec-content-updater
-description: "Used by managing-specs to edit existing requirements or section content and recheck cross-references."
+description: "Used by erfana:spec to edit existing requirements or section content and recheck cross-references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-update, section-update, cross-reference-validation, change-tracking]

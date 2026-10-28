@@ -1,6 +1,6 @@
 ---
 name: ms-validator
-description: "Used by managing-skills to validate a skill against its checklists and quality standards."
+description: "Used by erfana:skill to validate a skill against its checklists and quality standards."
 tools: Read, Glob, Grep
 model: sonnet
 effort: low

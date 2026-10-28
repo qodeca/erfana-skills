@@ -1,6 +1,6 @@
 ---
 name: mi-issue-displayer
-description: "Used by managing-issues to fetch, list, or search GitHub issues and return formatted markdown."
+description: "Used by erfana:issue to fetch, list, or search GitHub issues and return formatted markdown."
 capabilities: [github-issue-read, github-issue-list, github-issue-search, format-markdown]
 tools: Read, Bash
 model: opus

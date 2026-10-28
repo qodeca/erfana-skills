@@ -1,6 +1,6 @@
 ---
 name: ma-reviewer
-description: "Used by managing-agents to audit an existing agent for quality and compliance with current standards."
+description: "Used by erfana:agent to audit an existing agent for quality and compliance with current standards."
 tools:
   - Read
   - Glob

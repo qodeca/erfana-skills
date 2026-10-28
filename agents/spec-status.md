@@ -1,6 +1,6 @@
 ---
 name: spec-status
-description: "Used by managing-specs to report the detailed status of one spec – sections, requirement counts, validation state, gaps."
+description: "Used by erfana:spec to report the detailed status of one spec – sections, requirement counts, validation state, gaps."
 tools: Read, Glob
 model: opus
 capabilities: [spec-status, gap-analysis, progress-tracking]

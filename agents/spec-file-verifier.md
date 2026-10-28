@@ -1,6 +1,6 @@
 ---
 name: spec-file-verifier
-description: "Used by managing-specs to verify each spec file during creation; reports issues without fixing them."
+description: "Used by erfana:spec to verify each spec file during creation; reports issues without fixing them."
 tools: Read, Grep
 model: haiku
 capabilities: [markdown-validation, structure-verification, cross-reference-checking]

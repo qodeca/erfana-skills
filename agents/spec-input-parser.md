@@ -1,6 +1,6 @@
 ---
 name: spec-input-parser
-description: "Used by managing-specs to parse and validate the initial spec input (text, file, or URL)."
+description: "Used by erfana:spec to parse and validate the initial spec input (text, file, or URL)."
 tools: Read, WebFetch
 model: opus
 capabilities: [input-validation, text-parsing, file-reading, url-fetching, context-extraction]
