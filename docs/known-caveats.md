@@ -129,3 +129,15 @@ v9.0.0 rebuilds `agent`, `skill`, `issue`, `spec`, `report`, `fact-checking`, an
 11. **Test fixtures with deliberate prompt-injection text ship in the package.** The marketplace source is the repository root, so `tests/` – including fixtures such as `tests/fact-checking/fixtures/project/analysis.md` and `tests/article/fixtures/`, which carry planted instructions to test the data rules – is copied to every install. Nothing auto-discovers files under `tests/`, so they load only if a user or agent opens them deliberately.
 
 **Staged rollout: waived by explicit maintainer decision (2026-10-28).** The rc soak was skipped by owner decision for a direct v9.0.0 release, made for an unattended release. This is the **sixteenth consecutive no-soak release**, extending the tally the v8.0.0 entry called the fifteenth. v8.0.1 is not counted: it was a text-only fix that changed no runtime behaviour, and v6.6.1, which changed none either, was not counted by the v6.7.0 entry.
+
+## v9.1.0 – work-session skills and a looser bash-safety hook, shipped without an rc soak (accepted risk)
+
+v9.1.0 adds four skills (`autopilot`, `next-batch`, `coordinate`, `expert-panel`), extends `ship` with a checks wait and a branch and worktree cleanup, changes what `bash-safety` blocks, and adds an autopilot pointer to `post-compact-reminder`. Hook behaviour changes and new trigger phrases are staged-rollout triggers.
+
+1. **No rc soak and no live run of the new skills.** Each new skill has golden cases in `tests/<skill>/cases.md`, written with the skill and not yet run. The evidence is seven blinded `skill-reviewer` rounds, the gate suite, and the Qwen smoke test.
+2. **`bash-safety` allows more than before.** `rm -rf` on paths at least two levels below home or in a temp folder, `curl` piped to `python3 -c`, `python3 -m json.tool`, or `jq`, and quoted heredoc bodies fed to `cat`, `tee`, or an interpreter are no longer blocked. A script written through a quoted heredoc and run in the same command is no longer scanned for `sudo`. The old blocks were mostly false positives (77 in a week of sessions), but the hook is a safety net and its net is now smaller.
+3. **`ship cleanup` deletes branches and worktrees without a second confirmation.** Running the command is the consent; the guard is that a branch counts as merged only when a merged pull request's head commit matches both the local tip and, for remote deletion, `origin/<branch>`. Worktrees with uncommitted changes or non-regenerable ignored files are kept.
+4. **`coordinate` writes to GitHub.** Claims add a `claimed` label (created once per repository) and a comment carrying `<folder>@<host>`; on a public repository the skill asks first, and an unattended run claims nothing there.
+5. **Generic trigger phrases.** `autopilot` loads on "did you finish everything?" and "do you need anything from me?"; with no state file it reports that no run is active and changes nothing.
+
+**Staged rollout: waived by explicit maintainer decision (2026-10-28).** The owner chose "Ship and release" for v9.1.0 in this session. This is the **seventeenth consecutive no-soak release**.

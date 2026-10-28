@@ -3,7 +3,7 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [9.1.0] - 2026-10-28
 
 ### Added
 
