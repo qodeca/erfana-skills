@@ -1,4 +1,4 @@
-Continuation of [code-review-standards-2025.md](code-review-standards-2025.md).
+Continuation of [code-review-standards.md](code-review-standards.md).
 
 ## Contents
 

@@ -12,7 +12,7 @@ Code review standards. The stack-specific sections (Electron, Node.js, React, Ty
 - [5. TypeScript code review checklist](#5-typescript-code-review-checklist) (TypeScript projects)
 - [6. SOLID principles checklist](#6-solid-principles-checklist)
 - [Sources](#sources)
-- Continued in [code-review-standards-2025-dimensions.md](code-review-standards-2025-dimensions.md): code smells, complexity, test coverage, documentation, severity matrix, automated checks, review workflow (sections 7–13)
+- Continued in [code-review-standards-dimensions.md](code-review-standards-dimensions.md): code smells, complexity, test coverage, documentation, severity matrix, automated checks, review workflow (sections 7–13)
 
 ---
 
@@ -445,7 +445,7 @@ Grep(pattern="import.*Service|import.*Repository", path="src/renderer/")
 → Should import interfaces, not implementations
 ```
 
-See [code-review-standards-2025-dimensions.md](code-review-standards-2025-dimensions.md) for detailed dimension criteria (sections 7–13: code smells, complexity metrics, test coverage, documentation, severity matrix, automated checks, review workflow).
+See [code-review-standards-dimensions.md](code-review-standards-dimensions.md) for detailed dimension criteria (sections 7–13: code smells, complexity metrics, test coverage, documentation, severity matrix, automated checks, review workflow).
 
 ---
 
