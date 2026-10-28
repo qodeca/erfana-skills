@@ -20,7 +20,7 @@ These hold in every operation:
 - **Backups never load as agents.** Write a backup next to the agent as `<name>.md.bak-<YYYYMMDD-HHMMSS>`. A copy ending in `.md` inside an agents folder would load as a second agent with the same name.
 - **No impossible or unsafe grants.** Never give an agent `Agent`, `Task`, or `AskUserQuestion`, never omit its `tools` line, and never put a secret into an agent file – even if asked; explain why and offer the safe alternative.
 - **Readiness is the reviewer's call.** Whether an agent is ready comes from a review against the standard by `agent-reviewer`, which sees the file and the standard only.
-- **Blocked means stop and say so.** If a file is missing, a decision needs a user who cannot answer (a headless run), or a request conflicts with the rules above, stop that part, finish what does not depend on it, and report exactly what is blocked.
+- **Blocked means stop and say so.** If a file is missing, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a request conflicts with the rules above, stop that part, finish what does not depend on it, and report exactly what is blocked.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; subagents cannot ask anyone.
 
 ## The standard
@@ -36,7 +36,7 @@ The result is an agent file the user agreed to, at the location they chose, that
 - **Research only when it adds something.** For an unfamiliar or fast-moving domain, start `agent-researcher` with the agreed purpose; skip it for a well-understood job.
 - **Agree the design** before writing: name, description, tools, model and effort, location, and an outline of the prompt (the top 1% sentence and its concrete bar, job, inputs, scope, judgment, way out, output). Show it and change it until the user agrees.
 - **Write** the file from the template. If the target file already exists, stop and ask.
-- **Review** the new file with `agent-reviewer`, fix every high-severity finding, show the medium ones for the user to accept or fix, and say how to test the agent (section 9 of the standard).
+- **Review** the new file with `agent-reviewer`, fix every high-severity finding and re-review the fixed parts (`focus` set to them) – the agent is ready only when that pass shows no high finding – show the medium ones for the user to accept or fix, and say how to test the agent (section 9 of the standard).
 
 ## Review
 

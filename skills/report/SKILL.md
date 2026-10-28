@@ -21,7 +21,7 @@ These hold in every operation:
 - **The user's files stay recoverable.** Edit a report only after the user approves the concrete change list, and only after writing a backup. Never overwrite an existing file without the user's confirmation for that exact path in this session. Never delete a report or a snapshot.
 - **Paths stay in the project.** Every file the skill writes – specification, outline, backup, revision, snapshot, archive copy – sits inside the project at a path the user agreed. Refuse a path that is absolute outside the project, starts with `~`, or contains a `..` segment, and say why.
 - **The verdict is the checks'.** A report passes review only when all six checks pass. The skill never reports a failing check as passing; the user may still decide to ship a report that fails.
-- **Blocked means stop and say so.** If a file is missing, a check cannot run, or a decision needs a user who cannot answer (a headless run), stop that part, finish what does not depend on it, and report exactly what is blocked. Do not work around a blocked step.
+- **Blocked means stop and say so.** If a file is missing, a check cannot run, or a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), stop that part, finish what does not depend on it, and report exactly what is blocked. Do not work around a blocked step.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; the checker agents cannot ask anyone.
 
 ## The house standard

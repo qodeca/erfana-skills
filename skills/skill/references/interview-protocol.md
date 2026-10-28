@@ -7,7 +7,7 @@ How the skill interviews the user before it creates, changes, reviews, or modern
 - **Create** always interviews.
 - **Modify** and **Modernize** first ask one gate question: "Do you have particular ideas or reasons behind this change?" Yes → interview. No → proceed with what the request says.
 - **Review** first asks: "Any session observations, friction points, or particular ideas to focus this review?" Any yes (a friction point alone counts) → interview. The friction answer reaches the reviewer either way.
-- **Headless runs** (no user to answer): do not interview. Say which areas below are still open and stop that part.
+- **Headless runs** (no user to answer – the question tool is missing or denied, as in `claude -p`): do not interview and never print the open marker. Say which areas below are still open and stop that part.
 
 A complete request ("create a read-only skill that…, triggered by…, for…") still gets a short read-back of two or three questions, never zero: "just do it" is a complete request, not a skip.
 
@@ -29,7 +29,7 @@ Required areas are never waived. An optional area may be waived only by the user
 Repeat until the map is closed:
 
 1. Print the coverage-map line at the top of the message: `Map: <area>[x|~| |w: reason] ...` – `[x]` closed, `[~]` in progress, `[ ]` open, `[w]` waived. The map may grow when new information opens an area; it never silently shrinks.
-2. Ask exactly one question per message, recommended option first, fundamentals before the decisions that depend on them. Questions that rest on the user's judgment (goals, priorities, trade-offs) ask for the user's view first and give the recommendation afterwards.
+2. Ask exactly one question per message, through the question tool so the user answers in a picker and the turn waits for them; if the tool is missing or denied, treat the run as headless and drop the marker. Put the recommended option first, fundamentals before the decisions that depend on them. Questions that rest on the user's judgment (goals, priorities, trade-offs) ask for the user's view first and give the recommendation afterwards.
 3. Follow each answer one step further before changing area – what breaks if it is wrong, a concrete example, the consequence.
 4. Record each decision in a running ledger. An answer that contradicts an earlier one is asked again, quoting the user's earlier words.
 

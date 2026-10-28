@@ -16,10 +16,10 @@ Tier 1 runs only QG-8. The embedded reviews are agent fan-outs started from this
 | `solution-reviewer` | Always |
 | `security-auditor` | Always – security is never dropped from a review |
 | `code-reviewer` | Implementation reviews (not the design-only QG-4a) |
-| `test-writer` | Implementation reviews – missing scenarios and coverage gaps |
+| `code-reviewer` (coverage lens) | Implementation reviews – a second brief for missing scenarios and coverage gaps; `test-writer` writes the tests, so it does not review them |
 | `ux-reviewer` | The change touches the UI |
 
-Start three to five reviewers in one message, in parallel; batch beyond that. A reviewer that stalls is recorded as "not reviewed" and the run continues with the others' findings.
+Start three to five reviewers in one message, in parallel; batch beyond that. A reviewer that stalls is recorded as "not reviewed" and the run continues with the others' findings – except `security-auditor`: start it once more, and if it stalls again the gate fails and goes to the user.
 
 ## 2. Brief each reviewer
 

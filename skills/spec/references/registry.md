@@ -29,7 +29,7 @@ Never leave an entry `reserved`. Write the registry one change at a time – the
 
 ## Archive
 
-Archiving means "built and done – keep for reference". It is one way. After the user confirms, move the folder to `specs/archived/`, set the entry's `status` to `archived` and its `path` to `archived/<folder>`, and stamp `archived` in the manifest. If either half of that already happened in an earlier run, finish the other half instead of failing. Stop and report if the target folder already exists in `archived/`.
+Archiving means "built and done – keep for reference". It is one way. The skill has no shell, so the user runs the move: show `mkdir -p specs/archived && mv "specs/<folder>" "specs/archived/<folder>"`, ask the user to run it from the project root (in Claude Code they can prefix it with `!`) and to say when it is done, and check that the folder is now under `specs/archived/`. Then set the entry's `status` to `archived` and its `path` to `archived/<folder>`, and stamp `archived` in the manifest. If either half of that already happened in an earlier run, finish the other half instead of failing. Stop and report if the target folder already exists in `archived/`.
 
 ## Linked documents
 

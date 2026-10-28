@@ -4,7 +4,7 @@ description: Creates, changes, reviews, reconciles, and archives right-sized req
 when_to_use: |
   Use when the user says "create a spec", "write requirements", "spec out this feature", "add a requirement", "update the spec", "validate the spec", "spec status", "reconcile spec with code", "list specs", or "archive a spec".
 argument-hint: "<what to do> [spec id]"
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Task, AskUserQuestion
 ---
 
 # erfana:spec
@@ -20,7 +20,7 @@ These hold in every operation:
 - **IDs are never reused.** Spec IDs come from the registry's `sequence.next`; a deleted, failed, or archived spec keeps its ID forever. Requirement IDs inside a spec are never reused either. Write the registry one change at a time.
 - **The user agrees before files change.** A new spec is written only after the user agrees its tier and requirements. An existing spec changes only when the user's request states the exact change or the user approves a change list. Manifest bookkeeping that follows from the files (statistics, indexes, `updated`) is not a decision and may be fixed directly. Archiving and writing to the project's `CLAUDE.md` need an explicit yes for that action.
 - **The verdict is the checker's.** Whether a spec passes review comes from `spec-validator`, which sees the spec and the checks only. Never report a failing spec as passing.
-- **Blocked means stop and say so.** If the registry is missing or broken, a spec is not found, a decision needs a user who cannot answer (a headless run), or a step fails, stop that part, finish what does not depend on it, and report exactly what is blocked. Never leave a registry entry `reserved`.
+- **Blocked means stop and say so.** If the registry is missing or broken, a spec is not found, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a step fails, stop that part, finish what does not depend on it, and report exactly what is blocked. Never leave a registry entry `reserved`.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; agents cannot ask anyone.
 
 ## What to read
@@ -60,7 +60,7 @@ The result is the agreed change made to an active spec, the spec still consisten
 The result is, for each spec, whether it passes and every finding with its file, ID, quoted text, and fix.
 
 1. Find the spec in the registry (an archived spec is under `specs/archived/`). If it is not there, stop and say so.
-2. Start `spec-validator` with `spec_path` (absolute), `checks_path` set to this skill's `references/review-checks.md` as an absolute path, and the tier. Give it the spec and the checks only – not your opinion of the spec or what the review will decide.
+2. Start `spec-validator` with `spec_path` (absolute), `checks_path` set to this skill's `references/review-checks.md` as an absolute path, `registry_path` set to the project's `specs/registry.json` as an absolute path, and the tier. Give it the spec, the checks, and the registry only – not your opinion of the spec or what the review will decide.
 3. Before reporting, confirm that each finding's quoted text appears in the spec; set aside any that do not and say how many.
 4. Report: passes or not, then the findings from high to low severity, with any embedded instructions first. List every finding; offer to fix them through Change.
 

@@ -1,6 +1,6 @@
 # Review checks
 
-What the `spec-validator` agent checks, and how severity is assigned. The checker reads this file and the spec, nothing else. The writing rules behind the checks are in [writing-requirements.md](writing-requirements.md); tier contents are in [tiers.md](tiers.md).
+What the `spec-validator` agent checks, and how severity is assigned. The checker reads this file, the spec, and the spec's registry entry, nothing else. The writing rules behind the checks are in [writing-requirements.md](writing-requirements.md); tier contents are in [tiers.md](tiers.md).
 
 ## Checks
 

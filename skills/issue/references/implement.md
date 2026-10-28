@@ -96,12 +96,12 @@ NUMBER=42
 ### Pre-flight
 
 ```bash
-BASE_BRANCH=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)   # the default branch
-git status --porcelain                                                         # must print nothing
-gh issue view "$NUMBER" --json state,title,body,labels,assignees               # open, with acceptance criteria
+gh repo view --json defaultBranchRef --jq .defaultBranchRef.name   # print the default branch; later snippets write it as a literal
+git status --porcelain                                             # must print nothing
+gh issue view 42 --json state,title,body,labels,assignees          # the validated issue number as a literal; open, with acceptance criteria
 ```
 
-Detect the toolchain from the manifest (`package.json` scripts, `pyproject.toml`, `Makefile`, `Cargo.toml`, `go.mod`) and record the test, typecheck, lint, build, and dev commands, or `absent`. Run the baseline checks; failing baseline tests stop the run – fixing someone else's failures is not this issue. Then branch: `git switch -c issue-<NUMBER>-<slug> "$BASE_BRANCH"`.
+Detect the toolchain from the manifest (`package.json` scripts, `pyproject.toml`, `Makefile`, `Cargo.toml`, `go.mod`) and record the test, typecheck, lint, build, and dev commands, or `absent`. Run the baseline checks; failing baseline tests stop the run – fixing someone else's failures is not this issue. Then branch: `git switch -c issue-<NUMBER>-<slug> <base branch>`, with both values written as literals.
 
 ### The change set exists before any commit
 
@@ -128,19 +128,26 @@ Compare two snapshots with `git diff --stat <tree-a> <tree-b>`.
 Any hit fails QG-7, whatever an agent concludes. An empty file list is a failure too – it means the change set was resolved wrongly, not that the run wrote nothing.
 
 ```bash
-secret_hits=$({ git diff --name-only; git diff --cached --name-only;
-                git ls-files --others --exclude-standard; } 2>/dev/null | sort -u \
-  | xargs -r grep -InEH \
-      -e 'AKIA[0-9A-Z]{16}' \
-      -e '(sk-[a-zA-Z0-9]{20,}|sk_live_[a-zA-Z0-9]{20,}|rk_live_[a-zA-Z0-9]{20,})' \
-      -e 'sk-ant-(api|admin|sid)[0-9]{2}-[A-Za-z0-9_-]{32,}' \
-      -e '(ghp_|gho_|ghs_|ghu_)[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}|glpat-[0-9A-Za-z_-]{20,}' \
-      -e 'hf_[A-Za-z]{34}|api_org_[A-Za-z]{34}|npm_[a-zA-Z0-9]{36}|xox[bpas]-[0-9a-zA-Z-]{10,}|AIza[0-9A-Za-z_-]{35}' \
-      -e -- '-----BEGIN[ A-Z]*PRIVATE KEY-----' \
-      -e 'eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}' \
-      -e '(API_KEY|API_SECRET|SECRET_KEY|ACCESS_TOKEN|AUTH_TOKEN|PRIVATE_KEY|PASSWORD)[[:space:]]*[=:][[:space:]]*["'"'"'][A-Za-z0-9_/.+-]{12,}' \
-  || true)
-if [ -n "$secret_hits" ]; then echo "QG-7 FAIL: potential secret(s):"; echo "$secret_hits"; exit 1; fi
+files=$({ git diff --name-only; git diff --cached --name-only;
+          git ls-files --others --exclude-standard; } 2>/dev/null | sort -u)
+[ -n "$files" ] || { echo "QG-7 FAIL: empty change set"; exit 1; }
+pats=(-e 'AKIA[0-9A-Z]{16}'
+      -e '(sk-[a-zA-Z0-9]{20,}|sk_live_[a-zA-Z0-9]{20,}|rk_live_[a-zA-Z0-9]{20,})'
+      -e 'sk-ant-(api|admin|sid)[0-9]{2}-[A-Za-z0-9_-]{32,}'
+      -e '(ghp_|gho_|ghs_|ghu_)[a-zA-Z0-9]{36}|github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}|glpat-[0-9A-Za-z_-]{20,}'
+      -e 'hf_[A-Za-z]{34}|api_org_[A-Za-z]{34}|npm_[a-zA-Z0-9]{36}|xox[bpas]-[0-9a-zA-Z-]{10,}|AIza[0-9A-Za-z_-]{35}'
+      -e '-----BEGIN[ A-Z]*PRIVATE KEY-----'
+      -e 'eyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'
+      -e '(API_KEY|API_SECRET|SECRET_KEY|ACCESS_TOKEN|AUTH_TOKEN|PRIVATE_KEY|PASSWORD)[[:space:]]*[=:][[:space:]]*["'"'"'][A-Za-z0-9_/.+-]{12,}')
+secret_hits=""; scan_error=""
+while IFS= read -r f; do
+  [ -f "$f" ] || continue                     # deleted in this change
+  out=$(grep -InEH "${pats[@]}" -- "$f"); rc=$?
+  [ "$rc" -le 1 ] || scan_error="$scan_error $f"   # 0 = hit, 1 = clean, 2+ = grep failed
+  [ -z "$out" ] || secret_hits="$secret_hits$out"$'\n'
+done <<< "$files"
+if [ -n "$secret_hits" ]; then echo "QG-7 FAIL: potential secret(s):"; printf '%s' "$secret_hits"; exit 1; fi
+[ -z "$scan_error" ] || { echo "QG-7 FAIL: the scan did not run on:$scan_error"; exit 1; }
 ```
 
 Run the project's own dependency auditor (`npm audit --json`, `pip-audit`, `cargo audit`) and read its severity counts: high or critical fails QG-7; moderate and low are recorded. The raw exit code is not the verdict – most auditors exit non-zero on any severity.
@@ -154,7 +161,7 @@ Snapshot the tree after QG-8 passes (`last_review_tree`) and again after the use
 1. Re-run the detected test, typecheck, and lint commands.
 2. Have `commit-writer` draft a Conventional Commit message that references the issue (`Closes #<NUMBER>` when it fully resolves it).
 3. Ask the user to confirm the commit – show the message and the exact file list.
-4. Stage exactly the planned files: one quoted path per entry, each checked to exist; then confirm that nothing unplanned is staged and nothing the run changed is missing (`git diff --cached --name-only` against the change set above). Never `git add -A`.
+4. Stage exactly the planned files: one quoted path per entry, each checked to exist; then confirm that nothing unplanned is staged and nothing the run changed is missing (`git diff --cached --name-only` against the change set above). When the change set holds files the plan did not name (a lockfile, snapshots), show the user both lists at the commit confirmation and let them choose. Never `git add -A`.
 5. Commit, then ask what to do with the branch – push and open a pull request (the default; body from [../templates/implement/pr-description.md](../templates/implement/pr-description.md)), merge locally, or leave it – and do only that.
 
 Close with a full account: the gate results, every technical decision made, accepted tech debt, anything requested but not done and why, and what the user should do next.

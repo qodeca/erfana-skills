@@ -20,7 +20,7 @@ These hold in every operation:
 - **Backups stay out of the way.** Write a backup next to the file as `<file>.bak-<YYYYMMDD-HHMMSS>`. Only `SKILL.md` loads as a skill, so a backup with a different name never loads.
 - **No unsafe skills.** Never write a skill that invokes another skill or grants `Skill`, carries a secret, or takes destructive or outward-facing actions without confirmation – even if asked. Explain why and offer the safe alternative.
 - **Readiness is the reviewer's call.** Whether a skill is ready comes from a review against the standard by `skill-reviewer`, which sees the skill and the standard only.
-- **Blocked means stop and say so.** If a file is missing, a decision needs a user who cannot answer (a headless run), or a request conflicts with the rules above, stop that part, finish what does not depend on it, and report exactly what is blocked.
+- **Blocked means stop and say so.** If a file is missing, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a request conflicts with the rules above, stop that part, finish what does not depend on it, and report exactly what is blocked.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; agents cannot ask anyone.
 
 ## The standard
@@ -39,7 +39,7 @@ The result is a skill the user agreed to, at the location they chose, that passe
 - **Check the need.** Using section 1 of the standard, say plainly when a slash command, `CLAUDE.md`, an agent, or the plain conversation would serve better, and let the user decide.
 - **Agree the design** before writing: name, description and trigger phrases, tools, the operations and the result each one promises, the ground rules, any agents (existing ones first; a new one goes through `erfana:agent`, which the user runs), and the files. Show it and change it until the user agrees.
 - **Write** the files from the template. If the target folder already has a `SKILL.md`, stop and ask.
-- **Review** the new skill with `skill-reviewer`, fix every high-severity finding, show the medium ones for the user to accept or fix, and say how to test it (section 9 of the standard). For a skill in this repository, remind the user that `bash scripts/run-all-gates.sh` must pass and that the skill registry is regenerated in a separate change.
+- **Review** the new skill with `skill-reviewer`, fix every high-severity finding and re-review the fixed parts (`focus` set to them) – the skill is ready only when that pass shows no high finding – show the medium ones for the user to accept or fix, and say how to test it (section 9 of the standard). For a skill in this repository, remind the user that `bash scripts/run-all-gates.sh` must pass and that the skill registry is regenerated in a separate change.
 
 ## Review
 

@@ -20,7 +20,7 @@ These hold for the whole run:
 - **Sources are the user's choice.** Verify only against sources the user confirmed in this run. A source list named and confirmed in the request counts; otherwise propose the candidates and wait for the user to confirm them. Reject a path that starts with `~`, points into another user's home, or contains a `..` segment.
 - **The document changes only after approval.** Apply a correction only after the user has seen its literal replacement text and accepted it, and only after a backup of the document (`<file>.bak-<YYYYMMDD-HHMMSS>`). "Fix everything" before the findings are shown is not approval of specific text: show the replacements first. Source files are never edited.
 - **A verdict needs evidence.** A claim is Verified only with a quoted source passage and its file and line. A failed or empty search is not evidence: if no source can be read, stop and say so rather than reporting every claim as ungrounded.
-- **Blocked means stop and say so.** If the target or the sources are missing, a decision needs a user who cannot answer (a headless run), or a check cannot run, stop that part, finish what does not depend on it, and report exactly what is blocked.
+- **Blocked means stop and say so.** If the target or the sources are missing, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a check cannot run, stop that part, finish what does not depend on it, and report exactly what is blocked.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; the verifier agent cannot ask anyone.
 
 ## The method

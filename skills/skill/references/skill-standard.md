@@ -41,7 +41,7 @@ A skill is knowledge and judgment that loads when a task needs it. Choose it for
 - **`context: fork`** runs the skill in a separate context and returns only the result. Use it for long, self-contained work whose details the user does not need to watch; the forked run cannot ask the user anything.
 - **Arguments.** `argument-hint` shows a hint after the slash command; the body reads `$ARGUMENTS`, or positional `$ARGUMENTS[N]` / `$N`.
 - **Shell injection.** A line written as !`command` runs at load time with the user's permissions and pastes its output into the skill. Keep it read-only and bounded (`git log -5`, `git diff --stat`), because its output costs context on every load.
-- **Caching.** Content under about 4,096 tokens is not cached, without a warning. Dates, IDs, or other changing text near the top of `SKILL.md` break the cache for everything after them.
+- **Caching.** A skill body joins a conversation that is already cached, so its size does not decide caching – never pad it. Dates, IDs, or other changing text near the top of `SKILL.md` break the cache for everything after them.
 - **Agents load at session start.** An agent created during a session is not available until the next one. Per-skill `skills/<name>/agents/` folders are not a documented discovery path; agents live in a plugin's `agents/`, `.claude/agents/`, or `~/.claude/agents/`.
 - **Two hosts.** This plugin also installs on Qwen Code, which ignores skill-level `hooks:`, reads `allowedTools` rather than `allowed-tools`, drops `effort`, and does not resolve `model: opus`. So a hard limit lives in `hooks/hooks.json` or in tool grants, and a skill's correctness never depends on a pinned model tier. Details: `docs/hosts.md`.
 
@@ -68,7 +68,7 @@ Write what a capable colleague would need to do the job well, not a script for a
 - **A way out.** When a task cannot be done – a missing file, no access, a decision only an absent user can make – the skill stops that part, finishes what does not depend on it, and reports what blocks it. Without a permitted exit, models given impossible tasks try to game their checks far more often. Never "keep retrying until it succeeds".
 - **A full account** for operations that change things: every change made, anything requested but not done and why, and anything noticed but left alone.
 - **A separate checker** for quality claims: an agent that sees only the artifact and the standard, not the author's reasoning or what the verdict decides.
-- **Hard limits in hooks and tool grants**, not in prose: a missing tool is a guarantee; a sentence is a request.
+- **Hard limits in hooks and agent `tools`**, not in prose: an agent's `tools` line is a real limit; a skill's `allowed-tools` only removes the permission prompt for those tools and does not take the others away; a sentence is a request.
 - **No verify rituals** (**12.3**): no `always verify` / `double-check every step` on routine work – current models check their own work and over-check when told to. Keep checks at irreversible steps and at declared quality gates.
 - **Delegation calibration** (**12.4**): fan out to agents only for independent, sizeable work; small glue work stays in the main conversation, where spawning costs more than it saves. Do not tell agents to verify their own work with more agents.
 - **Agent settings stated** (**12.5**): each agent the skill uses has its model and effort set in its frontmatter, or the skill says they all inherit.

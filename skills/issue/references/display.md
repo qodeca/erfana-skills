@@ -4,7 +4,7 @@ Display shows what GitHub returns and changes nothing. Its only commands are rea
 
 | Mode | Asked as | Command |
 |---|---|---|
-| Single | "show issue #N", "view #N" | `gh issue view "$N" --comments` |
+| Single | "show issue #N", "view #N" | `gh issue view 42 --comments` (the validated number as a literal) |
 | List | "list issues", "recent issues", "issues assigned to me" | `gh issue list --state open --limit 30` (add `--assignee @me`, `--label "<label>"`, `--state closed`) |
 | Search | "find issues with label X", "search issues for Y" | `gh search issues --repo <owner/repo> -- "<query>"` or `gh issue list --search "<query>"` |
 

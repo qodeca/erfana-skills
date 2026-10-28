@@ -34,11 +34,13 @@ Show the exact title, body, and labels that will be created, with any assumption
 On approval, create it without passing the body through the shell – a body line can break out of a heredoc or carry shell metacharacters:
 
 1. Keep only labels that exist in the repository; pass each as its own quoted argument.
-2. Write the approved body to a temporary file whose name contains only a timestamp (for example `/tmp/issue-body-<digits>.md`) – never a name derived from the issue text.
+2. Make a private temporary file with `mktemp` (it prints a fresh, unpredictable path) and write the approved body into it with the file-write tool, not the shell – never a name derived from the issue text.
 3. Create it:
 
    ```bash
-   gh issue create --title "<title, quotes stripped>" --body-file "/tmp/issue-body-<digits>.md" --label "bug"
+   gh issue create --repo 'owner/name' --title '<title>' --body-file '<mktemp path>' --label 'bug'
    ```
+
+   Pass the title in single quotes, after removing every `'`, `$`, backtick, and `\\` from it, and pass the repository the user approved with `--repo`.
 
 4. Delete the temporary file and give the user the issue URL.
