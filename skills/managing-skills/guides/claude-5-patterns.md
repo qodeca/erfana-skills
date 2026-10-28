@@ -1,6 +1,6 @@
 # Claude 5 patterns for skill and agent authors
 
-Practical guidance for designing Claude Code skills and agents targeting the Claude 5 family — Opus 5 (`claude-opus-5`) and Fable 5 (`claude-fable-5`). Supersedes the retired `opus-4-7-patterns.md` guide (deleted in v6.3.0; its two model-agnostic sections — cache-friendliness and skill granularity — are ported below as §10 and §11, and the rest is preserved in git history).
+Practical guidance for designing Claude Code skills and agents targeting the Claude 5 family — the current Opus 5.5 (`claude-opus-5-5`), Sonnet 5.5 (`claude-sonnet-5-5`), and Fable 5.1 (`claude-fable-5-1`), and the earlier Opus 5 and Fable 5. Supersedes the retired `opus-4-7-patterns.md` guide (deleted in v6.3.0; its two model-agnostic sections — cache-friendliness and skill granularity — are ported below as §10 and §11, and the rest is preserved in git history).
 
 **Audience:** anyone authoring or modernizing skills and shared agents in this plugin.
 
@@ -18,6 +18,9 @@ Per https://www.anthropic.com/news/claude-opus-5 and https://www.anthropic.com/n
 |-------|----|----------|
 | Opus 5 | `claude-opus-5` | Current Opus; same pricing as Opus 4.8 ◎ (default Opus in Claude Code v2.1.219+ on Max/Team Premium/Enterprise/API; Pro and Team Standard default to Sonnet 5) |
 | Fable 5 | `claude-fable-5` | Mythos-class tier above Opus; additional safety classifiers for dual-use capabilities |
+| Opus 5.5 | `claude-opus-5-5` | Current Opus (2026-09-22, https://www.anthropic.com/claude-opus-5-5). Thinking always on; API default effort `medium`; built for long unattended runs; output more concise than Opus 5 |
+| Sonnet 5.5 | `claude-sonnet-5-5` | 2026-09-28 (https://www.anthropic.com/claude-sonnet-5-5). Default effort `medium` in Claude Code, `high` on the API |
+| Fable 5.1 | `claude-fable-5-1` | 2026-09 (https://www.anthropic.com/claude-fable-and-mythos-5-1). Default effort `high` in Claude Code; `low`/`medium` often match Fable 5 |
 | Opus 4.8 | `claude-opus-4-8` | Previous generation, still Active (retirement not sooner than 2027-05-28); the configured-fallback target for Claude 5 refusals (§3) |
 
 Frontmatter `model:` aliases remain `opus`, `sonnet`, `haiku` (plus `inherit`). **Never pin `fable`** — the alias is not universally available across harnesses, and Mythos-class access is gated; skills that need frontier capability should inherit the session model.
@@ -58,6 +61,7 @@ Per the Fable 5 prompting guide: *"lower effort settings on Claude Fable 5 still
 | `high` | Orchestrators, reviewers, ambiguous investigation — the "hard problem" setting |
 | `xhigh` / `max` | Genuinely frontier problems only. No longer the Claude Code default posture. Higher effort can produce over-planning and unrequested refactoring — pair with scope-fence constraints if used. |
 
+- **The 5.5 generation shifts again** ✓ (https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5): Opus 5.5 at `medium` matches Opus 5 at `high`; start there and keep `xhigh`/`max` for measured gains. Higher is not always better – Sonnet 5.5 scored lower at `max` than at `xhigh` on FrontierCode, partly because it ran subagent-heavy review flows more often and went out of scope (https://www.anthropic.com/claude-sonnet-5-5). Cap effort for fan-out review agents.
 - **Omitting `effort` is a valid choice** — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents still declare it explicitly (checklist 13.1) so role intent is auditable.
 - Rule of thumb: take the 4.7-era role table and go **one step cooler**. The current role→model/effort table lives in `templates/shared-agent-template.md` (Model Selection Guide) — that copy is canonical.
 - Keep 4.x-style explicit rigor in skills aimed at *smaller* models (haiku-pinned subagents still benefit from checklists and examples — see `cross-model-guide.md`).
@@ -125,6 +129,8 @@ The pre-release-checklist Section 12 numbering is a stable contract (ms-validato
 4. Recalibrate `effort:` one step cooler per §4; sync the SKILL.md Agents table in the same change (checklist 12.5 cross-validation).
 5. Run the Modernize operation (`guides/skill-modernization-guide.md`) and record the pass in `docs/modernization-registry.md`.
 
+For a skill written as a step-by-step workflow, a larger rewrite into a brief is usually worth more than this checklist – see §12.
+
 ## 10. Cache-friendliness ✓
 
 Per https://platform.claude.com/docs/en/build-with-claude/prompt-caching (model-agnostic; ported from the retired 4.7 guide):
@@ -152,3 +158,18 @@ Per https://platform.claude.com/docs/en/build-with-claude/prompt-caching (model-
 **Choose by deliverable shape, not by ideology:**
 - Focused (one output, one workflow) → `templates/focused-skill-template.md` (design-* family, ~65-200 lines)
 - Multi-operation (verb-dispatched) → `templates/skill-md-template.md` + multi-op subsection (managing-* family)
+
+## 12. Writing a skill as a brief ✓
+
+The direction Anthropic's 2026 guidance points in: give the goal, the guardrails, and the exit criteria – not the steps – and let the model plan. Boris Cherny (creator of Claude Code) advises deleting the system prompt with each new model and adding lines back only when a failure repeats (https://www.ycrootaccess.com/p/boris-cherny-building-claude-code); the harness-design post treats every harness piece as an assumption about what the model cannot do, to be removed one at a time as models improve (https://www.anthropic.com/research/harness-design-long-running-apps). A brief-style skill has this shape:
+
+1. **Ground rules first.** After compaction Claude Code re-attaches each invoked skill with only its first 5,000 tokens, from a shared 25,000-token budget (https://code.claude.com/docs/en/skills). The rules that protect the user – untrusted content, irreversible actions, confirmations, what the verdict depends on – go in the first screen, each with its reason.
+2. **One section per operation, led by its outcome.** "The result is …" followed by the judgment calls that matter and the few checks that prove it. Numbered steps only where order is load-bearing (a backup before an edit).
+3. **A way out.** Every autonomous path says what to do when it is blocked: stop that part, finish what does not depend on it, report what is blocked. When a task is impossible and the model may not say so, reward-hacking attempts rise three- to six-fold (Opus 5.5 system card §6.2.2, https://www.anthropic.com/claude-opus-5-5-system-card). Avoid blanket "act, don't ask": the card links it to an orchestrator fabricating user approval, and asking first is a main reason Opus 5.5 is the least destructive recent model.
+4. **A full account at the end.** Ask for every change made, every requested change not made and why, and anything noticed but left alone – then compare it with the real diff. Opus 5.5 disclosed hidden changes in 96.9% of cases when asked to summarise its work (system card §6.5.4.4).
+5. **A separate, blinded checker.** Keep the doer/checker split – it is the scaffolding the research says to keep. Give the checker the artifact and the rules, not the doer's justification or what the verdict will decide (https://www.anthropic.com/research/claude-code-auto-mode; https://alignment.anthropic.com/2026/agentic-misalignment-summer-2026/). Require line-level evidence and verify it before reporting (https://claude.com/resources/articles/code-review).
+6. **Agents split by context, not by role.** Keep a subagent only when one loop measurably bloats, parallel work needs a fresh context, or instructions conflict; fold specialists that chain on each other's output (https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop). Work the user should see and steer belongs in the skill, not a subagent (https://claude.com/resources/articles/steering-claude-code-skills-hooks-rules-subagents-and-more).
+7. **Hard limits in hooks and tool grants, not prose.** A rule that must always hold is a hook or a missing tool; prose is advice (same source as 6).
+8. **Golden cases before the rewrite.** Write about ten behavioural cases from real failures, run them on the old skill and the new one, more than once each, and compare which cases flipped (https://www.anthropic.com/research/demystifying-evals-for-ai-agents). Capture the whole conversation – a Stop hook can add a closing turn that hides the result.
+
+Worked example: `managing-reports` (2026-10-28) – 11 nested agents and step tables became ground rules, one rules file, two plugin-root checkers, and outcome-led operations; golden cases in `tests/managing-reports/`.
