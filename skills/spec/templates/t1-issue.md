@@ -82,6 +82,6 @@ specs/
 - The spec.md file contains everything (no separate requirements/ folder)
 
 **Workflow:**
-1. Claim unique ID via `spec-registry-manager`
+1. Claim a unique ID from the registry (`references/registry.md`)
 2. Create folder structure with manifest.json and spec.md
 3. Optionally create a GitHub issue using `gh issue create`
