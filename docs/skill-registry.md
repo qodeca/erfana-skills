@@ -18,18 +18,18 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| managing-skills | 2026-10-28 | docs: rename managing-reports to report across the docs |
+| agent | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| article | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| grill-me | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| issue | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | report | 2026-10-28 | docs: rename managing-reports to report across the docs |
-| using-erfana | 2026-10-28 | docs: rename managing-reports to report across the docs |
+| skill | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| spec | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
+| using-erfana | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | draft-goal | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
-| managing-agents | 2026-10-13 | refactor(agents): calm, shorter agent descriptions for Claude 5 model... |
 | prompt | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | ship | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
-| grill-me | 2026-09-03 | feat: support Qwen Code as a second host (v7.1.0) (#42) |
-| managing-articles | 2026-09-03 | feat: support Qwen Code as a second host (v7.1.0) (#42) |
-| managing-specs | 2026-09-03 | feat: support Qwen Code as a second host (v7.1.0) (#42) |
-| managing-issues | 2026-08-14 | chore(release): v6.7.1 (#36) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 
 13 skills, one row per folder under `skills/`.
