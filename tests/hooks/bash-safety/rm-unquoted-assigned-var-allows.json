@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "S=/private/tmp/claude-501/proj/sess/scratchpad; mkdir -p $S/x && rm -rf $S/x"
+  }
+}

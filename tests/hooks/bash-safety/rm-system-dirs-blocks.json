@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "rm -rf /usr/local/lib/node_modules /System/Library /Library/Caches /bin/zsh /var/log /etc/nginx"
+  }
+}

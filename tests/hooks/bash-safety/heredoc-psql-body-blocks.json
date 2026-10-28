@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "psql \"$DATABASE_URL\" <<'EOF'\nDROP TABLE users;\nEOF"
+  }
+}

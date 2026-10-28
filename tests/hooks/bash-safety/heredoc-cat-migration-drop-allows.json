@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "cat > db/migrations/0042_drop_legacy.sql <<'EOF'\nDROP TABLE legacy_sessions;\nEOF\ngit add db/migrations/0042_drop_legacy.sql"
+  }
+}
