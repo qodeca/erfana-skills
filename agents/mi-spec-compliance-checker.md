@@ -1,6 +1,6 @@
 ---
 name: mi-spec-compliance-checker
-description: "Used by erfana:issue (Phase 9 and compliance review) to check an implementation against its spec's FR/NFR requirements."
+description: "Used by erfana:issue to check an implementation against its spec's functional and non-functional requirements."
 capabilities: [spec-compliance-checking, requirements-verification, naming-validation]
 tools: Read, Grep, Glob
 model: opus
