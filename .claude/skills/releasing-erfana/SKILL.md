@@ -21,9 +21,10 @@ For every release:
 9. Create the GitHub Release: `gh release create vX.Y.Z --notes-file -`. Verify `gh release list` shows the new version with the `Latest` flag; if `--latest` was lost (e.g. back-filling), correct with `gh release edit vX.Y.Z --latest`.
 10. **Verify what a user actually gets.** Qwen resolves the **latest GitHub release tag**, so nothing published before step 9 is installable and every earlier check ran against a tree no user will see. Install the published release and confirm the shape: `qwen extensions install qodeca/erfana-skills:erfana` then `qwen extensions list` — expect the new version, the right `Release tag:`, and the skill, agent, and command counts stated in `.claude/CLAUDE.md` "What this is" (Gate 15 keeps those in step with the filesystem). Do **not** pass `--consent`; the prompt it skips is the one a user is meant to read. Then prove a hook still fires from the installed copy, which is the only check that exercises the shipped artifact rather than the repo:
     ```bash
-    printf '%s' '{"tool_name":"write_file","tool_input":{"file_path":"/tmp/x.ts","content":"k=\"AKIA_EXAMPLE_KEY\""}}' \
-      | bash ~/.qwen/extensions/erfana/hooks/dispatch.sh secret-detector
+    bash ~/.qwen/extensions/erfana/hooks/dispatch.sh secret-detector \
+      < tests/hooks/secret-detector/qwen-write-file-secret-blocks.json
     ```
+    Expect `BLOCKED: AWS access key detected (AKIA...)` and exit code 2. Use the shipped fixture rather than a hand-typed key: the AWS rule matches `AKIA` plus 16 uppercase letters or digits, so a readable placeholder such as `AKIA_EXAMPLE_KEY` does not match and the hook rightly allows it – a silent pass that proves nothing.
     This is still the loader, not the executor: it does not prove a skill behaves correctly inside a session. See [`docs/hosts.md`](../../../docs/hosts.md).
 
 Auto-update is **opt-in** for this third-party marketplace (only Anthropic's own marketplaces auto-update by default). Users who enabled it – per-marketplace in `/plugin`, or org-wide via `"autoUpdate": true` in managed settings – get the update on next session start. Manual fallback: `/plugin marketplace update erfana-skills && /plugin update erfana@erfana-skills`.

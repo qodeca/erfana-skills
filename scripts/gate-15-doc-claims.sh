@@ -10,7 +10,7 @@
 #   2. Per-skill internal agent counts in CLAUDE.md / README.md /
 #      docs/architecture.md / MAINTAINER.md ("Ships 23 internal agents",
 #      "23 skill-internal agents") that diverge from
-#      `ls skills/managing-<name>/agents/`.
+#      `ls skills/<name>/agents/`.
 #   3. Plugin-root agent count claims ("75 shared agents") that diverge
 #      from `ls agents/*.md`.
 #   4. Top-level skills count claims ("13 skills", "13 auto-discovered
@@ -101,7 +101,7 @@ COUNT_PATTERNS = [
     r'(\d+)\s+internal\s+agents',
 ]
 
-DIR_REF_PATTERN = re.compile(r'(managing-[a-z-]+)/agents/`?\s*\((\d+)\)')
+DIR_REF_PATTERN = re.compile(r'(?<![a-z-])([a-z][a-z-]*)/agents/`?\s*\((\d+)\)')
 
 prose_issues = []
 for doc in docs_to_scan:
@@ -109,9 +109,14 @@ for doc in docs_to_scan:
         continue
     lines = open(doc).read().split('\n')
     for i, line in enumerate(lines, start=1):
-        # Restrict to lines that mention exactly one managing-* skill, to
-        # avoid false positives on aggregate / comparison sentences.
-        skills_in_line = [s for s in fs_counts if s in line]
+        # Restrict to lines that mention exactly one skill, to avoid false
+        # positives on aggregate / comparison sentences. Skill names are short
+        # common words (`skill`, `issue`, `spec`), so only an explicit
+        # mention counts: backticked, bold, erfana-namespaced, a skills/ path,
+        # or "<name> skill".
+        skills_in_line = [s for s in fs_counts if re.search(
+            rf'`{re.escape(s)}`|erfana:{re.escape(s)}\b|skills/{re.escape(s)}/'
+            rf'|\*\*{re.escape(s)}\*\*|\b{re.escape(s)} skill\b', line)]
         if len(skills_in_line) == 1:
             skill = skills_in_line[0]
             expected = fs_counts[skill]
@@ -125,7 +130,7 @@ for doc in docs_to_scan:
                         f'{doc}:{i}: "{m.group(0)}" near `{skill}` disagrees with filesystem ({expected})'
                     )
                 break  # only flag first matching pattern per line
-        # Also handle inline directory references like `managing-articles/agents/` (23)
+        # Also handle inline directory references like `article/agents/` (23)
         for m in DIR_REF_PATTERN.finditer(line):
             skill, claimed = m.group(1), int(m.group(2))
             if skill not in fs_counts:

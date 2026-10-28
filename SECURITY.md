@@ -17,7 +17,7 @@ In scope:
 
 - The `erfana` plugin code in this repository (`.claude-plugin/`, `skills/`, `agents/`, `commands/`, `hooks/`, `docs/`, `scripts/`).
 - Plugin configuration that ships to users (manifests, safety hooks — bash `.sh` + Windows `.ps1` siblings).
-- The 87 shared agents in `agents/`. The orchestration skills (`managing-issues`, `managing-articles`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
+- The 33 shared agents in `agents/`. The orchestration skills (`issue`, `article`, etc.) delegate to these agents via the `Task` tool; depending on the user's configuration, agents may interact with GitHub (`gh` CLI), the Anthropic API, the local filesystem, and shell commands. Users running orchestration skills should review the relevant agent prompts before granting tool permissions in their session.
 - The release pipeline (signed tags, GitHub Actions workflows).
 
 Out of scope:
@@ -32,7 +32,7 @@ From v7.1.0 the same package also installs on Qwen Code, which converts Claude C
 **What is signed is the repository, not the installed bundle.** Release tags and commits are signed, and `git verify-tag` covers what this repo publishes. Qwen rewrites agent frontmatter and writes its own `qwen-extension.json` during conversion, so the tree in `~/.qwen/extensions/erfana/` is not byte-identical to the tag and carries no signature of ours. Verify the source, then verify the conversion did what you expect:
 
 ```bash
-ls ~/.qwen/extensions/erfana/agents/*.md | wc -l   # expect 87
+ls ~/.qwen/extensions/erfana/agents/*.md | wc -l   # expect 33
 ls ~/.qwen/extensions/erfana/skills | wc -l        # expect 9
 diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no output
 ```
@@ -50,4 +50,4 @@ diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no o
 ## Known limitations
 
 - The plugin does not encrypt prompts in transit beyond what Claude Code already does (TLS to Anthropic's API). Confidential data should not flow through the plugin — see [`README.md`](README.md#confidentiality).
-- The plugin ships ~15 agents with generic names (any agent in `agents/` whose name does not start with a team prefix such as `mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). These may collide with built-in Claude Code agents or agents shipped by other plugins; resolution is last-loaded-wins and non-deterministic. The highest-trust shadow target is `agents/security-auditor`, invoked precisely when a user asks for a security review — a malicious plugin shadowing this name could ship attacker-controlled prompts with `Bash` + `Read` tool access. Users running multiple plugins should audit their installed plugin list and prefer prefix-named agents (e.g. `mi-codebase-explorer`) when invoking via the `Task` tool's `subagent_type` field. List the current collision-risk set with `ls agents/ | grep -vE '^(mi-|ma-|ms-|spec-|e2e-|release-|nest-|react-|grill-|article-|fc-)'`.
+- The plugin ships 14 agents with generic names (any agent in `agents/` whose name does not start with a skill or team prefix such as `agent-`, `skill-`, `issue-`, `spec-`, `article-`, `report-`, `fact-checking-`, `lens-`, `e2e-`, `release-`). These may collide with built-in Claude Code agents or agents shipped by other plugins; resolution is last-loaded-wins and non-deterministic. The highest-trust shadow target is `agents/security-auditor`, invoked precisely when a user asks for a security review — a malicious plugin shadowing this name could ship attacker-controlled prompts with `Bash` + `Read` tool access. Users running multiple plugins should audit their installed plugin list and prefer prefix-named agents (e.g. `spec-compliance-checker`) when invoking via the `Task` tool's `subagent_type` field. List the current collision-risk set with `ls agents/ | grep -vE '^(agent-|skill-|issue-|spec-|article-|report-|fact-checking-|lens-|e2e-|release-)'`.

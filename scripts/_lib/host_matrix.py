@@ -206,7 +206,7 @@ QWEN_AGENT_NAME_MAX = 50
 # format "agent-plugins-v1". erfana installs as format "qwen", so that path is
 # not taken today. (The managed-skill parser is a third thing again: it reads
 # camelCase `allowedTools` and requires an ARRAY - the opposite requirement.)
-# skills/managing-specs/SKILL.md therefore uses a comma string as insurance:
+# skills/spec/SKILL.md therefore uses a comma string as insurance:
 # latent on both hosts today, one upstream change from silently deleting a
 # skill.
 

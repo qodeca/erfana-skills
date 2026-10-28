@@ -26,8 +26,8 @@
 #        - `<!-- erfana:grill-open -->` must appear in
 #          skills/grill-me/SKILL.md and hooks/grill-guard.{sh,ps1}.
 #        - `<!-- erfana:ms-grill-open -->` must appear in
-#          skills/managing-skills/SKILL.md,
-#          skills/managing-skills/references/interview-protocol.md, and
+#          skills/skill/SKILL.md,
+#          skills/skill/references/interview-protocol.md, and
 #          hooks/ms-grill-guard.{sh,ps1}.
 #      If any one is missing, the corresponding hook behaviour would silently
 #      break (a clean-data report would block, or the grill backstop would
@@ -130,7 +130,7 @@ declare -a GRILL_CASES=(
   "stop-hook-active|pass|stop_hook_active true skips the check unconditionally"
 )
 
-# ms-grill-guard fixtures (managing-skills requirements interview): same
+# ms-grill-guard fixtures (skill requirements interview): same
 # end-anchored open-marker protocol with the ms-grill sentinel.
 declare -a MS_GRILL_CASES=(
   "open-blocks|block|end-anchored open marker on a mid-interview message must block"
@@ -528,12 +528,12 @@ GRILL_SENTINEL_FILES=(
   "hooks/grill-guard.sh"
   "hooks/grill-guard.ps1"
 )
-# ms-grill family: the managing-skills orchestrator prose, the static
+# ms-grill family: the skill orchestrator prose, the static
 # interview protocol that governs the marker, and the skill-scoped Stop hook
 # that end-anchors on it (both implementations).
 MS_GRILL_SENTINEL_FILES=(
-  "skills/managing-skills/SKILL.md"
-  "skills/managing-skills/references/interview-protocol.md"
+  "skills/skill/SKILL.md"
+  "skills/skill/references/interview-protocol.md"
   "hooks/ms-grill-guard.sh"
   "hooks/ms-grill-guard.ps1"
 )

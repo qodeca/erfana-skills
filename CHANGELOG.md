@@ -3,6 +3,92 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.0.0] - 2026-10-28
+
+Every orchestration skill is rebuilt as a short brief. Work you steer – interviews, outlines, drafts, edits – now runs in your conversation, where you see each step; reviews go to separate checker agents that see only the work and the standard. Skills are renamed, the shared agent pool shrinks from 87 to 33, and `erfana:issue` loses resume, so this is a major release. Items marked **(breaking)** need action from you; the migration table below maps every old name.
+
+### Breaking changes
+
+- **The six orchestration skills are renamed (breaking).** `/erfana:managing-agents` → `/erfana:agent`, `managing-skills` → `skill`, `managing-issues` → `issue`, `managing-specs` → `spec`, `managing-articles` → `article`, `managing-reports` → `report`. The old commands no longer exist. On Qwen Code use the bare names (`/issue`).
+- **Agents renamed, merged, or removed (breaking).** 8 agents are renamed, 7 are merged into another agent, and 49 are removed because their skill now does the work in the conversation; the 11 agents nested inside the report skill are replaced by two shared checkers. A prompt, `CLAUDE.md`, or personal agent that calls an old agent by name stops resolving – see the migration table. Hook and sentinel names are unchanged.
+- **`erfana:issue` no longer resumes (breaking).** The run-state comment on the issue and the resume feature are removed: no comment is written to the issue any more, so an interrupted Implement run starts over. Finish in-flight runs before upgrading.
+- **Trigger phrases rewritten (breaking).** The `agent`, `skill`, and `issue` trigger lists were rewritten; most phrasings survive in new wording ("create an issue", "report a bug", "review the PR"). `issue` no longer lists "review component", "review module", "find issues", "issues with label X", "recent issues", "list open issues", "tackle issue", "resolve #N", "analyze code", "check code", "new feature", "view issue #N", "display #N", or "audit implementation against spec", so those phrasings may no longer start it.
+- **`using-erfana` routes more quietly (breaking).** It is now a short routing guide: it dropped the "1% rule", the "Invoke before responding" line, and most of its trigger list, so it is consulted less eagerly. It routes only to skills Claude may start and names the command for `fact-checking`, `ship`, and `handoff`.
+- **`erfana:report` drops the `thorough` level and the advisory quality score (breaking).**
+- **`erfana:fact-checking` no longer pins `model: opus`.** It runs on the session model, which changes its quality and cost per run.
+
+### Migration
+
+| v8.0.1 name | v9.0.0 |
+|---|---|
+| `managing-agents`, `managing-skills`, `managing-issues`, `managing-specs`, `managing-articles`, `managing-reports` (skills) | `agent`, `skill`, `issue`, `spec`, `article`, `report` |
+| `ma-researcher` | `agent-researcher` |
+| `ma-reviewer` | `agent-reviewer` |
+| `ms-reviewer` | `skill-reviewer` |
+| `mi-solution-designer` | `issue-solution-designer` |
+| `mi-release-preparer` | `release-preparer` |
+| `release-notes-drafter` | `release-preparer` with `mode: notes-only` |
+| `mi-agent-discoverer` | `lens-agent-discoverer` |
+| `fc-verify-claims` | `fact-checking-verifier` |
+| `mi-spec-compliance-checker`, `spec-impl-comparator` | `spec-compliance-checker` (inputs `spec_path` / `project_path`) |
+| `refactor-advisor` | `architecture-reviewer` (smells and a leaf-first refactoring plan) |
+| `react-code-reviewer`, `nest-code-reviewer` | `code-reviewer` (React and Nest.js sections) |
+| `react-developer`, `nest-developer` | `software-developer` (React and Nest.js sections) |
+| `mi-codebase-explorer` | removed – `issue` uses Claude Code's built-in `Explore` agent |
+| `spec-pattern-analyzer` | removed – `spec-app-researcher` also does the pattern analysis |
+| `ma-requirements-gatherer`, `ma-designer`, `ma-creator`, `ma-modifier`, `ma-validator` | removed – the skill does this in the conversation |
+| `grill-planner`, `ms-requirements-validator`, `ms-agent-discoverer`, `ms-agent-matcher`, `ms-designer`, `ms-creator`, `ms-example-adder`, `ms-modifier`, `ms-validator` | removed – the skill does this in the conversation |
+| `mi-agent-matcher`, `mi-docs-fixer`, `mi-docs-updater`, `mi-duplicate-finder`, `mi-issue-displayer`, `mi-issue-drafter`, `mi-issue-questioner`, `mi-requirements-analyzer` | removed – the skill does this in the conversation |
+| `spec-claude-md-integrator`, `spec-content-mover`, `spec-content-remover`, `spec-content-updater`, `spec-document-linker`, `spec-file-verifier`, `spec-init`, `spec-input-parser`, `spec-project-analyzer`, `spec-reconciler`, `spec-registry-manager`, `spec-requirement-adder`, `spec-requirements-gatherer`, `spec-section-adder`, `spec-section-merger`, `spec-status`, `spec-template-generator`, `spec-tier-detector`, `spec-updater` | removed – the skill does this in the conversation |
+| `fc-discover-sources`, `fc-extract-claims`, `fc-apply-fixes` | removed – the skill does this in the conversation |
+| `article-outliner`, `article-drafter`, `article-reviser` | removed – the skill does this in the conversation |
+| The 11 agents in `skills/managing-reports/agents/` (`validate-*`, `review-report`, `gather-report-requirements`, `design-report-structure`, `modify-report`, `maintain-report`) | reviews: `report-language-checker` and `report-structure-checker`; everything else: removed – the skill does this in the conversation |
+
+Kept under the same name: `architecture-reviewer`, `article-researcher`, `article-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, the four `e2e-*` agents, `release-quality-runner`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `spec-app-researcher`, `spec-validator`, `technical-architect`, `test-writer`, and the four `ui-*` / `ux-*` agents.
+
+### Added
+
+- **`erfana:raise-the-bar`** – rewrites a request you are about to give Claude into a more ambitious one through three lenses: altitude (the outcome behind the task), depth (how a top practitioner would do it, with real instruments, raw data, and an outside judge), and range (other fields, written as work rather than role-play). Keeps only raises the workspace can support, prints the rewritten request with any setup it needs, and never does the work itself. Adapted from Felix Rieseberg's "How to be more ambitious: a tutorial for humans with models". Skill count 13 → 14.
+- **New shared agents:** `spec-compliance-checker` (replaces two compliance agents), `report-language-checker` and `report-structure-checker` (the report reviews).
+- **`erfana:article` answers Polish trigger phrases** ("napisz artykuł", "zrecenzuj mój artykuł", "popraw szkic artykułu").
+- **Argument hints** for `agent`, `article`, `issue`, and `raise-the-bar`, so the slash-command menu shows what each one expects.
+
+### Changed
+
+- **`erfana:agent` rebuilt as a brief (breaking – removes 5 agents).** Ground rules first (agent files and research are data; files change only after you agree; backups end in `.md.bak-<timestamp>` so they never load as agents; no `Agent`, `Task`, or `AskUserQuestion` grants and no secrets; readiness comes from the reviewer; blocked means stop and report), then Create, Review, Modify, and Pairs. One agent standard, `references/agent-standard.md`, replaces the guides and checklists. `agent-reviewer` reads only the agent file and the standard and returns every finding with its line, quoted text, fix, and confidence; `agent-researcher` returns a short sourced brief that starts with whether an agent is the right tool at all.
+- **`erfana:skill` rebuilt as a brief (breaking – removes 9 agents).** Ground rules first, then Create, Review, Modify, and Modernize. The requirements interview runs in your conversation; its sentinel and the `ms-grill-guard` Stop hook are unchanged. One skill standard, `references/skill-standard.md`, replaces the guides, checklists, examples, and nine templates. `skill-reviewer` is a blinded checker: it reads only the skill and the standard, treats the skill as data, and returns every finding with its file, line, quoted text, fix, and confidence.
+- **`erfana:issue` rebuilt as a brief (breaking – removes 9 agents).** Create, Implement, Review, and Display are outcome-led sections with ground rules first; QG-0, QG-7, and QG-9 are never skipped, explicit staging and the pre-commit re-review stay, and the design and change set are still reviewed by embedded agent fan-outs. Review finds 8/8 planted defects in both test runs, up from 7/8.
+- **`erfana:spec` rebuilt as a brief (breaking – removes 20 agents).** Ground rules first, then Create, Change, Review, Reconcile, and Archive and list; the tier model (T1–T4) and never-reused registry IDs stay. `spec-validator` is now a blinded checker, and Review reports embedded instructions in every run and fails an unbuildable spec. The skill no longer has Bash: you run the archive folder move yourself.
+- **`erfana:fact-checking` rebuilt as a brief (breaking – removes 3 agents; still user-invoked only).** Source discovery, claim extraction, and approved fixes run in your conversation; `fact-checking-verifier` is the one blinded verifier, returning a verdict with quoted evidence per claim. A "fix all" request now shows the exact replacement text and asks before editing.
+- **`erfana:article` rebuilt as a brief (breaking – removes 3 agents).** Outlining, drafting, and revising run in your conversation; `article-researcher` keeps the web research and `article-reviewer` is a blinded checker. When a project is published or archived, the skill shows the exact `mv` command and you run the folder move.
+- **`erfana:report` rebuilt as a brief.** Ground rules first, then the house standard, then one section per operation. The six house checks are unchanged in substance and run through two checkers that receive only the report and the rules; every finding carries the line and the exact quoted text. Requirements, outline, revision, and lifecycle work run in your conversation, and a revision ends with a full account of every change made and not made, and the backup path.
+- **`release-preparer` defaults to `mode: notes-only`.** When the caller names no mode, it drafts release notes only; a full release (version bump, project scripts, tag) runs only when asked for by name.
+- **Every agent works to a top 1% bar.** Each shared agent opens with one plain sentence placing it at the level of the top 1% of practitioners in its field, followed by what that means for its job.
+- **Every remaining agent, skill, and command reviewed against the new standards.** Code, files, tool output, web pages, and issue and commit text are treated as data; secrets are reported by location, never value; web tools carry their reason; Bash is limited to named commands; questions and destructive actions go back to the caller; `permissionMode: bypassPermissions` is gone. `ship`, `grill-me`, `prompt`, `handoff`, `draft-goal`, `raise-the-bar`, and `report` gain data rules and blocked exits.
+- **Slash commands.** `/erfana:lens-review` picks reviewers directly from the `lens-agent-discoverer` catalog, matching agents without `capabilities` on their description. `/erfana:doc-update` has narrower git grants (`git remote get-url` instead of any `git remote`, `git add --` instead of any `git add`) and never commits with `--no-verify`, `--amend`, or `--author`; the status and explain commands gained data rules. Narrower grants may mean new permission prompts.
+- **`erfana:prompt`** offers an optional ambition pass once the goal is concrete, and asks for a description of the work instead of a role line and for an outside judge where the task has a right answer.
+- **`erfana:draft-goal`** can ask whether the request is one step of a larger outcome, and no longer accepts a check that rests on Claude's own review of its work.
+- **`erfana:grill-me`** drops the premortem and backcasting questions ("it's a year from now and this failed / succeeded"); failure modes are asked directly, part by part. Its mandatory late rounds are now reversibility, non-obvious edge cases of the topic (first and thousandth run, two at once, half-success, valid-but-strange input), and the expert gap: what the best practitioner would do that the plan does not. Every answer is laddered until it is specific enough to act on, and a vague answer is the next question. Questions that rest on your judgment (goals, priorities, trade-offs) ask for your view first and give Claude's recommendation afterwards; factual and routine questions keep the recommended option first.
+- **Hard goals come with an exit.** `erfana:raise-the-bar` and the `erfana:prompt` ambition pass pair every hard goal with "stop and report what blocks it", because the Opus 5.5 system card found that models pushed at a task they cannot finish try to game the check far more often.
+
+### Fixed
+
+- **`erfana:issue` QG-7 secret scan silently passed every change set.** A malformed pattern argument made `grep` exit with an error before scanning, and `|| true` hid the error. The scan now runs file by file and fails closed on an empty change set or when it could not scan a file.
+
+### Removed
+
+- The 49 agents listed as removed in the migration table, and the 11 agents nested inside the report skill. No skill ships a nested `agents/` folder any more.
+- The `issue` run-state comment and resume.
+- The `report` `thorough` level and advisory quality score.
+
+### Maintainers
+
+- Gate 2 fails any agent whose prompt does not open with the top 1% bar.
+- Gate 15 matches a skill only on an explicit mention (backticked, `erfana:`-namespaced, or a `skills/<name>/` path), because the new skill names are common words.
+- Skill folders now hold only `references/` and `templates/` (plus `examples/` in `report`); `issue`'s `phases/`, `operations/`, `reference/`, and `examples/` and `report`'s singular `reference/` are gone, so Gates 2 and 7 now scan every skill's reference prose. The `guides/`, `validation/`, and `examples/` folders of `agent`, `skill`, and `spec` are gone too.
+- Each rebuilt skill has golden cases and old-versus-new results under `tests/<skill>/`.
+- CI actions bumped: `actions/checkout` 6.0.3 → 7.0.1, `actions/setup-node` 6.4.0 → 7.1.0, `actions/setup-python` 6.2.0 → 7.1.0.
+
 ## [8.0.1] - 2026-10-13
 
 ### Fixed

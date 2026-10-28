@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Plugin-root Stop hook backing erfana:managing-skills. Registered in
+# Plugin-root Stop hook backing erfana:skill. Registered in
 # hooks/hooks.json rather than in the skill's frontmatter, because Qwen Code's
 # extension skill parser does not extract hooks: and a skill-scoped
 # registration would be dead on one of the two supported hosts. It therefore
 # evaluates EVERY stop, in every session; the open marker - not the
 # registration - is what scopes it to a live requirements interview
-# (skills/managing-skills/references/interview-protocol.md).
+# (skills/skill/references/interview-protocol.md).
 #
 # Protocol: while the interview is open, the skill ends every message with
 # the open marker; the wrap-up message simply omits it. This hook blocks a

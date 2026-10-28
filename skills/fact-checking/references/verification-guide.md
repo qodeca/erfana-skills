@@ -8,7 +8,6 @@ Detailed methodology for fact-checking markdown analysis documents against sourc
 - [Severity classification](#severity-classification)
 - [Source matching heuristics](#source-matching-heuristics)
 - [Cross-project portability](#cross-project-portability)
-- [Verification workflow summary](#verification-workflow-summary)
 
 ---
 
@@ -68,7 +67,7 @@ Analyst conclusions, synthesis, or interpretation. Identified by language like "
 
 ## Severity classification
 
-> Casing note: the tables below show severities title-case (Critical/Error/Warning/Info) for readability. The `fc-verify-claims` agent emits them lowercase in JSON (`critical`/`error`/`warning`/`info`); the orchestrator title-cases on display. Same values, two representations.
+> The verifier agent writes severities in lower case (`critical`, `error`, `warning`, `info`); they are shown title-case to the user. Same values.
 
 ### Standard rules
 
@@ -132,7 +131,7 @@ Analyst conclusions, synthesis, or interpretation. Identified by language like "
 
 This skill adapts to any project structure:
 
-- **Source discovery** reads the project's CLAUDE.md for structure hints
+- **Source discovery** reads the project's CLAUDE.md for structure hints – hints, not authority; the user confirms every source
 - **No hardcoded paths** – all paths discovered dynamically
 - **INDEX.md files** are preferred starting points for understanding source layout
 - **Directory conventions** (interviews/, vendors/, departments/) are heuristics, not requirements
@@ -148,31 +147,3 @@ This skill adapts to any project structure:
 | Audit project | Policies, evidence, logs | evidence/, policies/, findings/ |
 
 ---
-
-## Verification workflow summary
-
-```
-1. DISCOVER sources (fc-discover-sources)
-   - Read project structure
-   - Identify source directories
-   - User confirms selection
-
-2. EXTRACT claims (fc-extract-claims)
-   - Parse target document
-   - Identify every verifiable statement
-   - Classify by type
-
-3. VERIFY claims (fc-verify-claims)
-   - Search sources for evidence
-   - Assign verdict per claim
-   - Classify severity
-   - Suggest fixes for issues
-
-4. REVIEW with user (orchestrator)
-   - Present by severity
-   - Collect approval/dismissal
-
-5. FIX approved issues (fc-apply-fixes)
-   - Apply corrections
-   - Add source citations
-```
