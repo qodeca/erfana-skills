@@ -3,7 +3,7 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [9.0.0] - 2026-10-28
 
 Every orchestration skill is rebuilt as a short brief. Work you steer – interviews, outlines, drafts, edits – now runs in your conversation, where you see each step; reviews go to separate checker agents that see only the work and the standard. Skills are renamed, the shared agent pool shrinks from 87 to 33, and `erfana:issue` loses resume, so this is a major release. Items marked **(breaking)** need action from you; the migration table below maps every old name.
 
