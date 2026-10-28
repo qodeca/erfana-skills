@@ -3,6 +3,18 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **`erfana:raise-the-bar`** – rewrites a request the user is about to give Claude into a more ambitious one through three lenses: altitude (the outcome behind the task), depth (how a top practitioner would do it, with real instruments, raw data, and an outside judge), and range (other fields, written as work rather than role-play). Keeps only raises the workspace can support, prints the rewritten request with any setup it needs, and never does the work itself. Adapted from Felix Rieseberg's "How to be more ambitious: a tutorial for humans with models". Skill count 13 → 14.
+
+### Changed
+
+- **`erfana:prompt`** offers an optional ambition pass once the goal is concrete, and its wording principles now ask for a description of the work instead of a role line and for an outside judge where the task has a right answer.
+- **`erfana:draft-goal`** can ask whether the request is one step of a larger outcome, and no longer accepts a check that rests on Claude's own review of its work.
+- **`erfana:grill-me`** adds a third mandatory late round, the expert gap: what the best practitioner would do that the plan does not.
+
 ## [8.0.1] - 2026-10-13
 
 ### Fixed
