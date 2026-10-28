@@ -44,11 +44,11 @@ Per https://platform.claude.com/docs/en/about-claude/models/introducing-claude-f
 - ❌ "Show your reasoning for each finding"
 - ✅ "For each finding, cite the file and line that drove the decision, and describe the failure scenario"
 
-**Exemption:** author-filled `<critical_thinking>` blocks in agent files are static design records written at authoring time (alternatives weighed, edge cases, adaptation criteria). They are content the model *reads*, not an instruction to externalize runtime reasoning — they are exempt from this ban and remain required by agent-pre-release-checklist Section 11.
+**Exemption:** author-filled `<critical_thinking>` blocks in agent files are static design records written at authoring time (alternatives weighed, edge cases, adaptation criteria). They are content the model *reads*, not an instruction to externalize runtime reasoning — they are exempt from this ban. They are optional: useful for agents that make judgment calls (agent standard, section 6).
 
 **Fallback dependency note:** whether a classifier trip surfaces as a refusal or as an Opus 4.8 response depends on harness configuration, not on the skill. Skills must not assume either outcome; they must simply never contain the triggering instructions.
 
-Enforced as checklist items 12.7 / 8.7 / 13.5 (BLOCKING on the skill side) and a Gate 2 WARN.
+Rule 12.7 of `skill-standard.md` (13.5 for agents) and a Gate 2 WARN.
 
 ## 4. Effort recalibration ✓
 
@@ -62,9 +62,9 @@ Per the Fable 5 prompting guide: *"lower effort settings on Claude Fable 5 still
 | `xhigh` / `max` | Genuinely frontier problems only. No longer the Claude Code default posture. Higher effort can produce over-planning and unrequested refactoring — pair with scope-fence constraints if used. |
 
 - **The 5.5 generation shifts again** ✓ (https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5): Opus 5.5 at `medium` matches Opus 5 at `high`; start there and keep `xhigh`/`max` for measured gains. Higher is not always better – Sonnet 5.5 scored lower at `max` than at `xhigh` on FrontierCode, partly because it ran subagent-heavy review flows more often and went out of scope (https://www.anthropic.com/claude-sonnet-5-5). Cap effort for fan-out review agents.
-- **Omitting `effort` is a valid choice** — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents still declare it explicitly (checklist 13.1) so role intent is auditable.
-- Rule of thumb: take the 4.7-era role table and go **one step cooler**. The current role→model/effort table lives in `templates/shared-agent-template.md` (Model Selection Guide) — that copy is canonical.
-- Keep 4.x-style explicit rigor in skills aimed at *smaller* models (haiku-pinned subagents still benefit from checklists and examples — see `cross-model-guide.md`).
+- **Omitting `effort` is a valid choice** — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents still declare it explicitly so role intent is auditable.
+- Rule of thumb: take the 4.7-era role table and go **one step cooler**. The current role→model/effort table lives in the agent standard, section 7 — that copy is canonical.
+- Keep 4.x-style explicit rigor in skills aimed at *smaller* models (haiku-pinned subagents still benefit from checklists and examples).
 
 ## 5. Delegation calibration (the 12.4 inversion) ✓
 
@@ -73,7 +73,7 @@ The 4.7-era rule said: *"4.7 defaults to sequential delegation; explicit fan-out
 - ❌ "ALWAYS spawn parallel subagents — one per item — in the same turn" (as a blanket mandate)
 - ✅ "Reserve subagent fan-out for genuinely independent, sizeable items (per-file reviews, per-dimension audits); run small or sequential steps inline"
 
-Explicit fan-out prose is still *correct* where items are truly independent and each is substantial — the change is that fan-out language is now a calibration ("when it pays"), not an enablement ("or it won't happen"). Enforced as checklist item 12.4 / 8.4.
+Explicit fan-out prose is still *correct* where items are truly independent and each is substantial — the change is that fan-out language is now a calibration ("when it pays"), not an enablement ("or it won't happen"). Rule 12.4 of `skill-standard.md`.
 
 A related keeper ✓: **fresh-context verifier subagents still beat self-critique** on long runs — keep doer/reviewer agent pairs even while thinning the doer's scaffolding.
 
@@ -109,7 +109,7 @@ Litmus test for every line (◎): *"Would a strong model behave worse without th
 
 ## 8. Section 12 under Claude 5 (mapping) ✓
 
-The pre-release-checklist Section 12 numbering is a stable contract (ms-validator emits it). Under Claude 5 the seven items read:
+The rule numbers 12.1–12.7 are a stable contract (Gate 2 prints them; `skill-standard.md` keeps a rule index). Under Claude 5 the seven rules read:
 
 | Item | 4.7-era reading | Claude 5 reading |
 |------|-----------------|------------------|
@@ -126,8 +126,8 @@ The pre-release-checklist Section 12 numbering is a stable contract (ms-validato
 1. Grep for reasoning-display instructions (`show your reasoning`, `display: visible`, `explain your thinking`) — fix first; this is the only correctness item.
 2. Re-read every "ALWAYS spawn parallel subagents" / "explicit fan-out required" line against §5.
 3. Apply the §6 diet with the litmus test; keep the §6 keeper list intact.
-4. Recalibrate `effort:` one step cooler per §4; sync the SKILL.md Agents table in the same change (checklist 12.5 cross-validation).
-5. Run the Modernize operation (`guides/skill-modernization-guide.md`) and record the pass in `docs/modernization-registry.md`.
+4. Recalibrate `effort:` one step cooler per §4; state the agents' model and effort in the same change (rule 12.5).
+5. Run the Modernize operation of `erfana:skill` and record the pass in `docs/modernization-registry.md`.
 
 For a skill written as a step-by-step workflow, a larger rewrite into a brief is usually worth more than this checklist – see §12.
 
@@ -156,8 +156,8 @@ Per https://platform.claude.com/docs/en/build-with-claude/prompt-caching (model-
 **Both shapes are Anthropic-supported** (ported from the retired 4.7 guide). Community blogs sometimes claim "skills should do one thing well" without Anthropic citation; Anthropic's first-party skills contradict this — `pdf/` (extract + fill + merge), `docx/`/`xlsx/`/`pptx/` (parallel multi-op), `claude-api/` (build + debug + optimize + migrate). The canonical multi-op dispatch example is `migrate-component $0 from $1 to $2` (https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices), enabled by `argument-hint` + `arguments` frontmatter.
 
 **Choose by deliverable shape, not by ideology:**
-- Focused (one output, one workflow) → `templates/focused-skill-template.md` (design-* family, ~65-200 lines)
-- Multi-operation (verb-dispatched) → `templates/skill-md-template.md` + multi-op subsection (the orchestration skills: `agent`, `article`, `issue`, `report`, `skill`, `spec`)
+- Focused (one output, one workflow) → one result section in `templates/skill-template.md`
+- Multi-operation (verb-dispatched) → one result section per operation (the orchestration skills: `agent`, `article`, `issue`, `report`, `skill`, `spec`)
 
 ## 12. Writing a skill as a brief ✓
 
