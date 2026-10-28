@@ -143,7 +143,7 @@ Concrete trigger: the Modernize operation is the cascade primitive for the remai
 
 - **Cascade managing-skills' Modernize op against the remaining managing-* siblings.** `managing-articles` was the harder architectural case; it was fully redesigned in v4.3.0 (23 nested agents consolidated to 5 plugin-root `article-*` shared agents) rather than Modernized in place, so `managing-reports` is now the remaining nested-agent case requiring a separate proof-of-concept before wholesale cascade.
 - **Generic-named agent renames.** 9 unprefixed agents at risk of cross-plugin collision (`code-reviewer`, `commit-writer`, `software-developer`, etc.). Breaking change. Trigger: any reported mixed-plugin nondeterminism or maintainer policy decision.
-- **`managing-reports` nested-agent migration.** 11 nested agents. Architectural decision per Lane 2 review of v4.2.0: hoist genuinely-reusable to plugin-root with prefix (`mr-*`), convert stage-specific to `prompts/` files invoked via Task with inline content (the obra/superpowers pattern), drop the nested `agents/` directory. (`managing-articles` completed its equivalent migration in v4.3.0 – 23 nested agents consolidated to 5 plugin-root `article-*` shared agents.)
+- **`managing-reports` nested-agent migration – done (2026-10-28).** Rebuilt as a brief: the 11 nested agents became two plugin-root `report-*` checkers and the nested `agents/` directory was dropped. See `docs/modernization-registry.md`.
 
 Tracked in `BACKLOG.md` under "Deferred to a future major – concrete-trigger entries". The cascade plan will be authored separately when the trigger materializes.
 

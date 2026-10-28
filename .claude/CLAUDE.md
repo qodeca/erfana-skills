@@ -6,13 +6,13 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v8.0.1**. The plugin ships 13 auto-discovered skills + 87 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v8.0.1**. The plugin ships 13 auto-discovered skills + 89 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (13)** – all invoke as `/erfana:<name>`:
 
 - Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `managing-reports`, `managing-articles` (per-skill agent notes below).
 - `managing-articles` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
-- `managing-reports` ships 11 internal validation agents.
+- `managing-reports` reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
 - `managing-skills` opens every operation with a coverage-map requirements interview: Create always interviews via the shared `grill-planner` agent + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (2): `prompt` and `draft-goal`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
 - `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
@@ -21,7 +21,7 @@ Current version: **v8.0.1**. The plugin ships 13 auto-discovered skills + 87 sha
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
-Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/`, `guides/`, `templates/` and (for `managing-reports`) `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
+Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/`, `guides/`, `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
 
 ## Hard constraints (non-negotiable)
 

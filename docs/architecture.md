@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 89 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0 + 2 `report-*` when managing-reports was rebuilt as a brief; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -25,7 +25,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | `erfana:managing-agents` | Claude Code agent lifecycle (research → design → validation) |
 | `erfana:managing-articles` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
 | `erfana:managing-issues` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and persists its run state to one comment on the issue (created after an opt-in prompt on a public repo; written without a prompt but announced in one line on a private repo) so an interrupted run can resume. It runs 13 phases with 13 phase gates plus 3 embedded autonomous review sub-gates: the operation fans out its own reviewer agents (QG-4a, QG-8, QG-11a – no user-run `/erfana:lens-review`), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo run-state consent; it still refuses a detected headless run. |
-| `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Ships 11 internal validation agents. |
+| `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
 | `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (v6.4.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
 
@@ -68,12 +68,12 @@ erfana-skills/
 ├── .claude-plugin/
 │   ├── plugin.json          ← name=erfana, version=X.Y.Z (live: see CLAUDE.md banner)
 │   └── marketplace.json     ← marketplace catalog
-├── agents/                  ← 87 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0); flat directory; Claude Code auto-discovers
+├── agents/                  ← 89 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0, +2 report-*); flat directory; Claude Code auto-discovers
 ├── skills/
 │   ├── managing-agents/     ← orchestration skill (v4.0+); guides/, templates/, validation/
 │   ├── managing-articles/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
 │   ├── managing-issues/     ← phases/, operations/, reference/ (singular), examples/, templates/, validation/
-│   ├── managing-reports/    ← ships 11 internal validation agents; reference/, templates/
+│   ├── managing-reports/    ← brief-style SKILL.md; references/, templates/, examples/
 │   ├── managing-skills/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy); its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ only – its grill-guard lives in plugin-root hooks/ since v7.1.0
@@ -125,12 +125,12 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 89 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `report-` (2), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **No shared content bundle.** Since v7.0.0 every skill owns its own references, guides and templates. Content two skills both need is duplicated deliberately rather than hoisted – the skills are independent and a shared bundle would recouple them.
 
 ### Per-skill nested agents
 
-One orchestration skill ships internal agents under `<skill>/agents/` scoped to its own lifecycle: `managing-reports/agents/` (11 files – the only such directory on disk). `managing-issues` and `managing-skills` define `agents/` paths in prose only and ship no nested directory. Per-skill nested-agent discovery is unverified against the published Claude Code plugin spec (which documents only plugin-root `agents/`); accepted-risk per `CHANGELOG.md` v4.0.0 and [`known-caveats.md`](known-caveats.md). The previously-predicted follow-up is now done: `managing-articles`'s 5 internal agents were hoisted to plugin root with disambiguating `article-*` prefixes in v4.3.0. If a remaining orchestration skill silently fails to find its internal agents in production use, the same hoist applies.
+No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `managing-articles` hoisted its agents to `article-*` in v4.3.0, and `managing-reports` replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. `managing-issues` and `managing-skills` define `agents/` paths in prose only.
 
 ### Convention: subagents cannot call `AskUserQuestion`
 
