@@ -49,11 +49,20 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | `erfana:raise-the-bar` | Rewrite a request the user is about to give Claude into a more ambitious one through three lenses – altitude (the outcome behind the task), depth (how a top practitioner would do it), range (other fields, as work rather than role-play) – keeping only raises the workspace supports and an outside judge can check, then print it for the user to run. `references/lenses.md` holds the lenses and the grounding test. Adapted from Felix Rieseberg's "How to be more ambitious: a tutorial for humans with models"; wording is new. Never does the work itself. |
 | `erfana:draft-goal` | Turn an intention into a `/goal` completion condition the goal evaluator can judge from the transcript (one outcome, numbered checks with visible evidence, exclusions, owner-decisions clause, turn bound) and print it for the user to paste – never runs `/goal` itself. `references/` holds the goal mechanics (checked against the Claude Code docs, with Qwen Code differences) and weak-to-strong condition patterns. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0); wording is new, so it carries the repository's default GPL-3.0-only licence with a credit paragraph in SKILL.md. |
 
+### Work-session skills (4)
+
+| Sub-skill | Single concern |
+|---|---|
+| `erfana:autopilot` | Unattended run setup and upkeep – goal condition from the session, `.local/autopilot.md` state file (progress, owner queue, decisions), resume after restart; the `post-compact-reminder` hook points to the state file while it says `Status: active`. Prints the `/goal` line; never runs it. |
+| `erfana:next-batch` | Rank free open issues by delivery impact, group the top N by theme, save `.local/next-batch.md`. Read-only on GitHub. |
+| `erfana:coordinate` | Claims on GitHub (`claimed` label + `<!-- erfana:claim -->` comment) so parallel sessions and clones do not collide; board, release, and sibling-session status exchange. The claim rules (`references/claims.md`) are shared with `next-batch` and `autopilot`. |
+| `erfana:expert-panel` | Fan out read-only top-practitioner reviewers over a plan, design, or documents; merge, ask the owner's decisions, write an improved version to a new file. |
+
 ### Session closeout skills (2)
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:ship` | Git closeout – commit, push, pull request, optional merge – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
+| `erfana:ship` | Git closeout – commit, push, pull request, optional merge after the checks pass, and cleanup of merged branches and worktrees – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
 | `erfana:handoff` | Write a portable handoff document to the OS temp directory for another agent or person. `disable-model-invocation: true`. Adapted from `mattpocock/skills` (MIT); upstream files are kept verbatim under `references/` and licensed MIT in `REUSE.toml`, provenance in `references/UPSTREAM.md`. |
 
 ### Bootstrap (1)
