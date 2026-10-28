@@ -20,20 +20,24 @@ and checked by Gate 18, which hard-fails if this list stops matching
 |---|---|---|
 | agent | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | article | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| autopilot | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
+| coordinate | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 | draft-goal | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| expert-panel | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 | fact-checking | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | grill-me | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | handoff | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | issue | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| next-batch | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 | prompt | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | raise-the-bar | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | report | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
-| ship | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| ship | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 | skill | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | spec | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
-| using-erfana | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| using-erfana | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 
-14 skills, one row per folder under `skills/`.
+18 skills, one row per folder under `skills/`.
 
 ## Reading the dates
 
