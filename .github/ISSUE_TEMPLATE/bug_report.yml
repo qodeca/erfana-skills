@@ -41,7 +41,7 @@ body:
     id: skill
     attributes:
       label: Affected skill / command / agent
-      placeholder: "erfana:managing-issues, /erfana:lens-review, agents/mi-..."
+      placeholder: "erfana:issue, /erfana:lens-review, agents/mi-..."
     validations:
       required: false
   - type: textarea

@@ -446,7 +446,7 @@ echo "=== Gate 15 — doc-claim sync ==="
 # Verifies prose claims about plugin shape stay in sync with the filesystem.
 # Three checks: CLAUDE.md "Current version" matches plugin.json; per-skill
 # agent counts in CLAUDE.md/README.md/docs/architecture.md match
-# `ls skills/managing-*/agents/`; plugin-root agents/ count matches all
+# `ls skills/*/agents/`; plugin-root agents/ count matches all
 # "X shared agents" claims. Standalone runner under scripts/gate-15-doc-claims.sh.
 bash scripts/gate-15-doc-claims.sh
 
