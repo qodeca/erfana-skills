@@ -284,3 +284,18 @@ Complete report skeleton following the Pyramid Principle.
 - [ ] All recommendations have owner + timeline
 - [ ] No orphan sections (all connect to main message)
 - [ ] Appendices contain only supporting detail
+
+## Base structures by report type
+
+Start from the structure for the report type and adapt it to the requirements; every section still leads with its key message.
+
+| Audit | Assessment | Strategy |
+|---|---|---|
+| Executive summary | Executive summary | Executive summary |
+| Introduction | Introduction | Context and objectives |
+| Current state assessment | Assessment framework | Current state |
+| Findings | Analysis by domain | Future state vision |
+| Recommendations | Gap analysis | Strategic options |
+| Implementation roadmap | Recommendations | Recommended approach |
+| Appendices | Appendices | Implementation plan |
+| – | – | Appendices |

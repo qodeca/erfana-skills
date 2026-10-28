@@ -4,7 +4,6 @@
 
 - [Part 1: automatable rules (47 total)](#part-1-automatable-rules-47-total)
 - [Part 2: judgment-based rules (18 total)](#part-2-judgment-based-rules-18-total)
-- [Scoring guide](#scoring-guide)
 - [Quick reference card](#quick-reference-card)
 
 Complete style rules for consulting reports. 47 automatable rules + 18 judgment-based rules.
@@ -144,32 +143,6 @@ These require human review and cannot be fully automated.
 | H4 | Cultural sensitivity | Are cultural considerations respected? |
 | H5 | Professional formality | Is tone appropriately formal? |
 | H6 | Strategic implications | Are business implications clear? |
-
----
-
-## Scoring Guide
-
-### Automatable Rules
-
-| Category | Rules | Max points | Weight |
-|----------|-------|------------|--------|
-| Voice/Grammar | A1-A12 | 12 | x2 |
-| Nominalization | B1-B12 | 12 | x1 |
-| Plain Language | C1-C10 | 10 | x1 |
-| Precision | D1-D8 | 8 | x2 |
-| Redundancy | E1-E5 | 5 | x1 |
-
-**Scoring**: Each violation = -1 point in category. Calculate percentage compliance.
-
-### Judgment-Based Rules
-
-| Category | Rules | Max points | Weight |
-|----------|-------|------------|--------|
-| Structure/Logic | F1-F6 | 30 | x2 |
-| Content Quality | G1-G6 | 30 | x1 |
-| Tone/Audience | H1-H6 | 30 | x1 |
-
-**Scoring**: Rate each rule 0-5 (0=missing, 5=excellent).
 
 ---
 

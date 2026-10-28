@@ -87,7 +87,7 @@
 
 Title Case is permitted ONLY for:
 
-1. **Document title on cover page**: "Digital Ecosystem Audit Report"
+1. **Document title on cover page**: "Digital Ecosystem Audit Report". In a markdown report the H1 document title is the cover title, whether or not a separate cover page exists – the only H1 may use title case.
 2. **Proper nouns within headings**: "GymSoft integration issues"
 3. **Official document names when cited**: "National Vision 2030"
 4. **Trademarked product names**: "Microsoft Power BI"

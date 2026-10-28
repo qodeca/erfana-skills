@@ -9,10 +9,10 @@
 - [Category 4: Deliverable format](#category-4-deliverable-format)
 - [Category 5: Quality standards](#category-5-quality-standards)
 
-The canonical question catalog for the CREATE operation. The skill (main
-conversation) asks these via AskUserQuestion – subagents cannot ask the user
-anything. Answers are then passed inline to `gather-report-requirements`,
-which compiles the requirements specification.
+The question catalog for creating a report. Ask these in the main
+conversation – a subagent cannot ask the user anything – skipping any the user
+has already answered, then write the requirements specification described at
+the end of this file.
 
 Ask one category per AskUserQuestion call (max 4 questions per call).
 Open-ended questions (2.1) are asked as free-text prompts.
@@ -168,3 +168,13 @@ Open-ended questions (2.1) are asked as free-text prompts.
 | Confidential | Limited distribution, named recipients | |
 | Restricted | Highly sensitive, strict controls | |
 
+## Requirements specification
+
+Write the answers up as one markdown file with these sections, and list every unanswered question under "Open gaps" rather than guessing:
+
+1. **Purpose** – primary objective, audience, the decision the report should enable.
+2. **Content scope** – subject areas, time period, source materials (with paths), exclusions.
+3. **Structure** – report type, target length, required sections, appendices.
+4. **Deliverable format** – format, branding, version control.
+5. **Quality standards** – review process, special requirements, confidentiality.
+6. **Open gaps** – what is still unknown and what it affects.
