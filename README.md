@@ -15,7 +15,7 @@ by [Qodeca](https://github.com/qodeca)
 
 </div>
 
-Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 6 orchestration skills plus a process skill, a verification skill, and 75 shared agents, all delegating substantive work via the `Task` tool.
+Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 6 orchestration skills plus a process skill, a verification skill, and 41 shared agents, all delegating substantive work via the `Task` tool.
 
 It ships as a Claude Code plugin and also runs on **Qwen Code**, which converts Claude Code plugins at install time – one repository, one release, two hosts. What differs between them is recorded in [`docs/hosts.md`](docs/hosts.md).
 
@@ -30,7 +30,7 @@ Free and open source under the [GNU General Public License v3.0 only](LICENSE). 
 | Skill | What it does | Triggers |
 |---|---|---|
 | `erfana:agent` | Lifecycle management for Claude Code agents – research, design, validation phases. Ships its own validation/review checklists. | "create agent", "review agent", "modify agent" |
-| `erfana:article` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. | "write article", "research article", "publish article" |
+| `erfana:article` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation. | "write article", "research article", "publish article" |
 | `erfana:issue` | Full GitHub-issue lifecycle: create issues, implement them through phased quality gates, and review code or PRs. Runs on `main`-default repos, stack-agnostic, with a skill-wide untrusted-data boundary and confirm-before-destructive git ops. The Implement operation is **autonomous** – it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, resolving every architecture/technical decision by best practice plus judgment. Its reviews are **embedded**: it fans out its own reviewer agents (no manual `/erfana:lens-review`), auto-fixes CRITICAL/HIGH findings inline, and routes MEDIUM/LOW to a judge. It asks a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions – and it still **refuses a detected headless run**, so it is not safe for a `claude -p` / CI session. It saves its progress to one comment on the issue (after asking, on a public repo; without a prompt but announced in one line, on a private one) so an interrupted run can resume. See [`docs/architecture.md`](docs/architecture.md). | "create issue", "implement issue", "review code", "review PR" |
 | `erfana:report` | Professional consulting reports with Pyramid Principle, SCQA, Five Cs framework, sentence-case validation. Reviews run six house checks through two shared checker agents (`report-language-checker`, `report-structure-checker`). | "create report", "review report", "validate report" |
 | `erfana:skill` | Lifecycle management for Claude Code skills following Anthropic best practices. Includes the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills. Every operation opens with a coverage-map requirements interview – Create always interviews; Modify/Review/Modernize gate first and interview on yes. | "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns" |
@@ -70,7 +70,7 @@ Both run only when you type them, because they act outside the conversation.
 | Component | What it does |
 |---|---|
 | `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, routes to the right sub-skill. Loads automatically. |
-| `agents/` (75 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (1), `ma-` (2), `article-` (5), `e2e-` (4), `report-` (2), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
+| `agents/` (41 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (3), `mi-` (5), `ms-` (1), `ma-` (2), `article-` (2), `e2e-` (4), `report-` (2), `fc-` (1), `release-` (2), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
 

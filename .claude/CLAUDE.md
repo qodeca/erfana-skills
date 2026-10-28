@@ -6,12 +6,12 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 75 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 41 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (14)** – all invoke as `/erfana:<name>`:
 
 - Orchestration (6): `agent`, `issue`, `skill`, `spec`, `report`, `article` (per-skill agent notes below).
-- `article` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
+- `article` researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation.
 - `report` (named `managing-reports` until its brief rebuild) reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
 - `skill` opens every operation with a coverage-map requirements interview: Create always interviews in the main conversation per `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Reviews run through the blinded `ms-reviewer` against `references/skill-standard.md`. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (3): `prompt`, `draft-goal`, and `raise-the-bar`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
