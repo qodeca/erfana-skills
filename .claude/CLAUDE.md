@@ -21,7 +21,7 @@ Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 33 sha
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
-Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/`, `guides/`, `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
+Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/` and `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
 
 ## Hard constraints (non-negotiable)
 
