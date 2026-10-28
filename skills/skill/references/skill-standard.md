@@ -75,7 +75,7 @@ Write what a capable colleague would need to do the job well, not a script for a
 - **Find, then filter** (**12.6**): a reviewing skill lists every finding first and filters or ranks in a second pass. "Report only critical issues" is followed literally and drops the rest.
 - **Calm wording with reasons.** Capital-letter emphasis and `YOU MUST` make current models over-apply a rule; a plain rule with its reason generalises better.
 - **Ask from the main conversation.** Only the main conversation can ask the user; agents return their questions to it. Ask one decision at a time.
-- **No skill invokes another skill or a slash command.** Invoking one re-enters skill-level work and can recurse or fan out into the caller's context. When the user should run another skill next, print the command and end the turn.
+- **No skill invokes another skill or a slash command.** Invoking one re-enters skill-level work and can recurse or fan out into the caller's context. When the user should run another skill next, print the command and end the turn. The one exception is a router whose only job is choosing (in this plugin, `using-erfana`): it does no work itself, so loading the chosen skill is a hand-over, not a nested run – and it never routes to a skill marked `disable-model-invocation`.
 - **Name actions, not tool-call syntax** – "search the code for TODO markers", not a tool call with parameters – so the body works on hosts whose tool names differ. Real shell commands stay verbatim.
 - **Cut what does not change behaviour.** For each line ask: would a strong model do worse without it? Keep the reasons and the domain facts; cut generic steps, duplicated rules, and lists of behaviours the model shows anyway.
 
