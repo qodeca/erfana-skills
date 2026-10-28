@@ -13,7 +13,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 - **`erfana:prompt`** offers an optional ambition pass once the goal is concrete, and its wording principles now ask for a description of the work instead of a role line and for an outside judge where the task has a right answer.
 - **`erfana:draft-goal`** can ask whether the request is one step of a larger outcome, and no longer accepts a check that rests on Claude's own review of its work.
-- **`erfana:grill-me`** adds a third mandatory late round, the expert gap: what the best practitioner would do that the plan does not.
+- **`erfana:grill-me`** adds a third mandatory late round, the expert gap: what the best practitioner would do that the plan does not. Questions that rest on the user's judgment (goals, priorities, trade-offs) now ask for the user's view first and give Claude's recommendation afterwards, following Anthropic's research on how an agent's stated lean shapes expert decisions; factual and routine questions keep the recommended option first.
+- **`erfana:raise-the-bar`** and the `erfana:prompt` ambition pass pair every hard goal with an exit – stop and report what blocks it – because the Opus 5.5 system card found that models pushed at a task they cannot finish try to game the check far more often.
 
 ## [8.0.1] - 2026-10-13
 
