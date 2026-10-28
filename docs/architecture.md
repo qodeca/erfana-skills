@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 84 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the issue Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0 + 2 `report-*` when managing-reports was rebuilt as a brief minus 5 `ma-*` when the agent skill was rebuilt as a brief; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 75 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the issue Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0 + 2 `report-*` when managing-reports was rebuilt as a brief minus 5 `ma-*` when the agent skill was rebuilt as a brief; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -69,7 +69,7 @@ erfana-skills/
 ├── .claude-plugin/
 │   ├── plugin.json          ← name=erfana, version=X.Y.Z (live: see CLAUDE.md banner)
 │   └── marketplace.json     ← marketplace catalog
-├── agents/                  ← 84 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0, +2 report-*); flat directory; Claude Code auto-discovers
+├── agents/                  ← 75 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0, +2 report-*); flat directory; Claude Code auto-discovers
 ├── skills/
 │   ├── agent/     ← orchestration skill (v4.0+); guides/, templates/, validation/
 │   ├── article/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
@@ -127,7 +127,7 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 84 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (2), `article-` (5), `e2e-` (4), `fc-` (4), `report-` (2), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 75 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (1), `ma-` (2), `article-` (5), `e2e-` (4), `fc-` (4), `report-` (2), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **No shared content bundle.** Since v7.0.0 every skill owns its own references, guides and templates. Content two skills both need is duplicated deliberately rather than hoisted – the skills are independent and a shared bundle would recouple them.
 
 ### Per-skill nested agents
@@ -212,7 +212,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - `allowed-tools:` minimal set.
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
    - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `ship`, and `handoff`).
-   - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the Model Selection Guide in `skills/skill/templates/shared-agent-template.md`.
+   - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the model and effort table in `skills/agent/references/agent-standard.md` section 7.
 3. **Body structure** (per superpowers canonical order):
    - Core principle (one sentence)
    - When this skill applies / Out of scope
@@ -224,7 +224,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 5. **Add agents (optional)**:
    - Plugin-root agents → `agents/<prefix-name>.md` (use a unique team prefix to avoid generic-name collisions; see `SECURITY.md > Known limitations`).
    - Skill-internal agents → `skills/<name>/agents/<agent-name>.md`. Discovery is unverified for nested location; prefer plugin-root unless agents are tightly coupled to one skill's lifecycle.
-   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/skill/templates/shared-agent-template.md`). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
+   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/agent/references/agent-standard.md` section 7). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
    - **Never** declare `temperature`, `top_p`, `top_k` (400 error on Claude Opus 4.7 and later per Anthropic's parameter-deprecation table) or fixed `thinking: {budget_tokens: N}` on Claude 5 models (Haiku 4.5 exempt) in agent code (Gate 2 + Section 13.3/13.4 BLOCKING).
 6. **Update `skills/using-erfana/SKILL.md`** – add a row to the appropriate sub-table and to the Decision Flow.
 7. **Update `README.md`** – add a row to the appropriate skills sub-table at the top.
