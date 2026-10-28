@@ -1,12 +1,12 @@
 ---
-name: managing-reports
+name: report
 description: Creates, reviews, revises, and versions professional consulting reports to a house standard – Pyramid Principle, SCQA, Five C's findings, a bottom-line-first executive summary, sentence case, and plain, precise prose. A report passes review only when all six house checks pass.
 when_to_use: Use when the user says "create report", "review report", "validate report", "fix report issues", or "version report", or otherwise asks for help producing or quality-checking a consulting deliverable.
 allowed-tools: Read, Write, Edit, Glob, Grep, Task, AskUserQuestion
 model: inherit
 ---
 
-# erfana:managing-reports
+# erfana:report
 
 Help the user produce consulting reports that a busy reader can act on: the conclusion first, every finding complete, every recommendation owned and dated, and prose that is plain and exact. The skill creates a report's requirements and outline, reviews a draft against six house checks, revises a draft after approval, and versions and archives it.
 

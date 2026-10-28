@@ -25,7 +25,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | `erfana:managing-agents` | Claude Code agent lifecycle (research → design → validation) |
 | `erfana:managing-articles` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
 | `erfana:managing-issues` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and persists its run state to one comment on the issue (created after an opt-in prompt on a public repo; written without a prompt but announced in one line on a private repo) so an interrupted run can resume. It runs 13 phases with 13 phase gates plus 3 embedded autonomous review sub-gates: the operation fans out its own reviewer agents (QG-4a, QG-8, QG-11a – no user-run `/erfana:lens-review`), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo run-state consent; it still refuses a detected headless run. |
-| `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
+| `erfana:report` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
 | `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (v6.4.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
 | `erfana:managing-specs` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
 
@@ -73,7 +73,7 @@ erfana-skills/
 │   ├── managing-agents/     ← orchestration skill (v4.0+); guides/, templates/, validation/
 │   ├── managing-articles/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
 │   ├── managing-issues/     ← phases/, operations/, reference/ (singular), examples/, templates/, validation/
-│   ├── managing-reports/    ← brief-style SKILL.md; references/, templates/, examples/
+│   ├── report/              ← brief-style SKILL.md (was managing-reports); references/, templates/, examples/
 │   ├── managing-skills/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy); its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
 │   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ only – its grill-guard lives in plugin-root hooks/ since v7.1.0
@@ -130,7 +130,7 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Per-skill nested agents
 
-No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `managing-articles` hoisted its agents to `article-*` in v4.3.0, and `managing-reports` replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. `managing-issues` and `managing-skills` define `agents/` paths in prose only.
+No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `managing-articles` hoisted its agents to `article-*` in v4.3.0, and `report` (then `managing-reports`) replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. `managing-issues` and `managing-skills` define `agents/` paths in prose only.
 
 ### Convention: subagents cannot call `AskUserQuestion`
 
@@ -189,7 +189,7 @@ User intent → using-erfana (router)
                        ├─ agent lifecycle? → managing-agents
                        ├─ article (research → publish)? → managing-articles
                        ├─ GitHub issue (create / implement / review)? → managing-issues
-                       ├─ consulting report? → managing-reports
+                       ├─ consulting report? → report
                        ├─ skill lifecycle? → managing-skills
                        └─ specification (T1-T4)? → managing-specs
 ```

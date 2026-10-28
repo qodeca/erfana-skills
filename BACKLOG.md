@@ -66,7 +66,7 @@ These items are NOT scheduled but have explicit trigger conditions; none is tied
 
 - **Generic-named agent renames (8 unprefixed agents).** Trigger: any reported mixed-plugin nondeterminism (last-loaded-wins behavior on agents with the same name across plugins), OR a maintainer policy decision to systematically prevent the risk before incidents. Currently 8 agents are at risk: `code-reviewer`, `software-developer`, `commit-writer`, `architecture-reviewer`, `security-auditor`, `solution-architect`, `technical-architect`, `ux-reviewer`. Breaking change — proposed prefix scheme `er-*` (matches plugin id). v4.2.0 documented but did not act on this; the prefix scheme keeps Gate 2's name-equals-basename invariant intact and removes the cross-plugin collision risk.
 
-- **`managing-reports` nested-agent architectural migration – done (2026-10-28).** Rebuilt as a brief with two plugin-root `report-*` checkers; the nested `agents/` directory is gone.
+- **`managing-reports` nested-agent architectural migration – done (2026-10-28; the skill is now `report`).** Rebuilt as a brief with two plugin-root `report-*` checkers; the nested `agents/` directory is gone.
 
 - **MEDIUM-priority polish from v4.2.0 review (M-series).** Trigger: any future v4.2.x patch release. Status: M9 ms-validator example outputs, M10 Section 12.1 self-detection guard, M11 ms-reviewer "top 5" parenthetical, and M12 pre-release-checklist §1.7 phrasing all shipped within the v4.2.0 same-release window (rolled into PR #46 squash before tag). Two cosmetic items also landed in v4.2.0: creating-skills.md threshold prose, SKILL.md Operation: Create threshold listing. Entry retained for audit-trail (which review-lane finding maps to which fix); no further work pending.
 

@@ -172,4 +172,4 @@ The direction Anthropic's 2026 guidance points in: give the goal, the guardrails
 7. **Hard limits in hooks and tool grants, not prose.** A rule that must always hold is a hook or a missing tool; prose is advice (same source as 6).
 8. **Golden cases before the rewrite.** Write about ten behavioural cases from real failures, run them on the old skill and the new one, more than once each, and compare which cases flipped (https://www.anthropic.com/research/demystifying-evals-for-ai-agents). Capture the whole conversation – a Stop hook can add a closing turn that hides the result.
 
-Worked example: `managing-reports` (2026-10-28) – 11 nested agents and step tables became ground rules, one rules file, two plugin-root checkers, and outcome-led operations; golden cases in `tests/managing-reports/`.
+Worked example: `report`, formerly `managing-reports` (2026-10-28) – 11 nested agents and step tables became ground rules, one rules file, two plugin-root checkers, and outcome-led operations; golden cases in `tests/report/`.

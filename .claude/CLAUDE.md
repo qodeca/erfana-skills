@@ -10,9 +10,9 @@ Current version: **v8.0.1**. The plugin ships 13 auto-discovered skills + 89 sha
 
 **Skills (13)** – all invoke as `/erfana:<name>`:
 
-- Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `managing-reports`, `managing-articles` (per-skill agent notes below).
+- Orchestration (6): `managing-agents`, `managing-issues`, `managing-skills`, `managing-specs`, `report`, `managing-articles` (per-skill agent notes below).
 - `managing-articles` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
-- `managing-reports` reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
+- `report` (named `managing-reports` until its brief rebuild) reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
 - `managing-skills` opens every operation with a coverage-map requirements interview: Create always interviews via the shared `grill-planner` agent + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (2): `prompt` and `draft-goal`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
 - `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
