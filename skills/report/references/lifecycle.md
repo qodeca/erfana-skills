@@ -36,7 +36,7 @@ Numbering: a major revision raises the first digit (1.0 → 2.0), a minor update
 
 ## Archive
 
-Copy the report into the archive folder under a timestamped name and add a line to the archive index there (`archive-index.md`: file, date, reason). Archiving is copy-only: the active report stays where it is.
+If the user has not agreed the archive folder's path in this session, confirm it first. Then copy the report into the archive folder under a timestamped name and add a line to the archive index there (`archive-index.md`: file, date, reason). Archiving is copy-only: the active report stays where it is.
 
 ## Restore
 

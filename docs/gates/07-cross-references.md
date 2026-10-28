@@ -76,11 +76,11 @@ PYEOF
 
 ## Limitations
 
-The pass-2 glob is `skills/*/references/*.md` – **plural**. One skill spells the directory in the singular, `reference/`: `issue` (22 files). Every link inside those files is unchecked. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" therefore holds for the plural spelling only.
+The pass-2 glob is `skills/*/references/*.md` – **plural**. A skill that spelled the directory in the singular, `reference/`, would have every link inside those files unchecked; `issue` did until its brief rebuild moved everything to `references/`. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" holds for the plural spelling only.
 
-The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. In `issue` that is 13 phase files, 9 operation files and 5 example files – the bulk of the skill's prose. Only the handful of links in its `SKILL.md` are gate-checked.
+The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. No shipped skill uses those folders since `issue` was rebuilt as a brief.
 
-The Implement hardening (PR #24) added two files inside that blind spot (`reference/run-state-resume.md`, `examples/implement-edge-cases.md`) and roughly forty new cross-links from `operations/` and `phases/`. A **manual link-resolution pass** is the substitute, and is what covered the equivalent gap at v4.2.19 – [`../known-caveats.md`](../known-caveats.md) records both that pass and the gap itself as an accepted risk.
+History: before the brief rebuild, the `issue` skill's `reference/`, `operations/`, `phases/`, and `examples/` files (including the Implement hardening of PR #24) sat in this blind spot and were covered by a **manual link-resolution pass** instead – [`../known-caveats.md`](../known-caveats.md) records that gap as an accepted risk. Those folders no longer exist. Still outside the glob today: the nested templates under `skills/issue/templates/*/` and `skills/spec/templates/t3-lite-spec/` / `t4-standard-spec/`.
 
 Widening the glob is a code change to `scripts/run-all-gates.sh`, deliberately not made here: this file documents the limit so the gate doc does not contradict the accepted caveat.
 

@@ -105,7 +105,7 @@ If either sentinel literal ever changes:
 **Ms-grill family** (`<!-- erfana:ms-grill-open -->`, v6.4.0):
 
 1. Update the `MS_GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
-2. Update the marker literal in `skills/skill/SKILL.md` ("Requirements interrogation") and `skills/skill/references/interview-protocol.md` (Sentinel section).
+2. Update the marker literal in `skills/skill/SKILL.md` ("The interview") and `skills/skill/references/interview-protocol.md` (Sentinel section).
 3. Update the match in `hooks/ms-grill-guard.sh` (`grep -qF`) and `ms-grill-guard.ps1` (`.Contains`) — the guard-drift normalizer's `sed` mapping in the gate script must track the new literal too.
 4. Update the eight `tests/hooks/ms-grill-guard/*.json` fixtures that embed the literal.
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.

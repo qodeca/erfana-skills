@@ -146,14 +146,9 @@ Decision Quality (SDG) and ATAM:
 
 ## 9. Failure modes
 
-Mandatory – this is the premortem round, run late in the interview, after the map is mostly explored. Counters: optimism bias, planning fallacy, plan-continuation bias.
+Mandatory. Counters: optimism bias, planning fallacy, plan-continuation bias. Ask about failure directly, part by part, and keep digging until each answer names a concrete cause and how it would be noticed.
 
-Short pass: compressed – one premortem question, one boring failure mode as the floor.
-
-Klein's premortem framing – assert failure as fact, never ask "what might go wrong":
-
-- "It's a year from now. This plan shipped and failed spectacularly. Write down every reason why."
-- Require at least 2 *boring* failure modes (missed handoff, quiet scope creep, key person left) – exotic scenarios crowd out the mundane ones that actually happen.
+Short pass: compressed – one failure question laddered to a concrete cause; one boring failure mode (missed handoff, quiet scope creep, key person left) is the floor, because exotic scenarios crowd out the mundane ones that actually happen.
 
 Inversion (Munger): "What would guarantee this fails?"
 
@@ -194,6 +189,13 @@ Short pass: skipped by default – state the skip with its condition in the sizi
 UK MOD high-impact low-probability analysis:
 
 - "Take the main factor driving this plan. What does its expected development look like? Now the extreme negative? The extreme positive? What does each do to the plan?"
+
+Non-obvious edge cases – derive them from this plan, not from a generic list (this round is mandatory in every depth; see the late rounds in SKILL.md):
+
+- "What happens on the first run, with nothing set up yet? On the thousandth, with everything left over from the earlier runs?"
+- "What happens when two of these run at the same time, or the same input arrives twice?"
+- "A step half-succeeds – the file is written but the record is not. What state are we in, and who notices?"
+- "Which input is valid but strange – empty, enormous, in another language or time zone, from a user with fewer permissions?"
 
 Tenth-man doctrine – argue the consensus's opposite as a duty, not a conviction:
 
@@ -240,10 +242,6 @@ Cognitive interview mnemonics adapted:
 
 - "Walk the plan backwards from launch day to today." (reverse order)
 - "Describe this plan as your harshest competitor would. As the on-call engineer at 3 a.m. As your most disappointed customer." (change perspective)
-
-Annie Duke's backcasting pairs with the premortem:
-
-- "It's a year from now and this succeeded beyond expectations – what happened to get us here?"
 
 ## 16. Meta check
 

@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 75 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the issue Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0 + 2 `report-*` when managing-reports was rebuilt as a brief minus 5 `ma-*` when the agent skill was rebuilt as a brief; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; session closeout – `ship`, `handoff`) behind one bootstrap router, and 33 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -22,26 +22,26 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:agent` | Claude Code agent lifecycle (research → design → validation) |
-| `erfana:article` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
-| `erfana:issue` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and persists its run state to one comment on the issue (created after an opt-in prompt on a public repo; written without a prompt but announced in one line on a private repo) so an interrupted run can resume. It runs 13 phases with 13 phase gates plus 3 embedded autonomous review sub-gates: the operation fans out its own reviewer agents (QG-4a, QG-8, QG-11a – no user-run `/erfana:lens-review`), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo run-state consent; it still refuses a detected headless run. |
+| `erfana:agent` | Claude Code agent lifecycle – Create, Review, Modify, and Pairs (doer/reviewer agents) – written as a brief. Interviews, design, writing, and edits run in the main conversation against `references/agent-standard.md`; `agent-researcher` gathers sourced best practices and the blinded `agent-reviewer` judges readiness. |
+| `erfana:article` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation. |
+| `erfana:issue` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `search issues`). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and commits nothing before the user accepts the result at UAT; the brief rebuild retired the run-state comment and resume. It runs 13 phases with 13 phase gates plus 3 embedded review sub-gates (QG-4a design review, QG-4b judgment, QG-11a change-set review); the design (QG-4a) and the change set (QG-8, QG-11a) are reviewed by reviewer agents the operation fans out itself – no user-run `/erfana:lens-review` – with CRITICAL/HIGH findings fixed inline and MEDIUM/LOW routed to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), and the QG-12 git-action confirmation; a headless run stops before creating a branch, and a CI run is refused at QG-0. |
 | `erfana:report` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
-| `erfana:skill` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (v6.4.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
-| `erfana:spec` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
+| `erfana:skill` | Claude Code skill lifecycle – Create, Review, Modify, and the **Modernize operation**, which reviews an existing skill with the blinded `skill-reviewer` against `references/skill-standard.md`, lets the user pick the changes, and applies them in the main conversation with backups and a focused re-review. Every operation opens with a **coverage-map requirements interview** run in the main conversation per `references/interview-protocol.md`: Create always interviews; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
+| `erfana:spec` | 4-tier specification management (T1 issue → T4 standard) – Create, Change, Review, Reconcile, Archive and list – written as a brief. Requirements, creation, edits, and reconciliation run in the main conversation; `spec-app-researcher` researches similar applications, the blinded `spec-validator` reviews, and `spec-compliance-checker` compares a spec with the code. |
 
 ### Process skills (1, v4.2.3+)
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:grill-me` | Interview the user one question at a time until a 16-dimension coverage map is closed – every area done, or skipped with a stated reason. Originally imported from upstream `superpowers:grill-me` (v4.2.3); rewritten in v6.2.0 into a machine-checkable protocol: per-message coverage-map line, laddered follow-ups, decisions ledger, mandatory premortem and reversibility rounds, prediction-test exit gate, rationalization table from observed baseline excuses, and a `grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0, scripts under `hooks/` and fixtures under `tests/hooks/grill-guard/`, Gate 16; it evaluates every stop and the open-marker sentinel alone scopes it to a live interview). v6.6.0 makes the interview proportional: three depths (`short` / `standard` / `full`) the model selects from blast radius, reversibility, cost of being wrong, and consumers (any one-way door, external consumer, or money / legal / safety / data-loss exposure forces `full`; ambiguity resolves upward); skips batched into one mandatory sizing statement instead of one `AskUserQuestion` per waiver; the seven mandatory dimensions compressed rather than dropped at `short`; and a depth-relative question floor (5 / 10 / 16). The exit gate holds at every depth. Ships `references/question-stems.md`, which records per dimension what survives a short pass. Brand-agnostic. |
+| `erfana:grill-me` | Interview the user one question at a time until a 16-dimension coverage map is closed – every area done, or skipped with a stated reason. Originally imported from upstream `superpowers:grill-me` (v4.2.3); rewritten in v6.2.0 into a machine-checkable protocol: per-message coverage-map line, laddered follow-ups, decisions ledger, mandatory late rounds (since v9.0.0: reversibility, non-obvious edge cases, and the expert gap; the premortem was removed), prediction-test exit gate, rationalization table from observed baseline excuses, and a `grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0, scripts under `hooks/` and fixtures under `tests/hooks/grill-guard/`, Gate 16; it evaluates every stop and the open-marker sentinel alone scopes it to a live interview). v6.6.0 makes the interview proportional: three depths (`short` / `standard` / `full`) the model selects from blast radius, reversibility, cost of being wrong, and consumers (any one-way door, external consumer, or money / legal / safety / data-loss exposure forces `full`; ambiguity resolves upward); skips batched into one mandatory sizing statement instead of one `AskUserQuestion` per waiver; the seven mandatory dimensions compressed rather than dropped at `short`; and a depth-relative question floor (5 / 10 / 16). The exit gate holds at every depth. Ships `references/question-stems.md`, which records per dimension what survives a short pass. Brand-agnostic. |
 
 ### Verification skills (1, v4.2.7+)
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:fact-checking` | Validate markdown analysis documents against source materials by extracting atomic factual claims, tracing each to its source passage, classifying findings by severity (Critical / Error / Warning / Info), and applying user-approved corrections. Five-phase orchestrator (Setup → Extraction → Verification → Interactive review → Fix application) backed by four `fc-*` plugin-root agents. Manual-only via `/erfana:fact-checking <target-file>` (`disable-model-invocation: true`); not auto-discovered. Phase 3.1 implements adaptive fan-out (sequential single-call below ~50 claims; orchestrator-side parallel batching of ~25-claim chunks capped at ~8 workers, run in waves, at ≥50 claims) that reconciles by dispatched claim id and re-dispatches only failed/partial chunks (v4.6.0). All ingested document/source text is treated as untrusted data, and fix application anchors on verbatim text. Migrated from a prior Qodeca consulting project, Modernize-passed in v4.2.7, and lens-review-hardened in v4.6.0. Brand-agnostic. |
+| `erfana:fact-checking` | Validate markdown analysis documents against source materials by extracting atomic factual claims, tracing each to its source passage, classifying findings by severity (Critical / Error / Warning / Info), and applying user-approved corrections. Written as a brief: source discovery, claim extraction, the interactive review, and approved fixes run in the main conversation; one blinded verifier, `fact-checking-verifier`, returns a verdict with quoted evidence per claim. Manual-only via `/erfana:fact-checking <target-file>` (`disable-model-invocation: true`); not auto-discovered. Up to about 50 claims go to one verifier; larger documents are split into batches of about 25 claims verified in parallel, reconciled by claim id, with missing or failed batches sent again. All ingested document/source text is treated as untrusted data, and fix application anchors on verbatim text. Migrated from a prior Qodeca consulting project, Modernize-passed in v4.2.7, and lens-review-hardened in v4.6.0. Brand-agnostic. |
 
-### Prompting skills (2)
+### Prompting skills (3)
 
 | Sub-skill | Single concern |
 |---|---|
@@ -69,16 +69,16 @@ erfana-skills/
 ├── .claude-plugin/
 │   ├── plugin.json          ← name=erfana, version=X.Y.Z (live: see CLAUDE.md banner)
 │   └── marketplace.json     ← marketplace catalog
-├── agents/                  ← 75 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0, +2 report-*); flat directory; Claude Code auto-discovers
+├── agents/                  ← 33 shared agents; flat directory; Claude Code auto-discovers (history in CHANGELOG.md)
 ├── skills/
-│   ├── agent/     ← orchestration skill (v4.0+); guides/, templates/, validation/
-│   ├── article/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
-│   ├── issue/     ← phases/, operations/, reference/ (singular), examples/, templates/, validation/
+│   ├── agent/     ← orchestration skill; references/ (agent standard, pairs), templates/
+│   ├── article/   ← references/, templates/ (research and review through 2 plugin-root article-* agents)
+│   ├── issue/     ← references/ (one file per operation + embedded review + code-review standards), templates/create/, templates/implement/
 │   ├── report/              ← brief-style SKILL.md (was managing-reports); references/, templates/, examples/
-│   ├── skill/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy); its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
-│   ├── spec/      ← templates/ (T1-T4), validation/, examples/, guides/
+│   ├── skill/     ← references/ (skill standard, interview protocol, Claude 5 patterns), templates/; its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
+│   ├── spec/      ← references/ (tiers, registry, writing requirements, review checks, downstream links), templates/ (T1-T4, schemas)
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ only – its grill-guard lives in plugin-root hooks/ since v7.1.0
-│   ├── fact-checking/       ← verification skill (v4.2.7+); references/ + examples.md
+│   ├── fact-checking/       ← verification skill (v4.2.7+); references/ only
 │   ├── prompt/              ← prompting skill; references/ (interview, templates, model guidance)
 │   ├── draft-goal/          ← prompting skill; references/ (goal mechanics, condition patterns)
 │   ├── raise-the-bar/       ← prompting skill; references/ (the three ambition lenses)
@@ -127,12 +127,12 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 75 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (1), `ma-` (2), `article-` (5), `e2e-` (4), `fc-` (4), `report-` (2), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
-- **No shared content bundle.** Since v7.0.0 every skill owns its own references, guides and templates. Content two skills both need is duplicated deliberately rather than hoisted – the skills are independent and a shared bundle would recouple them.
+- **`agents/` at plugin root** – 33 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown (each skill-owned agent starts with its skill's name): `spec-` (3), `issue-` (1), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2), `lens-` (1), `e2e-` (4), `release-` (2), generic-name (14, including `solution-*`, UI/UX, and the general reviewers and developers). The generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **No shared content bundle.** Since v7.0.0 every skill owns its own references and templates. Content two skills both need is duplicated deliberately rather than hoisted – the skills are independent and a shared bundle would recouple them.
 
 ### Per-skill nested agents
 
-No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `article` hoisted its agents to `article-*` in v4.3.0, and `report` (then `managing-reports`) replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. `issue` and `skill` define `agents/` paths in prose only.
+No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `article` hoisted its agents to `article-*` in v4.3.0, and `report` (then `managing-reports`) replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. No skill defines a nested `agents/` folder.
 
 ### Convention: subagents cannot call `AskUserQuestion`
 
@@ -142,40 +142,20 @@ No skill ships internal agents under `<skill>/agents/` any more: the published C
 - The **orchestrator** (the skill running in the main conversation) asks those questions via `AskUserQuestion`, batching at most 4 per call, then passes the answers back to the agent or carries them forward.
 - A **skipped answer is valid** — record it and proceed; never loop re-asking the same question.
 
-Canonical reference implementation: [`agents/mi-requirements-analyzer.md`](../agents/mi-requirements-analyzer.md). In `issue` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13), `grill-planner` (plans the whole interview, never asks; v6.4.0 – supersedes the retired `ms-requirements-gatherer`, whose four CREATE requirement keys it preserves via `references/interview-taxonomy.md`). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `article/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
+Canonical shape: the agent returns its question with the context and options the user needs, and the main conversation asks it and passes the answer back. The brief-style skills (`agent`, `skill`, `report`, `issue`) go further and keep questions in the main conversation altogether: their agents are checkers and researchers that never need the user mid-task.
 
 ### Where new content goes – the rule
 
-- **Reference prose** (how-to depth a skill body cannot carry) → `skills/<name>/references/foo.md`, or the skill's own `guides/` / `reference/` folder where that spelling is already established.
+- **Reference prose** (how-to depth a skill body cannot carry) → `skills/<name>/references/foo.md`.
 - **Templates** → `skills/<name>/templates/`.
-- **Agent prompts** → plugin-root `agents/<prefix-name>.md` by default; `skills/<name>/agents/` only when the agent is tightly coupled to one skill's lifecycle.
+- **Agent prompts** → plugin-root `agents/<prefix-name>.md`; a skill-owned agent starts with its skill's name. No skill ships its own `agents/` folder.
 - **Gate logic** → `scripts/`, with a matching detail file under `docs/gates/`.
 
 Nothing is shared across skills. Gate 7 walks every cited path from each file's perspective and fails on broken links.
 
-### Phase-requirements split-file pattern (v4.2.x convention)
+### File-size convention
 
-Orchestration skills with multiple operations should split phase-requirements references by operation rather than concatenating into one file. v4.2.1 introduced the pattern in `issue` (motivated by Rule #16 fragility); v4.2.2 made it canonical by extracting shared vocabulary to its own file. Reference shape:
-
-- `reference/phase-requirements-shared.md` — capability vocab, domain vocab, criticality levels, allow_direct policy. All operation files cross-reference this equally (no implicit "implement is canonical" hierarchy).
-- `reference/<operation>-phase-requirements.md` — one file per operation (`implement-`, `create-`, `review-`, `conditional-`).
-
-The legacy single-file pattern (`reference/phase-requirements.md` containing both shared vocab and all operation phases) is **deprecated** as of v4.2.x. New skills should use the split pattern; existing skills with the single-file shape may migrate during their next Modernize pass. Documented in `skills/skill/templates/phase-requirements-template.md`.
-
-### File-cap fragility split pattern (v4.2.2 convention)
-
-When a skill file approaches the Rule #16 ≤500-line cap, hoist a single most-cohesive section to a sibling file rather than refactoring the whole file. v4.2.2 V6 demonstrated three reference splits in `issue`:
-
-- `operations/review-compliance.md` — Compliance review mode workflow hoisted from `review.md` (482 → 454 lines, +46 buffer).
-- `operations/implement-phases-overview.md` — Phases section hoisted from `implement.md` (469 → 207 lines, +293 buffer; the canonical per-phase detail still lives in `phases/0-12.md`).
-- `reference/agents-reference-mi.md` — `mi-*` family agent details hoisted from `agents-reference-detail.md` (457 → 287 lines, +213 buffer).
-
-The convention has held since. The `issue` Implement hardening applied it twice more, in the same skill:
-
-- `reference/run-state-resume.md` (245 lines) – the **read** side of the run-state block (fetch-time authorship filter, parser contract, resume rules) hoisted out of `reference/post-review-tracking.md`, which keeps the write side at 283 lines. The split is by responsibility, which is what kept both halves under the cap as the hardening grew them.
-- `examples/implement-edge-cases.md` (237 lines) – edge-case walkthroughs split out of `examples/implement.md` (286 lines), which keeps the happy path and the gate summary table.
-
-Sibling files cite their parent for navigability; Gate 7 enforces both directions **only where its globs reach** – neither of the two files above is inside its scan surface (see [`gates/07-cross-references.md`](gates/07-cross-references.md) `## Limitations`). Apply preemptively at 480+ lines rather than waiting for the 500-line BLOCKING failure.
+When a skill file approaches the 500-line cap, hoist the single most cohesive section to a sibling file under `references/` rather than refactoring the whole file, and have the sibling cite its parent. Apply it at 480+ lines rather than waiting for the cap. The older split patterns – the per-operation `reference/*-phase-requirements.md` files and the `issue` `phases/` / `operations/` / `examples/` splits – went away when the skills were rebuilt as briefs; the history is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 ## Cross-skill flow
 
@@ -196,7 +176,7 @@ User intent → using-erfana (router)
                        └─ specification (T1-T4)? → spec
 ```
 
-Orchestration skills are **independent** – they pick by domain, not by lifecycle stage of a shared deliverable. Each owns its own multi-phase workflow internally and delegates to agents in `agents/` and `<skill>/agents/` via the `Task` tool.
+Orchestration skills are **independent** – they pick by domain, not by lifecycle stage of a shared deliverable. Each owns its own workflow and delegates to agents in the plugin-root `agents/` via the `Task` tool.
 
 ### Cross-skill composition
 
@@ -204,7 +184,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 
 ## Adding a new sibling skill – checklist
 
-1. **Pick the folder name**. Lowercase kebab-case. Use `managing-` for a lifecycle-management vertical (e.g. `skills/managing-feedback/`), or a domain prefix otherwise (e.g. `skills/research-summary/`). The folder name becomes the namespace suffix (`erfana:managing-feedback`).
+1. **Pick the folder name**. Lowercase kebab-case, a short name for the domain (e.g. `skills/feedback/`). The folder name becomes the namespace suffix (`erfana:feedback`).
 2. **Create `skills/<name>/SKILL.md`** with frontmatter:
    - `name: <name>` (must match folder name; Gate 2 enforces).
    - `description:` one trigger sentence ("Use when..." form, third-person voice, ≤500 chars; Gate 2 warns above threshold).
@@ -213,23 +193,17 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
    - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `ship`, and `handoff`).
    - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the model and effort table in `skills/agent/references/agent-standard.md` section 7.
-3. **Body structure** (per superpowers canonical order):
-   - Core principle (one sentence)
-   - When this skill applies / Out of scope
-   - Process (numbered steps)
-   - Anti-patterns
-   - References + Assets (relative paths)
-   - Examples
-4. **References**: skill-internal docs go under `skills/<name>/{references,guides,reference,templates,validation,examples,phases,operations,workflows}/`. Cite nothing outside the skill's own folder except plugin-root `agents/`.
+3. **Body structure**: write the body as a brief – ground rules first, then one outcome-led section per operation – per section 4 of `skills/skill/references/skill-standard.md` ("The body: write a brief").
+4. **References**: skill-internal docs go under `skills/<name>/references/` and `skills/<name>/templates/` (plus `examples/` where a skill needs worked examples). Cite nothing outside the skill's own folder except plugin-root `agents/`.
 5. **Add agents (optional)**:
    - Plugin-root agents → `agents/<prefix-name>.md` (use a unique team prefix to avoid generic-name collisions; see `SECURITY.md > Known limitations`).
-   - Skill-internal agents → `skills/<name>/agents/<agent-name>.md`. Discovery is unverified for nested location; prefer plugin-root unless agents are tightly coupled to one skill's lifecycle.
-   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/agent/references/agent-standard.md` section 7). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
+   - A skill-owned agent starts with its skill's name (`spec-validator`, `skill-reviewer`). No skill ships a nested `agents/` folder.
+   - Choose `model:` and `effort:` per section 7 of `skills/agent/references/agent-standard.md`; omitting `effort` is valid and the agent then follows the session. Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
    - **Never** declare `temperature`, `top_p`, `top_k` (400 error on Claude Opus 4.7 and later per Anthropic's parameter-deprecation table) or fixed `thinking: {budget_tokens: N}` on Claude 5 models (Haiku 4.5 exempt) in agent code (Gate 2 + Section 13.3/13.4 BLOCKING).
 6. **Update `skills/using-erfana/SKILL.md`** – add a row to the appropriate sub-table and to the Decision Flow.
 7. **Update `README.md`** – add a row to the appropriate skills sub-table at the top.
 8. **Update `CHANGELOG.md`** – entry under the next release describing the addition.
-9. **Bump `version`** in both `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (same number).
+9. **Bump `version`** in `.claude-plugin/plugin.json` only – never add `version` to `marketplace.json` (see the release process).
 9b. **Regenerate the skill registry** – `bash scripts/gen-skill-registry.sh` – and commit `docs/skill-registry.md`. Gate 18 hard-fails when the registry's skill list disagrees with `ls skills/`. The new skill's row reads `uncommitted` until its commit lands, after which Gate 18 warns (not blocks) until the next regeneration.
 10. **Run `bash scripts/run-all-gates.sh`** – Gate 2 lists the new skill (and any added agents) and enforces frontmatter invariants; Gate 7 hard-fails on broken citations; Gate 15 hard-fails until every prose skills-count claim matches the filesystem.
 11. **Open a PR** – CODEOWNERS auto-tags `@marcinobel`. Squash-merge via admin bypass per the documented release process.
@@ -240,7 +214,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 - **Project-level skills** (`.claude/skills/` in employee repos). The plugin is plugin-scope only. Personal/project skills override plugin skills per CC's scope precedence; that's documented in README troubleshooting, not enforced by this plugin.
 - **Cross-skill coupling**. No skill depends on another. The single coupling point is the bootstrap router. A skill that would need a sibling's behaviour prints the sibling's command and ends the turn instead of invoking it.
 
-Note on agents: v4.0.0 added `agents/` (75 files at the time, rising to 76 when v4.2.2 added `mi-issue-displayer` – both historical figures; the live count is the one stated at the top of this document) and per-skill nested agents. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding a new agent does NOT require a `CLAUDE.md` update on its own; adding a new skill that delegates to agents does.
+Note on agents: v4.0.0 added `agents/` and per-skill nested agents; the nested agents are gone and the live count is the one stated at the top of this document. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding a new agent does NOT require a `CLAUDE.md` update on its own; adding a new skill that delegates to agents does.
 
 ## See also
 
@@ -249,7 +223,7 @@ Note on agents: v4.0.0 added `agents/` (75 files at the time, rising to 76 when 
 - [`skill-registry.md`](skill-registry.md) – generated inventory of every shipped skill and the last commit that touched it; regenerate with `scripts/gen-skill-registry.sh`, policed by Gate 18.
 - [`verification-gates.md`](verification-gates.md) – index for the 12 gates (all hard); per-gate detail under [`gates/`](gates/), one file per gate. Includes Gate 2 (frontmatter for skills + agents + Claude 5 model patterns incl. the reasoning-display detector with committed fixtures, v4.0+ extended v4.2.0+ and v6.3.0), Gate 7 (cross-references across skills + agents), Gate 14 (hooks valid, v4.1+), Gate 15 (doc-claim sync, v4.1.2+, extended v4.1.3+ to cover skills / hooks / slash command counts; v4.2.2 extended `docs_to_scan` to include `skills/using-erfana/SKILL.md` and `docs/verification-gates.md`), Gate 16 (verify-completion fixture replay + sentinel symmetry, v4.2.9+), Gate 17 (publication readiness, v6.0.0+), Gate 18 (skill-registry sync against git history – list drift and impossible dates hard, lagging dates warn, v6.6.1+)
 - [`modernization-registry.md`](modernization-registry.md) – audit-trail of every skill that has been through the Modernize operation (v4.2.0+) – first pass, last pass, scope, score. Convention-enforced (not gated). Updated atomically with each Modernize pass.
-- [`known-caveats.md`](known-caveats.md) – accepted risks from the v4.0.0 scope widening, v4.1.0 hooks migration, the 2026-05-17 v4.2.8 → v4.2.10 same-day release chain, and every later release that added one (generic-name agent collisions, unverified per-skill nested `agents/` discovery, skipped rc soaks, `~/.claude/` duplication, etc.). The running tally of no-staged-rollout overrides lives in that file's newest section – the last one in the file – and is not restated here. Extracted from CLAUDE.md to keep that file under the 40 KB recommended ceiling.
+- [`known-caveats.md`](known-caveats.md) – accepted risks from the v4.0.0 scope widening, v4.1.0 hooks migration, the 2026-05-17 v4.2.8 → v4.2.10 same-day release chain, and every later release that added one (generic-name agent collisions, skipped rc soaks, `~/.claude/` duplication, etc.). The running tally of no-staged-rollout overrides lives in that file's newest section – the last one in the file – and is not restated here. Extracted from CLAUDE.md to keep that file under the 40 KB recommended ceiling.
 - [`../CHANGELOG.md`](../CHANGELOG.md) – release narrative including v4.0.0 widening + accepted-risk audit trail
 - [`../ROADMAP.md`](../ROADMAP.md) – sequenced upcoming work
 - [`../BACKLOG.md`](../BACKLOG.md) – items intentionally NOT on the roadmap, with reasoning

@@ -10,7 +10,7 @@
 #   2. Per-skill internal agent counts in CLAUDE.md / README.md /
 #      docs/architecture.md / MAINTAINER.md ("Ships 23 internal agents",
 #      "23 skill-internal agents") that diverge from
-#      `ls skills/managing-<name>/agents/`.
+#      `ls skills/<name>/agents/`.
 #   3. Plugin-root agent count claims ("75 shared agents") that diverge
 #      from `ls agents/*.md`.
 #   4. Top-level skills count claims ("13 skills", "13 auto-discovered
@@ -112,9 +112,11 @@ for doc in docs_to_scan:
         # Restrict to lines that mention exactly one skill, to avoid false
         # positives on aggregate / comparison sentences. Skill names are short
         # common words (`skill`, `issue`, `spec`), so only an explicit
-        # mention counts: backticked, erfana-namespaced, or as a skills/ path.
+        # mention counts: backticked, bold, erfana-namespaced, a skills/ path,
+        # or "<name> skill".
         skills_in_line = [s for s in fs_counts if re.search(
-            rf'`{re.escape(s)}`|erfana:{re.escape(s)}\b|skills/{re.escape(s)}/', line)]
+            rf'`{re.escape(s)}`|erfana:{re.escape(s)}\b|skills/{re.escape(s)}/'
+            rf'|\*\*{re.escape(s)}\*\*|\b{re.escape(s)} skill\b', line)]
         if len(skills_in_line) == 1:
             skill = skills_in_line[0]
             expected = fs_counts[skill]

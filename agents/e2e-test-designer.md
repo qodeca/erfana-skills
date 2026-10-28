@@ -44,7 +44,7 @@ Transform spec acceptance criteria and use cases into structured, framework-agno
 | project_path | string | Yes | Absolute path, directory must exist |
 | spec_path | string | Yes | Path to spec directory, must contain manifest.json |
 | spec_tier | enum | Yes | T2, T3, or T4 (STOP and return error if T1) |
-| tech_stack | string[] | No | Web frameworks detected by spec-project-analyzer |
+| tech_stack | string[] | No | Web frameworks detected in the project by the caller |
 </input_contract>
 
 <workflow>
@@ -116,7 +116,7 @@ Transform spec acceptance criteria and use cases into structured, framework-agno
     - Write the 16-section document (see output_format)
     - Write to `{project_path}/specs/spec-t{tier}-{id}-{slug}/testing/001-e2e-design.md`
     - Verify file exists after write
-    - Return absolute path in output for spec-document-linker registration
+    - Return absolute path in output so the caller can link it in the spec registry
 
 13. **Verify completeness**
     - Every e2e-eligible AC has at least one scenario?

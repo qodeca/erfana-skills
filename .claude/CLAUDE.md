@@ -6,14 +6,14 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 75 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 33 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
 
 **Skills (14)** – all invoke as `/erfana:<name>`:
 
 - Orchestration (6): `agent`, `issue`, `skill`, `spec`, `report`, `article` (per-skill agent notes below).
-- `article` delegates to 5 plugin-root `article-*` shared agents; it ships no skill-internal agents.
+- `article` researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation.
 - `report` (named `managing-reports` until its brief rebuild) reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
-- `skill` opens every operation with a coverage-map requirements interview: Create always interviews in the main conversation per `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Reviews run through the blinded `ms-reviewer` against `references/skill-standard.md`. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
+- `skill` opens every operation with a coverage-map requirements interview: Create always interviews in the main conversation per `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Reviews run through the blinded `skill-reviewer` against `references/skill-standard.md`. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (3): `prompt`, `draft-goal`, and `raise-the-bar`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Bootstrap (1): `using-erfana` (auto-loaded).
 - `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
 
@@ -21,7 +21,7 @@ Current version: **v8.0.1**. The plugin ships 14 auto-discovered skills + 75 sha
 
 **Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
-Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/`, `guides/`, `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
+Every skill is self-contained: `skills/<name>/SKILL.md` plus its own `references/` and `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. Adding a sibling skill = create `skills/<name>/SKILL.md` + optional references; auto-discovery handles the rest.
 
 ## Hard constraints (non-negotiable)
 
@@ -104,7 +104,7 @@ Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking wo
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
 - Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](../docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
 - Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
-- Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: rule 15 of `skills/issue/SKILL.md`, whose QG-4a / QG-11a checkpoints run their reviews as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
+- Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: the ground rules of `skills/issue/SKILL.md`, whose QG-4a / QG-8 / QG-11a reviews run as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
 - Hand-editing [`docs/skill-registry.md`](../docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
 - Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose ("~30-50 words", "approximately", "aim for") in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling (the v4.2.10 status-command lesson).

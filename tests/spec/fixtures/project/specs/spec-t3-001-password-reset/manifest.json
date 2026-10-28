@@ -1,0 +1,16 @@
+{
+  "spec_id": 1,
+  "slug": "password-reset",
+  "tier": "T3",
+  "version": "1.0.0",
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "scope": { "type": "feature", "name": "Password reset" },
+  "sections": [
+    { "file": "requirements/01-overview.md", "title": "Overview" },
+    { "file": "requirements/02-requirements.md", "title": "Requirements" },
+    { "file": "requirements/03-acceptance.md", "title": "Acceptance" }
+  ],
+  "statistics": { "total_sections": 3, "total_requirements": 2, "total_words": 180 },
+  "tags": ["auth"]
+}

@@ -1,121 +1,74 @@
-# Slug and path safety
+# Slugs, paths, and moving a project
 
-Single source of truth for safe, bilingual-aware slug generation and filesystem path containment in `article`. Read this as instructions: apply every rule verbatim.
+How the article skill names project folders, where they live, and how a project moves to `published/` or `archived/`. Every project folder name comes from the slug rules below, and every publish or archive follows the move procedure at the end.
 
-## Purpose
+## The article root
 
-Every article directory name, every article file name, and every move, rename, publish, or archive in `article` MUST pass through this module before touching the filesystem. Centralizing slug generation and path validation here closes two defect classes surfaced in review: path traversal (slugs or user input escaping the project root via `..`, absolute paths, or symlinks) and Polish-diacritic corruption (titles silently mangled because an `NFD`/`NFKD` "strip accents" shortcut does not decompose every Polish letter). No caller may build a slug or resolve an article path inline; callers invoke the pipeline and checklists defined below.
+The article root is the current working folder. Projects live directly under it, in `in-progress/<slug>/`, `published/<slug>/`, and `archived/<slug>/`.
 
-## Canonical slug pipeline
+If `in-progress/` does not exist under the working folder the first time the skill needs it, ask the user once where their articles live (offering the working folder as the default) and use the answer as the article root for the rest of the session. Never place projects outside the folder the user named, and never in the home folder unless the user chose it.
 
-Apply the six steps in this exact order. Order is load-bearing: transliteration must run first, before lowercasing and before any character-class filtering, or Polish letters are dropped instead of mapped.
+## Making a slug
 
-### Step 1 - transliterate (Polish to ASCII)
+Apply these steps in order. Transliteration comes first because the later character filter would otherwise delete accented letters instead of mapping them.
 
-Apply this explicit map character-by-character before anything else. Do NOT rely on Unicode normalization to do this job.
+1. **Transliterate.** Replace each accented Latin letter with its base letter, using the Polish map below and the general rule after it. Do not rely on Unicode "strip the accents" normalization: `ł` / `Ł` has no Unicode decomposition, so normalization leaves it in place and the filter in step 4 then deletes it, turning "Łódź" into `odz` instead of `lodz`.
 
-| Input | Output | Input | Output |
-|---|---|---|---|
-| ą | a | Ą | A |
-| ć | c | Ć | C |
-| ę | e | Ę | E |
-| ł | l | Ł | L |
-| ń | n | Ń | N |
-| ó | o | Ó | O |
-| ś | s | Ś | S |
-| ź | z | Ź | Z |
-| ż | z | Ż | Z |
+   | Input | Output | Input | Output |
+   |---|---|---|---|
+   | ą | a | Ą | A |
+   | ć | c | Ć | C |
+   | ę | e | Ę | E |
+   | ł | l | Ł | L |
+   | ń | n | Ń | N |
+   | ó | o | Ó | O |
+   | ś | s | Ś | S |
+   | ź | z | Ź | Z |
+   | ż | z | Ż | Z |
 
-Rationale: `ł` / `Ł` (U+0142 / U+0141) has NO Unicode canonical decomposition. A "normalize to NFD/NFKD, then strip combining marks" approach silently passes `ł` through unchanged (it is a base letter, not base + combining accent), so the later `[a-z0-9-]` filter deletes it entirely - turning "Łódź" into "od" instead of "lodz". The other Polish letters decompose under NFD, but mixing two mechanisms invites partial coverage. Use ONE explicit map for all of them; never normalize-and-strip.
-
-This table is the operative source of truth for Polish-to-ASCII transliteration across the skill. `references/bilingual.md` cites this map for language-aware handling; it does not redefine it.
-
-### Step 2 - lowercase
-
-Lowercase the whole string after transliteration (so `Ł` already became `L`, which now becomes `l`).
-
-### Step 3 - collapse separators
-
-Replace any run of whitespace or punctuation with a single hyphen.
-
-### Step 4 - restrict character class
-
-Strip every character that is not in `[a-z0-9-]`.
-
-### Step 5 - tidy hyphens
-
-Collapse repeated hyphens to one; trim leading and trailing hyphens.
-
-### Step 6 - truncate
-
-Truncate to at most 50 characters at a word (hyphen) boundary - cut at the last hyphen at or before position 50, then re-trim any trailing hyphen. Never cut mid-word.
-
-### Worked examples
+   Other Latin letters with diacritics map to their base letter in the same way: `é`, `è`, `ê` → `e`; `ü`, `ú` → `u`; `ö`, `ø` → `o`; `ä`, `å`, `á` → `a`; `ñ` → `n`; `ç` → `c`; `č` → `c`; `š` → `s`; `ž` → `z`. A few map to two letters: `ß` → `ss`, `æ` → `ae`, `œ` → `oe`, `þ` → `th`. If the title is mostly in a non-Latin script (Cyrillic, Greek, and so on), ask the user for a slug rather than producing an empty or meaningless one.
+2. **Lowercase** the whole string.
+3. **Collapse separators.** Replace each run of whitespace or punctuation with one hyphen.
+4. **Filter.** Remove every character that is not in `[a-z0-9-]`.
+5. **Tidy hyphens.** Collapse repeated hyphens to one; trim leading and trailing hyphens.
+6. **Truncate** to at most 50 characters. If the slug is longer, cut at the last hyphen at or before position 50 so no word is split. If there is no hyphen within the first 50 characters (one very long word), cut at exactly 50 characters. Then trim any trailing hyphen.
 
 | Input title | Slug | Note |
 |---|---|---|
-| `Łódź w 2025` | `lodz-w-2025` | `Ł`->`L`->`l`, `ó`->`o`, `ź`->`z`; normalize-and-strip would have yielded `odz-w-2025` |
-| `Trendy w pracy zdalnej 2025` | `trendy-w-pracy-zdalnej-2025` | no diacritics; straight collapse |
-| `Pączki` | `paczki` | transliteration: `ą`->`a`, `ć`->`c` |
-| `Paczki` (no diacritics) | `paczki` | identical surface form to the row above |
+| `Łódź w 2025` | `lodz-w-2025` | `Ł` → `l`, `ó` → `o`, `ź` → `z` |
+| `Trendy w pracy zdalnej 2025` | `trendy-w-pracy-zdalnej-2025` | no diacritics |
+| `Pączki` | `paczki` | `ą` → `a` |
+| `Café culture in Zürich` | `cafe-culture-in-zurich` | general rule: `é` → `e`, `ü` → `u` |
+| `Straße` | `strasse` | `ß` → `ss` |
 
-The last two rows show why transliteration is mandatory rather than accent-dropping: `Pączki` and `Paczki` both resolve to `paczki`. That collision is real and expected - two distinct titles legitimately share a slug, and the path-safety collision policy (below) handles it by escalating to the user. The danger that transliteration prevents is the OPPOSITE failure: dropping `ł` so that "Łódź" and a hypothetical "Ódź" silently diverge or corrupt, producing unusable directory names that no longer round-trip to the original title.
+Two titles can share a slug (`Pączki` and `Paczki` both give `paczki`). That is expected: the existing-folder check below catches it and the user decides.
 
-## Path safety
+## Checking a slug and a path
 
-After building any path from a slug or from any user-supplied fragment, run this checklist BEFORE any create, move, or delete. Reject (do not sanitize-and-continue) on any failure; surface the reason to the orchestrator.
+Before creating a project folder or preparing a move, check the slug and reject it on any failure, telling the user why. Do not clean up a bad slug and carry on.
 
-- [ ] Slug matches `^[a-z0-9-]+$` exactly (allowlist, not denylist).
-- [ ] Slug is non-empty.
-- [ ] Slug does not begin with `.` (no hidden entries, no leading-dot tricks).
-- [ ] Slug does not begin or end with `-`.
-- [ ] Slug contains no `..` sequence.
-- [ ] The raw fragment is not an absolute path (no leading `/`, no drive prefix).
-- [ ] Slug length is within the 50-character ceiling from Step 6.
-- [ ] Canonicalize the final path with `realpath` (or equivalent normalize that resolves `.`, `..`, and symlinks) and assert the result is INSIDE the project root - the resolved absolute path must have the project root as a strict prefix.
-- [ ] No path component is a symlink, and the target does not traverse a symlink out of the project root. Reject symlinked targets outright.
+- It is non-empty and matches `^[a-z0-9-]+$`.
+- It does not begin or end with `-`, and is at most 50 characters.
+- It is used as a single folder name: the path is always `<article root>/<in-progress|published|archived>/<slug>`. Never build a path from any other text – a folder name found on disk, a user override, or anything from research – without running it through the same check, because a fragment such as `../` or an absolute path would place files outside the article root.
 
-Because Step 4 already restricts the slug to `[a-z0-9-]`, a slug produced by the pipeline cannot contain `..`, `/`, or a leading dot. The checklist still re-validates: callers may pass fragments that did not originate from the pipeline (existing on-disk names, user overrides), and defense-in-depth means the allowlist runs again at the path boundary regardless of provenance.
+A slug that passes these checks cannot contain `/`, `..`, or a leading dot.
 
-## Atomic move primitive
+## Moving a project (publish or archive)
 
-Define every relocation as a single move primitive. Never implement the legacy copy-verify-delete sequence (it leaves duplicates on partial failure and races on verification).
+The skill does not move, copy, or delete project folders: it has no tool that can, and a move done by copying files and deleting the source can lose work if it stops halfway. The user runs the move; the skill prepares it and confirms the result.
 
-Algorithm:
+1. **Check the paths.** Check the slug as above. Confirm that `in-progress/<slug>/` exists under the article root by listing its files, and that `published/<slug>/` (or `archived/<slug>/`) does not exist. For an archive of a published project, the source is `published/<slug>/`.
+2. **Destination already exists.** Stop and ask the user what to do. Never add a date, suffix, or counter to get around it: a silent rename hides a duplicate the user needs to resolve.
+3. **Show the command.** Show the absolute path of the article root and the exact command to run from it, with quoted paths relative to the root:
 
-```
-move(src, dst):
-    assert path_safe(src) and path_safe(dst)        # checklist above
-    require_approval(realpath(src), realpath(dst))  # approval hook below
-    if same_filesystem(src, dst):
-        rename(src, dst)                            # atomic
-    else:
-        tmp = sibling_temp_path(dst)               # same dir as dst
-        copy(src, tmp)
-        rename(tmp, dst)                           # atomic publish into place
-        unlink(src)                                # only after dst is committed
-```
+   ```bash
+   mv "in-progress/<slug>" "published/<slug>"
+   ```
 
-On the same filesystem the move is a single atomic `rename`. Across devices, copy to a temporary sibling of the destination, atomically `rename` the temporary into the final name, and only then `unlink` the source - so an interruption never leaves a half-written destination or an orphaned partial.
+   If the destination parent folder (`published/` or `archived/`) does not exist yet, show `mkdir -p "published" && mv "in-progress/<slug>" "published/<slug>"` instead. Ask the user to run it from the article root (in Claude Code they can prefix it with `!`) and to say when it is done. Running the command is the user's approval; do not treat anything else as approval.
+4. **Confirm the result.** When the user says it is done, list the destination to confirm it exists with the project files, and confirm the source no longer exists. If either check fails, report exactly what is on disk and stop; do not try to finish the move yourself.
+5. **Update the metadata** in the project's new location: the status, the `published_date` or `archived_date` (with `archive_reason` and `previous_status` for an archive), and `publication_path` for a publish.
 
-### Collision policy (one policy, both flows)
+In a headless run, nobody can run the command: do steps 1 and 2, print the command, make no changes, and report that the move is waiting for the user.
 
-Publish and archive share ONE collision policy. Before moving, detect whether the destination already exists. If it does, surface the collision and escalate to the user for a decision. NEVER silently append a timestamp, suffix, or counter to dodge the collision - silent renaming hides the duplicate-title condition the user needs to resolve.
-
-## Irreversible-action approval hook
-
-Move and delete are irreversible. Before executing either, the orchestrator MUST display the resolved absolute source and destination paths (post-`realpath`) and obtain explicit human approval. This is the human-in-the-loop gate for both publish and archive: no relocation or deletion proceeds without the user confirming the exact resolved paths. Show absolute paths, not slugs or relative fragments, so the human approves what will actually happen on disk.
-
-## Consumers
-
-The following all reference this module rather than reimplementing slug or path logic:
-
-- Orchestrator init - validates and slugs the new article directory name.
-- Versioning - derives version file names and validates their paths.
-- Publish step - uses the atomic move primitive, collision policy, and approval hook.
-- Archive step - same move primitive, collision policy, and approval hook.
-- Any agent that writes article files - slugs file names and runs the path-safety checklist before writing.
-
-## Boundary with content trust
-
-This module owns slug generation, path containment, the move primitive, and the approval gate. It does NOT cover web-fetch safety, SSRF protection, or handling of untrusted fetched content - those rules live in `references/content-trust.md` and are not duplicated here. When a path or slug is derived from externally fetched content, apply the content-trust rules first, then this module's allowlist and containment checks at the filesystem boundary.
+The skill never deletes a project or any file in it.

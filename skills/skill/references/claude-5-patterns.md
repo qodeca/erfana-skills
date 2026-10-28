@@ -32,7 +32,7 @@ Migrating a 4.x skill requires **no compatibility changes** — the SKILL.md fro
 Per https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5:
 
 - Fable 5 **always has thinking enabled** — `thinking: {"type": "disabled"}` is not supported. ◎ Community-observed: the Claude Code `MAX_THINKING_TOKENS=0` env var has no effect on Fable 5. Use `effort: low` to reduce thinking depth.
-- Claude 5 models are adaptive-thinking only: use `thinking: {type: "adaptive"}` + `effort`. Fixed `budget_tokens` is unsupported on Fable 5 / Opus 5 / Sonnet 5; **Haiku 4.5 still supports** `thinking: {type: "enabled", budget_tokens: N}` (it predates the adaptive-only generation) — the budget ban applies to Claude 5 models, not to haiku-pinned subagents.
+- Claude 5 models are adaptive-thinking only: use `thinking: {type: "adaptive"}` + `effort`. Fixed `budget_tokens` is unsupported on Claude 5 models, including Haiku 5.5 (what the `haiku` alias resolves to); only a subagent pinned to the older Haiku 4.5 by full model ID still accepts `thinking: {type: "enabled", budget_tokens: N}`.
 - Thinking output is summarized or omitted, never raw chain-of-thought. Do not toggle `thinking.display` — see §3.
 
 ## 3. The reasoning-display hazard (Claude 5 classifiers) ✓
@@ -58,13 +58,13 @@ Per the Fable 5 prompting guide: *"lower effort settings on Claude Fable 5 still
 |-------|--------------|
 | `low` | Validators, format-appliers, classifiers, scoped one-shot jobs |
 | `medium` | File creation, refactoring, research — the routine-work default |
-| `high` | Orchestrators, reviewers, ambiguous investigation — the "hard problem" setting |
+| `high` | Security review and ambiguous investigation — measured exceptions; fan-out reviewers stay at `medium` per the agent standard |
 | `xhigh` / `max` | Genuinely frontier problems only. No longer the Claude Code default posture. Higher effort can produce over-planning and unrequested refactoring — pair with scope-fence constraints if used. |
 
 - **The 5.5 generation shifts again** ✓ (https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5): Opus 5.5 at `medium` matches Opus 5 at `high`; start there and keep `xhigh`/`max` for measured gains. Higher is not always better – Sonnet 5.5 scored lower at `max` than at `xhigh` on FrontierCode, partly because it ran subagent-heavy review flows more often and went out of scope (https://www.anthropic.com/claude-sonnet-5-5). Cap effort for fan-out review agents.
 - **Omitting `effort` is a valid choice** — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents still declare it explicitly so role intent is auditable.
 - Rule of thumb: take the 4.7-era role table and go **one step cooler**. The current role→model/effort table lives in the agent standard, section 7 — that copy is canonical.
-- Keep 4.x-style explicit rigor in skills aimed at *smaller* models (haiku-pinned subagents still benefit from checklists and examples).
+- Keep 4.x-style explicit rigor in skills aimed at *smaller* models (a subagent pinned to an older 4.x model still benefits from checklists and examples).
 
 ## 5. Delegation calibration (the 12.4 inversion) ✓
 
@@ -103,7 +103,7 @@ Litmus test for every line (◎): *"Would a strong model behave worse without th
 ## 7. What carries over unchanged ✓
 
 - **Third-person descriptions + specific quoted triggers** (12.1 / 12.2) — skill discovery is unchanged; the description remains the discovery surface. Combined `description` + `when_to_use` ≤ 1,536 chars.
-- **Deprecated API bans** (12.7 / 13.3 / 13.4) — an **Anthropic-model constraint, not a universal authoring rule**: `temperature` / `top_p` / `top_k` return a 400 error when set to a non-default value on "Claude Opus 4.7 and later" per Anthropic's parameter-deprecation table (https://platform.claude.com/docs/en/about-claude/model-deprecations); fixed `budget_tokens` is unsupported on Claude 5 models (Haiku 4.5 excepted — see §2).
+- **Deprecated API bans** (12.7 / 13.3 / 13.4) — an **Anthropic-model constraint, not a universal authoring rule**: `temperature` / `top_p` / `top_k` return a 400 error when set to a non-default value on "Claude Opus 4.7 and later" per Anthropic's parameter-deprecation table (https://platform.claude.com/docs/en/about-claude/model-deprecations); fixed `budget_tokens` is unsupported on Claude 5 models (only a subagent pinned to Haiku 4.5 by full ID is excepted — see §2).
 - **Find-vs-filter decoupling** (12.6) ◎ — confirmed on Opus 5: "report only critical issues" is followed literally and silently drops the long tail. Enumerate everything, filter in a second pass.
 - **500-line file ceiling, orchestrator pattern, single-responsibility agents, Q&A requirements gathering** — architectural rules unaffected by the model generation.
 
@@ -146,7 +146,7 @@ Per https://platform.claude.com/docs/en/build-with-claude/prompt-caching (model-
 
 **Skill structural rules:**
 
-- Skills below 4,096 tokens don't cache at all (silent fail) — acceptable for artifact-driven focused skills where the output is the value, not the prompt template
+- The 4,096-token minimum applies to an API cached prefix, not to a skill: in Claude Code a skill body joins a conversation that is already cached, so never pad a skill to reach it
 - Place `cache_control` on the **last stable block**, never on a mutating one
 - Cache prefix order: `tools` → `system` → `messages`. Any change at level N invalidates N + everything after
 - Don't inject dynamic content (current date, ticket id, timestamps) at the top of SKILL.md — invalidates cache every run; keep the body stable across turns
