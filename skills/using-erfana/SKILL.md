@@ -8,7 +8,7 @@ when_to_use: |
 
 # Using erfana skills
 
-This plugin is an open-source (GPL-3.0-only) Claude Code orchestration toolkit maintained by Qodeca sp. z o.o. It bundles the 89 shared agents the orchestration skills delegate to. This bootstrap skill is the entry point for every other skill in the plugin.
+This plugin is an open-source (GPL-3.0-only) Claude Code orchestration toolkit maintained by Qodeca sp. z o.o. It bundles the 84 shared agents the orchestration skills delegate to. This bootstrap skill is the entry point for every other skill in the plugin.
 
 ## Available skills
 
@@ -23,7 +23,7 @@ This plugin is an open-source (GPL-3.0-only) Claude Code orchestration toolkit m
 | `erfana:skill` | Creating, reviewing, modifying, and **modernizing** (apply Claude 5 patterns) Claude Code skills following Anthropic best practices – opens with a coverage-map requirements interview (Create always; Modify/Review/Modernize when gated in) |
 | `erfana:spec` | 4-tier specification management (T1 issue, T2 spec, T3 lite spec, T4 standard spec) |
 
-The orchestration skills delegate substantive work to agents shipped alongside them in `agents/` (89 shared agents). Discovery is automatic; no manual wiring needed.
+The orchestration skills delegate substantive work to agents shipped alongside them in `agents/` (84 shared agents). Discovery is automatic; no manual wiring needed.
 
 ### Process
 
