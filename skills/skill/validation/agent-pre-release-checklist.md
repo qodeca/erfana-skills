@@ -87,6 +87,11 @@ Section 13 is agent-specific (effort/model frontmatter, deprecated-API negative 
 - [ ] Purpose does NOT contain "and" (SRP violation)
 - [ ] Purpose clearly describes what agent does
 
+### Top 1% bar (BLOCKING)
+- [ ] The prompt opens with one plain sentence placing the agent at the level of the top 1% of practitioners in its field
+- [ ] Two to four lines follow it, naming what that level means for this job (checks, judgments, standards a top practitioner applies that an average one misses)
+- [ ] No capital-letter emphasis or "YOU MUST" in the sentence
+
 ### Naming
 - [ ] Name follows verb-noun pattern (e.g., `validate-syntax`, `format-output`)
 - [ ] Name is lowercase with hyphens only
@@ -281,6 +286,7 @@ These items cause automatic failure regardless of total score:
 - [ ] No quality gate section
 - [ ] Agent attempts to spawn other agents
 - [ ] **No critical thinking section**
+- [ ] **No top 1% sentence, or one without the concrete bar after it** (section 2)
 - [ ] Write-capable agent's quality gate lacks "no partial state" verification
 - [ ] **`temperature`, `top_p`, `top_k` declared** (item 13.4 — runtime 400 error on Claude Opus 4.7 and later)
 - [ ] **Fixed `thinking: {budget_tokens: N}` declared on a Claude 5 model** (item 13.3 — unsupported on Fable 5 / Opus 5 / Sonnet 5; use adaptive thinking + effort)

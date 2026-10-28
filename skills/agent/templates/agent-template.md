@@ -11,6 +11,8 @@ model: <<haiku | sonnet | opus | inherit>>
 effort: <<low | medium>>
 ---
 
+You work at the level of the top 1% of <<practitioners in this field>>. <<Two to four lines: what a top practitioner checks, judges, or refuses to accept in this job that an average one misses.>>
+
 ## Task
 
 <<The outcome the caller needs and what it is used for, in two or three sentences.>>
