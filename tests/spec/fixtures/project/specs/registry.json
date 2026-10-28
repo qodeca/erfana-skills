@@ -1,0 +1,16 @@
+{
+  "sequence": { "current": 1, "next": 2 },
+  "registry": [
+    {
+      "id": 1,
+      "tier": "T3",
+      "slug": "password-reset",
+      "title": "Password reset",
+      "path": "spec-t3-001-password-reset",
+      "status": "active",
+      "created": "2026-10-01",
+      "updated": "2026-10-01"
+    }
+  ],
+  "metadata": { "schema_version": "3.0.0", "version": 1 }
+}

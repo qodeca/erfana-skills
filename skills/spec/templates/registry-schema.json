@@ -121,7 +121,7 @@
           },
           "documents": {
             "type": "object",
-            "description": "Linked external documents for this spec. These keys are the CANONICAL documents vocabulary (referenced by spec-document-linker and downstream-integrations.md). 'solution_specs' covers solution design docs (do not use the legacy 'solution_docs' alias).",
+            "description": "Linked external documents for this spec. These keys are the CANONICAL documents vocabulary (referenced by the spec skill's linking step and downstream-integrations.md). 'solution_specs' covers solution design docs (do not use the legacy 'solution_docs' alias).",
             "properties": {
               "technical_adrs":    { "type": "array", "items": { "type": "string" } },
               "solution_adrs":     { "type": "array", "items": { "type": "string" } },
@@ -142,7 +142,7 @@
         "schema_version": {
           "type": "string",
           "const": "3.0.0",
-          "description": "Registry schema version. v3.0.0 adds the 'failed' tombstone status and metadata.version. Registries at 2.0.0 (or absent) are auto-migrated on first touch (see spec-registry-manager 'migrate')."
+          "description": "Registry schema version. v3.0.0 adds the 'failed' tombstone status and metadata.version. Registries at 2.0.0 (or absent) are auto-migrated on first touch (see references/registry.md, 'Older registries')."
         },
         "version": {
           "type": "integer",
