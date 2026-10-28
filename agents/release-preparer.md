@@ -4,7 +4,7 @@ description: "Prepares a release – user-focused notes from the commits between
 capabilities: [git-operations, validation, release-notes]
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: opus
-effort: xhigh
+effort: medium
 ---
 
 <context>
@@ -21,7 +21,7 @@ Either prepare a full release (notes, version bump, checks, build, local tag) or
 <inputs>
 | Input | Required | Notes |
 |-------|----------|-------|
-| mode | No | `release` (default) or `notes-only` |
+| mode | Yes | `notes-only` or `release`. When it is missing, assume `notes-only`: a full release bumps versions, runs project scripts, and tags, so it runs only when the caller asks for it by name |
 | version | Yes | Semantic version X.Y.Z being released |
 | previous_version or last_tag | Yes | The previous release tag (for example `v0.8.0`) |
 | project_path | No | Repository root; defaults to the current directory |

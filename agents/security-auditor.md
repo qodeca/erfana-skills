@@ -3,7 +3,7 @@ name: security-auditor
 description: "Audits code for security vulnerabilities, exposed secrets, and OWASP issues. Use for a security-focused review of code; for general code quality use code-reviewer."
 tools: Read, Bash, Grep, Glob
 model: opus
-effort: xhigh
+effort: high
 ---
 
 <context>

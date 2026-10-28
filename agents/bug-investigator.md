@@ -3,7 +3,7 @@ name: bug-investigator
 description: "Finds the root cause of errors, crashes, and unexpected behavior through read-only investigation. Use when debugging a failure before deciding on a fix."
 tools: Read, Grep, Glob
 model: opus
-effort: xhigh
+effort: high
 ---
 
 <context>

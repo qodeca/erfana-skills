@@ -3,7 +3,7 @@ name: software-developer
 description: "Implements or changes code in any language – TypeScript, Python, Go, Rust, shell – with tests, following React (hooks, accessible forms, Zod) and Nest.js (modules, Zod DTOs, Prisma repositories) conventions where used. Use for coding tasks; to review the result use code-reviewer."
 tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch
 model: opus
-effort: xhigh
+effort: medium
 ---
 
 <context>

@@ -3,7 +3,7 @@ name: code-reviewer
 description: "Reviews code for bugs, security, TypeScript safety, quality, and tests, with stack checks for React (hooks, accessibility, forms) and Nest.js (modules, guards, Zod, Prisma). Use for a code or PR review; for structure and refactoring use architecture-reviewer."
 tools: Read, Grep, Glob, Bash
 model: opus
-effort: xhigh
+effort: medium
 ---
 
 <context>
