@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| agent | 2026-10-28 | feat(agent)!: rebuild the agent skill as a brief |
+| agent | 2026-10-28 | feat(skills): require the top 1% bar in every agent prompt |
 | article | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
 | draft-goal | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
 | grill-me | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
@@ -26,7 +26,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | prompt | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
 | raise-the-bar | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
 | report | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| skill | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
+| skill | 2026-10-28 | feat(skills): require the top 1% bar in every agent prompt |
 | spec | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
 | using-erfana | 2026-10-28 | docs: sync agent counts and references after the agent skill rebuild |
 | handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
