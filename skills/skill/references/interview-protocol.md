@@ -1,22 +1,39 @@
-# Interview protocol – skill requirements interrogation
+# Interview protocol – skill requirements
 
-Static, orchestrator-run loop. `grill-planner` returns the *data* (coverage map, seed requirements, question bank, budget); this file is the *protocol* the orchestrator follows with that data. It is deliberately fixed prose – the sentinel literal and closure rules must never depend on generated text.
+How the skill interviews the user before it creates, changes, reviews, or modernizes a skill. The interview runs in the main conversation, because only the main conversation can ask the user anything. The sentinel and closure rules below are fixed prose on purpose: the `ms-grill-guard` Stop hook depends on them, so they must never come from generated text.
 
-The protocol starts after grill-planner returns `run_mode: "interview"` or `"confirmation"`. It never starts when the operation gate (see SKILL.md "Requirements interrogation") was answered "no", or in non-interactive mode.
+## When it runs
+
+- **Create** always interviews.
+- **Modify** and **Modernize** first ask one gate question: "Do you have particular ideas or reasons behind this change?" Yes → interview. No → proceed with what the request says.
+- **Review** first asks: "Any session observations, friction points, or particular ideas to focus this review?" Any yes (a friction point alone counts) → interview. The friction answer reaches the reviewer either way.
+- **Headless runs** (no user to answer): do not interview. Say which areas below are still open and stop that part.
+
+A complete request ("create a read-only skill that…, triggered by…, for…") still gets a short read-back of two or three questions, never zero: "just do it" is a complete request, not a skip.
+
+## What to cover
+
+Build a coverage map from the areas for the operation. Mark an area closed when the request already answers it, and confirm it at the read-back.
+
+| Operation | Required areas | Optional areas |
+|---|---|---|
+| Create | purpose (what the skill achieves, and what it is not for), triggers (slash command, auto-detection, or both, and the cost of a false trigger), what it may change (the least-privilege tool set; whether anything needs Bash or Write), shape (one focused pass or several operations), failure modes (how it will misfire in daily use – at least one boring one) | non-goals, where it lives (project, user, or a plugin) |
+| Modify | target, intent (what prompted the change), the change end to end | change type (fix, addition, restructure), scope (what must stay untouched), risk (what could regress and how we would notice) |
+| Review | target, depth (quick check or full review), friction (where the skill fought the user in real sessions) | purpose, focus areas |
+| Modernize | target, intent (model change, observed drift, failed check), scope (whole skill or named parts) | exclusions, risk tolerance (preview every change, or apply the high-severity fixes directly) |
+
+Required areas are never waived. An optional area may be waived only by the user.
 
 ## The loop
 
 Repeat until the map is closed:
 
-1. Print the coverage-map line at the top of the message: `Map: <area>[x|~| |w: reason] ...` – `[x]` closed, `[~]` in progress, `[ ]` open, `[w]` waived. The map may grow (new information spawns areas); it never silently shrinks.
-2. Ask exactly one question per `AskUserQuestion` call, taken from the question bank, recommended option first. Dependency order: fundamentals before dependents.
-3. Ladder each answer at least one rung before changing area – use the question's `ladder_stems` ("what breaks if that is wrong", the concrete example, the consequence).
-4. Record each locked decision in a running ledger. An answer contradicting a ledger entry is re-asked quoting the user's earlier words verbatim.
-5. Propose a waiver only for an area whose taxonomy `waiver_condition` actually holds, and only the user closes it. `validator_hard` areas are never waivable – `ms-requirements-validator` would bounce them as `missing`.
+1. Print the coverage-map line at the top of the message: `Map: <area>[x|~| |w: reason] ...` – `[x]` closed, `[~]` in progress, `[ ]` open, `[w]` waived. The map may grow when new information opens an area; it never silently shrinks.
+2. Ask exactly one question per message, recommended option first, fundamentals before the decisions that depend on them. Questions that rest on the user's judgment (goals, priorities, trade-offs) ask for the user's view first and give the recommendation afterwards.
+3. Follow each answer one step further before changing area – what breaks if it is wrong, a concrete example, the consequence.
+4. Record each decision in a running ledger. An answer that contradicts an earlier one is asked again, quoting the user's earlier words.
 
-Budget is advisory; the map owns closure. Exceeding the budget requires naming the still-open required areas in the map line. If the question bank is exhausted while required areas remain open, re-engage grill-planner with `mode: "replan"` – never improvise unbanked questions and never close an area by rationalization.
-
-`run_mode: "confirmation"` (complete request): the map arrives fully `seeded_closed`; ask only the 2–3 read-back questions in the bank. Never zero questions in an interactive session – "just do it" is a complete request, not a skip.
+The map owns closure; there is no fixed question count. Never close an area by assuming its answer.
 
 ## Sentinel
 
@@ -30,13 +47,10 @@ From the wrap-up message onward – for the remainder of the operation – stop 
 
 ## Abort
 
-"Stop", "skip this", "no more questions" – always honored, immediately. Acknowledge, drop the marker in that same message, report which required areas remain open, and STOP the operation. No downstream agent receives partial requirements without the user explicitly choosing "proceed anyway".
+"Stop", "skip this", "no more questions" – always honored, immediately. Acknowledge, drop the marker in that same message, report which required areas remain open, and stop the operation. Nothing is written from partial requirements unless the user explicitly chooses "proceed anyway".
 
-## Wrap-up and post-closure
+## Wrap-up and after
 
-Close the interview with a read-back: the map line, the ledger as a numbered list, waived areas with reasons, and the question "Does this match your intent?". On confirmation, merge `seed_requirements` with the answers by `maps_to` (append `coverage_map`, ledger, and waivers as extra audit fields – the validator ignores unknown keys) and hand the object to the operation's next step.
+Close the interview with a read-back: the map line, the ledger as a numbered list, waived areas with reasons, and the question "Does this match your intent?". On confirmation the interview is closed and the operation continues with the agreed requirements.
 
-After wrap-up the interview is closed:
-
-- Downstream `needs_user_input` questions (validator, matcher, modifier) are asked plainly – no map line, no marker.
-- If `ms-requirements-validator` reports a missing required field, re-open once via grill-planner `mode: "replan"`: re-arm the marker, ask the delta questions, finish with a fresh wrap-up. Maximum one re-open; after that, follow the existing escalation path in `guides/qa-protocol.md`.
+After wrap-up, later questions are asked plainly – no map line, no marker. If a gap appears later (the design needs a decision nobody made), re-open once: re-arm the marker, ask only the missing questions, and finish with a fresh wrap-up.

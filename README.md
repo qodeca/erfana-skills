@@ -15,7 +15,7 @@ by [Qodeca](https://github.com/qodeca)
 
 </div>
 
-Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 6 orchestration skills plus a process skill, a verification skill, and 84 shared agents, all delegating substantive work via the `Task` tool.
+Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 6 orchestration skills plus a process skill, a verification skill, and 75 shared agents, all delegating substantive work via the `Task` tool.
 
 It ships as a Claude Code plugin and also runs on **Qwen Code**, which converts Claude Code plugins at install time – one repository, one release, two hosts. What differs between them is recorded in [`docs/hosts.md`](docs/hosts.md).
 
@@ -70,7 +70,7 @@ Both run only when you type them, because they act outside the conversation.
 | Component | What it does |
 |---|---|
 | `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, routes to the right sub-skill. Loads automatically. |
-| `agents/` (84 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (2), `article-` (5), `e2e-` (4), `report-` (2), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
+| `agents/` (75 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (1), `ma-` (2), `article-` (5), `e2e-` (4), `report-` (2), `fc-` (4), `release-` (2), `grill-` (1), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
 

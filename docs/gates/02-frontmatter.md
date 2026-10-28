@@ -35,7 +35,7 @@ Every sub-skill and (when present) every agent prints with its name; the fixture
 - `when_to_use` block has fewer than 3 quoted activation phrases (recommended ≥3, Section 12.2)
 - Skill, agent, command, or reference prose instructs reasoning display — Section 12.7 / 13.5 (v6.3.0)
 - Stale `gate2-allow` suppression comment covering no match (v6.3.0)
-- ms-* agent missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the Model Selection Guide in `skills/skill/templates/shared-agent-template.md`
+- ms-* agent missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the model and effort table in `skills/agent/references/agent-standard.md` section 7
 - Agent body contains a deprecated API reference at YAML-key syntax: `temperature:`, `top_p:`, `top_k:` (400 on Claude Opus 4.7 and later), `budget_tokens:` (unsupported on Claude 5 models; Haiku 4.5 exempt) — Section 13.3/13.4, hard-blocking semantically; gate emits WARN to allow incremental fix-up
 
 **Hard FAILs** (block CI):
@@ -62,10 +62,9 @@ The phrase regex requires a self-referential determiner (`your`/`its`/`internal`
 
 ## Reference
 
-- `skills/skill/validation/pre-release-checklist.md` — Section 12 (Claude 5 model patterns) full definitions and weight system
-- `skills/skill/validation/agent-pre-release-checklist.md` — Section 13 (per-agent Claude 5 frontmatter requirements)
-- `skills/skill/templates/shared-agent-template.md` — Model Selection Guide (orchestrator → opus high, validator → sonnet low, etc.)
-- `skills/skill/guides/claude-5-patterns.md` — current pattern reference for what this gate detects
+- `skills/skill/references/skill-standard.md` — the skill rules, with a rule index mapping 7.4 and 12.1–12.7 to their sections
+- `skills/agent/references/agent-standard.md` — the agent rules (13.1–13.5), including the model and effort table and the top 1% bar
+- `skills/skill/references/claude-5-patterns.md` — current pattern reference for what this gate detects
 
 ## Cross-host frontmatter rules (v7.1.0)
 
