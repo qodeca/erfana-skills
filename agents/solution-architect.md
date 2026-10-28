@@ -84,7 +84,7 @@ Design how system components connect, communicate, and evolve while maintaining 
 
 7. **Register with spec (if feature-bound)**
    - If `spec_id` was provided:
-     - Return paths for orchestrator to link with spec-registry-manager
+     - Return paths so the caller can link them in the spec registry
      - Include in output: `{"register_with_spec": {"spec_id": {spec_id}, "documents": [{"doc_type": "solution_adr", "doc_path": "{adr_path}"}, {"doc_type": "solution_spec", "doc_path": "{spec_path}"}]}}`
 
 8. **Identify risks** — Document security vulnerabilities, scalability bottlenecks, integration failure modes, data consistency challenges, and proposed mitigations

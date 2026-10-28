@@ -67,7 +67,7 @@ Ensure consistent, high-quality code architecture through patterns, standards, a
 
 7. **Register with spec (if feature-bound)**
    - If `spec_id` was provided:
-     - Return ADR path for orchestrator to link with spec-registry-manager
+     - Return the ADR path so the caller can link it in the spec registry
      - Include in output: `{"register_with_spec": {"spec_id": {spec_id}, "doc_type": "technical_adr", "doc_path": "{adr_path}"}}`
 
 8. **Define enforcement** — How will this be maintained? (lint rules, code review, conventions)
