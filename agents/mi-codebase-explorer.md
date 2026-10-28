@@ -1,6 +1,6 @@
 ---
 name: mi-codebase-explorer
-description: "Used by erfana:issue (Implement Phase 3) to find relevant files and patterns before planning."
+description: "Used by erfana:issue to find the files, dependencies, and patterns a change touches before it is designed or reviewed."
 capabilities: [codebase-exploration, file-search, pattern-matching]
 tools: Read, Grep, Glob
 model: opus

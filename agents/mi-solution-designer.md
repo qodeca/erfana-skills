@@ -1,6 +1,6 @@
 ---
 name: mi-solution-designer
-description: "Used by erfana:issue for implementation planning (Phase 4), verification (Phase 9), and triage of embedded-review findings."
+description: "Used by erfana:issue to plan an implementation, verify it against the plan and criteria, and judge embedded-review findings."
 capabilities: [architecture-design, implementation-planning, task-breakdown, acceptance-criteria-verification, design-persistence, cost-benefit-triage, finding-triage]
 tools: Read, Grep, Glob, Write
 model: opus
