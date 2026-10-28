@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| agent | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
+| agent | 2026-10-28 | feat(agent)!: rebuild the agent skill as a brief |
 | article | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
 | draft-goal | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
 | grill-me | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
@@ -28,7 +28,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | report | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
 | skill | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
 | spec | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| using-erfana | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
+| using-erfana | 2026-10-28 | docs: sync agent counts and references after the agent skill rebuild |
 | handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | ship | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
