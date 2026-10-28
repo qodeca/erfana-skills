@@ -42,6 +42,7 @@ The orchestration skills delegate substantive work to agents shipped alongside t
 | Skill | Use when |
 |---|---|
 | `erfana:prompt` | Writing or improving a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1) – interviews the user one decision at a time, confirms a brief, then delivers a paste-ready prompt with setup notes and evaluation cases. It authors prompts; it does not carry out the task a prompt describes. |
+| `erfana:raise-the-bar` | Making a request more ambitious before running it – aims it at the outcome behind the task, at how a top practitioner would do it, and at other fields, keeps only raises the workspace can support and check from outside, then prints the rewritten request. It rewrites the request; it does not do the work. |
 | `erfana:draft-goal` | Turning an intention into a `/goal` completion condition the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, exclusions, an owner-decisions clause, and a turn bound – printed ready to paste. It writes the condition only; the user runs `/goal`. |
 
 ### Session closeout
@@ -119,6 +120,9 @@ User message arrives
     │
     ├─ Wants a prompt written or improved for a Claude model?
     │       └─ Yes → erfana:prompt
+    │
+    ├─ Wants a request made more ambitious before running it?
+    │       └─ Yes → erfana:raise-the-bar
     │
     ├─ Wants a /goal condition drafted or tightened?
     │       └─ Yes → erfana:draft-goal

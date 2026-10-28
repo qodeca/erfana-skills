@@ -41,6 +41,8 @@ Rows are coverage, not questions. Ask only what is unknown and relevant, one dec
 2. **Model.** Options: Opus 5.5, Sonnet 5.5, Fable 5.1, Several. Recommend from what the user said about task difficulty, latency, and cost; if nothing points either way, say so and let the user pick. Other models go through the custom answer.
 3. **Destination.** Options: chat, Claude project, Claude Code, API. Other hosts go through the custom answer.
 
+After these three, offer the ambition pass from [ambition.md](ambition.md) when the goal is a task with a measurable outcome; record a skip and its reason in the ledger otherwise.
+
 For a revision, ask for the current prompt in its own question (paste it in the custom answer, or point at a file already identified), then separately for a failing output, the expected behavior, and what must keep working.
 
 If the user says "you decide", choose, record the reason, and expose it in the brief. Ask only when the choice needs facts or authorization they have not given. Do not ask for secrets; ask for redacted examples or variable names.
@@ -91,5 +93,7 @@ Use these when changing the skill; they are behavioral cases, so a text search f
 10. A repository task with a known checkout → instructions, test config, and CI read before setup questions.
 11. Any finished prompt → calm wording with reasons, no capitalised imperatives, no request for the model's reasoning in the response, settings in the setup notes rather than in the prompt.
 12. A Claude Code destination → the prompt names Claude Code's question tool in its interaction branch; a chat or API destination does not invent one.
+13. A task prompt with a measurable outcome → the ambition pass is offered once; declining it leaves the goal unchanged, and an accepted raise appears in the brief as its own decision with its outside judge.
+14. Any finished prompt → no "you are a ..." role line standing in for a description of the work.
 
 Whether a picker actually renders is a host matter; confirm it in a live interactive session after changing this skill.

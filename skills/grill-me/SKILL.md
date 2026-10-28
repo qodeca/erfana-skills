@@ -67,7 +67,9 @@ New information spawns new map areas. The map grows during the interview; it nev
 Repeat until the exit gate opens:
 
 1. Print the map line.
-2. Ask exactly one question per `AskUserQuestion` call. The tool accepts up to 4 questions; you will use exactly 1. A topic needing more exploration becomes the next call. Put your recommended answer first, labelled "(Recommended)".
+2. Ask exactly one question per `AskUserQuestion` call. The tool accepts up to 4 questions; you will use exactly 1. A topic needing more exploration becomes the next call. How to frame the options depends on whose judgment the question rests on:
+   - **The user's judgment** – goals, priorities, trade-offs, values, risk appetite. Ask for their view first, with neutral options and no recommendation. Once they answer, give your own view with the strongest case for and against, matched to how strong the evidence is. Anthropic's research on agents and expert judgment found people adopt an agent's stated lean far more often than chance, usually without noticing, so leading with it would grill the plan against your view instead of theirs.
+   - **Facts or routine choices** – what the code does, a default, a naming convention. Put your recommended answer first, labelled "(Recommended)".
 3. Ladder every answer at least one rung before changing topic: why does that matter, what breaks if it is wrong, or what is the concrete example. One-and-done questions produce shallow interviews. At `short`, ladder the mandatory seven once; do not stack further rungs on a correctly sized short pass.
 4. Log each locked decision in a running decisions ledger. An answer that contradicts a prior ledger entry gets re-questioned with the user's own earlier words.
 5. Resolve dependencies in order – do not ask question N+1 before question N when N gates the branch.
@@ -81,6 +83,7 @@ After the map is mostly explored, always run – at `short` as one question each
 
 - Premortem: "It's a year from now. This plan shipped and failed spectacularly – why?" Require at least 2 boring failure modes (missed handoff, quiet scope creep, key person left); exotic scenarios crowd out the ones that actually happen. At `short`, one boring failure mode is the floor.
 - Reversibility: "Which of these locked decisions are one-way doors?" A yes at `short` re-sizes the interview upward.
+- Expert gap: "What would the best practitioner in this field do here that this plan does not?" Probe for real instruments instead of approximations, raw data instead of summaries, a target harder than the one set, and a check the team does not grade itself. Each gap the user accepts becomes a new map area; each one they decline goes into the ledger with its reason. At `short`, one gap is the floor.
 
 ## Exit gate
 

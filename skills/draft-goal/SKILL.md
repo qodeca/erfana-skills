@@ -46,6 +46,7 @@ If the user mentions earlier decisions in this conversation (a recommendation th
 
 Ask only what cannot be inferred and would change the checks, the scope, or the bound. Put the questions in one batch of one to three, each with two to four options, the recommended option first and labelled as recommended, in plain words. Typical questions:
 
+- **Is this the real outcome?** Ask only when the request is one step of a larger, recurring outcome – "fix this crash" when the user wants the app crash-free. Offer the higher outcome and the request as stated; recommend the higher one only when Step 1 found checks that can prove it. A goal aimed at the outcome keeps the session working on the cause instead of stopping after one instance.
 - **What proves it is done?** Offer two or three candidate checks found in Step 1.
 - **What is off limits?** Files or folders not to touch; actions not to take (push, delete, publish, send).
 - **What is yours to decide?** Recommendations the user may want to accept or decline themselves rather than have Claude apply.
@@ -70,6 +71,7 @@ Rules for the content, each with its reason:
 
 - **One outcome.** Two outcomes mean two goals, or one checklist file plus a single "every item in `<file>` is ticked or marked declined" goal. A split outcome lets one half stall the other.
 - **Checks are binary and visible.** Each names a command and its expected result, a file and what it contains, or a count. Ask for the decisive line to be shown, because the evaluator reads only the conversation.
+- **The proof comes from outside Claude.** A command result, a test run, a file's contents, held-out data, or a tool Claude runs. "Claude reviewed its work and found no issues" is not a check: a model grading its own output tends to pass it, and the evaluator cannot tell a real review from a claimed one.
 - **Re-run before finishing.** Phrase the last check as "run <command> after the final change and show the result", so stale evidence from an early turn does not count.
 - **Usually three to five checks; never more than eight.** Fewer is fine when they cover the outcome. Do not pad to reach a count, and keep every check the user stated explicitly.
 - **No taste words as checks.** "Clean", "robust", "best-practice", "fully aligned", "better" have no finish line. Translate each into something observable or move it out of scope.
@@ -86,7 +88,7 @@ Before printing, confirm each line holds:
 
 1. Exactly one `Outcome`.
 2. `Done when` items are numbered, binary, and at least one names a command or file read whose result must be shown.
-3. No taste words used as checks.
+3. No taste words used as checks, and no check that rests on Claude's own review of its work.
 4. No check that waits on user approval.
 5. The owner-decisions clause is present.
 6. `Not in scope` names the cheap exits and any irreversible actions.

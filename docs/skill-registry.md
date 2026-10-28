@@ -18,6 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
+| raise-the-bar | uncommitted | not yet committed |
 | agent | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | article | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
 | grill-me | 2026-10-28 | refactor(skills)!: rename the managing-* skills to agent, article, is... |
@@ -32,7 +33,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | ship | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
 | fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
 
-13 skills, one row per folder under `skills/`.
+14 skills, one row per folder under `skills/`.
 
 ## Reading the dates
 
