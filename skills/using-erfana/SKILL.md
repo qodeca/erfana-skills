@@ -16,12 +16,12 @@ This plugin is an open-source (GPL-3.0-only) Claude Code orchestration toolkit m
 
 | Skill | Use when |
 |---|---|
-| `erfana:managing-agents` | Creating, reviewing, modifying, or validating Claude Code agents (lifecycle management with research, design, validation phases) |
-| `erfana:managing-articles` | Writing medium-form articles end-to-end – research, outline, draft, review, publish (bilingual Polish/English support) |
-| `erfana:managing-issues` | Full lifecycle of GitHub issues – create, implement (multi-phase), review code, and display (read-only `show issue #N` / `list issues` / `find issues` modes). The Implement operation is **autonomous**: it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, asking a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions; its reviews are **embedded** (its own reviewer agents fan out – no user-run `/erfana:lens-review`). It still refuses a detected headless run – do not route a `claude -p` / CI session into it |
+| `erfana:agent` | Creating, reviewing, modifying, or validating Claude Code agents (lifecycle management with research, design, validation phases) |
+| `erfana:article` | Writing medium-form articles end-to-end – research, outline, draft, review, publish (bilingual Polish/English support) |
+| `erfana:issue` | Full lifecycle of GitHub issues – create, implement (multi-phase), review code, and display (read-only `show issue #N` / `list issues` / `find issues` modes). The Implement operation is **autonomous**: it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, asking a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions; its reviews are **embedded** (its own reviewer agents fan out – no user-run `/erfana:lens-review`). It still refuses a detected headless run – do not route a `claude -p` / CI session into it |
 | `erfana:report` | Creating, reviewing, and validating professional consulting reports (Pyramid Principle, SCQA, Five Cs framework) |
-| `erfana:managing-skills` | Creating, reviewing, modifying, and **modernizing** (apply Claude 5 patterns) Claude Code skills following Anthropic best practices – opens with a coverage-map requirements interview (Create always; Modify/Review/Modernize when gated in) |
-| `erfana:managing-specs` | 4-tier specification management (T1 issue, T2 spec, T3 lite spec, T4 standard spec) |
+| `erfana:skill` | Creating, reviewing, modifying, and **modernizing** (apply Claude 5 patterns) Claude Code skills following Anthropic best practices – opens with a coverage-map requirements interview (Create always; Modify/Review/Modernize when gated in) |
+| `erfana:spec` | 4-tier specification management (T1 issue, T2 spec, T3 lite spec, T4 standard spec) |
 
 The orchestration skills delegate substantive work to agents shipped alongside them in `agents/` (89 shared agents). Discovery is automatic; no manual wiring needed.
 
@@ -29,7 +29,7 @@ The orchestration skills delegate substantive work to agents shipped alongside t
 
 | Skill | Use when |
 |---|---|
-| `erfana:grill-me` | Stress-testing a plan or design – walks the decision tree one question at a time, recommends an answer per branch, explores the codebase before asking when the answer is already encoded there. For skill-lifecycle requirements, `erfana:managing-skills` runs its own scoped interview – route general plan interrogation here, skill create/modify interviews there. |
+| `erfana:grill-me` | Stress-testing a plan or design – walks the decision tree one question at a time, recommends an answer per branch, explores the codebase before asking when the answer is already encoded there. For skill-lifecycle requirements, `erfana:skill` runs its own scoped interview – route general plan interrogation here, skill create/modify interviews there. |
 
 ### Verification
 
@@ -105,14 +105,14 @@ User message arrives
     │       └─ Yes → erfana:grill-me
     │
     ├─ Mentions an orchestration task (agents, articles, issues, reports, skills, specs)?
-    │       ├─ Claude Code agent lifecycle? → erfana:managing-agents
-    │       ├─ Medium-form article (research → publish)? → erfana:managing-articles
-    │       ├─ GitHub issue (create / implement / review / display)? → erfana:managing-issues
+    │       ├─ Claude Code agent lifecycle? → erfana:agent
+    │       ├─ Medium-form article (research → publish)? → erfana:article
+    │       ├─ GitHub issue (create / implement / review / display)? → erfana:issue
     │       │     (Display sub-modes: "show issue #N", "list issues", "find issues with label X")
     │       │     (Implement runs autonomously but still needs a human at UAT + git confirm – refuses a headless session)
     │       ├─ Consulting report (Pyramid / SCQA)? → erfana:report
-    │       ├─ Claude Code skill lifecycle? → erfana:managing-skills
-    │       └─ Specification (T1-T4)? → erfana:managing-specs
+    │       ├─ Claude Code skill lifecycle? → erfana:skill
+    │       └─ Specification (T1-T4)? → erfana:spec
     │
     ├─ Validating a markdown analysis document against sources?
     │       └─ Yes → erfana:fact-checking (manual invocation only)
