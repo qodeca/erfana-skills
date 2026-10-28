@@ -1,7 +1,7 @@
 ---
 description: Refresh project documentation after recent work – syncs docs/, README, CHANGELOG, AGENTS.md, CLAUDE.md, API specs and decision records with the current state of the code. Use after finishing a task or as housekeeping.
 argument-hint: "[path-or-glob] [--dry-run] [--offline] [--commit] [--push] [--allow-delete]"
-allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Bash(git rev-parse:*), Bash(git branch --show-current), Bash(git ls-files:*), Bash(git remote:*), Bash(git add:*), Bash(git commit:*), Bash(test:*), Bash(mkdir:*)
+allowed-tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Bash(git rev-parse:*), Bash(git branch --show-current), Bash(git ls-files:*), Bash(git remote get-url:*), Bash(git add --:*), Bash(git commit:*), Bash(test:*), Bash(mkdir:*)
 ---
 
 # Arguments
@@ -94,7 +94,7 @@ Each phase may exit early; do not push past a stop condition.
 9. **Summarise.** Present a plain-language summary of every change with the reasoning behind it. The working-tree diff is the review surface; the user reviews it directly.
 
 10. **Git (opt-in only).** Default: take no git action – leave changes in the working tree for the user's normal flow.
-    - With `--commit`: refuse to proceed if the current branch is the default branch (`git branch --show-current` vs the resolved base) – report it and stop. Otherwise stage only the doc files this run changed (explicit `git add -- <paths>`, never `git add -A` / `commit -a`), and commit with a `docs:` Conventional-Commits message.
+    - With `--commit`: refuse to proceed if the current branch is the default branch (`git branch --show-current` vs the resolved base) – report it and stop. Otherwise stage only the doc files this run changed (explicit `git add -- <paths>`, never `git add -A` / `commit -a`; never `--no-verify`, `--amend`, or `--author`), and commit with a `docs:` Conventional-Commits message.
     - With `--push`: confirm the push, then push the current branch. `git push` is deliberately not pre-granted, so the host asks before it runs.
 
 11. **No scratch files.** Keep working notes in the conversation rather than on disk, so there is nothing to clean up and nothing to delete.

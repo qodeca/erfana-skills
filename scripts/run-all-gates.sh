@@ -142,12 +142,67 @@ for fp in sorted(glob.glob('skills/*/SKILL.md')):
     print(f'  {fp} → name={m.get("name", "?")}')
 
 # Agents: require name + description; invariant: name == filename basename.
-# Plus model patterns: warn if effort/model fields missing on ms-* agents; warn if deprecated APIs declared.
+# Plus model patterns: warn if effort/model fields missing on skill-owned checking agents; warn if deprecated APIs declared.
 # Detection: deprecated APIs as YAML-style keys at start of line (with optional indent), NOT mentions
 # inside backticks/code-references (e.g. "Grep -nE \"temperature:|...\"" in detection regexes).
 # Match: `temperature: 0.7` (line-start, key:value)
 # Skip: `... "temperature:" ...` (mention inside string)
 DEPRECATED_API = re.compile(r'^\s{0,4}(temperature|top_p|top_k|budget_tokens)\s*:\s*\S', re.IGNORECASE | re.MULTILINE)
+
+# Body of an agent file: everything after the closing frontmatter fence.
+# Line-anchored, so a '---' inside a frontmatter value does not move it.
+FM_FENCE = re.compile(r'^---\s*$', re.MULTILINE)
+def agent_body(text):
+    fences = list(FM_FENCE.finditer(text.lstrip('\ufeff')))
+    if len(fences) >= 2 and fences[0].start() == 0:
+        return text.lstrip('\ufeff')[fences[1].end():]
+    return text
+
+SKILL_PREFIXES = ('agent', 'skill', 'article', 'report', 'spec', 'issue', 'fact-checking', 'lens')
+CHECKER_ROLES = ('-reviewer', '-checker', '-validator', '-verifier')
+def is_skill_checker(name):
+    return name.startswith(tuple(p + '-' for p in SKILL_PREFIXES)) and name.endswith(CHECKER_ROLES)
+
+TOP_BAR = 'You work at the level of the top 1% of'
+ABBREV = re.compile(r'\b(?:e\.g|i\.e|etc|vs|cf|approx)\.', re.IGNORECASE)
+SENTENCE_END = re.compile(r'[.!?]["\')*\]]*(?=\s|$)')
+def top_bar_problem(body):
+    """None when the body opens with the top 1% sentence followed by a
+    concrete bar; otherwise the reason it does not."""
+    body = re.sub(r'<!--.*?-->', '', body, flags=re.S)
+    lines = [l.strip() for l in body.splitlines()]
+    idx = None
+    for i, l in enumerate(lines):
+        l = re.sub(r'^<context\b[^>]*>\s*', '', l)
+        lines[i] = l
+        if l and not l.startswith('#'):
+            idx = i
+            break
+    if idx is None:
+        return 'agent has no prompt body (top 1% bar, agent-standard.md section 6)'
+    if not lines[idx].startswith(TOP_BAR):
+        return (f'prompt does not open with "{TOP_BAR} <field>." '
+                f'(top 1% bar, agent-standard.md section 6)')
+    # The bar: the rest of the paragraph, or the next paragraph or list when
+    # the sentence stands alone.
+    block, seen_text = [], False
+    for l in lines[idx:]:
+        if not l:
+            if seen_text and len(block) > 1:
+                break
+            continue
+        if l.startswith('#') or (l.startswith('<') and not l.startswith('<<')):
+            break
+        block.append(l)
+        seen_text = True
+    text = ABBREV.sub('', ' '.join(block))
+    text = re.sub(r'\.{2,}', ' ', text)
+    first = SENTENCE_END.search(text)
+    rest = text[first.end():] if first else ''
+    if len(re.findall(r'[A-Za-z]{2,}', rest)) < 8:
+        return ('top 1% sentence has no concrete bar after it '
+                '(two to four lines on what that level means for the job)')
+    return None
 
 # Cross-host agent-name rules, sourced from the one module that knows the hosts.
 sys.path.insert(0, 'scripts')
@@ -159,7 +214,6 @@ AGENT_NAME_SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
 # there" - covered 87 of the 98 shipped agents. They also escaped the
 # name==basename invariant.
 AGENT_GLOBS = ['agents/*.md', 'skills/*/agents/*.md']
-TOP_BAR = 'You work at the level of the top 1% of'
 agent_files = sorted(set(fp for g in AGENT_GLOBS for fp in glob.glob(g)))
 if agent_files:
     for fp in agent_files:
@@ -184,16 +238,17 @@ if agent_files:
             ok = False
 
         # Model patterns for agents (added v4.2.0; revised v6.3.0; soft warnings)
-        # Item 13.1: effort field on skill-owned reviewer agents
-        if expected.endswith('-reviewer') and expected.split('-')[0] in ('agent', 'skill', 'article', 'report', 'spec') and 'effort' not in m:
-            print(f'WARN: {fp} missing `effort` field (Section 13.1; skill-owned reviewer agents should declare per Model Selection Guide)')
-
-        # Item 13.2: model field on skill-owned reviewer agents
-        if expected.endswith('-reviewer') and expected.split('-')[0] in ('agent', 'skill', 'article', 'report', 'spec') and 'model' not in m:
-            print(f'WARN: {fp} missing `model` field (Section 13.2; skill-owned reviewer agents should declare per Model Selection Guide)')
+        # Items 13.1 / 13.2: effort and model on skill-owned checking agents
+        # (reviewer, checker, validator, verifier roles). Omitting effort is
+        # valid in general; plugin checkers declare it so role intent is
+        # auditable (agent-standard.md section 7).
+        if is_skill_checker(expected):
+            for field in ('effort', 'model'):
+                if field not in m:
+                    print(f'WARN: {fp} missing `{field}` field (skill-owned checking agents declare it; agent-standard.md section 7)')
 
         # Item 13.4: deprecated APIs in agent body
-        body = text.split('---', 2)[2] if text.count('---') >= 2 else text
+        body = agent_body(text)
         if DEPRECATED_API.search(body):
             match = DEPRECATED_API.search(body)
             print(f'WARN: {fp} body contains deprecated API reference "{match.group(0)}" — deprecated on Opus 4.7 and later / Claude 5 models (Section 13.3/13.4)')
@@ -201,29 +256,12 @@ if agent_files:
         # Item 13.5 (v6.3.0): reasoning-display instructions
         report_reasoning_display(fp, text, '13.5')
 
-        # Top 1% bar (house rule, agent-standard.md section 6). The first prose
-        # line of the body -- inside a leading <context> tag if there is one --
-        # places the agent at the top 1% of its field, and the same paragraph
-        # goes on to say what that level means. A FAIL: the rule is the plugin's
-        # quality bar, and a title with nothing after it does not meet it.
-        lines = [l.strip() for l in body.splitlines()]
-        idx = next((i for i, l in enumerate(lines)
-                    if l and l != '<context>' and not l.startswith('<!--')), None)
-        first = lines[idx] if idx is not None else ''
-        if not first.startswith(TOP_BAR):
-            print(f'FAIL: {fp} prompt does not open with "{TOP_BAR} <field>." '
-                  f'(top 1% bar, agent-standard.md section 6)')
+        # Top 1% bar (house rule, agent-standard.md section 6). Logic lives in
+        # top_bar_problem() so tests/gate-02-top-bar-fixtures can pin it.
+        problem = top_bar_problem(body)
+        if problem:
+            print(f'FAIL: {fp} {problem}')
             ok = False
-        else:
-            para = []
-            for l in lines[idx:]:
-                if not l or l.startswith('#') or (l.startswith('<') and not l.startswith('<<')):
-                    break
-                para.append(l)
-            if len(re.findall(r'[.!?](?:\s|$)', ' '.join(para))) < 2:
-                print(f'FAIL: {fp} top 1% sentence has no concrete bar after it '
-                      f'(two to four lines on what that level means for the job)')
-                ok = False
 
         # Cross-host agent name rules (v7.1.0). Qwen Code's converter drops an
         # agent whose name is over 50 characters, is not identifier-shaped, or
@@ -245,6 +283,24 @@ if agent_files:
             ok = False
 
         print(f'  {fp} → name={m.get("name", "?")}')
+
+# Top 1% bar fixtures: every valid/ file passes top_bar_problem(), every
+# invalid/ file fails it. Pins the detector against regressions both ways.
+TBDIR = 'tests/gate-02-top-bar-fixtures'
+if not os.path.isdir(TBDIR):
+    print(f'FAIL: {TBDIR} missing - top 1% bar fixtures are required')
+    ok = False
+else:
+    for kind in ('valid', 'invalid'):
+        for fp in sorted(glob.glob(f'{TBDIR}/{kind}/*.md')):
+            problem = top_bar_problem(agent_body(read_text(fp) or ''))
+            if kind == 'valid' and problem:
+                print(f'FAIL: top 1% bar false positive in {fp}: {problem}')
+                ok = False
+            if kind == 'invalid' and not problem:
+                print(f'FAIL: top 1% bar missed {fp}')
+                ok = False
+    print(f'  top 1% bar fixtures: {len(glob.glob(TBDIR + "/*/*.md"))} checked')
 
 # Widened reasoning-display sweep (v6.3.0): instructional prose beyond SKILL.md and plugin-root
 # agents — nested agents, references, templates, guides, validation, examples, slash commands.
