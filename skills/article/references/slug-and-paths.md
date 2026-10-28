@@ -63,7 +63,7 @@ The last two rows show why transliteration is mandatory rather than accent-dropp
 
 ## Path safety
 
-After building any path from a slug or from any user-supplied fragment, run this checklist BEFORE any create, move, or delete. Reject (do not sanitize-and-continue) on any failure; surface the reason to the orchestrator.
+After building any path from a slug or from any user-supplied fragment, run this checklist BEFORE any create, move, or delete. Reject (do not sanitize-and-continue) on any failure; report the reason to the user.
 
 - [ ] Slug matches `^[a-z0-9-]+$` exactly (allowlist, not denylist).
 - [ ] Slug is non-empty.
@@ -104,17 +104,17 @@ Publish and archive share ONE collision policy. Before moving, detect whether th
 
 ## Irreversible-action approval hook
 
-Move and delete are irreversible. Before executing either, the orchestrator MUST display the resolved absolute source and destination paths (post-`realpath`) and obtain explicit human approval. This is the human-in-the-loop gate for both publish and archive: no relocation or deletion proceeds without the user confirming the exact resolved paths. Show absolute paths, not slugs or relative fragments, so the human approves what will actually happen on disk.
+Move and delete are irreversible. Before executing either, the skill displays the resolved absolute source and destination paths (post-`realpath`) and obtain explicit human approval. This is the human-in-the-loop gate for both publish and archive: no relocation or deletion proceeds without the user confirming the exact resolved paths. Show absolute paths, not slugs or relative fragments, so the human approves what will actually happen on disk.
 
 ## Consumers
 
 The following all reference this module rather than reimplementing slug or path logic:
 
-- Orchestrator init - validates and slugs the new article directory name.
+- Starting a project - validates and slugs the new article directory name.
 - Versioning - derives version file names and validates their paths.
 - Publish step - uses the atomic move primitive, collision policy, and approval hook.
 - Archive step - same move primitive, collision policy, and approval hook.
-- Any agent that writes article files - slugs file names and runs the path-safety checklist before writing.
+- Writing any article file - slug the file name and run the path-safety checklist before writing.
 
 ## Boundary with content trust
 
