@@ -46,6 +46,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | Sub-skill | Single concern |
 |---|---|
 | `erfana:prompt` | Interview the user one decision at a time and write or improve a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1. SKILL.md holds the question protocol and the Claude 5 wording principles; `references/` holds the interview ledger and branches, the composable templates, and model guidance with the official URLs and a review date to recheck against. Authors prompts only – never executes the task a prompt describes. |
+| `erfana:raise-the-bar` | Rewrite a request the user is about to give Claude into a more ambitious one through three lenses – altitude (the outcome behind the task), depth (how a top practitioner would do it), range (other fields, as work rather than role-play) – keeping only raises the workspace supports and an outside judge can check, then print it for the user to run. `references/lenses.md` holds the lenses and the grounding test. Adapted from Felix Rieseberg's "How to be more ambitious: a tutorial for humans with models"; wording is new. Never does the work itself. |
 | `erfana:draft-goal` | Turn an intention into a `/goal` completion condition the goal evaluator can judge from the transcript (one outcome, numbered checks with visible evidence, exclusions, owner-decisions clause, turn bound) and print it for the user to paste – never runs `/goal` itself. `references/` holds the goal mechanics (checked against the Claude Code docs, with Qwen Code differences) and weak-to-strong condition patterns. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0); wording is new, so it carries the repository's default GPL-3.0-only licence with a credit paragraph in SKILL.md. |
 
 ### Session closeout skills (2)
@@ -80,6 +81,7 @@ erfana-skills/
 │   ├── fact-checking/       ← verification skill (v4.2.7+); references/ + examples.md
 │   ├── prompt/              ← prompting skill; references/ (interview, templates, model guidance)
 │   ├── draft-goal/          ← prompting skill; references/ (goal mechanics, condition patterns)
+│   ├── raise-the-bar/       ← prompting skill; references/ (the three ambition lenses)
 │   ├── ship/                ← session-closeout skill (user-invoked only)
 │   ├── handoff/             ← session-closeout skill (user-invoked only); references/ holds MIT upstream files
 │   └── using-erfana/        ← bootstrap meta-router
@@ -177,7 +179,7 @@ Sibling files cite their parent for navigability; Gate 7 enforces both direction
 
 ## Cross-skill flow
 
-The bootstrap (`skills/using-erfana/SKILL.md`) routes between the orchestration track and single-skill branches: a process branch (`grill-me`, v4.2.3+), a verification branch (`fact-checking`, v4.2.7+), and a prompting branch (`prompt`, `draft-goal`). `ship` and `handoff` are listed there but run only when the user invokes them. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
+The bootstrap (`skills/using-erfana/SKILL.md`) routes between the orchestration track and single-skill branches: a process branch (`grill-me`, v4.2.3+), a verification branch (`fact-checking`, v4.2.7+), and a prompting branch (`prompt`, `draft-goal`, `raise-the-bar`). `ship` and `handoff` are listed there but run only when the user invokes them. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
 
 ### Orchestration flow
 
