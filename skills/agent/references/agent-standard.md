@@ -74,6 +74,7 @@ Claude Code lists every agent's description in every session, and Claude decides
 
 Write the brief a capable new colleague would need, not a script.
 
+- **The top 1% bar (required in this plugin).** Open the prompt with one plain sentence that places the agent at the level of the top 1% of practitioners in its field – "You work at the level of the top 1% of database reliability engineers." Follow it at once with two to four lines on what that level means for this job: the checks, judgments, and standards a top practitioner applies that an average one misses. The sentence sets the bar; the lines after it make the bar real. A title without those lines adds little, and capital letters or "YOU MUST" add nothing – they make current models over-apply the rule.
 - **The job and why it matters**, in a few sentences: the outcome the caller needs and what it will be used for.
 - **Inputs** the agent receives and what to do when one is missing.
 - **Boundaries** – what is in scope, what belongs to another agent, what it must not touch – each with its reason.
@@ -85,7 +86,7 @@ Write the brief a capable new colleague would need, not a script.
 Wording:
 
 - Calm and direct, with reasons. All-caps commands and "YOU MUST" make current models over-apply a rule; a plain rule with its reason generalises better.
-- Describe the work, not a persona. "Check every migration for table locks and a working rollback" beats "You are a world-class database expert".
+- Describe the work, not only a persona. The top 1% sentence is the one identity line; the rest of the prompt names the work. "Check every migration for table locks and a working rollback" beats a second, longer line about being a world-class expert.
 - Never ask the agent to show or write out its reasoning ("show your reasoning step by step", "explain your chain of thought"). Current models may refuse that with a `reasoning_extraction` refusal. Ask for evidence in the output instead.
 - No "think carefully" or "be thorough" lines: depth comes from the effort setting.
 - No "use a subagent to verify your work" lines. Self-started verification agents add cost without adding quality; a separate reviewer, chosen by the caller, is the one that helps.
@@ -110,9 +111,9 @@ Haiku 5.5 is the cheap subagent model for the 5.5 family and the first Haiku wit
 
 | Severity | Meaning | Examples |
 |---|---|---|
-| High | The agent will fail, refuse, or create a security risk | `Agent` or `AskUserQuestion` granted; a secret in the prompt; sampling parameters; a request to show reasoning; untrusted content with no data rule; no `tools` line on an agent that reads untrusted material; instructions to ask the user or start an agent |
+| High | The agent will fail, refuse, create a security risk, or miss this plugin's quality bar | `Agent` or `AskUserQuestion` granted; a secret in the prompt; sampling parameters; a request to show reasoning; untrusted content with no data rule; no `tools` line on an agent that reads untrusted material; instructions to ask the user or start an agent; no top 1% sentence, or one without the concrete bar after it (section 6) |
 | Medium | The agent works but routes, scopes, or reports badly | Pressure wording or `<example>` blocks in the description; description over the length limit; name not matching the filename; more tools than the job needs; no output contract; no way out when blocked |
-| Low | Quality and cost | Persona lines, all-caps emphasis, generic steps, an over-long prompt, instructions to verify its own work with subagents |
+| Low | Quality and cost | Extra persona lines beyond the top 1% sentence, all-caps emphasis, generic steps, an over-long prompt, instructions to verify its own work with subagents |
 
 An agent is ready when it has no high-severity findings and the user has accepted or fixed the medium ones.
 

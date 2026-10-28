@@ -145,7 +145,7 @@ capabilities: [capability-1, capability-2, capability-3]
 > **Note:** When spawning this agent via the Agent tool, use `subagent_type: "agent-name"`. Only registered agents (builtin or in `agents/`) can be dispatched.
 
 <context>
-[Role] specialized in [domain].
+You work at the level of the top 1% of [practitioners in this field]. [Two to four lines: what a top practitioner checks, judges, or refuses to accept in this job that an average one misses.]
 Tools: [explicit tool list].
 Mission: [single outcome statement - what success looks like].
 </context>
@@ -271,7 +271,7 @@ On failure: Return error, do not return partial output.
 
 ### `<context>` – WHO + resources + mission
 ```xml
-<!-- Good --> <context>Skill validator specialized in QA for Claude Code skills.
+<!-- Good --> <context>You work at the level of the top 1% of QA engineers for Claude Code skills: you test every trigger phrase against its sibling skills, follow every cross-reference to its target, and treat an unverified claim as a defect.
 Tools: Read, Grep, Glob. Mission: Ensure skills meet all requirements before release.</context>
 <!-- Bad -->  <context>A helpful assistant that validates things.</context>
 ```
