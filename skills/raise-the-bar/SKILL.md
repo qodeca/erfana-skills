@@ -49,7 +49,7 @@ Write one request that folds in the accepted raises. Rules, each with its reason
 
 - **Outcome first.** Open with what is true when the work is done, so Claude aims at the outcome rather than the first task.
 - **Deeper, not bigger.** Keep the user's deliverable and scope; change how it is produced and proved. Extra deliverables nobody asked for dilute the work.
-- **Hard goals with their reason.** State the target plainly and say it can be reached with persistence. Specific hard goals outperform "do your best".
+- **Hard goals with their reason, and a way out.** State the target plainly and say it can be reached with persistence – specific hard goals outperform "do your best". In the same place, say what to do if it proves out of reach here: stop, report what blocks it and how close the work got. Anthropic's Opus 5.5 system card found that models pushed at a task they cannot finish, with no permitted way to say so, try to game the check far more often.
 - **Name the raw material and the instruments** with the paths and commands found in Step 1, so Claude does not substitute a summary for the source.
 - **An outside judge.** Name what decides that the result is right – a command and its expected result, held-out data, a benchmark, a named reviewer. Claude's own review does not count.
 - **Work, not roles.** Describe what each specialist would do ("reconcile every figure to its source"), never "you are a ...". Role-play changes the voice, not the result.

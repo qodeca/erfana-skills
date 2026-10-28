@@ -22,7 +22,7 @@ Ask what the best person in the field would do that the request does not ask for
 
 - **Real instruments.** Use the tools the field uses – a database, a statistical model, a profiler, a test harness – not prose that only borrows the field's vocabulary.
 - **Raw material first.** Start from logs, exports, tickets, or source data rather than someone's summary of them.
-- **A hard goal, stated as reachable.** Ask for the hard target ("load in 200 ms", not "make it faster") and say it can be reached with persistence. Specific hard goals outperform "do your best".
+- **A hard goal, stated as reachable.** Ask for the hard target ("load in 200 ms", not "make it faster") and say it can be reached with persistence. Specific hard goals outperform "do your best". Pair it with a way out: if the target proves out of reach, stop and report what blocks it. A hard goal with no permitted exit invites the model to game the check instead.
 - **Test one assumption.** Pick the belief the request takes for granted ("churn comes from onboarding") and have the data confirm or reject it before building on it.
 - **New knowledge.** Where it fits, ask for something that did not exist before: a model built from the logs, an early signal found, then validated on data it was not built from.
 - **An outside judge.** Something other than Claude decides whether the result is right: tests, a benchmark, held-out data, a tool Claude can run for immediate feedback, or a named human reviewer. Claude's own review of its work does not count.

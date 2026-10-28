@@ -19,7 +19,7 @@ Each check yields at most one candidate. Ask it as its own question, with the ra
 ## How accepted raises enter the prompt
 
 - The raised outcome replaces the original in `<task>`; the original deliverable stays required unless the user replaced it.
-- Hard targets go into `<requirements>` with their reason and a line saying they are reachable with persistence.
+- Hard targets go into `<requirements>` with their reason and a line saying they are reachable with persistence, paired with the exit: if the target proves out of reach, stop and report what blocks it and how close the work got. A hard target with no permitted exit invites gaming the check.
 - The outside judge goes into the completion checks: a command and its expected result, held-out data, a benchmark, or a named reviewer. The model's own review of its work is not an outside judge.
 - Specialist work is written as tasks ("reconcile every figure to its source"), never as a role ("you are a forensic accountant") – role framing changes the voice of the output without improving it.
 - The prompt asks for deeper work, not more work: scope and permissions stay as confirmed in the brief.
