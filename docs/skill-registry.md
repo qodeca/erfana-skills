@@ -18,20 +18,20 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| agent | 2026-10-28 | feat(agents): require the top 1% bar in every agent (#61) |
-| article | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| draft-goal | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
-| grill-me | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| issue | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| prompt | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
-| raise-the-bar | 2026-10-28 | feat(skills): add raise-the-bar and ambition patterns for Claude 5.5 ... |
-| report | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| skill | 2026-10-28 | feat(skill)!: rebuild the skill skill as a brief (#62) |
-| spec | 2026-10-28 | refactor!: rename the orchestration skills and rebuild report as a br... |
-| using-erfana | 2026-10-28 | feat(skill)!: rebuild the skill skill as a brief (#62) |
-| handoff | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
-| ship | 2026-10-13 | feat(skills): add prompt, ship, and handoff skills (#47) |
-| fact-checking | 2026-06-14 | erfana v6.0.0 — open-source release (GPL-3.0-only) |
+| agent | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| article | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| draft-goal | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| fact-checking | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| grill-me | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| handoff | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| issue | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| prompt | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| raise-the-bar | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| report | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| ship | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| skill | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| spec | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
+| using-erfana | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 
 14 skills, one row per folder under `skills/`.
 
