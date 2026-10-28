@@ -1,6 +1,6 @@
 ---
 name: spec-reconciler
-description: "Used by managing-specs to auto-fix spec inconsistencies – orphaned references, statistics, manifest sync, ID numbering."
+description: "Used by erfana:spec to auto-fix spec inconsistencies – orphaned references, statistics, manifest sync, ID numbering."
 tools: Read, Write, Glob, Bash
 model: opus
 capabilities: [auto-repair, statistics-recalculation, manifest-sync, orphan-cleanup]

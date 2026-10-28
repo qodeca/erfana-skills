@@ -1,6 +1,6 @@
 ---
 name: ms-agent-matcher
-description: "Used by managing-skills to match skill requirements against available agents."
+description: "Used by erfana:skill to match skill requirements against available agents."
 tools: Read, Glob, Grep
 model: sonnet
 effort: low

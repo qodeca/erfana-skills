@@ -1,6 +1,6 @@
 ---
 name: spec-impl-comparator
-description: "Used by managing-specs to compare spec requirements against the codebase and report deviations."
+description: "Used by erfana:spec to compare spec requirements against the codebase and report deviations."
 tools: Read, Grep, Glob
 model: opus
 capabilities: [spec-implementation-comparison, deviation-detection, naming-validation]

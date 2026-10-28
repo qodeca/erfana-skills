@@ -1,6 +1,6 @@
 ---
 name: ms-example-adder
-description: "Used by managing-skills to add usage examples to a newly created skill."
+description: "Used by erfana:skill to add usage examples to a newly created skill."
 tools: Read, Write, Edit, Glob
 model: opus
 effort: medium

@@ -1,6 +1,6 @@
 ---
 name: spec-section-merger
-description: "Used by managing-specs to merge generated updates into existing spec content."
+description: "Used by erfana:spec to merge generated updates into existing spec content."
 tools: Read, Write
 model: opus
 capabilities: [content-merging, conflict-resolution, version-control, backup-management]

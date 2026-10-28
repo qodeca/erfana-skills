@@ -1,6 +1,6 @@
 ---
 name: ma-requirements-gatherer
-description: "Used by managing-agents to find and fill gaps when an agent request is unclear or incomplete."
+description: "Used by erfana:agent to find and fill gaps when an agent request is unclear or incomplete."
 tools: Read, Glob
 effort: medium
 model: sonnet

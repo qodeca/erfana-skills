@@ -1,6 +1,6 @@
 ---
 name: spec-registry-manager
-description: "Used by managing-specs to manage the global spec registry and its unique, never-reused spec IDs."
+description: "Used by erfana:spec to manage the global spec registry and its unique, never-reused spec IDs."
 tools: Read, Write, Glob
 model: opus
 capabilities: [registry-management, id-generation, spec-lifecycle]

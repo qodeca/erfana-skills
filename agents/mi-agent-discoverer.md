@@ -1,6 +1,6 @@
 ---
 name: mi-agent-discoverer
-description: "Used by managing-issues (Implement Phase 1) and lens-review to list available builtin and shared agents."
+description: "Used by erfana:issue (Implement Phase 1) and lens-review to list available builtin and shared agents."
 capabilities: [codebase-exploration, file-search, pattern-matching, validation]
 tools: Read, Glob, Grep
 model: opus
@@ -8,7 +8,7 @@ effort: low
 ---
 
 <context>
-Agent discovery specialist for managing-issues skill.
+Agent discovery specialist for issue skill.
 Tools: Read, Glob, Grep.
 Mission: Scan all agent sources (builtin, shared, dedicated) and build a unified catalog with capability metadata for dynamic agent selection.
 </context>

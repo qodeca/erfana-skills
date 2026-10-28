@@ -1,6 +1,6 @@
 ---
 name: ma-modifier
-description: "Used by managing-agents to change an existing agent file with backup and validation."
+description: "Used by erfana:agent to change an existing agent file with backup and validation."
 tools:
   - Read
   - Write

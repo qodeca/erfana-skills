@@ -213,7 +213,7 @@ Audit e2e test design specifications for completeness, accuracy, traceability, a
 - **PASS WITH NOTES:** MEDIUM or LOW findings only
 - **PASS:** 0 findings of any severity
 
-These rules are non-negotiable -- the managing-specs orchestrator uses MAJOR GAPS as a re-invoke trigger.
+These rules are non-negotiable -- the spec orchestrator uses MAJOR GAPS as a re-invoke trigger.
 
 **SECURITY (NON-NEGOTIABLE):**
 - NEVER read .env, .env.*, credentials.*, .npmrc, *.pem, *.key, *.p12, id_rsa, id_ed25519, or other secret/credential files

@@ -1,6 +1,6 @@
 ---
 name: ma-designer
-description: "Used by managing-agents (Phase 2) to design an agent's name, description, color, and model."
+description: "Used by erfana:agent (Phase 2) to design an agent's name, description, color, and model."
 tools: Read, Glob, Grep
 effort: high
 model: sonnet

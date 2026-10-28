@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 87 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the managing-issues Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing 89 shared agents (76 at v4.0.0 + 4 `fc-*` fact-checking quartet in v4.2.7 + 2 from the issue Create-operation split in v4.2.13 + 5 `article-*` in v4.3.0 + 2 `report-*` when managing-reports was rebuilt as a brief; v6.4.0 swaps `ms-requirements-gatherer` for `grill-planner` – net zero) and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remains is a single-domain orchestration toolkit: six orchestration skills plus two single-skill branches (a process branch added in v4.2.3, `grill-me`, and a verification branch added in v4.2.7, `fact-checking`) behind one bootstrap router.
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -22,12 +22,12 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:managing-agents` | Claude Code agent lifecycle (research → design → validation) |
-| `erfana:managing-articles` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
-| `erfana:managing-issues` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and persists its run state to one comment on the issue (created after an opt-in prompt on a public repo; written without a prompt but announced in one line on a private repo) so an interrupted run can resume. It runs 13 phases with 13 phase gates plus 3 embedded autonomous review sub-gates: the operation fans out its own reviewer agents (QG-4a, QG-8, QG-11a – no user-run `/erfana:lens-review`), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo run-state consent; it still refuses a detected headless run. |
-| `erfana:managing-reports` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Ships 11 internal validation agents. |
-| `erfana:managing-skills` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (v6.4.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
-| `erfana:managing-specs` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
+| `erfana:agent` | Claude Code agent lifecycle (research → design → validation) |
+| `erfana:article` | Medium-form article authoring (research → outline → draft → publish), bilingual Polish/English. Delegates to 5 plugin-root `article-*` agents. |
+| `erfana:issue` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `find issues with label X` modes added v4.2.2). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and persists its run state to one comment on the issue (created after an opt-in prompt on a public repo; written without a prompt but announced in one line on a private repo) so an interrupted run can resume. It runs 13 phases with 13 phase gates plus 3 embedded autonomous review sub-gates: the operation fans out its own reviewer agents (QG-4a, QG-8, QG-11a – no user-run `/erfana:lens-review`), auto-fixes CRITICAL/HIGH inline, and routes MEDIUM/LOW to a judge. The only human touchpoints are requirements clarification in the business-analysis phase, UAT acceptance (QG-11), the QG-12 git-action confirmation, and the QG-0 public-repo run-state consent; it still refuses a detected headless run. |
+| `erfana:report` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
+| `erfana:skill` | Claude Code skill lifecycle including the **Modernize operation** (v4.2.0+) that applies Claude 5 patterns to existing skills via ms-reviewer → user approval → ms-modifier (`change_type: modernize`) → ms-validator, and (v6.4.0) **coverage-map requirements interviews**: Create always interviews via `grill-planner` + `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
+| `erfana:spec` | 4-tier specification management (T1 issue → T4 standard). Delegates to plugin-root `spec-*` agents. |
 
 ### Process skills (1, v4.2.3+)
 
@@ -69,14 +69,14 @@ erfana-skills/
 ├── .claude-plugin/
 │   ├── plugin.json          ← name=erfana, version=X.Y.Z (live: see CLAUDE.md banner)
 │   └── marketplace.json     ← marketplace catalog
-├── agents/                  ← 87 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0); flat directory; Claude Code auto-discovers
+├── agents/                  ← 89 shared agents (v4.0+, +4 fc-* in v4.2.7, +2 Create-split in v4.2.13, +5 article-* in v4.3.0, +2 report-*); flat directory; Claude Code auto-discovers
 ├── skills/
-│   ├── managing-agents/     ← orchestration skill (v4.0+); guides/, templates/, validation/
-│   ├── managing-articles/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
-│   ├── managing-issues/     ← phases/, operations/, reference/ (singular), examples/, templates/, validation/
-│   ├── managing-reports/    ← ships 11 internal validation agents; reference/, templates/
-│   ├── managing-skills/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy); its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
-│   ├── managing-specs/      ← templates/ (T1-T4), validation/, examples/, guides/
+│   ├── agent/     ← orchestration skill (v4.0+); guides/, templates/, validation/
+│   ├── article/   ← references/, templates/ (delegates to 5 plugin-root article-* agents; no nested agents or workflows as of v4.3.0)
+│   ├── issue/     ← phases/, operations/, reference/ (singular), examples/, templates/, validation/
+│   ├── report/              ← brief-style SKILL.md (was managing-reports); references/, templates/, examples/
+│   ├── skill/     ← guides/, templates/, validation/, examples/, references/ (interview protocol + taxonomy); its ms-grill-guard lives in plugin-root hooks/ since v7.1.0
+│   ├── spec/      ← templates/ (T1-T4), validation/, examples/, guides/
 │   ├── grill-me/            ← process skill (v4.2.3+); references/ only – its grill-guard lives in plugin-root hooks/ since v7.1.0
 │   ├── fact-checking/       ← verification skill (v4.2.7+); references/ + examples.md
 │   ├── prompt/              ← prompting skill; references/ (interview, templates, model guidance)
@@ -112,11 +112,11 @@ The plugin's hook bundle (`hooks/`) is the project-agnostic safety net that trav
 | `post-compact-reminder.sh` | PostCompact | Re-injects load-bearing facts after context compaction + current git state snapshot. |
 | `verify-completion.sh` | Stop | Blocks success-without-evidence claims using a regex Stop hook (per Anthropic's Apr 2026 guidance: deterministic regex for hard safety, not prompt-based). v4.2.9+ adds (a) a sentinel-comment allowlist – the literal `<!-- erfana:status-template -->` emitted by `/erfana:project-status` and `/erfana:session-status` bypasses the success-claim check, enforced for symmetry by Gate 16; (b) an unclosed-fence fallback that uses the unstripped body when the message has an odd number of code fences; (c) a `\bverified\b` word-boundary fix so "unverified" no longer satisfies the verification check. v4.2.14+ extends the allowlist to a second sentinel `<!-- erfana:explain-template -->` emitted by `/erfana:explain-issue` (reserved for future `explain-*` siblings); Gate 16 enforces symmetry for the new sentinel across `commands/explain-issue.md` and the hook in addition to the existing status family. |
 | `grill-guard.sh` | Stop | Blocks one stop attempt per turn while a `grill-me` interview is still open – the trailing `<!-- erfana:grill-open -->` marker is present. Fence- and inline-code-aware, so a message merely quoting the marker does not re-trigger it. Backstop only; the protocol lives in the skill (v6.2.0+, promoted to plugin root v7.1.0). |
-| `ms-grill-guard.sh` | Stop | The same one-stop block for a `managing-skills` requirements interview, keyed on `<!-- erfana:ms-grill-open -->` (v6.4.0+, promoted to plugin root v7.1.0). |
+| `ms-grill-guard.sh` | Stop | The same one-stop block for a `skill` requirements interview, keyed on `<!-- erfana:ms-grill-open -->` (v6.4.0+, promoted to plugin root v7.1.0). |
 
 **Cross-platform implementation (v4.2.20+).** Each of the six hooks ships in two forms: the `.sh` shown above (macOS/Linux) and a faithful `.ps1` port (Windows). `hooks.json` never names a `.sh`/`.ps1` directly – every command runs `bash "${CLAUDE_PLUGIN_ROOT}/hooks/dispatch.sh" <hook>`, and `dispatch.sh` `exec`s the PowerShell sibling via `powershell.exe` on Windows (OS detected by `uname`; the script path is handed over in `cygpath -m` forward-slash form to dodge bash↔native quoting) or the bash sibling elsewhere. stdin/stdout/stderr/exit-code pass straight through, so exit 2 still blocks and stdout JSON is still honoured. This exists because Git Bash on Windows ships without `jq`, so the bash hooks parsed empty input and silently no-op'd there. The PowerShell ports use built-in `ConvertFrom-Json` (no `jq`), `-cmatch`/`-match` to mirror `grep -E`/`grep -iE` case sensitivity, and `(?m)` to preserve per-line `^`/`$` anchoring. A Windows host without Git Bash is uncovered (PowerShell can't launch `bash dispatch.sh`) – the same gap the prior `.sh`-only bundle had; see [`known-caveats.md`](known-caveats.md).
 
-**Cross-host registration (v7.1.0+).** `hooks/hooks.json` is the only place a hook is declared. Both supported hosts read that file, so anything registered there runs on both; a hook declared in a skill's `hooks:` frontmatter runs on Claude Code alone, because Qwen Code's skill parser does not extract that field at all. That is why the two interview guards moved out of `skills/grill-me/` and `skills/managing-skills/` into the plugin root in v7.1.0 – a skill-scoped guard was dead on one of the two hosts. As ordinary Stop hooks they now evaluate **every** stop, and the open-marker sentinel in the message – not the registration – is what scopes each one to a live interview. Two further wiring rules follow from the same split: `hooks.json` carries no `timeout` key, and every matcher names both hosts' tool vocabulary. Gate 14 enforces both; the reasoning behind them is in [`hosts.md`](hosts.md), and [`known-caveats.md`](known-caveats.md) records what stays unverified.
+**Cross-host registration (v7.1.0+).** `hooks/hooks.json` is the only place a hook is declared. Both supported hosts read that file, so anything registered there runs on both; a hook declared in a skill's `hooks:` frontmatter runs on Claude Code alone, because Qwen Code's skill parser does not extract that field at all. That is why the two interview guards moved out of `skills/grill-me/` and `skills/skill/` into the plugin root in v7.1.0 – a skill-scoped guard was dead on one of the two hosts. As ordinary Stop hooks they now evaluate **every** stop, and the open-marker sentinel in the message – not the registration – is what scopes each one to a live interview. Two further wiring rules follow from the same split: `hooks.json` carries no `timeout` key, and every matcher names both hosts' tool vocabulary. Gate 14 enforces both; the reasoning behind them is in [`hosts.md`](hosts.md), and [`known-caveats.md`](known-caveats.md) records what stays unverified.
 
 The bundle is project-agnostic by design – no hook reads any skill's content. Personal style preferences (worktree ban, en-dash policing, English-only, per-account budgets) live in user settings, not the plugin. Validated by Gate 14 (`scripts/gate-14-hooks.sh`), which now also asserts both siblings exist per dispatched hook and PowerShell-parses the `.ps1` files when a PowerShell interpreter is on PATH.
 
@@ -127,12 +127,12 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 87 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
+- **`agents/` at plugin root** – 89 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; orchestration skills delegate to them via the `Task` tool. Prefix breakdown: `spec-` (23), `mi-` (13), `ms-` (9), `ma-` (7), `article-` (5), `e2e-` (4), `fc-` (4), `report-` (2), `release-` (2), `grill-` (1), tech-domain (`nest-*`, `react-*`, `solution-*`, etc., 6), UI/UX (4), generic-name (9; 15 under the broader no-team-prefix definition used in `SECURITY.md`). The 9 generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **No shared content bundle.** Since v7.0.0 every skill owns its own references, guides and templates. Content two skills both need is duplicated deliberately rather than hoisted – the skills are independent and a shared bundle would recouple them.
 
 ### Per-skill nested agents
 
-One orchestration skill ships internal agents under `<skill>/agents/` scoped to its own lifecycle: `managing-reports/agents/` (11 files – the only such directory on disk). `managing-issues` and `managing-skills` define `agents/` paths in prose only and ship no nested directory. Per-skill nested-agent discovery is unverified against the published Claude Code plugin spec (which documents only plugin-root `agents/`); accepted-risk per `CHANGELOG.md` v4.0.0 and [`known-caveats.md`](known-caveats.md). The previously-predicted follow-up is now done: `managing-articles`'s 5 internal agents were hoisted to plugin root with disambiguating `article-*` prefixes in v4.3.0. If a remaining orchestration skill silently fails to find its internal agents in production use, the same hoist applies.
+No skill ships internal agents under `<skill>/agents/` any more: the published Claude Code plugin spec documents only plugin-root `agents/`, so every agent lives there. `article` hoisted its agents to `article-*` in v4.3.0, and `report` (then `managing-reports`) replaced its 11 nested agents with two plugin-root `report-*` checkers when it was rebuilt as a brief. `issue` and `skill` define `agents/` paths in prose only.
 
 ### Convention: subagents cannot call `AskUserQuestion`
 
@@ -142,7 +142,7 @@ One orchestration skill ships internal agents under `<skill>/agents/` scoped to 
 - The **orchestrator** (the skill running in the main conversation) asks those questions via `AskUserQuestion`, batching at most 4 per call, then passes the answers back to the agent or carries them forward.
 - A **skipped answer is valid** — record it and proceed; never loop re-asking the same question.
 
-Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `managing-issues` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13), `grill-planner` (plans the whole interview, never asks; v6.4.0 – supersedes the retired `ms-requirements-gatherer`, whose four CREATE requirement keys it preserves via `references/interview-taxonomy.md`). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `managing-articles/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
+Canonical reference implementation: [`agents/ma-requirements-gatherer.md`](../agents/ma-requirements-gatherer.md). In `issue` this is also stated as SKILL.md rule 7 (the `needs_user_input` contract) and the Context-preservation table. Compliant create-operation agents: `mi-issue-questioner` (proposes), `mi-requirements-analyzer` (proposes; fixed v4.2.13), `grill-planner` (plans the whole interview, never asks; v6.4.0 – supersedes the retired `ms-requirements-gatherer`, whose four CREATE requirement keys it preserves via `references/interview-taxonomy.md`). **Known remaining occurrences to migrate** (each requires its consuming skill's orchestration to ask, fixed in lockstep): `article/agents/{gather-article-requirements,generate-gemini-prompt,generate-research-prompt}.md` and `managing-reports/agents/gather-report-requirements.md`.
 
 ### Where new content goes – the rule
 
@@ -155,22 +155,22 @@ Nothing is shared across skills. Gate 7 walks every cited path from each file's 
 
 ### Phase-requirements split-file pattern (v4.2.x convention)
 
-Orchestration skills with multiple operations should split phase-requirements references by operation rather than concatenating into one file. v4.2.1 introduced the pattern in `managing-issues` (motivated by Rule #16 fragility); v4.2.2 made it canonical by extracting shared vocabulary to its own file. Reference shape:
+Orchestration skills with multiple operations should split phase-requirements references by operation rather than concatenating into one file. v4.2.1 introduced the pattern in `issue` (motivated by Rule #16 fragility); v4.2.2 made it canonical by extracting shared vocabulary to its own file. Reference shape:
 
 - `reference/phase-requirements-shared.md` — capability vocab, domain vocab, criticality levels, allow_direct policy. All operation files cross-reference this equally (no implicit "implement is canonical" hierarchy).
 - `reference/<operation>-phase-requirements.md` — one file per operation (`implement-`, `create-`, `review-`, `conditional-`).
 
-The legacy single-file pattern (`reference/phase-requirements.md` containing both shared vocab and all operation phases) is **deprecated** as of v4.2.x. New skills should use the split pattern; existing skills with the single-file shape may migrate during their next Modernize pass. Documented in `skills/managing-skills/templates/phase-requirements-template.md`.
+The legacy single-file pattern (`reference/phase-requirements.md` containing both shared vocab and all operation phases) is **deprecated** as of v4.2.x. New skills should use the split pattern; existing skills with the single-file shape may migrate during their next Modernize pass. Documented in `skills/skill/templates/phase-requirements-template.md`.
 
 ### File-cap fragility split pattern (v4.2.2 convention)
 
-When a skill file approaches the Rule #16 ≤500-line cap, hoist a single most-cohesive section to a sibling file rather than refactoring the whole file. v4.2.2 V6 demonstrated three reference splits in `managing-issues`:
+When a skill file approaches the Rule #16 ≤500-line cap, hoist a single most-cohesive section to a sibling file rather than refactoring the whole file. v4.2.2 V6 demonstrated three reference splits in `issue`:
 
 - `operations/review-compliance.md` — Compliance review mode workflow hoisted from `review.md` (482 → 454 lines, +46 buffer).
 - `operations/implement-phases-overview.md` — Phases section hoisted from `implement.md` (469 → 207 lines, +293 buffer; the canonical per-phase detail still lives in `phases/0-12.md`).
 - `reference/agents-reference-mi.md` — `mi-*` family agent details hoisted from `agents-reference-detail.md` (457 → 287 lines, +213 buffer).
 
-The convention has held since. The `managing-issues` Implement hardening applied it twice more, in the same skill:
+The convention has held since. The `issue` Implement hardening applied it twice more, in the same skill:
 
 - `reference/run-state-resume.md` (245 lines) – the **read** side of the run-state block (fetch-time authorship filter, parser contract, resume rules) hoisted out of `reference/post-review-tracking.md`, which keeps the write side at 283 lines. The split is by responsibility, which is what kept both halves under the cap as the hardening grew them.
 - `examples/implement-edge-cases.md` (237 lines) – edge-case walkthroughs split out of `examples/implement.md` (286 lines), which keeps the happy path and the gate summary table.
@@ -188,12 +188,12 @@ User intent → using-erfana (router)
                   │
                   └─ orchestration task?
                        │
-                       ├─ agent lifecycle? → managing-agents
-                       ├─ article (research → publish)? → managing-articles
-                       ├─ GitHub issue (create / implement / review)? → managing-issues
-                       ├─ consulting report? → managing-reports
-                       ├─ skill lifecycle? → managing-skills
-                       └─ specification (T1-T4)? → managing-specs
+                       ├─ agent lifecycle? → agent
+                       ├─ article (research → publish)? → article
+                       ├─ GitHub issue (create / implement / review)? → issue
+                       ├─ consulting report? → report
+                       ├─ skill lifecycle? → skill
+                       └─ specification (T1-T4)? → spec
 ```
 
 Orchestration skills are **independent** – they pick by domain, not by lifecycle stage of a shared deliverable. Each owns its own multi-phase workflow internally and delegates to agents in `agents/` and `<skill>/agents/` via the `Task` tool.
@@ -212,7 +212,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - `allowed-tools:` minimal set.
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
    - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `ship`, and `handoff`).
-   - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the Model Selection Guide in `skills/managing-skills/templates/shared-agent-template.md`.
+   - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the Model Selection Guide in `skills/skill/templates/shared-agent-template.md`.
 3. **Body structure** (per superpowers canonical order):
    - Core principle (one sentence)
    - When this skill applies / Out of scope
@@ -224,7 +224,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 5. **Add agents (optional)**:
    - Plugin-root agents → `agents/<prefix-name>.md` (use a unique team prefix to avoid generic-name collisions; see `SECURITY.md > Known limitations`).
    - Skill-internal agents → `skills/<name>/agents/<agent-name>.md`. Discovery is unverified for nested location; prefer plugin-root unless agents are tightly coupled to one skill's lifecycle.
-   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/managing-skills/templates/shared-agent-template.md`). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
+   - Each agent declares `effort:` + `model:` per Model Selection Guide (v4.2.0+, recalibrated for Claude 5 in v6.3.0, in `skills/skill/templates/shared-agent-template.md`). Routine validators on `sonnet`+`low` are far cheaper than reviewers on `opus`+`high`; the savings compound across long workflows.
    - **Never** declare `temperature`, `top_p`, `top_k` (400 error on Claude Opus 4.7 and later per Anthropic's parameter-deprecation table) or fixed `thinking: {budget_tokens: N}` on Claude 5 models (Haiku 4.5 exempt) in agent code (Gate 2 + Section 13.3/13.4 BLOCKING).
 6. **Update `skills/using-erfana/SKILL.md`** – add a row to the appropriate sub-table and to the Decision Flow.
 7. **Update `README.md`** – add a row to the appropriate skills sub-table at the top.

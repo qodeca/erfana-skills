@@ -1,6 +1,6 @@
 ---
 name: spec-document-linker
-description: "Used by managing-specs to link external documents to specs and check registry integrity."
+description: "Used by erfana:spec to link external documents to specs and check registry integrity."
 tools: Read, Write, Glob
 model: opus
 capabilities: [document-linking, integrity-checking, registry-rebuild]

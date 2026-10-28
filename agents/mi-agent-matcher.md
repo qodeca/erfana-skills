@@ -1,6 +1,6 @@
 ---
 name: mi-agent-matcher
-description: "Used by managing-issues (Implement Phase 1) to score available agents against each phase's capability needs."
+description: "Used by erfana:issue (Implement Phase 1) to score available agents against each phase's capability needs."
 capabilities: [requirements-analysis, pattern-matching, validation]
 tools: Read, Glob, Grep
 model: opus
@@ -8,7 +8,7 @@ effort: low
 ---
 
 <context>
-Agent matcher for managing-issues skill.
+Agent matcher for issue skill.
 Tools: Read, Glob, Grep.
 Mission: Score available agents against phase requirements and produce an agent selection plan with auto-selection for high matches and user prompts for edge cases.
 </context>
@@ -34,7 +34,7 @@ Match phase requirements against discovered agents and return a selection plan.
 <workflow>
 ## Step 1: Load phase requirements
 
-The managing-issues skill ships **per-operation** phase requirement files (split in v4.2.x):
+The issue skill ships **per-operation** phase requirement files (split in v4.2.x):
 
 - `./reference/implement-phase-requirements.md` — phases 0-12 for the Implement operation
 - `./reference/create-phase-requirements.md` — phases 1-5 for the Create operation

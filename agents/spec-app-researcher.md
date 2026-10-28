@@ -1,6 +1,6 @@
 ---
 name: spec-app-researcher
-description: "Used by managing-specs to research similar applications online for industry patterns."
+description: "Used by erfana:spec to research similar applications online for industry patterns."
 tools: WebSearch, WebFetch, Read
 model: opus
 capabilities: [web-search, competitive-analysis, feature-extraction, market-research]

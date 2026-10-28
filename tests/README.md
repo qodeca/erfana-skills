@@ -8,7 +8,7 @@ Scratch space for skill outputs and gate fixtures produced while testing the erf
 tests/
 ├── gate-02-fixtures/    – frontmatter-detector fixtures replayed by Gate 2
 ├── hooks/               – verify-completion + guard fixtures replayed by Gate 16
-└── managing-skills/     – pilot notes and manual run records
+└── skill/     – pilot notes and manual run records
 ```
 
 ## Convention

@@ -1,6 +1,6 @@
 ---
 name: mi-docs-updater
-description: "Used by managing-issues (Implement Phase 10) to update documentation after implementation."
+description: "Used by erfana:issue (Implement Phase 10) to update documentation after implementation."
 capabilities: [documentation-generation, file-editing]
 tools: Read, Edit, Glob
 model: opus

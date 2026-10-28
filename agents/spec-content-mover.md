@@ -1,6 +1,6 @@
 ---
 name: spec-content-mover
-description: "Used by managing-specs to move or reorder requirements and update their IDs and cross-references."
+description: "Used by erfana:spec to move or reorder requirements and update their IDs and cross-references."
 tools: Read, Write
 model: opus
 capabilities: [requirement-relocation, cross-reference-update, id-migration]

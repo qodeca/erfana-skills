@@ -1,6 +1,6 @@
 ---
 name: ms-designer
-description: "Used by managing-skills to design skill structure from validated requirements."
+description: "Used by erfana:skill to design skill structure from validated requirements."
 tools: Read, Glob, Grep
 model: opus
 effort: medium

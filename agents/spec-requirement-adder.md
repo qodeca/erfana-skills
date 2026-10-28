@@ -1,6 +1,6 @@
 ---
 name: spec-requirement-adder
-description: "Used by managing-specs to add a requirement to a spec section with a unique ID and updated indexes."
+description: "Used by erfana:spec to add a requirement to a spec section with a unique ID and updated indexes."
 tools: Read, Write
 model: opus
 capabilities: [requirement-creation, id-assignment, cross-reference-detection, section-update]

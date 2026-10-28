@@ -1,6 +1,6 @@
 ---
 name: spec-tier-detector
-description: "Used by managing-specs to assess feature complexity and recommend a spec tier (T1–T4)."
+description: "Used by erfana:spec to assess feature complexity and recommend a spec tier (T1–T4)."
 tools: Read, Glob, Grep
 model: opus
 capabilities: [complexity-analysis, tier-recommendation, scope-assessment]

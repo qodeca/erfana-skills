@@ -1,6 +1,6 @@
 ---
 name: spec-updater
-description: "Used by managing-specs to generate updated spec content from new requirements."
+description: "Used by erfana:spec to generate updated spec content from new requirements."
 tools: Read
 model: opus
 capabilities: [content-generation, requirements-structuring, section-updating, change-tracking]

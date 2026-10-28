@@ -1,6 +1,6 @@
 ---
 name: spec-template-generator
-description: "Used by managing-specs to generate the multi-file spec from gathered data."
+description: "Used by erfana:spec to generate the multi-file spec from gathered data."
 tools: Read, Write
 model: opus
 capabilities: [documentation-generation, template-filling, requirements-structuring, use-case-writing, multi-file-output]
@@ -162,7 +162,7 @@ MUST:
 
 **ALLOWED PATHS (READ-ONLY):**
 - `templates/*.md` – Template files
-- Skill templates in `skills/managing-specs/templates/`
+- Skill templates in `skills/spec/templates/`
 
 **NEVER:**
 - Write files outside SPEC_PATH folder

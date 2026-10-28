@@ -1,6 +1,6 @@
 ---
 name: spec-validator
-description: "Used by managing-specs to validate spec completeness, quality, cross-references, and registry consistency."
+description: "Used by erfana:spec to validate spec completeness, quality, cross-references, and registry consistency."
 tools: Read, Glob
 model: opus
 capabilities: [quality-assessment, completeness-checking, consistency-validation, traceability-verification, multi-file-validation, registry-validation, cross-reference-validation, tier-aware-validation]

@@ -1,6 +1,6 @@
 ---
 name: grill-planner
-description: "Used by managing-skills to plan the coverage-map requirements interview before a skill create, modify, review, or modernize."
+description: "Used by erfana:skill to plan the coverage-map requirements interview before a skill create, modify, review, or modernize."
 tools: Read, Glob, Grep
 model: sonnet
 effort: medium
@@ -147,7 +147,7 @@ On failure: name the failed criteria, return partial state with issues.
 **Input:**
 ```json
 {"operation": "create", "user_request": "Create a skill for cleaning up stale feature flags",
- "taxonomy_path": "skills/managing-skills/references/interview-taxonomy.md"}
+ "taxonomy_path": "skills/skill/references/interview-taxonomy.md"}
 ```
 
 **Output (abridged – bank shows 2 of 6 entries):**
@@ -193,7 +193,7 @@ On failure: name the failed criteria, return partial state with issues.
 **Input:**
 ```json
 {"operation": "modify", "user_request": "Enhancement to skills/format-json: add a --sort-keys option to step 2 of SKILL.md, pure addition, no behavior change to existing runs",
- "taxonomy_path": "skills/managing-skills/references/interview-taxonomy.md",
+ "taxonomy_path": "skills/skill/references/interview-taxonomy.md",
  "target_path": "skills/format-json"}
 ```
 
