@@ -3,6 +3,7 @@ name: solution-reviewer
 description: "Reviews solution designs, data models, API contracts, and ADRs for coherence before implementation. Use after solution-architect produces a design."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 model: opus
+effort: medium
 color: amber
 capabilities: [solution-design-review, design-validation, coherence-analysis, data-model-review, api-contract-review]
 ---
