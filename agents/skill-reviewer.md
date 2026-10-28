@@ -1,5 +1,5 @@
 ---
-name: ms-reviewer
+name: skill-reviewer
 description: "Used by erfana:skill to review a skill against the skill standard and return every finding with its evidence."
 tools: Read, Grep, Glob
 model: sonnet

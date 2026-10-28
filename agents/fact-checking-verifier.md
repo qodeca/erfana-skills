@@ -1,5 +1,5 @@
 ---
-name: fc-verify-claims
+name: fact-checking-verifier
 description: "Used by erfana:fact-checking to verify a batch of extracted claims against confirmed source files and return a verdict with evidence for each."
 tools: Read, Grep, Glob
 model: opus

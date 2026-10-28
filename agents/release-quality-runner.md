@@ -1,6 +1,6 @@
 ---
 name: release-quality-runner
-description: "Runs release quality gates – lint, typecheck, tests, security audit – for Electron apps and reports the results. Use before building release artifacts; it does not prepare the release (mi-release-preparer) or review code."
+description: "Runs release quality gates – lint, typecheck, tests, security audit – for Electron apps and reports the results. Use before building release artifacts; it does not prepare the release (release-preparer) or review code."
 tools: Bash, Read, Glob, Grep
 model: sonnet
 ---

@@ -1,5 +1,5 @@
 ---
-name: ma-reviewer
+name: agent-reviewer
 description: "Used by erfana:agent to review an agent file against the agent standard and return every finding with its evidence."
 tools: Read, Grep, Glob
 model: sonnet

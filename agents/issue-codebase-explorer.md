@@ -1,5 +1,5 @@
 ---
-name: mi-codebase-explorer
+name: issue-codebase-explorer
 description: "Used by erfana:issue to find the files, dependencies, and patterns a change touches before it is designed or reviewed."
 capabilities: [codebase-exploration, file-search, pattern-matching]
 tools: Read, Grep, Glob

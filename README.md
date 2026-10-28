@@ -70,7 +70,7 @@ Both run only when you type them, because they act outside the conversation.
 | Component | What it does |
 |---|---|
 | `using-erfana` | Bootstrap. Lists available skills, establishes the 1% rule, routes to the right sub-skill. Loads automatically. |
-| `agents/` (41 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown: `spec-` (3), `mi-` (5), `ms-` (1), `ma-` (2), `article-` (2), `e2e-` (4), `report-` (2), `fc-` (1), `release-` (2), UI/UX (4), tech-domain (6), generic (9). |
+| `agents/` (41 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown (each skill-owned agent starts with its skill's name): `spec-` (3), `issue-` (3), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2), `lens-` (1), `e2e-` (4), `release-` (3), UI/UX (4), tech-domain (6), generic (9). |
 
 ### Safety hooks (v4.1+)
 
@@ -103,7 +103,7 @@ The first four are the project-agnostic safety net – no personal style prefere
 
 Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root) and `skills/<skill>/agents/*.md` (skill-internal); hooks from `hooks/hooks.json`; commands from `commands/*.md`. Every skill is self-contained – there is no shared content bundle.
 
-> **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `mi-codebase-explorer`, `ma-reviewer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
+> **Heads-up: generic-name agents.** The plugin ships ~15 agents with generic names – any agent in `agents/` whose name does not start with a team prefix (`mi-`, `ma-`, `ms-`, `spec-`, `e2e-`, `release-`, `nest-`, `react-`, `grill-`, `article-`, `fc-`). At the v4.0.0 release these include `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `refactor-advisor`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `issue-codebase-explorer`, `agent-reviewer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
 
 ---
 

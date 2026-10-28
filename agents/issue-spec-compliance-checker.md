@@ -1,5 +1,5 @@
 ---
-name: mi-spec-compliance-checker
+name: issue-spec-compliance-checker
 description: "Used by erfana:issue to check an implementation against its spec's functional and non-functional requirements."
 capabilities: [spec-compliance-checking, requirements-verification, naming-validation]
 tools: Read, Grep, Glob

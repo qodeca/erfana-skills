@@ -11,13 +11,13 @@ Thirteen phases, each closed by a quality gate (QG-0 … QG-12), plus three embe
 | 0 Pre-flight | The issue is readable and open with acceptance criteria; the tree is clean; the run starts from the default branch on a new branch; the baseline checks pass; tier, task type, UI impact, and toolchain commands are recorded | QG-0 – **never skipped** |
 | 1 Team | The agents for this run are chosen (table below) | QG-1 |
 | 2 Requirements | Every acceptance criterion is understood and testable; genuine product ambiguities are asked, technical ones are not | QG-2 |
-| 3 Discovery | The files the change touches, their dependencies, and the patterns to follow (`mi-codebase-explorer`) | QG-3 |
-| 4 Design | A plan on disk that meets every criterion (`mi-solution-designer`), reviewed by QG-4a and judged by QG-4b | QG-4, QG-4a, QG-4b |
+| 3 Discovery | The files the change touches, their dependencies, and the patterns to follow (`issue-codebase-explorer`) | QG-3 |
+| 4 Design | A plan on disk that meets every criterion (`issue-solution-designer`), reviewed by QG-4a and judged by QG-4b | QG-4, QG-4a, QG-4b |
 | 5 Build | Code and tests written (`software-developer`, `test-writer`, `e2e-test-writer` for UI flows); the detected typecheck and test commands exit 0 | QG-5 |
 | 6 Architecture | No critical structural problem (`architecture-reviewer`) | QG-6 |
 | 7 Security | The secret scan below finds nothing and the dependency audit reports no high or critical issue (`security-auditor` for the deeper review) | QG-7 – **never skipped** |
 | 8 Quality | The change set reviewed and fixed per [embedded-review.md](embedded-review.md); tests and typecheck pass | QG-8 |
-| 9 Verification | Every acceptance criterion is met and the change matches the plan (`mi-spec-compliance-checker` when a spec exists, else `mi-solution-designer` verification mode) | QG-9 – **never skipped** |
+| 9 Verification | Every acceptance criterion is met and the change matches the plan (`issue-spec-compliance-checker` when a spec exists, else `issue-solution-designer` verification mode) | QG-9 – **never skipped** |
 | 10 Documentation | Docs, changelog, and agent-instruction files that the change affects are updated; every new relative link resolves | QG-10 |
 | 11 Acceptance | QG-11a reviews and fixes the whole change set, then the user tries the result and accepts it (UAT) | QG-11a, QG-11 |
 | 12 Finalize | The re-review gate passes, the user confirms the commit and the branch action, and the commit holds exactly the planned files | QG-12 |
@@ -44,11 +44,11 @@ The user is asked only:
 
 | Need | Agent |
 |---|---|
-| Codebase discovery | `mi-codebase-explorer` |
-| Design, verification, and the review judge | `mi-solution-designer` (planning, verification, and JUDGE modes) |
+| Codebase discovery | `issue-codebase-explorer` |
+| Design, verification, and the review judge | `issue-solution-designer` (planning, verification, and JUDGE modes) |
 | Build | `software-developer` (or `react-developer` / `nest-developer` for those stacks), `test-writer`, `e2e-test-writer` |
 | Review lenses | `architecture-reviewer`, `solution-reviewer`, `code-reviewer`, `security-auditor`, `ux-reviewer` (UI changes), `refactor-advisor` (`refactor` label) |
-| Spec conformance | `mi-spec-compliance-checker` |
+| Spec conformance | `issue-spec-compliance-checker` |
 | UI design | `ux-designer`, `ui-designer` |
 | Root cause for a `bug` label | `bug-investigator` |
 | Commit message | `commit-writer` |

@@ -1,5 +1,5 @@
 ---
-name: mi-agent-discoverer
+name: lens-agent-discoverer
 description: "Used by /erfana:lens-review to list the available builtin and shared agents with their capabilities and tools."
 capabilities: [codebase-exploration, file-search, pattern-matching, validation]
 tools: Read, Glob, Grep
@@ -134,7 +134,7 @@ Extract: name, description, capabilities, tools, model
 ```
 
 **Exclusions:**
-- Skip `mi-agent-discoverer.md` (this agent)
+- Skip `lens-agent-discoverer.md` (this agent)
 
 **Validation:**
 - Same as shared agents
@@ -172,7 +172,7 @@ NEVER:
 - Invent agents that don't exist
 - Include agents without valid frontmatter
 - Modify any agent files (discovery is read-only)
-- Include mi-agent-discoverer in the catalog
+- Include lens-agent-discoverer in the catalog
 
 ALWAYS:
 - Return consistent format for all agent sources
@@ -258,7 +258,7 @@ Return exactly:
 <quality_gate>
 Before returning, ALL must be true:
 - [ ] Builtin agents list populated (8 agents minimum)
-- [ ] Shared and dedicated agent directories scanned (dedicated excluding mi-agent-discoverer; warning added when a directory is missing)
+- [ ] Shared and dedicated agent directories scanned (dedicated excluding lens-agent-discoverer; warning added when a directory is missing)
 - [ ] Each agent has name, capabilities (may be empty), source — or a warning logged
 - [ ] No duplicate agent names in final catalog; total count matches sum of all sources
 - [ ] Output format matches schema exactly

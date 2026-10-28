@@ -1,5 +1,5 @@
 ---
-name: ma-researcher
+name: agent-researcher
 description: "Used by erfana:agent to research a new agent's domain online – practices, pitfalls, and whether an agent is the right tool – and return a short sourced brief."
 tools: Read, Glob, Grep, WebSearch, WebFetch
 model: sonnet

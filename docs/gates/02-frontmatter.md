@@ -35,7 +35,7 @@ Every sub-skill and (when present) every agent prints with its name; the fixture
 - `when_to_use` block has fewer than 3 quoted activation phrases (recommended ≥3, Section 12.2)
 - Skill, agent, command, or reference prose instructs reasoning display — Section 12.7 / 13.5 (v6.3.0)
 - Stale `gate2-allow` suppression comment covering no match (v6.3.0)
-- ms-* agent missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the model and effort table in `skills/agent/references/agent-standard.md` section 7
+- A skill-owned reviewer agent (`agent-reviewer`, `skill-reviewer`, `article-reviewer`, `report-*`… ending in `-reviewer`) missing `effort` (Section 13.1) or `model` (Section 13.2) — both should be declared per the model and effort table in `skills/agent/references/agent-standard.md` section 7
 - Agent body contains a deprecated API reference at YAML-key syntax: `temperature:`, `top_p:`, `top_k:` (400 on Claude Opus 4.7 and later), `budget_tokens:` (unsupported on Claude 5 models; Haiku 4.5 exempt) — Section 13.3/13.4, hard-blocking semantically; gate emits WARN to allow incremental fix-up
 
 **Hard FAILs** (block CI):
@@ -54,7 +54,7 @@ Per-line escapes, applied in order (see `gate2_detector.py` docstring):
 3. **Negation context** evaluated on the stripped text: `\b`-anchored rule-definition markers (`MUST NOT`, `never`, `reject`, `Grep`, …) suppress the line. Anchoring prevents substring suppression ("never" no longer hides inside "whenever", "drop" inside "dropdown").
 4. **Explicit suppression**: `<!-- gate2-allow: reasoning-display -- <reason> -->` on the same or preceding line. Allow-comments that cover no match are reported stale (Ruff `noqa`/RUF100 model: suppress narrowly, detect stale suppressions).
 
-The phrase regex requires a self-referential determiner (`your`/`its`/`internal`) after a display-verb, so output-evidence prose ("Explain the reasoning behind each severity rating", "state the design rationale") does not match; author-filled `<critical_thinking>` blocks pass because their content does not use the imperative shape. The `DEPRECATED_API` regex matches YAML-key syntax at line start only, so backticked detection regexes (e.g. in `agents/ms-reviewer.md`) do not match.
+The phrase regex requires a self-referential determiner (`your`/`its`/`internal`) after a display-verb, so output-evidence prose ("Explain the reasoning behind each severity rating", "state the design rationale") does not match; author-filled `<critical_thinking>` blocks pass because their content does not use the imperative shape. The `DEPRECATED_API` regex matches YAML-key syntax at line start only, so backticked detection regexes (e.g. in `agents/skill-reviewer.md`) do not match.
 
 ## Fixtures
 

@@ -184,13 +184,13 @@ if agent_files:
             ok = False
 
         # Model patterns for agents (added v4.2.0; revised v6.3.0; soft warnings)
-        # Item 13.1: effort field on ms-* agents
-        if expected.startswith('ms-') and 'effort' not in m:
-            print(f'WARN: {fp} missing `effort` field (Section 13.1; ms-* agents should declare per Model Selection Guide)')
+        # Item 13.1: effort field on skill-owned reviewer agents
+        if expected.endswith('-reviewer') and expected.split('-')[0] in ('agent', 'skill', 'article', 'report', 'spec') and 'effort' not in m:
+            print(f'WARN: {fp} missing `effort` field (Section 13.1; skill-owned reviewer agents should declare per Model Selection Guide)')
 
-        # Item 13.2: model field on ms-* agents
-        if expected.startswith('ms-') and 'model' not in m:
-            print(f'WARN: {fp} missing `model` field (Section 13.2; ms-* agents should declare per Model Selection Guide)')
+        # Item 13.2: model field on skill-owned reviewer agents
+        if expected.endswith('-reviewer') and expected.split('-')[0] in ('agent', 'skill', 'article', 'report', 'spec') and 'model' not in m:
+            print(f'WARN: {fp} missing `model` field (Section 13.2; skill-owned reviewer agents should declare per Model Selection Guide)')
 
         # Item 13.4: deprecated APIs in agent body
         body = text.split('---', 2)[2] if text.count('---') >= 2 else text

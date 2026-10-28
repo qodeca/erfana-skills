@@ -1,6 +1,6 @@
 ---
 name: release-notes-drafter
-description: "Drafts user-focused release notes from the git commits between two tags. Use when preparing release notes for any project; for the full release (version bump, tag, build check) use mi-release-preparer."
+description: "Drafts user-focused release notes from the git commits between two tags. Use when preparing release notes for any project; for the full release (version bump, tag, build check) use release-preparer."
 tools: Bash, Read, Glob, Grep, Write
 model: sonnet
 ---

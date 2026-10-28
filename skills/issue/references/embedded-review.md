@@ -34,12 +34,12 @@ Merge duplicates, number the findings F1…Fn, and map every severity onto the f
 
 | Severity | Action |
 |---|---|
-| Critical, high | Fixed now by the builder that owns the artifact (`mi-solution-designer` for the design, `software-developer` / `test-writer` for code), then re-checked |
+| Critical, high | Fixed now by the builder that owns the artifact (`issue-solution-designer` for the design, `software-developer` / `test-writer` for code), then re-checked |
 | Medium, low | Sent to the judge |
 
 ## 5. The judge
 
-`mi-solution-designer` in JUDGE mode receives the medium and low findings with the diff so far, and rules on each: **fix** (the benefit clearly outweighs the effort – it goes back to the builder), **accept as tech debt** (real, not worth blocking on – listed in the final account and the pull request), or **not worth it** (speculative or gold-plating – dropped with a one-line reason). Verdicts stick for the run: a finding already ruled "not worth it" or "tech debt" is not judged again when a later round re-reports it (same file, category, and description).
+`issue-solution-designer` in JUDGE mode receives the medium and low findings with the diff so far, and rules on each: **fix** (the benefit clearly outweighs the effort – it goes back to the builder), **accept as tech debt** (real, not worth blocking on – listed in the final account and the pull request), or **not worth it** (speculative or gold-plating – dropped with a one-line reason). Verdicts stick for the run: a finding already ruled "not worth it" or "tech debt" is not judged again when a later round re-reports it (same file, category, and description).
 
 ## 6. Stop
 
