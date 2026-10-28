@@ -3,6 +3,23 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Four work-session skills**, built from a review of a week of real sessions where the same routine was typed by hand in most projects:
+  - `erfana:autopilot` – sets up an unattended run: writes the `/goal` condition from the session, keeps `.local/autopilot.md` (progress, a queue of what needs you, your decisions), keeps the task list to open work, and resumes after a restart or compaction. Replaces the hand-pasted goal, the task-list `/loop`, and "do you need anything from me?".
+  - `erfana:next-batch` – ranks the free open issues by impact on delivery and groups the top ten by theme for `autopilot`.
+  - `erfana:coordinate` – claims issues on GitHub so parallel sessions and clones never take the same one; shows who holds what and exchanges status with sibling sessions on the same machine.
+  - `erfana:expert-panel` – a panel of top-practitioner reviewers for a plan, design, or documents, ending with an improved version in a new file.
+
+### Changed
+
+- **`erfana:ship merge`** waits up to 30 minutes for the checks instead of stopping while they run, then cleans up: merged local and remote branches and clean merged worktrees are removed, and what is left is listed with the reason. New `cleanup` argument runs only the tidy-up. Worktrees are removed with `git worktree remove`, never `rm -rf`.
+- **`bash-safety` hook: far fewer false blocks.** In a week of real sessions it blocked 77 safe commands. Now allowed: `rm -rf` on paths well inside a project or a temp folder (including `$VAR/sub` when the variable was set to such a path earlier in the same command); `curl … | python3 -c '…'`, `| python3 -m json.tool`, and `| jq`, which parse data rather than run it; and `sudo` or `DROP` inside a quoted heredoc that only feeds file content to `cat`, `tee`, or an interpreter. Still blocked: `rm -rf` on `/`, home, `~/Projects` itself, or system folders; unset variables; a download piped into a shell; a real `sudo`. Newly blocked: `ssh host sudo …`, `| sudo …`, `$(sudo …)`, and `rm -r -f` with split flags on a system path. 42 new fixtures, identical results on bash and PowerShell. Accepted trade-off: a script written through a quoted heredoc and run in the same command is no longer scanned for `sudo`.
+- **`solution-reviewer` and `e2e-test-design-reviewer`** now set `effort: medium`.
+- **`post-compact-reminder` hook** points to `.local/autopilot.md` after a compaction while an autopilot run is active, so the session resumes instead of starting over.
+
 ## [9.0.0] - 2026-10-28
 
 Every orchestration skill is rebuilt as a short brief. Work you steer – interviews, outlines, drafts, edits – now runs in your conversation, where you see each step; reviews go to separate checker agents that see only the work and the standard. Skills are renamed, the shared agent pool shrinks from 87 to 33, and `erfana:issue` loses resume, so this is a major release. Items marked **(breaking)** need action from you; the migration table below maps every old name.

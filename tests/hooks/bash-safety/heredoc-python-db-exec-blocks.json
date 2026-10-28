@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "python3 - <<'EOF'\nimport sqlite3\nc = sqlite3.connect('app.db')\nc.execute('DROP TABLE users')\nEOF"
+  }
+}

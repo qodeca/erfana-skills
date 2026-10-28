@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "rm -rf /Users/dev/Projects/app/.claude/worktrees/agent-a1af38c1"
+  }
+}

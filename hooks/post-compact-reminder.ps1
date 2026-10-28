@@ -34,4 +34,12 @@ if (-not [string]::IsNullOrWhiteSpace($gitStatus)) {
     $out += "`n- Status:`n$gitStatus"
 }
 
+# An erfana:autopilot run keeps its state in .local/autopilot.md. Point to
+# it (never inline it: the file holds text other tools wrote) while the run
+# is active, so the compacted session resumes instead of starting over.
+$autopilot = '.local/autopilot.md'
+if ((Test-Path -LiteralPath $autopilot) -and ((Get-Content -LiteralPath $autopilot -TotalCount 1) -match '^Status: active')) {
+    $out += "`n`nAUTOPILOT RUN ACTIVE: read .local/autopilot.md and continue from its`nProgress and Owner queue sections (erfana:autopilot resume)."
+}
+
 Write-Output $out

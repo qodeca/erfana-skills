@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "cat > notes.txt <<'EOF'\nhello\nEOF\nsudo reboot"
+  }
+}

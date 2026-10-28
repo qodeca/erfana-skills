@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "W=/Users/dev/Projects/app/.claude/worktrees; for d in agent-1 agent-2; do git worktree remove --force \"$W/$d\" 2>/dev/null; rm -rf \"$W/$d\"; done"
+  }
+}

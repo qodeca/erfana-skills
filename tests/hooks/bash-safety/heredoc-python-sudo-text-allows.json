@@ -1,0 +1,6 @@
+{
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "python3 - <<'EOF'\nfrom pathlib import Path\np = Path('docs/setup.md')\np.write_text('''## Install\nsudo apt-get install -y jq\n''')\nEOF"
+  }
+}
