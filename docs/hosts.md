@@ -85,7 +85,7 @@ names already work there unchanged – `Edit`, `Grep`, `Glob`, `Task`,
 `TodoWrite`, `AskUserQuestion`, `WebSearch`, `WebFetch`, `NotebookEdit`,
 `Skill`, `ExitPlanMode`. Four do not: `Bash`, `Read`, `Write` and `MultiEdit`.
 The first three have Qwen counterparts a matcher must also name; `MultiEdit` and
-`SlashCommand` have none at all, so naming them is harmless and simply never
+`SlashCommand` have none at all, so naming them is harmless and never
 fires there.
 
 One trap worth stating explicitly: do not add a lowercase `edit` alternative to

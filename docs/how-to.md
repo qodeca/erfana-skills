@@ -1,5 +1,7 @@
 # How-to guides
 
+*This page describes erfana v9.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+
 Each section below is a recipe for one goal. It assumes you know what you want to do and need the steps. If you are new to erfana, start with the [tutorial](tutorial.md). For every skill, agent, command, and hook in one list, see the [reference](reference.md). For why erfana works the way it does, see the [explanation](explanation.md).
 
 ## Install on Claude Code
@@ -43,7 +45,7 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
    The latest release number is the newest entry in [`CHANGELOG.md`](../CHANGELOG.md), or the top entry on the [releases page](https://github.com/qodeca/erfana-skills/releases).
 
 2. **The skills loaded.** In a new session, type `/erfana:`. Autocomplete lists the erfana skills and commands, such as `/erfana:draft-goal`.
-3. **A skill starts from plain words.** Type a request such as "draft a goal for adding a --help flag to my script". `erfana:draft-goal` should start: Claude Code shows that it loaded the skill, Claude reads your files, may ask one to three questions, and ends with a block between the lines `===== GOAL – START =====` and `===== GOAL – END =====`. It needs no `gh`.
+3. **A skill starts from plain words.** Type a request such as "draft a goal for adding a --help flag to my script". `erfana:draft-goal` should start: Claude Code shows that it loaded the skill, Claude reads your files, may ask one to three questions, and ends with a block between the lines `===== GOAL – START (copy the /goal line below) =====` and `===== GOAL – END =====`. It needs no `gh`.
 4. **The safety hooks are active.** Ask Claude to run `sudo -n true`. With the hooks active, the `bash-safety` hook blocks it, and Claude reports `BLOCKED: Privilege escalation (sudo/doas/pkexec) is not appropriate for an automated agent`. If the command runs instead, the hooks are off: see [safety hooks do not fire](#safety-hooks-do-not-fire). The hook runs before Claude Code asks you to allow the command (inferred from the hook order, not checked in a live session); if a permission prompt appears, approving it is safe, because the hook still blocks. On macOS and Linux, the usual cause of a hook that does nothing is a missing `jq`. Run `command -v jq` in a shell: no output means `jq` is missing.
 
 ### Install from a local clone
@@ -106,7 +108,8 @@ To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-
 A few things work differently on Qwen Code:
 
 - Slash commands have no `erfana:` prefix: `/doc-update`, not `/erfana:doc-update`. Skills are started the same way, by a request in plain words or by the bare name, such as `/autopilot resume`.
-- A command whose name clashes with a Qwen Code built-in command becomes `/erfana.<name>`. Checked against Qwen Code 0.26.2, no erfana name matches a built-in command, but Qwen Code ships its own bundled skill named `coordinate`. Which of the two `/coordinate` starts has not been verified in a session; if Qwen's starts, say what you want in plain words, such as "claim #12 with erfana coordinate".
+- A slash command (not a skill) whose name clashes with a Qwen Code built-in command becomes `/erfana.<name>`. Checked against Qwen Code 0.26.2, no erfana command clashes.
+- Skills are not renamed on a clash. Qwen Code ships its own bundled skill named `coordinate`. Which of the two `/coordinate` starts has not been verified in a session; if Qwen's starts, say what you want in plain words, such as "claim #12 with erfana coordinate".
 - Qwen Code may be less reliable at picking a skill from your request. Naming the skill helps.
 - Skills run without their tool limits, because Qwen Code does not read the `allowed-tools` field.
 - No erfana skill has yet been run end to end inside a Qwen Code session. The automated checks prove the install and the conversion, not a full run.
@@ -219,7 +222,7 @@ Use the namespaced form in shared docs, screenshots, and team conversations. The
 
 ### Stress-test a plan before you build it
 
-Say "grill me on this plan" and `erfana:grill-me` interviews you one question at a time. It reads the code first, so it does not ask what the code already answers, and it sizes the interview to the plan: a small change you can easily undo gets a short pass, and anything hard to undo gets the full sweep. For facts and routine choices it offers a recommended answer; for questions that rest on your judgment – goals, priorities, trade-offs, risk – it gives neutral options and its own view only after you answer. When the plan is settled, move on to `erfana:spec` or `erfana:issue`.
+Say "grill me on this plan" and `erfana:grill-me` interviews you one question at a time. It reads the code first, so it does not ask what the code already answers, and it sizes the interview to the plan: a small change you can undo gets a short pass, and anything hard to undo gets the full sweep. For facts and routine choices it offers a recommended answer; for questions that rest on your judgment – goals, priorities, trade-offs, risk – it gives neutral options and its own view only after you answer. When the plan is settled, move on to `erfana:spec` or `erfana:issue`.
 
 ## Write a requirements spec
 

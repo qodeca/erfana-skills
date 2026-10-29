@@ -6,6 +6,8 @@
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
 ![Qwen Code compatible](https://img.shields.io/badge/Qwen_Code-compatible-555)
 
+*This page describes erfana v9.2.0. See the [changelog](CHANGELOG.md) for what changed since.*
+
 **erfana** is an open-source plugin, by [Qodeca](https://github.com/qodeca), that adds ready-made ways of working to your coding agent: writing requirements specs, working GitHub issues end to end, reviewing code, writing reports and articles, drafting prompts and goals, and running long sessions without you watching every step.
 
 It is for developers and the people who work with them – product owners, analysts, consultants – who use Claude Code or Qwen Code and want repeatable, reviewed results instead of one-off prompts. You decide; Claude does the work. Work you steer runs in your own conversation, and reviews go to separate checker agents (helper models that see only the work and the standard, not your conversation).

@@ -1,5 +1,7 @@
 # Your first erfana session
 
+*This page describes erfana v9.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+
 In this tutorial you install erfana, make a small practice project, and use the `erfana:draft-goal` skill to write a finished `/goal` condition for it. A `/goal` condition is a short text that tells Claude Code what "done" means, so it can keep working, turn after turn, until every check passes.
 
 Everything happens on your own computer, in a folder you create and delete at the end. Nothing is pushed, published, or sent anywhere.
@@ -60,7 +62,7 @@ From the same folder, start Claude Code:
 claude
 ```
 
-If Claude Code asks whether you trust the files in this folder, say yes – you just created them.
+If Claude Code asks whether you trust the files in this folder, say yes – you created them a moment ago.
 
 Check that erfana loaded: type `/erfana:` and look at the autocomplete list. It shows the erfana skills and commands, including `/erfana:draft-goal`. If the list is empty, see the [install how-to](how-to.md#install-on-claude-code).
 
@@ -86,7 +88,7 @@ On Qwen Code, type the same message with `/draft-goal` at the start.
 
 The skill ends its reply with your goal. The exact wording differs from run to run, but the shape is always the same:
 
-- One or two sentences saying what the goal will make Claude do and which choices it made for you. Because this task is so small, it may also say it could simply make the change – that is expected.
+- One or two sentences saying what the goal will make Claude do and which choices it made for you. Because this task is so small, it may also say it could make the change directly – that is expected.
 - A line `===== GOAL – START (copy the /goal line below) =====`.
 - A code block with one line that starts with `/goal Outcome:` and then lists `Done when:` checks, `Owner decisions:`, `Not in scope:`, and a `Bound:` (a turn limit).
 - A line `===== GOAL – END =====`.
