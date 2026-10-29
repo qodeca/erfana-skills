@@ -55,17 +55,20 @@ Write one request that folds in the accepted raises. Rules, each with its reason
 - **Work, not roles.** Describe what each specialist would do ("reconcile every figure to its source"), never "you are a ...". Role-play changes the voice, not the result.
 - **Calm wording.** No capitalised imperatives and no request for Claude's reasoning in the response; ask for a short summary of what was done and found instead.
 - **Permissions stay put.** Irreversible or outward-facing actions – publishing, sending, deploying, deleting, spending – stay the user's decision unless the original request already authorized them.
+- **Length.** The rule: the request inside the block stays at or under 3,500 estimated characters. The hard ceiling is 4,000, the same as a `/goal` condition, so the request can seed `/erfana:draft-goal`; the 500-character gap covers counting error, since counts here are estimates. To shorten, name a file that already holds long material instead of copying it in, then drop the raise with the smallest gain – never the outcome-first opening – and list each dropped raise under **Left out** with the reason "over the length limit". If it is still too long with every raise dropped, use the over-limit hand-off in Step 5.
 
 ## Step 5 – hand off
 
 Print, and nothing else:
 
 1. One or two plain sentences: what the raised request will do differently from the original.
-2. The rewritten request in one fenced code block, ready to paste.
+2. The rewritten request in one fenced code block, ready to paste, with the marker line `===== REQUEST – START (copy only the text inside the block) =====` just above the block and `===== REQUEST – END =====` just below it. Print both markers as plain lines outside the fence, exactly as written, every time, so the user sees where the text to copy begins and ends. Nothing else goes between the markers. If the request contains backticks, make the fence longer than any run of backticks inside it, so the block cannot close early.
 3. **What was raised** – one line per accepted raise: lens, change, and its outside judge.
 4. **Setup needed** – only if any: access, data, or environment changes the raise depends on, each with who has to make it. Altitude often needs these more than longer wording.
 5. **Left out** – one line per dropped or declined idea, with its reason, so the user can revisit it.
 6. **Assumptions** – only if any.
+
+**Over-limit hand-off.** When the request breaks the length rule even with every raise dropped, replace item 2 with a plain line – no markers, no code block – saying the request is over by roughly how much and which material makes it long. Offer two ways on: the user saves that material in a file the request can name, or trims the input; then run this skill again. This skill writes no file itself.
 
 Then end the turn. If the user wants Claude to keep working until the raised outcome is met, suggest `/erfana:draft-goal` with the raised request as input; do not run it.
 
