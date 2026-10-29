@@ -401,7 +401,7 @@ The skill never starts the goal itself. When no goal is running, it prints one `
 ===== GOAL – END =====
 ```
 
-The `Bound:` part says when the run ends by itself. A goal autopilot writes always ends its Bound with "or stop once only Owner queue items remain", so the run stops when only your decisions are left. Autopilot follows the draft-goal patterns, which usually add a turn limit as well, such as "or after 20 turns"; the skill picks the number for each run, so read the Bound before you paste. To change the limit, ask for one in the start message ("limit the run to 40 turns") or edit the number in the line before you paste it. The evaluator judges the limit from the conversation; it is not a timer.
+The `Bound:` part says when the run ends by itself. The Bound of a goal autopilot writes always includes "or stop once only Owner queue items remain", so the run stops when only your decisions are left. Autopilot follows the draft-goal patterns, which usually add a turn limit after that phrase, for example: `Bound: or stop once only Owner queue items remain, or after 20 turns – either way listing each open item`. The skill picks the number for each run, so read the Bound before you paste. To change the limit, ask for one in the start message ("limit the run to 40 turns") or edit the number in the line before you paste it. The evaluator judges the limit from the conversation; it is not a timer.
 
 In the real output the `/goal` line sits in its own code block between the markers. Copy it by typing `/copy` and picking the block, or select the one line – it may wrap on screen. The marker lines are not part of it. Paste it as your next message. Pasting a `/goal` line starts a turn at once, and after each turn the evaluator decides whether Claude goes on, so you send no further messages. Check that the `/goal` active indicator shows; if it does not, paste it again with `/goal` at the very start. The same line is stored under Goal in `.local/autopilot.md`.
 
@@ -429,12 +429,11 @@ After a compaction, a restart, or `/clear`, run `/erfana:autopilot resume` (on Q
 
 ### 7. When the run stops on its own
 
-When the goal's Bound ends the run, for example once only your decisions are left, the state file may still say `Status: active`, so a new `start` is refused. Two outcomes are possible:
+A run can stop without you in three ways. First type `/goal` alone: it shows whether a goal is still set. Then open `.local/autopilot.md` and read its first line.
 
-- **The state file still says `Status: active`.** A new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste.
-- **The state file says `Status: finished`.** The run closed itself, because the goal was met, judged impossible, or cleared. `resume` only says the run is closed, and `status` only shows the final summary – it no longer asks the queue questions. Read the Owner queue section in `.local/autopilot.md` yourself, then start a new run with `/erfana:autopilot start` and give your answers in that message; the old run is kept under `## Previous run`.
-
-Claude Code can also stop the loop with a warning when Claude answers the evaluator several turns in a row without using a tool, which is typical when only your decisions are left. The goal stays set: answer the queue with `status`, or end the run as in the next step.
+- **The goal is still set.** Claude Code stopped the loop with a warning, because Claude answered the evaluator several turns in a row without using a tool – typical when only your decisions are left. Answer the queue with `/erfana:autopilot status` and the goal goes on. Do not paste a new `/goal`: it would replace the running one and restart its turn count.
+- **The goal has ended and the file still says `Status: active`.** The evaluator gave its verdict after Claude's last turn, so Claude often had no turn left to close the file. A new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste.
+- **The file says `Status: finished`.** The run closed itself, because the goal was met, judged impossible, or cleared. `resume` only says the run is closed, and `status` only shows the final summary – it no longer asks the queue questions. Read the Owner queue section in `.local/autopilot.md` yourself, then start a new run with `/erfana:autopilot start` and give your answers in that message; the old run is kept under `## Previous run`.
 
 To end the run instead, use the next step.
 
