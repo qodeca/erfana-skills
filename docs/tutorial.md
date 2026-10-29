@@ -27,9 +27,9 @@ Inside the session, add the erfana marketplace and install the plugin:
 /plugin install erfana@erfana-skills
 ```
 
-Quit Claude Code (type `/exit`) so the skills and hooks load fresh next time. To confirm the safety hooks are on, ask Claude to run `sudo -n true` in the next session: it should be blocked. The other checks are in [check the install](how-to.md#check-the-install).
+Quit Claude Code (type `/exit`) so the skills and hooks load fresh next time. From your shell, run `claude plugin list` and look for `erfana@erfana-skills` with `Status: ✔ enabled`. To confirm the safety hooks are on, ask Claude to run `sudo -n true` in the next session: it should be blocked. The other checks are in [check the install](how-to.md#check-the-install).
 
-On Qwen Code, run `qwen extensions install qodeca/erfana-skills:erfana` in a shell instead, and accept the prompt it shows.
+On Qwen Code, run `qwen extensions install qodeca/erfana-skills:erfana` in a shell instead, and accept the prompt it shows. If `qwen extensions list` already shows `✓ erfana (x.y.z)`, [update it](how-to.md#update-on-qwen-code) instead, because `install` refuses when erfana is present.
 
 ## Step 2 – make a practice project
 

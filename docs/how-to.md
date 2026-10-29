@@ -136,11 +136,9 @@ If the old version still loads, see [an update does not show up](#an-update-does
 qwen extensions update erfana
 ```
 
-Or run `qwen extensions update --all`. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
+Or run `qwen extensions update --all`. Then start a new `qwen` session, because skills, agents, and hooks load at session start. What the update command prints on success has not been recorded here. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
 
 Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
-
-Then start a new `qwen` session, because skills, agents, and hooks load at session start.
 
 ### Upgrade from 8.x to 9.x
 
@@ -225,7 +223,7 @@ Say "grill me on this plan" and `erfana:grill-me` interviews you one question at
 
 ## Write a requirements spec
 
-`erfana:spec` writes requirements at the depth the feature needs, in four tiers: T1 issue, T2 spec, T3 lite spec, and T4 standard spec. A small fix gets a short T1; a payment integration gets a T4.
+Start Claude Code in your project's root folder, because the skill puts `specs/` in the folder you work from. git is not required. `erfana:spec` writes requirements at the depth the feature needs, in four tiers: T1 issue, T2 spec, T3 lite spec, and T4 standard spec. A small fix gets a short T1; a payment integration gets a T4.
 
 1. Say "create a spec for the CSV export feature", or run `/erfana:spec create a spec for the CSV export feature`.
 2. The skill looks at your project, recommends a tier with its reason, and lets you decide. It picks the tier from questions like these:
@@ -280,7 +278,7 @@ The skill does not commit or push. Review the new files under `specs/` and commi
 
 In a headless run (`claude -p`, with nobody to answer questions), the skill stops before writing and says which tier it recommends and what it needs.
 
-On Qwen Code, start it with the bare name, `/spec`, or with a request in plain words; `/erfana:spec` is the Claude Code form. `erfana:spec` has not been run end to end there, like every erfana skill; see [`known-caveats.md`](known-caveats.md).
+On Qwen Code, start it with the bare name, `/spec` (seen on releases newer than the tested one), or with a request in plain words, which works if `/spec` does not appear; `/erfana:spec` is the Claude Code form. `erfana:spec` has not been run end to end there, like every erfana skill; see [`known-caveats.md`](known-caveats.md).
 
 When the spec is ready, [work the issue end to end](#work-a-github-issue-end-to-end).
 
@@ -375,7 +373,18 @@ You may push the branches and open pull requests for this batch; do not merge.
 
 The skill quotes your message, with its date, in the state file.
 
-Your permission settings are the real limit: an action you have not allowed stops at a prompt, and one you allowed in advance runs whatever the goal says. The skill names the steps that will need a prompt. Before a long run, set [Claude Code permission rules](https://code.claude.com/docs/en/settings#permission-settings): allow rules for your project's test, lint, and build commands, so the run does not stop at a prompt, and ask rules for `git push` and `gh pr merge` when you have not authorized them.
+Your permission settings are the real limit: an action you have not allowed stops at a prompt, and one you allowed in advance runs whatever the goal says. The skill names the steps that will need a prompt. Before a long run, set [Claude Code permission rules](https://code.claude.com/docs/en/settings#permission-settings): allow rules for your project's test, lint, and build commands, so the run does not stop at a prompt, and ask rules for `git push` and `gh pr merge` when you have not authorized them. For example, in `.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(npm test)", "Bash(npm run lint)"],
+    "ask": ["Bash(git push *)", "Bash(gh pr merge *)"]
+  }
+}
+```
+
+A goal does not change the permission mode. In the default mode, every file edit and every command you have not allowed stops at a prompt, and the run waits until you come back. For a run nobody watches, switch Claude Code to auto mode before you paste the goal, and keep the ask rules for actions you have not authorized.
 
 ### 4. Paste the goal
 
@@ -389,9 +398,9 @@ The skill never starts the goal itself. When no goal is running, it prints one `
 ===== GOAL – END =====
 ```
 
-The `Bound:` part says when the run ends by itself. A goal autopilot writes always ends its Bound with "or stop once only Owner queue items remain", so the run stops when only your decisions are left. Autopilot follows the draft-goal patterns, which usually add a turn limit as well, such as "or after 20 turns"; the skill picks the number for each run, so read the Bound before you paste.
+The `Bound:` part says when the run ends by itself. A goal autopilot writes always ends its Bound with "or stop once only Owner queue items remain", so the run stops when only your decisions are left. Autopilot follows the draft-goal patterns, which usually add a turn limit as well, such as "or after 20 turns"; the skill picks the number for each run, so read the Bound before you paste. To change the limit, ask for one in the start message ("limit the run to 40 turns") or edit the number in the line before you paste it. The evaluator judges the limit from the conversation; it is not a timer.
 
-In the real output the `/goal` line sits in its own code block between the markers. Copy it by typing `/copy` and picking the block, or select the one line – it may wrap on screen. The marker lines are not part of it. Paste it as your next message and check that the `/goal` active indicator shows; if it does not, paste it again with `/goal` at the very start. The same line is stored under Goal in `.local/autopilot.md`.
+In the real output the `/goal` line sits in its own code block between the markers. Copy it by typing `/copy` and picking the block, or select the one line – it may wrap on screen. The marker lines are not part of it. Paste it as your next message. Pasting a `/goal` line starts a turn at once, and after each turn the evaluator decides whether Claude goes on, so you send no further messages. Check that the `/goal` active indicator shows; if it does not, paste it again with `/goal` at the very start. The same line is stored under Goal in `.local/autopilot.md`.
 
 The skill keeps the whole line at or under 3,500 characters and about 450 words, because Claude Code refuses a `/goal` over 4,000 characters and the counts are estimates. If the goal runs long, it first moves the run rules into the state file, then points to the batch instead of listing it, then merges checks. If it still does not fit, it writes no state file, prints nothing you could paste, and says roughly how far over it is and what to cut. If `/goal` refuses the line anyway, tell the skill: it rewrites the goal in place and prints it again.
 
@@ -399,7 +408,7 @@ The skill keeps the whole line at or under 3,500 characters and about 450 words,
 
 A new `/goal` replaces the running one, so autopilot never prints one over yours:
 
-- **Your goal covers the work.** The skill writes no new goal. It records yours in the state file as set by you, shows the batch, what is authorized, and the run rules, and ends its turn. Your goal starts the work on the next turn. Your goal has no exit for items that need you, so the run may keep looping once only those remain. If that happens, run `/erfana:autopilot status` to answer them, or end the run with `/goal clear` and then `/erfana:autopilot stop`. To avoid it, end your goal's condition with "or stop once only Owner queue items remain in .local/autopilot.md", or write the goal with `/erfana:draft-goal`.
+- **Your goal covers the work.** The skill writes no new goal. It records yours in the state file as set by you, shows the batch, what is authorized, and the run rules, and ends its turn. After this turn, your running goal's evaluator continues the work by itself; you do not need to send a message. Your goal has no exit for items that need you, so the run may keep looping once only those remain. If that happens, run `/erfana:autopilot status` to answer them, or end the run with `/goal clear` and then `/erfana:autopilot stop`. To avoid it, end your goal's condition with "or stop once only Owner queue items remain in .local/autopilot.md", or write the goal with `/erfana:draft-goal`.
 - **Your goal is an earlier autopilot goal, or does not cover the work.** The skill starts nothing and writes nothing to `.local/autopilot.md`. It says which goal is running; keeping it or ending it with `/goal clear` is your call. To get an autopilot goal instead, run `/goal clear`, then run `/erfana:autopilot start` again.
 - **It cannot tell.** When you run `start` after a compaction or in a resumed session, the skill asks once and recommends that you type `/goal` alone, which shows the running condition. In a normal session the question waits for your answer, so stay until you have answered it. Only in a non-interactive run (`claude -p`, CI) does it treat the goal as not running and adds a warning to the printed line: paste it only if no `/goal` is running, because a new one replaces it and restarts its turn count.
 
@@ -407,7 +416,7 @@ A new `/goal` replaces the running one, so autopilot never prints one over yours
 
 Ask "do you need anything from me?" or run `/erfana:autopilot status`. You get what is done, in progress, and next, with evidence, and each owner-queue item as a question with a recommended answer. Your answers are recorded under Owner decisions. Running `/erfana:autopilot` with no argument shows the status when a state file exists, and starts a run when none does.
 
-The question is an ordinary message in the same session: it runs the status check, asks your owner-queue questions one at a time, and the goal then carries on. Whether that turn counts toward a turn limit in the goal is up to Claude Code's goal evaluator and is not documented here.
+Checking and answering need you at the session, or reading `.local/autopilot.md`; erfana offers no remote channel. The question is an ordinary message in the same session: it runs the status check, asks your owner-queue questions one at a time, and the goal then carries on. Whether that turn counts toward a turn limit in the goal is up to Claude Code's goal evaluator and is not documented here.
 
 The run also keeps Claude Code's built-in task list short: after each item it holds only open and in-progress items. Claude Code shows the list in the session; the state file is the lasting record.
 
@@ -417,11 +426,18 @@ After a compaction, a restart, or `/clear`, run `/erfana:autopilot resume` (on Q
 
 ### 7. When the run stops on its own
 
-When the goal's Bound ends the run, for example once only your decisions are left, the state file may still say `Status: active`, so a new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste. To end the run instead, use the next step.
+When the goal's Bound ends the run, for example once only your decisions are left, the state file may still say `Status: active`, so a new `start` is refused. Two outcomes are possible:
+
+- **The state file still says `Status: active`.** A new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste.
+- **The state file says `Status: finished`.** The run closed itself, because the goal was met. `resume` only says the run is closed. Answer anything left with `/erfana:autopilot status`, then start a new run with `/erfana:autopilot start`; the old run is kept under `## Previous run`.
+
+Claude Code can also stop the loop with a warning when Claude answers the evaluator several turns in a row without using a tool, which is typical when only your decisions are left. The goal stays set: answer the queue with `status`, or end the run as in the next step.
+
+To end the run instead, use the next step.
 
 ### 8. Stop the run
 
-Run `/erfana:autopilot stop`. The state file is marked `Status: finished` with a final summary; the file is never deleted. If autopilot wrote the goal, it prints `/goal clear` for you to run. If the goal is yours, it says the goal is still set and that ending it with `/goal clear` is your call.
+Run `/erfana:autopilot stop`. `/goal clear` on its own is not enough: it ends the goal, but the state file stays `Status: active` and the next `start` is refused, so always run `stop` too. To interrupt the turn that is running now, press `Esc` (a Claude Code control); `/goal clear` only stops the turns after it. With `stop`, the state file is marked `Status: finished` with a final summary; the file is never deleted. If autopilot wrote the goal, it prints `/goal clear` for you to run. If the goal is yours, it says the goal is still set and that ending it with `/goal clear` is your call.
 
 ### Write a goal without a run
 
