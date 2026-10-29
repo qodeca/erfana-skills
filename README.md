@@ -30,7 +30,7 @@ On **Claude Code**, run these inside a session:
 
 Then restart Claude Code – type `/exit`, then run `claude` again – because skills, agents, and hooks load when a session starts. To check it worked, type `/erfana:` – autocomplete lists the erfana skills and commands. The full [install check](docs/how-to.md#check-the-install) also tests the safety hooks.
 
-On **Qwen Code**, run this in a shell and accept the prompt Qwen shows:
+On **Qwen Code**, run this in a shell and accept the prompt Qwen shows. Already installed? Run `qwen extensions update erfana` instead, because `install` refuses when erfana is present.
 
 ```bash
 qwen extensions install qodeca/erfana-skills:erfana

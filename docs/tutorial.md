@@ -4,13 +4,13 @@ In this tutorial you install erfana, make a small practice project, and use the 
 
 Everything happens on your own computer, in a folder you create and delete at the end. Nothing is pushed, published, or sent anywhere.
 
-It takes about 15 minutes. The steps use Claude Code; if you use Qwen Code, see the note at the end of each step.
+It takes about 15 minutes, or 25 with the optional spec step. The steps use Claude Code; if you use Qwen Code, see the note at the end of each step.
 
 ## What you need
 
 - Claude Code, signed in and working.
 - `git` and a terminal with `bash`. On Windows, use Git Bash.
-- `jq` on your `PATH`, so the safety hooks work (macOS: `brew install jq`). The tutorial still works without it, but the hooks then protect nothing.
+- On macOS and Linux, `jq` on your `PATH`, so the safety hooks work (macOS: `brew install jq`). On Windows, Git Bash with `powershell.exe` on `PATH` instead; `jq` is not needed there. The tutorial still works without them, but the hooks then protect nothing.
 
 ## Step 1 – install erfana
 
@@ -27,7 +27,7 @@ Inside the session, add the erfana marketplace and install the plugin:
 /plugin install erfana@erfana-skills
 ```
 
-Quit Claude Code (type `/exit`) so the skills and hooks load fresh next time.
+Quit Claude Code (type `/exit`) so the skills and hooks load fresh next time. To confirm the safety hooks are on, ask Claude to run `sudo -n true` in the next session: it should be blocked. The other checks are in [check the install](how-to.md#check-the-install).
 
 On Qwen Code, run `qwen extensions install qodeca/erfana-skills:erfana` in a shell instead, and accept the prompt it shows.
 
@@ -104,7 +104,31 @@ This is safe to try: the practice repository has no remote, so nothing can be pu
 
 Type `/goal` alone to see progress, or `/goal clear` to stop early.
 
-## Step 7 – clean up
+## Step 7 – write a spec for the same change (optional)
+
+A goal says when work is done. A spec says what to build. Try the `erfana:spec` skill on the same small change, still inside `~/erfana-tutorial`:
+
+```text
+/erfana:spec create a spec: greet.sh prints a usage message and exits with status 1 when it gets no name
+```
+
+What happens:
+
+1. The skill recommends a tier – for a change this small, T1 – and says why. Accept it.
+2. It may ask one or two questions, such as what the usage message should say. Answer in a few words.
+3. It shows the requirement it will write, with an ID such as `001-FR-001` and its acceptance criterion `001-AC-001`. Say yes.
+4. Because the project has no specs yet, it creates `specs/registry.json` and tells you so. It then writes the spec folder `specs/spec-t1-001-<slug>/` with `manifest.json` and `spec.md`; the skill picks the `<slug>` from your words.
+5. A separate checker agent reviews the spec and the skill reports what it found.
+
+Check the result in your terminal:
+
+```bash
+ls specs
+```
+
+The output lists `registry.json` and the new `spec-t1-001-…` folder. The skill wrote files only under `specs/`; it committed nothing. On Qwen Code, type the same message with `/spec` at the start.
+
+## Step 8 – clean up
 
 Quit Claude Code with `/exit`, then delete the practice folder:
 
@@ -121,6 +145,7 @@ erfana stays installed for your real projects.
 - How to start a skill by name with `/erfana:<name>`.
 - How an erfana skill reads your project first, asks only what it cannot find out, and recommends an answer.
 - What a good `/goal` condition contains: one outcome, checks with visible proof, and a turn limit.
+- How a spec turns one change into numbered requirements with acceptance criteria.
 
 ## Next steps
 

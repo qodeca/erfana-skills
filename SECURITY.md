@@ -11,9 +11,9 @@ Please report security issues **privately** – do not open a public issue, pull
 
 Private reporting counts as unavailable when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and this policy names no other channel.
 
-Blank issues are turned off in this repository, so open the fallback issue with the **Bug report** template. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
+Blank issues are turned off in this repository, so open the fallback issue from the [new issue page](https://github.com/qodeca/erfana-skills/issues/new/choose) with the **Bug report** template. The same page has a **Report a security vulnerability** link, which opens the private form from the preferred route. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
 
-Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, any suggested remediation, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version. We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released.
+Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, any suggested remediation, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version (`claude --version` or `qwen --version`). We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released.
 
 ## Scope
 

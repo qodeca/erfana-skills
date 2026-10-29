@@ -19,7 +19,7 @@ The marketplace is public, so you need no GitHub token. Inside Claude Code, run:
 /plugin install erfana@erfana-skills
 ```
 
-The first line registers the marketplace under the name `erfana-skills` (the name in its `marketplace.json`). The second installs the plugin: `erfana` is the plugin name, and the part after `@` is the marketplace name. Each command should finish without an error. If Claude Code does not know the `/plugin` command, update Claude Code first.
+The first line registers the marketplace under the name `erfana-skills` (the name in its `marketplace.json`). The second installs the plugin: `erfana` is the plugin name, and the part after `@` is the marketplace name. Each command should finish without an error. erfana promises no exact success text for these two commands, because Claude Code's own wording can change; `claude plugin list` in [check the install](#check-the-install) is the real confirmation. If Claude Code does not know the `/plugin` command, update Claude Code first.
 
 Restart Claude Code: type `/exit` (or close the session), then run `claude` again. Skills, agents, and hooks load when a session starts, so the hooks are active only from the next session.
 
@@ -40,9 +40,11 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
        Status: ✔ enabled
    ```
 
+   The latest release number is the newest entry in [`CHANGELOG.md`](../CHANGELOG.md), or the top entry on the [releases page](https://github.com/qodeca/erfana-skills/releases).
+
 2. **The skills loaded.** In a new session, type `/erfana:`. Autocomplete lists the erfana skills and commands, such as `/erfana:draft-goal`.
-3. **A skill starts from plain words.** Type a request such as "draft a goal for adding a --help flag to my script". `erfana:draft-goal` should start. It needs no `gh`.
-4. **The safety hooks are active.** Ask Claude to run `sudo -n true`. With the hooks active, the `bash-safety` hook blocks it, and Claude reports `BLOCKED: Privilege escalation (sudo/doas/pkexec) is not appropriate for an automated agent`. If the command runs instead, the hooks are off: see [safety hooks do not fire](#safety-hooks-do-not-fire). On macOS and Linux, a missing `jq` shows up only as the line `dispatch.sh: jq not found; bash-safety cannot parse its payload (hook skipped)` in the error output, which you may never see.
+3. **A skill starts from plain words.** Type a request such as "draft a goal for adding a --help flag to my script". `erfana:draft-goal` should start: Claude Code shows that it loaded the skill, Claude reads your files, may ask one to three questions, and ends with a block between the lines `===== GOAL – START =====` and `===== GOAL – END =====`. It needs no `gh`.
+4. **The safety hooks are active.** Ask Claude to run `sudo -n true`. With the hooks active, the `bash-safety` hook blocks it, and Claude reports `BLOCKED: Privilege escalation (sudo/doas/pkexec) is not appropriate for an automated agent`. If the command runs instead, the hooks are off: see [safety hooks do not fire](#safety-hooks-do-not-fire). The hook runs before Claude Code asks you to allow the command (inferred from the hook order, not checked in a live session); if a permission prompt appears, approving it is safe, because the hook still blocks. On macOS and Linux, the usual cause of a hook that does nothing is a missing `jq`. Run `command -v jq` in a shell: no output means `jq` is missing.
 
 ### Install from a local clone
 
@@ -99,7 +101,7 @@ Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the outp
 
 The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
 
-To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-goal` and `/issue`, and the five commands – `/doc-update`, `/project-status`, `/session-status`, `/lens-review`, and `/explain-issue` – should appear. On Qwen Code 0.26.2, skills register as bare slash commands; this has not been checked on 0.22.3.
+To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-goal` and `/issue`, and the five commands – `/doc-update`, `/project-status`, `/session-status`, `/lens-review`, and `/explain-issue` – should appear. On Qwen Code 0.26.2, skills register as bare slash commands; this has not been checked on 0.22.3. If `/issue` does not appear on your version, start the skill with a request in plain words that names it, such as "use the erfana issue skill to show issue #12".
 
 A few things work differently on Qwen Code:
 
@@ -134,7 +136,9 @@ If the old version still loads, see [an update does not show up](#an-update-does
 qwen extensions update erfana
 ```
 
-Or run `qwen extensions update --all`. Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
+Or run `qwen extensions update --all`. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
+
+Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
 
 Then start a new `qwen` session, because skills, agents, and hooks load at session start.
 
@@ -224,11 +228,45 @@ Say "grill me on this plan" and `erfana:grill-me` interviews you one question at
 `erfana:spec` writes requirements at the depth the feature needs, in four tiers: T1 issue, T2 spec, T3 lite spec, and T4 standard spec. A small fix gets a short T1; a payment integration gets a T4.
 
 1. Say "create a spec for the CSV export feature", or run `/erfana:spec create a spec for the CSV export feature`.
-2. The skill looks at your project, recommends a tier with its reason, and lets you decide.
-3. It asks what it cannot write the spec without – goals and users, what is in and out of scope, each requirement and how it will be tested, quality targets with numbers – one question at a time. For T3 and T4 it can also research how similar products solve the problem.
-4. It shows the tier, the scope, and the numbered requirements with their acceptance criteria. Nothing is written until you agree.
-5. It writes the spec into its own folder in your project and records it in `specs/registry.json`. The folder is `specs/spec-t<tier>-<NNN>-<slug>/`, for example `specs/spec-t2-004-csv-export/`. T1 and T2 specs hold `manifest.json` and `spec.md`; T3 and T4 specs hold `manifest.json` and numbered files under `requirements/`, starting with `01-overview.md`. The full list per tier is in the skill's [tier table](../skills/spec/references/tiers.md).
-6. A separate checker agent, `spec-validator`, reviews the spec seeing only the spec, the review checks, and the spec registry. The skill reports every finding and fixes the ones you agree to.
+2. The skill looks at your project, recommends a tier with its reason, and lets you decide. It picks the tier from questions like these:
+
+   | Question | T1 | T2 | T3 | T4 |
+   |---|---|---|---|---|
+   | How many requirements? | 1–5 | 5–15 | 15–30 | 30+ |
+   | External integrations? | No | No | Maybe | Yes |
+   | Security-critical? | No | No | Maybe | Yes |
+   | Several user roles? | No | No | No | Yes |
+   | Architectural impact? | No | No | Some | Yes |
+   | Needs traceability? | No | No | Yes | Yes |
+
+3. It asks what it cannot write the spec without – goals and users, what is in and out of scope, each requirement and how it will be tested, quality targets with numbers – one question at a time. For T3 and T4 it offers to research how similar products solve the problem (with the agent `spec-app-researcher`); you choose whether that runs.
+4. It shows the tier, the scope, and the numbered requirements with their acceptance criteria. Nothing is written until you agree. A short example of what you approve (the exact layout varies):
+
+   ```text
+   Tier: T2 – one user concern, no integrations, no security impact
+   In scope: export the visible table as CSV. Out of scope: Excel, scheduled exports.
+   004-FR-001 The user can download the current table as a CSV file.
+     004-AC-001 Given a table with 3 rows, when the user clicks Export, a file with a header and 3 rows downloads.
+   ```
+
+5. It writes the spec into its own folder in your project and records it in `specs/registry.json`. In a project with no specs yet, it creates `specs/registry.json` and tells you so, and the first spec gets ID `001`. The folder is `specs/spec-t<tier>-<NNN>-<slug>/`, for example `specs/spec-t2-004-csv-export/`. Each tier holds these files:
+
+   | Tier | Files |
+   |---|---|
+   | T1, T2 | `manifest.json`, `spec.md` |
+   | T3 | `manifest.json`, `requirements/01-overview.md`, `02-requirements.md`, `03-acceptance.md` |
+   | T4 | `manifest.json`, `requirements/01-overview.md`, `02-requirements.md`, `03-use-cases.md`, `04-acceptance.md`, `05-notes.md` |
+
+   T4 also creates the folders `architecture/`, `solution/`, `design/`, `ux/`, and `testing/` inside the spec folder; T3 creates them only when needed. The source is the skill's [tier table](../skills/spec/references/tiers.md).
+6. A separate checker agent, `spec-validator`, reviews the spec seeing only the spec, the review checks, and the spec registry. For T1 and T2 it checks that the files exist, the format is valid, and every requirement can be tested. For T3 it also checks completeness, requirement quality, acceptance coverage, and consistency; T4 adds use-case quality and cross-references. Each finding has a severity:
+
+   | Severity | Meaning | Example |
+   |---|---|---|
+   | High | The team could build or test the wrong thing | Two requirements contradict each other |
+   | Medium | It can be built, but not verified or traced | A quality requirement with no number |
+   | Low | Polish | Inconsistent formatting |
+
+   A spec passes with no high-severity findings; a T4 spec also needs no more than two medium ones. The skill reports every finding and fixes the ones you agree to.
 
 Even a T1 "issue" is a short spec file under `specs/`, not a GitHub issue. To put it on GitHub, use `erfana:issue` afterwards.
 
@@ -242,7 +280,7 @@ The skill does not commit or push. Review the new files under `specs/` and commi
 
 In a headless run (`claude -p`, with nobody to answer questions), the skill stops before writing and says which tier it recommends and what it needs.
 
-On Qwen Code, `erfana:spec` has not been run end to end, like every erfana skill there; see [`known-caveats.md`](known-caveats.md).
+On Qwen Code, start it with the bare name, `/spec`, or with a request in plain words; `/erfana:spec` is the Claude Code form. `erfana:spec` has not been run end to end there, like every erfana skill; see [`known-caveats.md`](known-caveats.md).
 
 When the spec is ready, [work the issue end to end](#work-a-github-issue-end-to-end).
 
@@ -296,7 +334,14 @@ Run `/erfana:next-batch` to have the next issues picked for you. It skips issues
 /erfana:next-batch 5 performance
 ```
 
-It reads GitHub only, saves the batch to `.local/next-batch.md` (or `.local/next-batch-<YYYYMMDD-HHMM>.md` when that file exists), and prints two commands for you to run: a claim command and an autopilot start command.
+It reads GitHub only, saves the batch to `.local/next-batch.md` (or `.local/next-batch-<YYYYMMDD-HHMM>.md` when that file exists), and prints two commands for you to run, such as:
+
+```text
+/erfana:coordinate claim #12 #15 #18
+/erfana:autopilot start .local/next-batch.md
+```
+
+The start command names the timestamped file when `.local/next-batch.md` already existed.
 
 ### 2. Claim the issues (optional)
 
@@ -308,15 +353,19 @@ If other sessions work on the same repository, claim the issues so no two sessio
 
 A claim adds a `claimed` label and a comment that shows your folder and machine names. On a public repository the skill asks before the first claim. `/erfana:coordinate board` shows who holds what.
 
+Claim before you run `start`. The run claims further issues itself only when you ran the claim command, or said to claim, before it started.
+
 ### 3. Start the run
 
-Run `/erfana:autopilot start` followed by what to work on, or by the batch file:
+Run `/erfana:autopilot start` followed by what to work on: plain words ("fix the flaky login tests"), issue numbers (`#12 #15`), or the batch file from `erfana:next-batch`. The skill builds the Batch section of the state file from that and from the session so far:
 
 ```text
 /erfana:autopilot start .local/next-batch.md
 ```
 
 The skill works out the goal from the batch, your words, and the session so far, and finds the real test, lint, and build commands in your project. It writes the state file `.local/autopilot.md`: the goal, what you authorized (quoted from your messages), the batch, progress, and an owner queue – the list of decisions the run needs from you. It keeps the file out of git by adding `.local/` to your clone's local exclude file, never to `.gitignore`.
+
+While `.local/autopilot.md` still starts with `Status: active`, `start` changes nothing: it shows the status and says to close the old run with `stop` first. When a new run starts after a finished one, the old run is kept in the same file under `## Previous run`.
 
 "Unattended" means "do not stop to ask", not "do anything". Pushing, opening or merging pull requests, publishing, deleting, or messaging people is part of the run only if you said so; otherwise it goes to the owner queue. To grant an outward action, say it in plain words, in the start message or any earlier message in the session – for example:
 
@@ -350,19 +399,27 @@ The skill keeps the whole line at or under 3,500 characters and about 450 words,
 
 A new `/goal` replaces the running one, so autopilot never prints one over yours:
 
-- **Your goal covers the work.** The skill writes no new goal. It records yours in the state file as set by you, shows the batch, what is authorized, and the run rules, and ends its turn. Your goal starts the work on the next turn. Your goal has no exit for items that need you, so the run may keep looping once only those remain.
+- **Your goal covers the work.** The skill writes no new goal. It records yours in the state file as set by you, shows the batch, what is authorized, and the run rules, and ends its turn. Your goal starts the work on the next turn. Your goal has no exit for items that need you, so the run may keep looping once only those remain. If that happens, run `/erfana:autopilot status` to answer them, or end the run with `/goal clear` and then `/erfana:autopilot stop`. To avoid it, end your goal's condition with "or stop once only Owner queue items remain in .local/autopilot.md", or write the goal with `/erfana:draft-goal`.
 - **Your goal is an earlier autopilot goal, or does not cover the work.** The skill starts nothing and writes nothing to `.local/autopilot.md`. It says which goal is running; keeping it or ending it with `/goal clear` is your call. To get an autopilot goal instead, run `/goal clear`, then run `/erfana:autopilot start` again.
-- **It cannot tell.** When you run `start` after a compaction or in a resumed session, the skill asks once and recommends that you type `/goal` alone, which shows the running condition. In a run with nobody to ask, it treats the goal as not running and adds a warning to the printed line: paste it only if no `/goal` is running, because a new one replaces it and restarts its turn count.
+- **It cannot tell.** When you run `start` after a compaction or in a resumed session, the skill asks once and recommends that you type `/goal` alone, which shows the running condition. In a normal session the question waits for your answer, so stay until you have answered it. Only in a non-interactive run (`claude -p`, CI) does it treat the goal as not running and adds a warning to the printed line: paste it only if no `/goal` is running, because a new one replaces it and restarts its turn count.
 
 ### 5. Check on it
 
 Ask "do you need anything from me?" or run `/erfana:autopilot status`. You get what is done, in progress, and next, with evidence, and each owner-queue item as a question with a recommended answer. Your answers are recorded under Owner decisions. Running `/erfana:autopilot` with no argument shows the status when a state file exists, and starts a run when none does.
 
+The question is an ordinary message in the same session: it runs the status check, asks your owner-queue questions one at a time, and the goal then carries on. Whether that turn counts toward a turn limit in the goal is up to Claude Code's goal evaluator and is not documented here.
+
+The run also keeps Claude Code's built-in task list short: after each item it holds only open and in-progress items. Claude Code shows the list in the session; the state file is the lasting record.
+
 ### 6. Resume after a restart or compaction
 
-After a compaction, erfana's `post-compact-reminder` hook points the session at `.local/autopilot.md` while the run is active, so it carries on. Resume works differently from start here: a turn that began from the compaction reminder counts as proof that the goal is still running, because compaction does not clear a goal, so resume carries on without asking and never reprints a goal you set yourself. After a restart or `/clear`, run `/erfana:autopilot resume`. On Qwen Code the compaction reminder's output is discarded, so always resume with `/autopilot resume`.
+After a compaction, a restart, or `/clear`, run `/erfana:autopilot resume` (on Qwen Code, `/autopilot resume`). erfana's `post-compact-reminder` hook prints a pointer to `.local/autopilot.md` after a compaction, but on both hosts that output does not reach the model, so do not wait for the run to carry on by itself. A `/goal` you set is not cleared by compaction: when the conversation shows the goal still running, resume carries on without asking and never reprints it.
 
-### 7. Stop the run
+### 7. When the run stops on its own
+
+When the goal's Bound ends the run, for example once only your decisions are left, the state file may still say `Status: active`, so a new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste. To end the run instead, use the next step.
+
+### 8. Stop the run
 
 Run `/erfana:autopilot stop`. The state file is marked `Status: finished` with a final summary; the file is never deleted. If autopilot wrote the goal, it prints `/goal clear` for you to run. If the goal is yours, it says the goal is still set and that ending it with `/goal clear` is your call.
 
@@ -431,9 +488,9 @@ Report security issues **privately**. Do not open a public issue, pull request, 
 
 Private reporting counts as not available when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and the security policy names no other channel.
 
-Blank issues are turned off in this repository, so open the fallback issue with the **Bug report** template. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
+Blank issues are turned off in this repository, so open the fallback issue from the [new issue page](https://github.com/qodeca/erfana-skills/issues/new/choose) with the **Bug report** template. The same page has a **Report a security vulnerability** link, which opens the private form from the preferred route. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
 
-Include the affected files or component, steps to reproduce or a proof of concept, the impact, any fix you suggest, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version. The maintainers aim to acknowledge a report within a few business days, and credit reporters who wish to be named once a fix is released.
+Include the affected files or component, steps to reproduce or a proof of concept, the impact, any fix you suggest, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version (`claude --version` or `qwen --version`). The maintainers aim to acknowledge a report within a few business days, and credit reporters who wish to be named once a fix is released.
 
 Where to send what:
 
@@ -515,7 +572,7 @@ In a headless run (`claude -p`) nobody can answer questions, so each skill stops
 
 ### The compaction reminder mentions a time tool you do not have
 
-After a compaction, the `post-compact-reminder` hook asks Claude to call `mcp__time__get_current_time`. That tool exists only if you have a time MCP server installed. Without one, Claude cannot call it; the rest of the reminder still applies.
+After a compaction, the `post-compact-reminder` hook prints a line that asks Claude to call `mcp__time__get_current_time`. That tool exists only if you have a time MCP server installed. The line is harmless either way: Claude Code writes the reminder's output to its debug log, not to Claude's context, so Claude does not act on it.
 
 ### A `.local/` folder appears in your repository
 

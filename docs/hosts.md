@@ -159,6 +159,10 @@ would live upstream or would cost Claude Code users something.
   starts has not been verified in a session.
 - **Commands register unnamespaced** – `/doc-update`, not `/erfana:doc-update` –
   so a name collision with a Qwen builtin renames the extension command to `erfana.<name>` rather than dropping it - the builtin takes the bare name, but the erfana command stays reachable under the dotted form.
+- **Skills start by their bare name.** On a newer Qwen release than the tested one, a skill registers as
+  a bare slash command (`/spec`, `/issue`); the Claude Code form `/erfana:spec`
+  is not registered there. A request in plain words that names the skill also
+  starts it. The bare registration has not been checked on the tested version.
 - **`$ARGUMENTS` is not substituted.** Qwen uses `{{args}}` and otherwise
   appends the raw invocation to the end of the prompt. Each argument-taking
   command carries both tokens and a rule for telling which one the host filled

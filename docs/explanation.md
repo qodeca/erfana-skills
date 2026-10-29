@@ -4,7 +4,7 @@ This page explains how erfana works and why it is built the way it is. It does n
 
 ## How erfana is built
 
-erfana is a **plugin** for Claude Code, made by Qodeca and released under the GPL-3.0-only licence. It adds ready-made ways of working to your coding agent: writing GitHub issues and implementing them, writing requirements specs, consulting reports and articles, building Claude Code agents and skills, and running long sessions without someone watching. Qwen Code can install the same package – see [One package, two hosts](#one-package-two-hosts).
+erfana is a **plugin** for Claude Code, made by Qodeca and released under the GPL-3.0-only license. It adds ready-made ways of working to your coding agent: writing GitHub issues and implementing them, writing requirements specs, consulting reports and articles, building Claude Code agents and skills, and running long sessions without someone watching. Qwen Code can install the same package – see [One package, two hosts](#one-package-two-hosts).
 
 The plugin is four kinds of parts in one folder:
 
@@ -90,14 +90,14 @@ The hooks are a safety net that comes with the plugin. They work in any project 
 |---|---|---|
 | `bash-safety` | Before every shell command | Blocks destructive commands, such as deleting your home folder or force-pushing to a protected branch. |
 | `secret-detector` | Before every file write or edit | Blocks writing an API key, token, or private key into a file; test fixtures and Markdown docs are skipped. |
-| `post-compact-reminder` | After **compaction** | Reminds Claude of key working rules and the current git state. |
+| `post-compact-reminder` | After **compaction** | Prints key working rules and the current git state to the debug log; Claude does not see it. |
 | `verify-completion` | When Claude is about to stop | Asks Claude once to show proof when it claims success without any. |
 | `grill-guard` | When Claude is about to stop | Blocks one stop while a `grill-me` interview is still open. |
 | `ms-grill-guard` | When Claude is about to stop | Does the same for the `skill` requirements interview. |
 
 The last two only act while an interview is open. While the interview is open, it ends every message with a hidden marker – a **sentinel** – and the guard checks for it. With no marker in the reply, the guard does nothing. The status commands use a sentinel the other way round: their output carries a marker that tells `verify-completion` the brief is not a success claim.
 
-`post-compact-reminder` has one more job. While an `erfana:autopilot` run is active, it points Claude to the run's state file after compaction, so the run picks up where it left off.
+`post-compact-reminder` also names the run's state file while an `erfana:autopilot` run is active. Today this output does not reach Claude: Claude Code writes the output of a `PostCompact` hook to its debug log, not to the model's context, and Qwen Code discards it. So after a compaction, run `/erfana:autopilot resume` (on Qwen Code, `/autopilot resume`) to pick the run up again.
 
 ### What fail open means
 
@@ -126,7 +126,7 @@ What you notice as a Qwen Code user:
 - **Slash commands have no prefix.** You type `/lens-review`, not `/erfana:lens-review`. If a name clashes with a Qwen Code built-in command, the erfana command becomes `/erfana.<name>`.
 - **Updates come from releases.** Qwen Code installs the latest tagged GitHub release, so a fix reaches you when it is released, not when it is merged.
 - **Some limits are not applied.** The tool limits that skills and commands declare are not enforced on Qwen Code, and a few agent settings are dropped during the conversion.
-- **The compaction reminder has no effect.** The hook runs, but Qwen Code discards its output, so a compacted autopilot run picks up again only when you run `/autopilot resume`.
+- **The compaction reminder has no effect.** The hook runs, but Qwen Code discards its output. On Claude Code the output also stays out of the model's context, so on both hosts you resume a compacted autopilot run yourself (`/autopilot resume` here).
 - **Skills may load less reliably.** Qwen Code can be slower to recognise that a request matches a skill. Naming the skill or the kind of work directly helps.
 
 The hooks themselves need nothing extra on Qwen Code. Both hosts read the same `hooks/hooks.json`, and both read a hook's exit code the same way, so the same scripts block and allow the same things.
