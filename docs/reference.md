@@ -3,6 +3,8 @@
 <!-- GENERATED FILE - DO NOT EDIT BY HAND. -->
 <!-- Regenerate with: bash scripts/gen-reference.sh -->
 
+*This page describes erfana v9.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+
 Everything erfana ships, read straight from the plugin files by
 [`scripts/gen-reference.sh`](../scripts/gen-reference.sh). Gate 19 fails the
 build when this page and the files disagree, so what you read here is what

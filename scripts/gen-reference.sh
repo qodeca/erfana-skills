@@ -14,6 +14,7 @@
 #             disable-model-invocation)
 #   hooks     hooks/hooks.json (event, matcher) + the `# Summary:` line of each
 #             hooks/<name>.sh header (first header sentence as a fallback)
+#   version   .claude-plugin/plugin.json (the "This page describes" line)
 #
 #   bash scripts/gen-reference.sh            write docs/reference.md
 #   bash scripts/gen-reference.sh --stdout   print to stdout (used by Gate 19)
@@ -106,6 +107,9 @@ out = [
     '',
     '<!-- GENERATED FILE - DO NOT EDIT BY HAND. -->',
     '<!-- Regenerate with: bash scripts/gen-reference.sh -->',
+    '',
+    f"*This page describes erfana v{json.load(open('.claude-plugin/plugin.json', encoding='utf-8'))['version']}. "
+    'See the [changelog](../CHANGELOG.md) for what changed since.*',
     '',
     'Everything erfana ships, read straight from the plugin files by',
     '[`scripts/gen-reference.sh`](../scripts/gen-reference.sh). Gate 19 fails the',

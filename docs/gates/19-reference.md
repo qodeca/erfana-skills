@@ -14,7 +14,7 @@
 | `hooks/hooks.json` | event and matcher for each `dispatch.sh <hook>` command |
 | `hooks/<name>.sh` | the `# Summary:` header line (first header sentence as a fallback) |
 
-It also checks the sample install output in [`docs/how-to.md`](../how-to.md) and [`docs/hosts.md`](../hosts.md): every `Version: X.Y.Z`, `erfana (X.Y.Z)`, and `Release tag: vX.Y.Z` there must show the version in `.claude-plugin/plugin.json`. A newcomer compares their screen with these lines, so an old number would send them looking for a release they do not need. A version bump therefore updates these lines in the same change.
+It also checks versions. Each user page – `README.md`, `docs/README.md`, `docs/tutorial.md`, `docs/how-to.md`, `docs/explanation.md`, and the generated `docs/reference.md` – must carry the line `This page describes erfana vX.Y.Z.`, and that line, plus every `Version: X.Y.Z`, `erfana (X.Y.Z)`, and `Release tag: vX.Y.Z` in the sample install output there and in [`docs/hosts.md`](../hosts.md), must show the version in `.claude-plugin/plugin.json`. A newcomer compares their screen with these lines, so an old number would send them looking for a release they do not need. A version bump therefore updates these lines in the same change, and regenerates the reference.
 
 ## Why a whole-file diff is safe here
 

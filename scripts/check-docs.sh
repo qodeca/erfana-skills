@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# check-docs.sh - the three documentation checks, in one command.
+# check-docs.sh - the four documentation checks, in one command.
 #
 #   lychee              every link in every tracked Markdown file resolves,
 #                       including #fragments (config: lychee.toml)
@@ -10,8 +10,10 @@
 #                       (config: .vale.ini + .vale/styles/Erfana)
 #   markdownlint-cli2   Markdown structure: headings, lists, fences, tables
 #                       (config: .markdownlint-cli2.jsonc)
+#   tutorial            the shell block in docs/tutorial.md "Step 2" runs in
+#                       a scratch HOME and prints the PASS the page promises
 #
-#   bash scripts/check-docs.sh            all three; web links included
+#   bash scripts/check-docs.sh            all four; web links included
 #   bash scripts/check-docs.sh --offline  local links and fragments only
 #
 # A missing tool is a failure, not a skip: a check that silently does not run
@@ -75,6 +77,27 @@ if need npx; then
     echo "  PASS: Markdown structure is clean"
   else
     echo "  FAIL: Markdown errors above"
+    status=1
+  fi
+fi
+
+echo "=== Docs 4 - tutorial commands ==="
+# Take the first ```bash block after the "## Step 2" heading, run it with HOME
+# pointed at a scratch folder (the block works in ~/erfana-tutorial), and
+# require the last line of output to be PASS, as the page shows.
+block=$(awk '/^## Step 2/{s=1} s&&/^```bash$/{f=1;next} f&&/^```$/{exit} f{print}' docs/tutorial.md)
+if [[ -z "$block" ]]; then
+  echo "  FAIL: no bash block under \"## Step 2\" in docs/tutorial.md"
+  status=1
+else
+  scratch=$(mktemp -d)
+  out=$(HOME="$scratch" GIT_CONFIG_NOSYSTEM=1 bash -euc "$block" 2>&1) || true
+  rm -rf "$scratch"
+  if [[ "$(printf '%s\n' "$out" | tail -1)" == "PASS" ]]; then
+    echo "  PASS: the tutorial's practice project prints PASS"
+  else
+    echo "  FAIL: the tutorial's Step 2 commands did not print PASS:"
+    printf '%s\n' "$out" | tail -5
     status=1
   fi
 fi
