@@ -3,6 +3,23 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.2.1] - 2026-10-29
+
+### Changed
+
+- **New documentation, arranged by what you want to do.** A [tutorial](docs/tutorial.md) for a first session, [how-to guides](docs/how-to.md) for real tasks (install on Claude Code or Qwen Code, pick a skill, write a spec, run an unattended session, report a security problem), a [reference](docs/reference.md) of every skill, agent, command, and hook, and an [explanation](docs/explanation.md) of how erfana is built. `README.md` is the entry point, and each page names the erfana version it describes.
+- **`SECURITY.md` states its promises.** Only the latest release gets security fixes; no fixed timeline for a fix is promised; GitHub is the only way to report; a problem seen only on Qwen Code with an unclear cause goes privately to erfana first.
+
+### Fixed
+
+- **`erfana:spec` can write the first spec in a new project.** With no `specs/registry.json` yet, the skill now creates the registry and says so, instead of stopping before it writes the spec.
+- **`erfana:article` links the live OWASP LLM top-10 page.** The old link returned 404.
+
+### Internal
+
+- **The reference is generated and checked.** `scripts/gen-reference.sh` writes `docs/reference.md` from the plugin files. The new Gate 19 fails when the page and the files disagree, or when a user page names a different version than `plugin.json`.
+- **Docs are checked in CI.** `scripts/check-docs.sh` runs lychee (links), vale (house style), markdownlint-cli2, and the tutorial's own commands; the new `docs` job in `verify.yml` runs it with `--offline`.
+
 ## [9.2.0] - 2026-10-29
 
 ### Changed
@@ -107,7 +124,7 @@ Kept under the same name: `architecture-reviewer`, `article-researcher`, `articl
 - The `issue` run-state comment and resume.
 - The `report` `thorough` level and advisory quality score.
 
-### Maintainers
+### Internal
 
 - Gate 2 fails any agent whose prompt does not open with the top 1% bar.
 - Gate 15 matches a skill only on an explicit mention (backticked, `erfana:`-namespaced, or a `skills/<name>/` path), because the new skill names are common words.

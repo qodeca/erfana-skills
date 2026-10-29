@@ -1,6 +1,6 @@
 # Your first erfana session
 
-*This page describes erfana v9.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.2.1. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 In this tutorial you install erfana, make a small practice project, and use the `erfana:draft-goal` skill to write a finished `/goal` condition for it. A `/goal` condition is a short text that tells Claude Code what "done" means, so it can keep working, turn after turn, until every check passes.
 
