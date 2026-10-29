@@ -202,7 +202,7 @@ out += [
     '|---|---|---|---|',
 ]
 for name, event, matcher in hooks:
-    watched = cell(matcher.replace('|', ', ')) if matcher != 'every event' else 'all'
+    watched = ', '.join(f'`{t}`' for t in matcher.split('|')) if matcher != 'every event' else 'all'
     out.append(f'| [`{name}`](../hooks/{name}.sh) | {event} | {watched} | {cell(hook_summary(name))} |')
 out.append('')
 

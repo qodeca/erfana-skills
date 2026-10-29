@@ -14,6 +14,8 @@
 | `hooks/hooks.json` | event and matcher for each `dispatch.sh <hook>` command |
 | `hooks/<name>.sh` | the `# Summary:` header line (first header sentence as a fallback) |
 
+It also checks the sample install output in [`docs/how-to.md`](../how-to.md) and [`docs/hosts.md`](../hosts.md): every `Version: X.Y.Z`, `erfana (X.Y.Z)`, and `Release tag: vX.Y.Z` there must show the version in `.claude-plugin/plugin.json`. A newcomer compares their screen with these lines, so an old number would send them looking for a release they do not need. A version bump therefore updates these lines in the same change.
+
 ## Why a whole-file diff is safe here
 
 Gate 18 cannot diff the skill registry, because that page carries git dates that go stale by construction. The reference carries no dates and reads no git history, so its output depends only on the working tree. A difference therefore always means one of two things: a skill, agent, command, or hook changed without the page being regenerated, or someone edited the page by hand. Both mislead a reader, so both block.

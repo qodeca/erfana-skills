@@ -1,0 +1,7 @@
+# Spelling (US English, Vale's built-in dictionary). Project names and terms
+# the dictionary lacks go in .vale/styles/Erfana/accept-words.txt, one per line.
+extends: spelling
+message: "Check the spelling of '%s'."
+level: error
+ignore:
+  - Erfana/accept-words.txt

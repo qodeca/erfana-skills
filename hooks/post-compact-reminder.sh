@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
-# Summary: After Claude compacts the conversation, restores the working rules and the current git state, and points to an active autopilot run.
+# Summary: After Claude Code compacts the conversation, prints the working rules, the current git state, and a pointer to an active autopilot run; Claude does not see this output, so run the autopilot resume command yourself.
 # PostCompact hook: re-inject load-bearing facts after the context
 # window has been compacted. Compaction loses awareness of rules and
 # state that lived in the early turns; this restores the few that

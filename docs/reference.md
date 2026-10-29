@@ -256,9 +256,9 @@ the `.ps1` file on Windows.
 
 | Hook | Runs at | Tools it watches | What it does |
 |---|---|---|---|
-| [`bash-safety`](../hooks/bash-safety.sh) | PreToolUse | Bash, run_shell_command | Blocks shell commands that could destroy data or change your system, such as rm -rf on your home folder, a download piped into a shell, or sudo. |
+| [`bash-safety`](../hooks/bash-safety.sh) | PreToolUse | `Bash`, `run_shell_command` | Blocks shell commands that could destroy data or change your system, such as rm -rf on your home folder, a download piped into a shell, or sudo. |
 | [`grill-guard`](../hooks/grill-guard.sh) | Stop | all | Keeps an erfana:grill-me interview from ending while a question is still open. |
 | [`ms-grill-guard`](../hooks/ms-grill-guard.sh) | Stop | all | Keeps an erfana:skill requirements interview from ending while a question is still open. |
-| [`post-compact-reminder`](../hooks/post-compact-reminder.sh) | PostCompact | all | After Claude compacts the conversation, restores the working rules and the current git state, and points to an active autopilot run. |
-| [`secret-detector`](../hooks/secret-detector.sh) | PreToolUse | Write, Edit, MultiEdit, write_file | Blocks a file write that would put a credential, such as an API key or private key, into your code. |
+| [`post-compact-reminder`](../hooks/post-compact-reminder.sh) | PostCompact | all | After Claude Code compacts the conversation, prints the working rules, the current git state, and a pointer to an active autopilot run; Claude does not see this output, so run the autopilot resume command yourself. |
+| [`secret-detector`](../hooks/secret-detector.sh) | PreToolUse | `Write`, `Edit`, `MultiEdit`, `write_file` | Blocks a file write that would put a credential, such as an API key or private key, into your code. |
 | [`verify-completion`](../hooks/verify-completion.sh) | Stop | all | When Claude says work is done without showing proof, asks it once to show the check that proves it. |
