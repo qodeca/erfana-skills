@@ -14,7 +14,7 @@ around it is written by hand.
 
 | Host | Key | How it consumes erfana | Install | Version tested | Hook `timeout` |
 |---|---|---|---|---|---|
-| Claude Code | `claude-code` | native plugin | `/plugin marketplace add qodeca/erfana-skills` | – | seconds, default 600 |
+| Claude Code | `claude-code` | native plugin | `/plugin marketplace add qodeca/erfana-skills`, then `/plugin install erfana@erfana-skills` | – | seconds, default 600 |
 | Qwen Code | `qwen-code` | converted at install time | `qwen extensions install qodeca/erfana-skills:erfana` | 0.22.3 | milliseconds, default 60000 |
 
 Derived from `scripts/_lib/host_matrix.py`. The Qwen row was read from bundle
@@ -37,8 +37,10 @@ real install: `qwen extensions list` reports `Type: github-release` and
 `Release tag: v7.1.0`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
-is the tagged tree, which is what `scripts/qwen-smoke.sh` should be pointed at
-before a release rather than the working tree. Users update with
+is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by
+default (CI uses that default). After a release, run
+`bash scripts/qwen-smoke.sh --from-marketplace` to install and check the
+published tag instead. Users update with
 `qwen extensions update erfana`.
 
 It also runs a variable-replacement pass over **every** `.md` in the tree, not
@@ -63,7 +65,10 @@ reports when the checksum moves.
 ## Tool-name vocabulary
 
 Claude Code tool names are canonical everywhere in this repository. Qwen names
-appear in exactly one place: hook `matcher:` strings in `hooks/hooks.json`.
+appear in two places: hook `matcher:` strings in `hooks/hooks.json`, and the
+hook scripts that branch on the `tool_name` in the payload, because the payload
+carries Qwen's own name. `hooks/secret-detector.sh` and its `.ps1` sibling, for
+example, match both `Write|write_file` and `Edit|edit`.
 
 | Where a tool is named | Converted by Qwen? | Rule |
 |---|---|---|
@@ -110,11 +115,13 @@ themselves need no host branch:
 | Exit 2 plus a message on stderr | Block the tool call |
 | Exit 0 plus `{"decision":"block","reason":"..."}` on stdout | Block the stop |
 | Exit 0, no output | Allow |
-| Killed by the watchdog | **Allow.** The watchdog sends SIGTERM, so the hook exits 143; Qwen's own timeout produces 142. Neither is 2, so neither is read as a block |
+| Killed by the watchdog | **Allow.** The watchdog sends SIGTERM, so the hook exits 143 – or 137 if it survives a one-second grace and gets SIGKILL; Qwen's own timeout produces 142. Neither is 2, so neither is read as a block |
 
 That last row is the one to remember: the hooks fail open. A hook that cannot
-run does not protect you. `hooks/dispatch.sh` emits a diagnostic to stderr when
-it has to skip a hook, so a silent failure is at least a loud one.
+run does not protect you. `hooks/dispatch.sh` prints a stderr note when it skips
+a hook because `jq` or `cygpath` is missing, but it exits 0, so the host may not
+show the note. A watchdog timeout is silent: the launcher hides the reap
+message on purpose.
 
 ## What degrades on Qwen Code
 
@@ -132,7 +139,7 @@ would live upstream or would cost Claude Code users something.
   field is never read, so erfana's skills run unrestricted there. The spelling
   stays as it is because Claude Code does enforce it.
 - **Command `allowed-tools:` is not enforced either**, so the scoped
-  `Bash(git status:*)` grants in three commands become approval prompts.
+  `Bash(...)` grants in all five commands become approval prompts.
 - **Agent `effort:` and `capabilities:` are dropped** by the converter, along
   with `type:` and `file_restrictions:`. They stay in the files because Claude
   Code uses them.
@@ -156,6 +163,7 @@ would live upstream or would cost Claude Code users something.
 | Cross-host wiring rules | `bash scripts/run-all-gates.sh` (Gates 2, 14, 15) |
 | Hook behaviour on real payloads | `bash scripts/gate-16-hook-fixtures.sh` |
 | Install and conversion on Qwen | `bash scripts/qwen-smoke.sh` |
+| The published release on Qwen | `bash scripts/qwen-smoke.sh --from-marketplace` |
 | The generated table above | `bash scripts/gen-hosts-table.sh` produces no diff |
 
 The smoke test is deliberately not part of `run-all-gates.sh`. That runner has

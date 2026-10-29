@@ -64,6 +64,41 @@ jobs:
           fi
           echo "agent count in sync: ${AGENTS}"
 
+  # Documentation checks: links (lychee), house style (vale), Markdown
+  # structure (markdownlint-cli2). Configuration lives in lychee.toml,
+  # .vale.ini + .vale/styles/, and .markdownlint-cli2.jsonc; the runner is
+  # scripts/check-docs.sh, the same command maintainers run locally.
+  # Local links and #fragments block the merge. Web links are checked in a
+  # second, non-blocking step, because a third-party site being down must not
+  # red-light develop; its failures are still printed in the log.
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install lychee and vale (pinned)
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/lychee-dl"
+          curl -sSfL "https://github.com/lycheeverse/lychee/releases/download/lychee-v0.24.2/lychee-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP/lychee-dl"
+          curl -sSfL "https://github.com/errata-ai/vale/releases/download/v3.25.1/vale_3.25.1_Linux_64-bit.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP" vale
+          find "$RUNNER_TEMP/lychee-dl" -name lychee -type f -exec mv {} "$RUNNER_TEMP/lychee" \;
+          "$RUNNER_TEMP/lychee" --version && "$RUNNER_TEMP/vale" --version
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Docs checks (local links, style, Markdown) – blocking
+        run: bash scripts/check-docs.sh --offline
+      - name: Web links – reported, not blocking
+        continue-on-error: true
+        run: lychee --no-progress --config lychee.toml -- $(git ls-files -- '*.md' ':!skills/article/templates/*' ':!tests/skill/fixtures/*')
+
   # Cross-host: prove the plugin still converts and loads on Qwen Code.
   # A separate job from `gates` so a Qwen-side breakage is diagnosable at a
   # glance and can be de-required without weakening the main gate suite.

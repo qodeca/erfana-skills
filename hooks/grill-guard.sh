@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
+# Summary: Keeps an erfana:grill-me interview from ending while a question is still open.
 # Plugin-root Stop hook backing erfana:grill-me. Registered in
 # hooks/hooks.json rather than in the skill's frontmatter, because Qwen Code's
 # extension skill parser does not extract hooks: and a skill-scoped

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
+# Summary: Blocks shell commands that could destroy data or change your system, such as rm -rf on your home folder, a download piped into a shell, or sudo.
 # PreToolUse hook: Block dangerous bash commands.
 #
 # Catches destructive patterns that allow/deny rules in settings.json

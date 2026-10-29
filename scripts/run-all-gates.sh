@@ -543,6 +543,13 @@ echo "=== Gate 18 — skill registry sync ==="
 # Standalone runner under scripts/gate-18-skill-registry.sh.
 bash scripts/gate-18-skill-registry.sh
 
+echo "=== Gate 19 — reference sync ==="
+# Regenerates docs/reference.md from the skills, agents, commands, and hooks and
+# fails on any byte difference. Safe as a whole-file diff because the page reads
+# no git history (see docs/gates/19-reference.md). Fix with:
+# bash scripts/gen-reference.sh. Standalone runner: scripts/gate-19-reference.sh.
+bash scripts/gate-19-reference.sh
+
 echo "=== claude plugin validate ==="
 if command -v claude > /dev/null; then
     cv_log=$(mktemp)
