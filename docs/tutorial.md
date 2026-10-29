@@ -76,6 +76,8 @@ Type this as your message and press Enter:
 
 The skill reads `greet.sh` and `test.sh` to find a real command that proves the work is done. It does not change any files.
 
+This example works only inside the practice folder from Step 2, because the skill needs `test.sh` as its check. In any other folder, describe a task about your own files instead; if the skill cannot find a command that proves the work is done, it may print **Needs clarification**.
+
 It may then ask you one to three short questions, such as which check proves the work is done or how many turns to allow. Each question comes with options, and the recommended one is listed first. Pick the recommended option each time.
 
 On Qwen Code, type the same message with `/draft-goal` at the start.

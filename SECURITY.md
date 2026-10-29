@@ -9,7 +9,11 @@ Please report security issues **privately** – do not open a public issue, pull
 - **Preferred:** use GitHub's [private vulnerability reporting](https://github.com/qodeca/erfana-skills/security/advisories/new) (the "Report a vulnerability" button under the repository's **Security** tab). This keeps the report confidential between you and the maintainers until a fix ships.
 - **If private reporting is unavailable to you:** open a minimal public issue that contains **no exploit details** – just ask the maintainers to open a private channel – and we will follow up.
 
-Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, and any suggested remediation. We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released.
+Private reporting counts as unavailable when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and this policy names no other channel.
+
+Blank issues are turned off in this repository, so open the fallback issue with the **Bug report** template. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
+
+Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, any suggested remediation, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version. We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released.
 
 ## Scope
 

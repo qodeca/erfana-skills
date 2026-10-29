@@ -9,7 +9,7 @@ Before you start, check what erfana needs on your machine:
 | Need | Why |
 |---|---|
 | On macOS and Linux: [`jq`](https://jqlang.github.io/jq/) on your `PATH` (macOS: `brew install jq`) | Without it, five of the six [safety hooks](explanation.md#safety-hooks-and-why-they-fail-open) skip themselves and protect nothing. |
-| The GitHub CLI (`gh`), logged in | `erfana:issue`, `erfana:next-batch`, `erfana:coordinate`, `erfana:ship`, `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request use it. |
+| The GitHub CLI (`gh`), logged in | The skills `erfana:issue`, `erfana:next-batch`, `erfana:coordinate`, and `erfana:ship` use it, and so do the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request. |
 | On Windows: Git Bash, with `powershell.exe` on `PATH` | The hooks start through Git Bash and run their PowerShell versions; a Windows machine with no Git Bash runs no hooks. |
 
 The marketplace is public, so you need no GitHub token. Inside Claude Code, run:
@@ -19,17 +19,30 @@ The marketplace is public, so you need no GitHub token. Inside Claude Code, run:
 /plugin install erfana@erfana-skills
 ```
 
-The first line registers the marketplace under the name `erfana-skills` (the name in its `marketplace.json`). The second installs the plugin: `erfana` is the plugin name, and the part after `@` is the marketplace name.
+The first line registers the marketplace under the name `erfana-skills` (the name in its `marketplace.json`). The second installs the plugin: `erfana` is the plugin name, and the part after `@` is the marketplace name. Each command should finish without an error. If Claude Code does not know the `/plugin` command, update Claude Code first.
 
-Restart Claude Code. Skills, agents, and hooks load when a session starts, so the hooks are active only from the next session.
+Restart Claude Code: type `/exit` (or close the session), then run `claude` again. Skills, agents, and hooks load when a session starts, so the hooks are active only from the next session.
 
-To check the install, run this from a shell:
+### Check the install
 
-```bash
-claude plugin list
-```
+1. **The plugin is listed.** From a shell, run:
 
-You should see `erfana@erfana-skills` enabled. Then type a request such as "create an issue for the login bug" in Claude Code – `erfana:issue` should start.
+   ```bash
+   claude plugin list
+   ```
+
+   The erfana entry looks like this, with the version of the latest release:
+
+   ```text
+     ❯ erfana@erfana-skills
+       Version: 9.2.0
+       Scope: user
+       Status: ✔ enabled
+   ```
+
+2. **The skills loaded.** In a new session, type `/erfana:`. Autocomplete lists the erfana skills and commands, such as `/erfana:draft-goal`.
+3. **A skill starts from plain words.** Type a request such as "draft a goal for adding a --help flag to my script". `erfana:draft-goal` should start. It needs no `gh`.
+4. **The safety hooks are active.** Ask Claude to run `sudo -n true`. With the hooks active, the `bash-safety` hook blocks it, and Claude reports `BLOCKED: Privilege escalation (sudo/doas/pkexec) is not appropriate for an automated agent`. If the command runs instead, the hooks are off: see [safety hooks do not fire](#safety-hooks-do-not-fire). On macOS and Linux, a missing `jq` shows up only as the line `dispatch.sh: jq not found; bash-safety cannot parse its payload (hook skipped)` in the error output, which you may never see.
 
 ### Install from a local clone
 
@@ -56,7 +69,15 @@ Then restart Claude Code.
 
 erfana is tested against Qwen Code 0.22.3. Qwen Code converts the Claude Code plugin on your machine at install time, from the same release Claude Code users install – there is no second package, no second manifest, and no build step. The hooks need `jq` here too.
 
-From a shell, run:
+First check whether erfana is already installed. From a shell, run:
+
+```bash
+qwen extensions list
+```
+
+If the output has a line `✓ erfana (x.y.z)`, erfana is installed: skip to [update on Qwen Code](#update-on-qwen-code). Running `install` again refuses with `Extension "erfana" is already installed. Please uninstall it first.`
+
+Otherwise, install it:
 
 ```bash
 qwen extensions install qodeca/erfana-skills:erfana
@@ -64,17 +85,26 @@ qwen extensions install qodeca/erfana-skills:erfana
 
 The source is the repository followed by the plugin name inside its marketplace. Qwen Code shows a security prompt; accept it, and the extension is written to `~/.qwen/extensions/erfana/`. Do not add `--consent` to skip that prompt – [`SECURITY.md`](../SECURITY.md) explains why it is for CI only.
 
-Check the result:
+Then start a new `qwen` session, because skills, agents, and hooks load at session start.
 
-```bash
-qwen extensions list
+Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the output starts like this, followed by the lists of commands and skills:
+
+```text
+✓ erfana (9.2.0)
+ Path: /Users/you/.qwen/extensions/erfana
+ Source: https://github.com/qodeca/erfana-skills (Type: github-release)
+ Origin: Claude
+ Release tag: v9.2.0
 ```
 
-If erfana is already installed, `install` refuses; run `qwen extensions update erfana` instead.
+The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
+
+To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-goal` and `/issue`, and the five commands – `/doc-update`, `/project-status`, `/session-status`, `/lens-review`, and `/explain-issue` – should appear. On Qwen Code 0.26.2, skills register as bare slash commands; this has not been checked on 0.22.3.
 
 A few things work differently on Qwen Code:
 
 - Slash commands have no `erfana:` prefix: `/doc-update`, not `/erfana:doc-update`. Skills are started the same way, by a request in plain words or by the bare name, such as `/autopilot resume`.
+- A command whose name clashes with a Qwen Code built-in command becomes `/erfana.<name>`. Checked against Qwen Code 0.26.2, no erfana name matches a built-in command, but Qwen Code ships its own bundled skill named `coordinate`. Which of the two `/coordinate` starts has not been verified in a session; if Qwen's starts, say what you want in plain words, such as "claim #12 with erfana coordinate".
 - Qwen Code may be less reliable at picking a skill from your request. Naming the skill helps.
 - Skills run without their tool limits, because Qwen Code does not read the `allowed-tools` field.
 - No erfana skill has yet been run end to end inside a Qwen Code session. The automated checks prove the install and the conversion, not a full run.
@@ -106,6 +136,8 @@ qwen extensions update erfana
 
 Or run `qwen extensions update --all`. Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
 
+Then start a new `qwen` session, because skills, agents, and hooks load at session start.
+
 ### Upgrade from 8.x to 9.x
 
 Version 9.0 renamed skills and agents. Check these before you update:
@@ -116,6 +148,8 @@ Version 9.0 renamed skills and agents. Check these before you update:
 - **Restart after updating.** Skills, agents, and hooks load at session start.
 
 No way to pin a version is documented here, because a per-version install syntax for Claude Code could not be confirmed. To stay on 8.x, do not run `/plugin update` and leave auto-update off until you are ready.
+
+On Qwen Code the same changes apply, under bare names: `/managing-issues` becomes `/issue`, and so on. The agent pool changes the same way, and running issue work should finish first. To stay on 8.x, do not run `qwen extensions update` until you are ready. Whether Qwen Code can also update erfana on its own, and how to go back to an older tag, have not been verified.
 
 ### Turn erfana off or remove it
 
@@ -193,12 +227,22 @@ Say "grill me on this plan" and `erfana:grill-me` interviews you one question at
 2. The skill looks at your project, recommends a tier with its reason, and lets you decide.
 3. It asks what it cannot write the spec without – goals and users, what is in and out of scope, each requirement and how it will be tested, quality targets with numbers – one question at a time. For T3 and T4 it can also research how similar products solve the problem.
 4. It shows the tier, the scope, and the numbered requirements with their acceptance criteria. Nothing is written until you agree.
-5. It writes the spec under `specs/` in your project and records it in `specs/registry.json`. Each spec gets an ID that is never reused, even after the spec is archived or deleted.
-6. A separate checker agent, `spec-validator`, reviews the spec seeing only the spec and the checks. The skill reports every finding and fixes the ones you agree to.
+5. It writes the spec into its own folder in your project and records it in `specs/registry.json`. The folder is `specs/spec-t<tier>-<NNN>-<slug>/`, for example `specs/spec-t2-004-csv-export/`. T1 and T2 specs hold `manifest.json` and `spec.md`; T3 and T4 specs hold `manifest.json` and numbered files under `requirements/`, starting with `01-overview.md`. The full list per tier is in the skill's [tier table](../skills/spec/references/tiers.md).
+6. A separate checker agent, `spec-validator`, reviews the spec seeing only the spec, the review checks, and the spec registry. The skill reports every finding and fixes the ones you agree to.
+
+Even a T1 "issue" is a short spec file under `specs/`, not a GitHub issue. To put it on GitHub, use `erfana:issue` afterwards.
+
+Spec IDs are global across tiers and have three digits, such as `004`. Requirement IDs inside a spec start with the spec ID, such as `004-FR-001` for a functional requirement, `004-NFR-002` for a non-functional (quality) requirement, and `004-AC-007` for an acceptance criterion. Each spec gets an ID that is never reused, even after the spec is archived or deleted.
 
 Later, say "update the spec" to change it. If your request states the exact change, that is your approval; otherwise the skill shows a change list first. Outside version control it backs up each changed file as `<file>.bak-<YYYYMMDD-HHMMSS>`. Say "reconcile spec with code" to compare a T3 or T4 spec with the code; nothing changes until you have decided on each gap.
 
+Say "archive a spec" when the work is built and done. The skill has no shell, so it shows a `mkdir -p specs/archived && mv …` command for you to run from the project root, then checks the result and updates the registry.
+
+The skill does not commit or push. Review the new files under `specs/` and commit them yourself, for example with `/erfana:ship commit`.
+
 In a headless run (`claude -p`, with nobody to answer questions), the skill stops before writing and says which tier it recommends and what it needs.
+
+On Qwen Code, `erfana:spec` has not been run end to end, like every erfana skill there; see [`known-caveats.md`](known-caveats.md).
 
 When the spec is ready, [work the issue end to end](#work-a-github-issue-end-to-end).
 
@@ -236,7 +280,13 @@ To work several issues in a row without watching, see [run an unattended session
 
 ## Run an unattended session
 
-An unattended run is work Claude keeps doing turn after turn while you are away. It runs on Claude Code's `/goal` command: a goal holds a completion condition, and after each turn a small evaluator model reads the conversation and decides whether the condition is met. `erfana:autopilot` writes that condition from your session and keeps the run's memory in one file. Your Claude Code version must have the `/goal` command.
+An unattended run is work Claude keeps doing turn after turn while you are away. It runs on Claude Code's `/goal` command: a goal holds a completion condition, and after each turn a small evaluator model reads the conversation and decides whether the condition is met. `erfana:autopilot` writes that condition from your session and keeps the run's memory in one file.
+
+Your Claude Code version must have the `/goal` command. To check, type `/goal` alone; if Claude Code does not know the command, update Claude Code.
+
+Qwen Code has a `/goal` command of its own, but it works differently (its commands include `/goal pause` and `/goal resume`, and its turn limits are settings rather than words in the goal). Autopilot writes its goal for Claude Code's `/goal`, and a run with Qwen Code's has not been tried. On Qwen Code, the state file and the owner queue work as described below; whether the goal keeps the run going there is not verified.
+
+Autopilot has golden test cases but has not yet had a live end-to-end run; see the v9.1.0 entry in [`known-caveats.md`](known-caveats.md). Keep that in mind before you leave a long run alone.
 
 ### 1. Pick the work (optional)
 
@@ -268,7 +318,15 @@ Run `/erfana:autopilot start` followed by what to work on, or by the batch file:
 
 The skill works out the goal from the batch, your words, and the session so far, and finds the real test, lint, and build commands in your project. It writes the state file `.local/autopilot.md`: the goal, what you authorized (quoted from your messages), the batch, progress, and an owner queue – the list of decisions the run needs from you. It keeps the file out of git by adding `.local/` to your clone's local exclude file, never to `.gitignore`.
 
-"Unattended" means "do not stop to ask", not "do anything". Pushing, opening or merging pull requests, publishing, deleting, or messaging people is part of the run only if you said so; otherwise it goes to the owner queue. Your permission settings are the real limit: an action you have not allowed stops at a prompt, and the skill names the steps that will need one.
+"Unattended" means "do not stop to ask", not "do anything". Pushing, opening or merging pull requests, publishing, deleting, or messaging people is part of the run only if you said so; otherwise it goes to the owner queue. To grant an outward action, say it in plain words, in the start message or any earlier message in the session – for example:
+
+```text
+You may push the branches and open pull requests for this batch; do not merge.
+```
+
+The skill quotes your message, with its date, in the state file.
+
+Your permission settings are the real limit: an action you have not allowed stops at a prompt, and one you allowed in advance runs whatever the goal says. The skill names the steps that will need a prompt. Before a long run, set [Claude Code permission rules](https://code.claude.com/docs/en/settings#permission-settings): allow rules for your project's test, lint, and build commands, so the run does not stop at a prompt, and ask rules for `git push` and `gh pr merge` when you have not authorized them.
 
 ### 4. Paste the goal
 
@@ -282,6 +340,8 @@ The skill never starts the goal itself. When no goal is running, it prints one `
 ===== GOAL – END =====
 ```
 
+The `Bound:` part says when the run ends by itself. A goal autopilot writes always ends its Bound with "or stop once only Owner queue items remain", so the run stops when only your decisions are left. Autopilot follows the draft-goal patterns, which usually add a turn limit as well, such as "or after 20 turns"; the skill picks the number for each run, so read the Bound before you paste.
+
 In the real output the `/goal` line sits in its own code block between the markers. Copy it by typing `/copy` and picking the block, or select the one line – it may wrap on screen. The marker lines are not part of it. Paste it as your next message and check that the `/goal` active indicator shows; if it does not, paste it again with `/goal` at the very start. The same line is stored under Goal in `.local/autopilot.md`.
 
 The skill keeps the whole line at or under 3,500 characters and about 450 words, because Claude Code refuses a `/goal` over 4,000 characters and the counts are estimates. If the goal runs long, it first moves the run rules into the state file, then points to the batch instead of listing it, then merges checks. If it still does not fit, it writes no state file, prints nothing you could paste, and says roughly how far over it is and what to cut. If `/goal` refuses the line anyway, tell the skill: it rewrites the goal in place and prints it again.
@@ -291,8 +351,8 @@ The skill keeps the whole line at or under 3,500 characters and about 450 words,
 A new `/goal` replaces the running one, so autopilot never prints one over yours:
 
 - **Your goal covers the work.** The skill writes no new goal. It records yours in the state file as set by you, shows the batch, what is authorized, and the run rules, and ends its turn. Your goal starts the work on the next turn. Your goal has no exit for items that need you, so the run may keep looping once only those remain.
-- **Your goal is an earlier autopilot goal, or does not cover the work.** The skill starts nothing. It says which goal is running; keeping it or ending it with `/goal clear` is your call.
-- **It cannot tell.** After a compaction or in a resumed session, the skill asks once and recommends that you type `/goal` alone, which shows the running condition. In a run with nobody to ask, it treats the goal as not running and adds a warning to the printed line: paste it only if no `/goal` is running, because a new one replaces it and restarts its turn count.
+- **Your goal is an earlier autopilot goal, or does not cover the work.** The skill starts nothing and writes nothing to `.local/autopilot.md`. It says which goal is running; keeping it or ending it with `/goal clear` is your call. To get an autopilot goal instead, run `/goal clear`, then run `/erfana:autopilot start` again.
+- **It cannot tell.** When you run `start` after a compaction or in a resumed session, the skill asks once and recommends that you type `/goal` alone, which shows the running condition. In a run with nobody to ask, it treats the goal as not running and adds a warning to the printed line: paste it only if no `/goal` is running, because a new one replaces it and restarts its turn count.
 
 ### 5. Check on it
 
@@ -300,7 +360,7 @@ Ask "do you need anything from me?" or run `/erfana:autopilot status`. You get w
 
 ### 6. Resume after a restart or compaction
 
-After a compaction, erfana's `post-compact-reminder` hook points the session at `.local/autopilot.md` while the run is active, so it carries on. After a restart or `/clear`, run `/erfana:autopilot resume`. On Qwen Code the compaction reminder's output is discarded, so always resume with `/autopilot resume`.
+After a compaction, erfana's `post-compact-reminder` hook points the session at `.local/autopilot.md` while the run is active, so it carries on. Resume works differently from start here: a turn that began from the compaction reminder counts as proof that the goal is still running, because compaction does not clear a goal, so resume carries on without asking and never reprints a goal you set yourself. After a restart or `/clear`, run `/erfana:autopilot resume`. On Qwen Code the compaction reminder's output is discarded, so always resume with `/autopilot resume`.
 
 ### 7. Stop the run
 
@@ -369,7 +429,11 @@ Report security issues **privately**. Do not open a public issue, pull request, 
 1. **Preferred:** use GitHub's [private vulnerability reporting for erfana-skills](https://github.com/qodeca/erfana-skills/security/advisories/new) – the "Report a vulnerability" button under the repository's **Security** tab. The report stays between you and the maintainers until a fix ships.
 2. **If private reporting is not available to you:** open a minimal public issue that contains **no exploit details** – only ask the maintainers to open a private channel – and they will follow up.
 
-Include the affected files or component, steps to reproduce or a proof of concept, the impact, and any fix you suggest. The maintainers aim to acknowledge a report within a few business days, and credit reporters who wish to be named once a fix is released.
+Private reporting counts as not available when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and the security policy names no other channel.
+
+Blank issues are turned off in this repository, so open the fallback issue with the **Bug report** template. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
+
+Include the affected files or component, steps to reproduce or a proof of concept, the impact, any fix you suggest, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version. The maintainers aim to acknowledge a report within a few business days, and credit reporters who wish to be named once a fix is released.
 
 Where to send what:
 

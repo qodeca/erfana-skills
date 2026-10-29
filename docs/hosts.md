@@ -33,8 +33,10 @@ its own allowlist, and writes a `qwen-extension.json` beside it. The conversion
 happens on the user's machine, after the release.
 
 **Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
-real install: `qwen extensions list` reports `Type: github-release` and
-`Release tag: v7.1.0`. Two consequences for maintainers. A fix reaches Qwen
+real install of a newer Qwen release than the tested one: `qwen extensions list`
+reports a header line
+`✓ erfana (9.2.0)`, then `Source: https://github.com/qodeca/erfana-skills
+(Type: github-release)` and `Release tag: v9.2.0`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
 is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by
@@ -144,6 +146,17 @@ would live upstream or would cost Claude Code users something.
   with `type:` and `file_restrictions:`. They stay in the files because Claude
   Code uses them.
 - **The post-compaction reminder runs but its output is discarded.** That includes its pointer to an active `erfana:autopilot` state file, so on Qwen a compacted run resumes only through `/autopilot resume`.
+- **`/goal` is Qwen's own command, not Claude Code's.** Qwen Code has a `/goal`
+  with `set`, `edit`, `pause`, `resume`, and `clear`, and its turn limits are
+  runtime settings rather than words in the goal
+  ([goal mechanics](../skills/draft-goal/references/goal-mechanics.md)).
+  `erfana:autopilot` and `erfana:draft-goal` write goals for Claude Code's
+  evaluator; whether such a goal drives an autopilot run on Qwen is not
+  verified. The state file and owner queue do not depend on `/goal`.
+- **Skill names can clash with Qwen's bundled skills.** A newer Qwen release than the
+  tested one ships a bundled `coordinate` skill. Read from its code, the `erfana.<name>` rename
+  below applies to extension commands only, not to skills; which `/coordinate`
+  starts has not been verified in a session.
 - **Commands register unnamespaced** – `/doc-update`, not `/erfana:doc-update` –
   so a name collision with a Qwen builtin renames the extension command to `erfana.<name>` rather than dropping it - the builtin takes the bare name, but the erfana command stays reachable under the dotted form.
 - **`$ARGUMENTS` is not substituted.** Qwen uses `{{args}}` and otherwise

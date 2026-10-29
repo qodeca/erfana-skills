@@ -16,9 +16,10 @@ It ships as a Claude Code plugin and also runs on Qwen Code, which converts Clau
 
 Before you start:
 
-- **Claude Code** or **Qwen Code** 0.22.3 or later.
+- **Claude Code** with the `/plugin` command. If Claude Code does not know `/plugin`, update it.
+- Or **Qwen Code** 0.22.3 or later.
 - **`jq`** on your `PATH` (macOS: `brew install jq`). Without it, five of the six safety hooks skip themselves and protect nothing. On Windows, the hooks need Git Bash and `powershell.exe` instead.
-- **GitHub CLI (`gh`), signed in**, only for the skills and commands that read or change GitHub: `issue`, `next-batch`, `coordinate`, `ship`, `explain-issue`, `project-status`, and `lens-review` on a pull request.
+- **GitHub CLI (`gh`), signed in**, only for what reads or changes GitHub: the skills `issue`, `next-batch`, `coordinate`, and `ship`, and the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request.
 
 On **Claude Code**, run these inside a session:
 
@@ -27,7 +28,7 @@ On **Claude Code**, run these inside a session:
 /plugin install erfana@erfana-skills
 ```
 
-Then restart Claude Code, because skills, agents, and hooks load when a session starts. To check it worked, type `/erfana:` – autocomplete lists the erfana skills and commands.
+Then restart Claude Code – type `/exit`, then run `claude` again – because skills, agents, and hooks load when a session starts. To check it worked, type `/erfana:` – autocomplete lists the erfana skills and commands. The full [install check](docs/how-to.md#check-the-install) also tests the safety hooks.
 
 On **Qwen Code**, run this in a shell and accept the prompt Qwen shows:
 
@@ -36,7 +37,7 @@ qwen extensions install qodeca/erfana-skills:erfana
 qwen extensions list
 ```
 
-On Qwen Code, every skill and command uses its bare name: `/issue`, not `/erfana:issue`.
+Then start a new `qwen` session, because skills, agents, and hooks load at session start. On Qwen Code, every skill and command uses its bare name: `/issue`, not `/erfana:issue`.
 
 Updating, removing, proxies, and other install problems are covered in the [how-to guides](docs/how-to.md#install-on-claude-code).
 
