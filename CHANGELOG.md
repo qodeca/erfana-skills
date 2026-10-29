@@ -3,6 +3,15 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.2.0] - 2026-10-29
+
+### Changed
+
+- **Paste-ready text has a clear start and end.** `erfana:draft-goal` and `erfana:autopilot` print the `/goal` line between `===== GOAL – START … =====` and `===== GOAL – END =====` lines, and `erfana:raise-the-bar` does the same for its rewritten request (`REQUEST`). The markers sit outside the code block, so you copy only the line inside it; the hand-off also points to `/copy` and to the `/goal` active indicator.
+- **Hard length limit.** The paste-ready text stays at or under about 3,500 characters (about 450 words), so it never reaches the 4,000-character limit where Claude Code refuses a `/goal`. Text over the limit is never printed as ready to paste; the skill says what to cut instead.
+- **`erfana:autopilot` uses a goal you already set.** When a `/goal` is running, autopilot writes no new goal: it records yours, shows the batch, what it may do, and its run rules, and ends its reply so your goal starts the work. Outward actions (push, pull request, messages) still need your own words. A leftover or unrelated goal starts nothing. After a compaction it treats the goal as still running and never reprints your own goal; `stop` clears only a goal autopilot wrote.
+- **`post-compact-reminder` hook** also names the autopilot Run rules section.
+
 ## [9.1.0] - 2026-10-28
 
 ### Added
