@@ -376,7 +376,7 @@ You may push the branches and open pull requests for this batch; do not merge.
 
 The skill quotes your message, with its date, in the state file.
 
-Your permission settings are the real limit: an action you have not allowed stops at a prompt, and one you allowed in advance runs whatever the goal says. The skill names the steps that will need a prompt. Before a long run, set [Claude Code permission rules](https://code.claude.com/docs/en/settings#permission-settings): allow rules for your project's test, lint, and build commands, so the run does not stop at a prompt, and ask rules for `git push` and `gh pr merge` when you have not authorized them. For example, in `.claude/settings.json`:
+Your permission settings are the real limit: an action you have not allowed stops at a prompt, and one you allowed in advance runs whatever the goal says. The skill names the steps that will need a prompt. Before a long run, set [Claude Code permission rules](https://code.claude.com/docs/en/permissions#permission-rule-syntax): allow rules for your project's test, lint, and build commands, so the run does not stop at a prompt, and ask rules for `git push` and `gh pr merge` when you have not authorized them. For example, in `.claude/settings.json`:
 
 ```json
 {
@@ -387,7 +387,7 @@ Your permission settings are the real limit: an action you have not allowed stop
 }
 ```
 
-A goal does not change the permission mode. In the default mode, every file edit and every command you have not allowed stops at a prompt, and the run waits until you come back. For a run nobody watches, switch Claude Code to auto mode before you paste the goal, and keep the ask rules for actions you have not authorized.
+A goal does not change the permission mode. In the default mode, every file edit and every command you have not allowed stops at a prompt, and the run waits until you come back. For a run nobody watches, switch Claude Code to [auto mode](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode) before you paste the goal (where your session does not offer it, use accept-edits mode plus allow rules for the commands the run needs), and keep the ask rules for actions you have not authorized.
 
 ### 4. Paste the goal
 
