@@ -2,6 +2,10 @@
 
 `erfana` is an open-source Claude Code plugin (GPL-3.0-only). This policy covers how to report vulnerabilities and what is in scope.
 
+## Supported versions
+
+Only the latest release receives security fixes. Fixes are not backported to older versions, so update to the latest release to get them.
+
 ## Reporting a vulnerability
 
 Please report security issues **privately** – do not open a public issue, pull request, or discussion for an unfixed vulnerability.
@@ -9,11 +13,11 @@ Please report security issues **privately** – do not open a public issue, pull
 - **Preferred:** use GitHub's [private vulnerability reporting](https://github.com/qodeca/erfana-skills/security/advisories/new) (the "Report a vulnerability" button under the repository's **Security** tab). This keeps the report confidential between you and the maintainers until a fix ships.
 - **If private reporting is unavailable to you:** open a minimal public issue that contains **no exploit details** – just ask the maintainers to open a private channel – and we will follow up.
 
-Private reporting counts as unavailable when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and this policy names no other channel.
+Private reporting counts as unavailable when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub. GitHub is the only way to report, so you need a GitHub account.
 
 Blank issues are turned off in this repository, so open the fallback issue from the [new issue page](https://github.com/qodeca/erfana-skills/issues/new/choose) with the **Bug report** template. The same page has a **Report a security vulnerability** link, which opens the private form from the preferred route. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details, and pick your host in the required **Host** list.
 
-Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, any suggested remediation, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version (`claude --version` or `qwen --version`). We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released.
+Please include: the affected file(s) or component, reproduction steps or a proof of concept, the impact, any suggested remediation, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version (`claude --version` or `qwen --version`). We aim to acknowledge a report within a few business days and will credit reporters who wish to be named once a fix is released. No fixed timeline for a fix is promised: this is a small project, and each fix ships in a normal release when it is ready.
 
 ## Scope
 
@@ -41,7 +45,7 @@ ls ~/.qwen/extensions/erfana/skills | wc -l        # expect 18 (the same as: ls 
 diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no output
 ```
 
-**Defects in the conversion itself belong upstream.** If Qwen drops an agent, mangles frontmatter, or mis-parses a manifest, report it to the Qwen Code project. What belongs here is anything erfana ships that is unsafe *because* of how the two hosts differ – a hook that fires on one host and not the other, or a block message that a host could be made to reinterpret.
+**Defects in the conversion itself belong upstream.** If Qwen drops an agent, mangles frontmatter, or mis-parses a manifest, report it to the Qwen Code project. What belongs here is anything erfana ships that is unsafe *because* of how the two hosts differ – a hook that fires on one host and not the other, or a block message that a host could be made to reinterpret. If a problem shows up only on Qwen Code and you cannot tell whether erfana or the conversion causes it, report it privately to erfana first; we pass it upstream if it belongs there.
 
 **Reduced hook coverage on Qwen, and two fail-open directions on both hosts.** Read [`docs/hosts.md`](docs/hosts.md) for the full matrix; the security-relevant parts:
 
