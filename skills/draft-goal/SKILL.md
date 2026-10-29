@@ -78,7 +78,7 @@ Rules for the content, each with its reason:
 - **User approval is never a completion check.** "After the user approves" cannot happen inside an unattended loop. Route it through the owner-decisions clause or into the bound's report.
 - **Exclusions close the cheap exits.** Name the shortcuts that would make a check pass without the work being done: deleting a failing test, lowering a threshold, editing the benchmark, skipping a hook.
 - **Irreversible actions stay out** unless the user explicitly allowed them: pushing, force-pushing, deleting branches, publishing, sending messages.
-- **Length.** The rule: the whole line, `/goal ` included, stays at or under 3,500 estimated characters. The documented ceiling for a condition is 4,000; the 500-character gap covers counting error, since counts here are estimates. A line over the rule is never printed as a runnable `/goal` line. Shorter reads better – most good goals fit in about 1,200 characters – but that is a habit, not a check. If a draft runs long, shorten paths, merge checks, or point to a checklist file that already exists in the workspace. If it still does not fit, use **Needs clarification** (Step 4) and offer to split the work into two goals.
+- **Length.** The rule: the whole line, `/goal ` included, stays at or under 3,500 estimated characters and about 450 words (count each path as about three words). Claude Code refuses a `/goal` over 4,000 characters; the gap covers counting error, since counts here are estimates. A line over the rule is never printed as a runnable `/goal` line. Shorter reads better – most good goals fit in about 1,200 characters – but that is a habit, not a check. If a draft runs long, shorten paths, merge checks, or point to a checklist file that already exists in the workspace. If it still does not fit, use **Needs clarification** (Step 4) and offer one goal over a checklist file, or two goals run one after the other – the second pasted only after the first is met or cleared, because a new `/goal` replaces the running one.
 
 Worked examples, weak to strong, and the shapes for audits and checklists: [references/condition-patterns.md](references/condition-patterns.md).
 
@@ -94,23 +94,24 @@ Before printing, confirm each line holds:
 6. `Not in scope` names the cheap exits and any irreversible actions.
 7. A `Bound` is present.
 8. Every path and command was confirmed in Step 1 or is marked `<TODO: ...>`.
-9. The whole `/goal` line is at or under 3,500 estimated characters (Step 3 length rule).
+9. The whole `/goal` line is at or under 3,500 estimated characters and about 450 words (Step 3 length rule).
 
 If any `<TODO: ...>` remains for a success check, a command, or a path, or item 9 still fails after the Step 3 length remedies, print the draft under the heading **Needs clarification** as plain labelled text – no `/goal ` prefix, no code block, no markers – so nothing in it looks ready to paste. List what is missing, or say it is over by roughly how much, and stop. Do not print a runnable `/goal` line for an incomplete draft – a goal set on a placeholder can never close.
 
 Otherwise print the hand-off below, and nothing else except the optional plan. Show the goal text exactly once – a second, reworded copy makes the user compare two versions to find out which one to paste. Keep the condition free of backticks and other markdown, so what the user copies is exactly what the evaluator reads.
 
 1. One or two plain sentences of context: what the goal will make Claude do, and the choices you made for the user (for example a raised turn limit).
-2. The goal, in three parts, every time, so the user sees where the text to copy begins and ends:
-   - the START marker as a plain line, never inside a fence: `===== GOAL – START (copy only the line inside the block) =====`
-   - a fenced code block holding only the goal, on a single line: `/goal Outcome: … Done when: 1) … 2) … Owner decisions: … Not in scope: … Bound: …`
-   - the END marker as a plain line, never inside a fence: `===== GOAL – END =====`
+2. The goal, in this order, every time, so the user sees where the text to copy begins and ends. Nothing else goes between the markers:
+   - a blank line, then the START marker as a plain line with no backticks: ===== GOAL – START (copy the /goal line below) =====
+   - a blank line, then a fenced code block tagged `text` holding only the goal, on a single line: `/goal Outcome: … Done when: 1) … 2) … Owner decisions: … Not in scope: … Bound: …`
+   - a blank line, then the END marker as a plain line with no backticks: ===== GOAL – END =====
 
 3. A short **How to use it** list:
-   1. Copy the one line inside the code block – it starts with `/goal`. The marker lines are not part of it.
-   2. Paste it as your next message and press Enter. Claude then keeps working, turn after turn, until every check is shown as passing.
-   3. Type `/goal` alone to see how it is going, or `/goal clear` to stop it early. A new `/goal` replaces one that is already running.
+   1. Type `/copy` and pick the code block, or select the one line inside it – it starts with `/goal` and may wrap on screen. The marker lines are not part of it.
+   2. Paste it as your next message and press Enter. Check that the `/goal` active indicator shows; if it does not, paste again with `/goal` at the very start. Claude then keeps working, turn after turn, until every check is shown as passing.
+   3. Type `/goal` alone to see how it is going, or `/goal clear` to stop it early. A new `/goal` replaces one that is already running. If `/goal` refuses the text as too long, run this skill again and ask for a shorter one.
 4. Only if there are any: an **Assumptions** list, one line each, so the user can fix them before pasting.
+5. Only if the user asked for one: the **Plan** (see the section below), always last.
 
 Then end the turn. This skill does not run `/goal` itself: a slash command run from inside a skill would start an autonomous loop the user has not yet read, and the plugin convention is to print the command and let the user run it.
 
