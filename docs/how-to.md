@@ -425,14 +425,14 @@ The run also keeps Claude Code's built-in task list short: after each item it ho
 
 ### 6. Resume after a restart or compaction
 
-After a compaction, a restart, or `/clear`, run `/erfana:autopilot resume` (on Qwen Code, `/autopilot resume`). erfana's `post-compact-reminder` hook prints a pointer to `.local/autopilot.md` after a compaction, but on both hosts that output does not reach the model, so do not wait for the run to carry on by itself. A `/goal` you set is not cleared by compaction: when the conversation shows the goal still running, resume carries on without asking and never reprints it.
+After a compaction, a restart, or `/clear`, run `/erfana:autopilot resume` (on Qwen Code, `/autopilot resume`, or a plain-words request such as "resume the autopilot run" if the bare command does not appear on your version). erfana's `post-compact-reminder` hook prints a pointer to `.local/autopilot.md` after a compaction, but on both hosts that output does not reach the model, so do not wait for the run to carry on by itself. Compaction does not clear a goal: when the conversation shows the goal still running, resume carries on without asking. `/clear` does remove the goal. After it, resume prints a goal autopilot wrote again for you to paste, and for a goal you set yourself it asks whether it still runs.
 
 ### 7. When the run stops on its own
 
 When the goal's Bound ends the run, for example once only your decisions are left, the state file may still say `Status: active`, so a new `start` is refused. Two outcomes are possible:
 
 - **The state file still says `Status: active`.** A new `start` is refused. Answer the queue with `/erfana:autopilot status`, then run `/erfana:autopilot resume`: for a goal autopilot wrote, it prints the stored `/goal` line again for you to paste.
-- **The state file says `Status: finished`.** The run closed itself, because the goal was met. `resume` only says the run is closed. Answer anything left with `/erfana:autopilot status`, then start a new run with `/erfana:autopilot start`; the old run is kept under `## Previous run`.
+- **The state file says `Status: finished`.** The run closed itself, because the goal was met, judged impossible, or cleared. `resume` only says the run is closed, and `status` only shows the final summary – it no longer asks the queue questions. Read the Owner queue section in `.local/autopilot.md` yourself, then start a new run with `/erfana:autopilot start` and give your answers in that message; the old run is kept under `## Previous run`.
 
 Claude Code can also stop the loop with a warning when Claude answers the evaluator several turns in a row without using a tool, which is typical when only your decisions are left. The goal stays set: answer the queue with `status`, or end the run as in the next step.
 
@@ -440,7 +440,7 @@ To end the run instead, use the next step.
 
 ### 8. Stop the run
 
-Run `/erfana:autopilot stop`. `/goal clear` on its own is not enough: it ends the goal, but the state file stays `Status: active` and the next `start` is refused, so always run `stop` too. To interrupt the turn that is running now, press `Esc` (a Claude Code control); `/goal clear` only stops the turns after it. With `stop`, the state file is marked `Status: finished` with a final summary; the file is never deleted. If autopilot wrote the goal, it prints `/goal clear` for you to run. If the goal is yours, it says the goal is still set and that ending it with `/goal clear` is your call.
+Run `/erfana:autopilot stop`. `/goal clear` on its own is not enough: it ends the goal, but the state file stays `Status: active` and the next `start` is refused, so always run `stop` too. To interrupt the turn that is running now, press `Esc` (a Claude Code control); `/goal clear` only stops the turns after it. With `stop`, the state file is marked `Status: finished` with a final summary; the file is never deleted. If autopilot wrote the goal and it still runs, it prints `/goal clear` for you to run; if it cannot tell, it prints the line with the note "only if a goal is running"; if the goal has already ended, it prints nothing. If the goal is yours, it says the goal is still set and that ending it with `/goal clear` is your call.
 
 ### Write a goal without a run
 
@@ -507,7 +507,7 @@ Report security issues **privately**. Do not open a public issue, pull request, 
 
 Private reporting counts as not available when the "Report a vulnerability" button is missing, or the link does not open a report form. The form needs a signed-in GitHub account, and so does the fallback issue: both routes go through GitHub, and the security policy names no other channel.
 
-Blank issues are turned off in this repository, so open the fallback issue from the [new issue page](https://github.com/qodeca/erfana-skills/issues/new/choose) with the **Bug report** template. The same page has a **Report a security vulnerability** link, which opens the private form from the preferred route. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details.
+Blank issues are turned off in this repository, so open the fallback issue from the [new issue page](https://github.com/qodeca/erfana-skills/issues/new/choose) with the **Bug report** template. The same page has a **Report a security vulnerability** link, which opens the private form from the preferred route. Its note asks you not to report vulnerabilities there – that means the details. In each required text field, write only that you are asking for a private security channel and are holding back the details, and pick your host in the required **Host** list.
 
 Include the affected files or component, steps to reproduce or a proof of concept, the impact, any fix you suggest, the erfana version (shown by `claude plugin list` or `qwen extensions list`), and the host – Claude Code or Qwen Code – with its version (`claude --version` or `qwen --version`). The maintainers aim to acknowledge a report within a few business days, and credit reporters who wish to be named once a fix is released.
 
