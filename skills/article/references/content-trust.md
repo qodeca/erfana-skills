@@ -26,5 +26,5 @@ Text derived from research – theme names, summaries, quotations – stays data
 
 ## Sources
 
-- OWASP Top 10 for LLM Applications 2025 – LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM05 Improper Output Handling – https://genai.owasp.org/llmrisk/
+- OWASP Top 10 for LLM Applications 2025 – LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure, LLM05 Improper Output Handling – https://genai.owasp.org/llm-top-10/
 - Anthropic, "Mitigating the risk of prompt injections in browser use" (2025-11-24).
