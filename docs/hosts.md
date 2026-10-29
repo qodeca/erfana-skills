@@ -14,7 +14,7 @@ around it is written by hand.
 
 | Host | Key | How it consumes erfana | Install | Version tested | Hook `timeout` |
 |---|---|---|---|---|---|
-| Claude Code | `claude-code` | native plugin | `/plugin marketplace add qodeca/erfana-skills` | – | seconds, default 600 |
+| Claude Code | `claude-code` | native plugin | `/plugin marketplace add qodeca/erfana-skills`, then `/plugin install erfana@erfana-skills` | – | seconds, default 600 |
 | Qwen Code | `qwen-code` | converted at install time | `qwen extensions install qodeca/erfana-skills:erfana` | 0.22.3 | milliseconds, default 60000 |
 
 Derived from `scripts/_lib/host_matrix.py`. The Qwen row was read from bundle
@@ -33,12 +33,16 @@ its own allowlist, and writes a `qwen-extension.json` beside it. The conversion
 happens on the user's machine, after the release.
 
 **Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
-real install: `qwen extensions list` reports `Type: github-release` and
-`Release tag: v7.1.0`. Two consequences for maintainers. A fix reaches Qwen
+real install of a newer Qwen release than the tested one: `qwen extensions list`
+reports a header line
+`✓ erfana (9.2.1)`, then `Source: https://github.com/qodeca/erfana-skills
+(Type: github-release)` and `Release tag: v9.2.1`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
-is the tagged tree, which is what `scripts/qwen-smoke.sh` should be pointed at
-before a release rather than the working tree. Users update with
+is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by
+default (CI uses that default). After a release, run
+`bash scripts/qwen-smoke.sh --from-marketplace` to install and check the
+published tag instead. Users update with
 `qwen extensions update erfana`.
 
 It also runs a variable-replacement pass over **every** `.md` in the tree, not
@@ -63,7 +67,10 @@ reports when the checksum moves.
 ## Tool-name vocabulary
 
 Claude Code tool names are canonical everywhere in this repository. Qwen names
-appear in exactly one place: hook `matcher:` strings in `hooks/hooks.json`.
+appear in two places: hook `matcher:` strings in `hooks/hooks.json`, and the
+hook scripts that branch on the `tool_name` in the payload, because the payload
+carries Qwen's own name. `hooks/secret-detector.sh` and its `.ps1` sibling, for
+example, match both `Write|write_file` and `Edit|edit`.
 
 | Where a tool is named | Converted by Qwen? | Rule |
 |---|---|---|
@@ -78,7 +85,7 @@ names already work there unchanged – `Edit`, `Grep`, `Glob`, `Task`,
 `TodoWrite`, `AskUserQuestion`, `WebSearch`, `WebFetch`, `NotebookEdit`,
 `Skill`, `ExitPlanMode`. Four do not: `Bash`, `Read`, `Write` and `MultiEdit`.
 The first three have Qwen counterparts a matcher must also name; `MultiEdit` and
-`SlashCommand` have none at all, so naming them is harmless and simply never
+`SlashCommand` have none at all, so naming them is harmless and never
 fires there.
 
 One trap worth stating explicitly: do not add a lowercase `edit` alternative to
@@ -110,11 +117,13 @@ themselves need no host branch:
 | Exit 2 plus a message on stderr | Block the tool call |
 | Exit 0 plus `{"decision":"block","reason":"..."}` on stdout | Block the stop |
 | Exit 0, no output | Allow |
-| Killed by the watchdog | **Allow.** The watchdog sends SIGTERM, so the hook exits 143; Qwen's own timeout produces 142. Neither is 2, so neither is read as a block |
+| Killed by the watchdog | **Allow.** The watchdog sends SIGTERM, so the hook exits 143 – or 137 if it survives a one-second grace and gets SIGKILL; Qwen's own timeout produces 142. Neither is 2, so neither is read as a block |
 
 That last row is the one to remember: the hooks fail open. A hook that cannot
-run does not protect you. `hooks/dispatch.sh` emits a diagnostic to stderr when
-it has to skip a hook, so a silent failure is at least a loud one.
+run does not protect you. `hooks/dispatch.sh` prints a stderr note when it skips
+a hook because `jq` or `cygpath` is missing, but it exits 0, so the host may not
+show the note. A watchdog timeout is silent: the launcher hides the reap
+message on purpose.
 
 ## What degrades on Qwen Code
 
@@ -132,13 +141,28 @@ would live upstream or would cost Claude Code users something.
   field is never read, so erfana's skills run unrestricted there. The spelling
   stays as it is because Claude Code does enforce it.
 - **Command `allowed-tools:` is not enforced either**, so the scoped
-  `Bash(git status:*)` grants in three commands become approval prompts.
+  `Bash(...)` grants in all five commands become approval prompts.
 - **Agent `effort:` and `capabilities:` are dropped** by the converter, along
   with `type:` and `file_restrictions:`. They stay in the files because Claude
   Code uses them.
 - **The post-compaction reminder runs but its output is discarded.** That includes its pointer to an active `erfana:autopilot` state file, so on Qwen a compacted run resumes only through `/autopilot resume`.
+- **`/goal` is Qwen's own command, not Claude Code's.** Qwen Code has a `/goal`
+  with `set`, `edit`, `pause`, `resume`, and `clear`, and its turn limits are
+  runtime settings rather than words in the goal
+  ([goal mechanics](../skills/draft-goal/references/goal-mechanics.md)).
+  `erfana:autopilot` and `erfana:draft-goal` write goals for Claude Code's
+  evaluator; whether such a goal drives an autopilot run on Qwen is not
+  verified. The state file and owner queue do not depend on `/goal`.
+- **Skill names can clash with Qwen's bundled skills.** A newer Qwen release than the
+  tested one ships a bundled `coordinate` skill. Read from its code, the `erfana.<name>` rename
+  below applies to extension commands only, not to skills; which `/coordinate`
+  starts has not been verified in a session.
 - **Commands register unnamespaced** – `/doc-update`, not `/erfana:doc-update` –
   so a name collision with a Qwen builtin renames the extension command to `erfana.<name>` rather than dropping it - the builtin takes the bare name, but the erfana command stays reachable under the dotted form.
+- **Skills start by their bare name.** On a newer Qwen release than the tested one, a skill registers as
+  a bare slash command (`/spec`, `/issue`); the Claude Code form `/erfana:spec`
+  is not registered there. A request in plain words that names the skill also
+  starts it. The bare registration has not been checked on the tested version.
 - **`$ARGUMENTS` is not substituted.** Qwen uses `{{args}}` and otherwise
   appends the raw invocation to the end of the prompt. Each argument-taking
   command carries both tokens and a rule for telling which one the host filled
@@ -156,6 +180,7 @@ would live upstream or would cost Claude Code users something.
 | Cross-host wiring rules | `bash scripts/run-all-gates.sh` (Gates 2, 14, 15) |
 | Hook behaviour on real payloads | `bash scripts/gate-16-hook-fixtures.sh` |
 | Install and conversion on Qwen | `bash scripts/qwen-smoke.sh` |
+| The published release on Qwen | `bash scripts/qwen-smoke.sh --from-marketplace` |
 | The generated table above | `bash scripts/gen-hosts-table.sh` produces no diff |
 
 The smoke test is deliberately not part of `run-all-gates.sh`. That runner has

@@ -48,7 +48,7 @@ body:
     id: env
     attributes:
       label: Environment
-      description: Host version, OS, and plugin version (`/plugin list` on Claude Code, `qwen extensions list` on Qwen Code).
+      description: Host version, OS, and plugin version (`claude plugin list`, or `/plugin list` inside a Claude Code session; `qwen extensions list` on Qwen Code).
       placeholder: |
         - Host version:
         - OS:

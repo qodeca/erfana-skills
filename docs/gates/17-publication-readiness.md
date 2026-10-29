@@ -1,4 +1,4 @@
-# Gate 17 — publication readiness
+# Gate 17 – publication readiness
 
 **Type:** hard. **Script:** [`scripts/gate-17-publication-readiness.sh`](../../scripts/gate-17-publication-readiness.sh). **Added:** v6.0.0 (the open-source release).
 
@@ -6,10 +6,10 @@
 
 The plugin shipped as a private, proprietary, Qodeca-internal tool before v6.0.0. This gate is the regression guard that keeps proprietary or internal-only framing from creeping back into the now-public (GPL-3.0-only) repository. Four hard checks:
 
-1. **LICENSE is the GNU GPL** — the `LICENSE` file contains the GNU General Public License text and carries no proprietary "All rights reserved" notice.
-2. **Manifests declare GPL-3.0-only** — `.claude-plugin/plugin.json` and `marketplace.json` do not declare a "Proprietary" license, and `plugin.json` declares `"license": "GPL-3.0-only"`.
-3. **No internal contact address** — no `@qodeca.com` email appears in published files, with one allowed exception: the public `hi@qodeca.com` contact address in `CODE_OF_CONDUCT.md`. Every other `@qodeca.com` address still fails the gate. Security routing goes through GitHub private vulnerability reporting; see `SECURITY.md`.
-4. **No proprietary / internal-only framing** — published files do not reintroduce phrases like "Qodeca-internal", "employees and contractors only", "For internal use by Qodeca", "private internal", or "internal-only license".
+1. **LICENSE is the GNU GPL** – the `LICENSE` file contains the GNU General Public License text and carries no proprietary "All rights reserved" notice.
+2. **Manifests declare GPL-3.0-only** – `.claude-plugin/plugin.json` and `marketplace.json` do not declare a "Proprietary" license, and `plugin.json` declares `"license": "GPL-3.0-only"`.
+3. **No internal contact address** – no `@qodeca.com` email appears in published files, with one allowed exception: the public `hi@qodeca.com` contact address. It is allowed in any published file, for example `CODE_OF_CONDUCT.md` and `README.md`, which carry it today. Every other `@qodeca.com` address still fails the gate. Security routing goes through GitHub private vulnerability reporting; see `SECURITY.md`.
+4. **No proprietary / internal-only framing** – published files do not reintroduce phrases like "Qodeca-internal", "employees and contractors only", "For internal use by Qodeca", "private internal", or "internal-only license".
 
 ## Exemptions
 
@@ -21,7 +21,7 @@ Going public is irreversible: once the repository is public, anything in it is f
 
 ## Known limitation
 
-The text scans use `grep -nIHE`, where `-I` skips binary files. A proprietary string embedded in a binary asset (a PDF text layer, PNG metadata) would not be detected. This is acceptable under the current threat model — text source is the realistic leak vector, and the v6.0.0 release removed all proprietary binaries — but a future binary asset is a structural blind spot. Mitigation if needed: add a `git ls-files '*qodeca*'` filename check.
+The text scans use `grep -nIHE`, where `-I` skips binary files. A proprietary string embedded in a binary asset (a PDF text layer, PNG metadata) would not be detected. This is acceptable under the current threat model – text source is the realistic leak vector, and the v6.0.0 release removed all proprietary binaries – but a future binary asset is a structural blind spot. Mitigation if needed: add a `git ls-files '*qodeca*'` filename check.
 
 ## Run standalone
 

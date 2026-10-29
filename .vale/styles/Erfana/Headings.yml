@@ -1,0 +1,54 @@
+# House style: sentence case headings.
+extends: capitalization
+message: "Use sentence case for the heading '%s'."
+level: error
+scope: heading
+match: $sentence
+indicators:
+  - ':'
+  - '–'
+exceptions:
+  - Anthropic
+  - API
+  - Apache
+  - CI
+  - CLA
+  - Claude
+  - Claude Code
+  - CLAUDE
+  - CJK
+  - Diataxis
+  - Django
+  - Fable
+  - GitHub
+  - GPL
+  - Haiku
+  - JSON
+  - Linux
+  - Markdown
+  - MCP
+  - MIT
+  - Opus
+  - Owner
+  - PowerShell
+  - PR
+  - Python
+  - Qodeca
+  - Qwen
+  - Qwen Code
+  - README
+  - REUSE
+  - Rust
+  - SDLC
+  - SPDX
+  - Sonnet
+  - Stripe
+  - Windows
+  - YAML
+  - macOS
+  - Gate
+  - PreToolUse
+  - PostCompact
+  - OSS
+  - 'v[0-9][0-9.]*(-rc\.[0-9]+)?'
+  - '#[0-9]+'

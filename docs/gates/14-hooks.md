@@ -21,7 +21,17 @@ bash scripts/gate-14-hooks.sh
 
 ## Pass criteria
 
-When `hooks/` does not exist, the gate is a no-op (`PASS: no hooks/ directory`). This keeps the gate quiet for any future fork that elects to drop hooks. Pass = `PASS: hooks.json shape, <N> entries, all paths use ${CLAUDE_PLUGIN_ROOT}` (this check also enforces the `.sh` + `.ps1` sibling pair per dispatched hook) followed by `PASS: bash -n clean on all hook scripts`, then either `PASS: shellcheck clean` / `SKIP: shellcheck not on PATH`, and either `PASS: PowerShell parse clean on all .ps1 hooks` / `SKIP: no PowerShell on PATH`.
+When `hooks/` does not exist, the gate is a no-op (`PASS: no hooks/ directory`). This keeps the gate quiet for any future fork that elects to drop hooks. Otherwise a passing run prints these lines in order:
+
+1. `PASS: hooks.json shape, <N> entries, all paths use ${CLAUDE_PLUGIN_ROOT}` (this check also enforces the `.sh` + `.ps1` sibling pair per dispatched hook).
+2. `PASS: bash -n clean on all hook scripts`.
+3. `PASS: shellcheck clean` or `SKIP: shellcheck not on PATH`.
+4. `PASS: PowerShell parse clean on all .ps1 hooks` or `SKIP: no PowerShell on PATH`.
+5. `PASS: no 'timeout' key in hooks.json (unit differs per host)` (7a).
+6. `PASS: every matcher is plain, non-empty, known and dual-named` (7b and 7c).
+7. `PASS: every block message is a literal, on both .sh and .ps1` (7d).
+8. `PASS: no skill declares hooks: or timeout: in SKILL.md frontmatter` (7e).
+9. `PASS: dispatch.sh carries the process-group watchdog` (check 8).
 
 ## Adding a new hook
 
@@ -36,15 +46,23 @@ When `hooks/` does not exist, the gate is a no-op (`PASS: no hooks/ directory`).
 
 ## Cross-host contract (check 7, v7.1.0)
 
-Four rules that `hooks/dispatch.sh`, `CLAUDE.md`, `docs/hosts.md` and `scripts/_lib/host_matrix.py` all already stated as this gate's job, and that nothing enforced until v7.1.0. Re-adding a `timeout` key or dropping a Qwen alias passed the whole suite.
+Five rules that `hooks/dispatch.sh`, `CLAUDE.md`, `docs/hosts.md` and `scripts/_lib/host_matrix.py` all already stated as this gate's job, and that nothing enforced until v7.1.0. Re-adding a `timeout` key or dropping a Qwen alias passed the whole suite.
 
 | Rule | Why it is not a style nit |
 |---|---|
 | **7a** No `timeout` key anywhere in `hooks.json` | The field is seconds on Claude Code (default 600) and milliseconds on Qwen Code (default 60000). `5` means five seconds here and five milliseconds there, so every hook died before reading its payload. The bound lives in `dispatch.sh`, where a second is a second on both. |
-| **7b** A matcher naming a Claude-only tool must also name its Qwen canonical | Read from `CLAUDE_TO_QWEN_TOOL` in `scripts/_lib/host_matrix.py`. `Bash` does not resolve to `run_shell_command`, so `bash-safety` simply never fired on Qwen. `MultiEdit` and `SlashCommand` are exempt – they have no Qwen counterpart. |
-| **7c** Matchers are plain `\|`-separated tool names | A matcher Qwen cannot resolve as an alias falls through to a substring test, so regex syntax widens coverage there without widening it here. |
+| **7b** A matcher naming a Claude-only tool must also name its Qwen canonical | Read from `CLAUDE_TO_QWEN_TOOL` in `scripts/_lib/host_matrix.py`. `Bash` does not resolve to `run_shell_command`, so `bash-safety` never fired on Qwen. `MultiEdit` and `SlashCommand` are exempt – they have no Qwen counterpart. |
+| **7c** Matchers are plain `\|`-separated tool names, each one known, none empty | A matcher Qwen cannot resolve as an alias falls through to a substring test, so regex syntax widens coverage there without widening it here. An empty alternative (a stray `\|`) matches every tool on Claude Code. A name missing from `KNOWN_MATCHER_NAMES` in `host_matrix.py` – a typo or a wrong case – fires on neither host. The all-tools matchers `*` and the empty string are allowed. |
 | **7d** Every stderr line preceding an `exit 2` is a literal | Qwen parses exit-2 stderr as JSON when it parses. Interpolating a filename into a block message would let attacker-controlled text emit a JSON body and change the hook's decision. All messages are static single-quoted literals today; this keeps them that way. |
+| **7e** No `SKILL.md` declares `hooks:` or a `timeout:` key in its frontmatter | Qwen Code does not extract the `hooks:` field, so a skill-scoped hook would run on Claude Code only. A `timeout:` key there has the same unit problem as 7a. |
 
-Known blind spot in 7d: the walk-back reads the `>&2` lines immediately above an `exit 2` and stops at the first line that is not one. A block message assembled some other way - a `cat >&2 <<EOF` heredoc, or a variable interpolated on a line the walk-back never reaches - would evade it. No shipped hook builds a message that way (`grep -n 'cat >&2' hooks/*.sh` is empty), and the rule is a tripwire against a plausible future edit rather than a proof. If a hook ever needs a multi-line block message, extend the walk-back first.
+How 7d reads the hooks today:
+
+- In `.sh` hooks it walks back from each `exit 2` over the `>&2` lines above it, skipping blank lines and stopping at the first line that is not a `>&2` line. The window is seven lines.
+- It also checks the same-line form `echo '...' >&2; exit 2`.
+- A heredoc whose body carries a decision (`"decision"` or `BLOCKED:`) must use a quoted delimiter, so the shell cannot expand the body. This covers the stderr form and the Stop hooks' stdout JSON.
+- In `.ps1` hooks it flags any double-quoted string with a `$` on a line that emits a block (`Block`, `Error.WriteLine`, `Write-Output`, `Write-Error`).
+
+Remaining blind spots: a block message written more than seven lines above its `exit 2`, and a message that reaches stderr some way other than a `>&2` line or a decision heredoc. The rule is a tripwire against a plausible future edit, not a proof. If a hook ever needs a longer block message, extend the walk-back first.
 
 **Check 8** greps `dispatch.sh` for `HOOK_TIMEOUT_SECONDS` and for a process-group kill (`kill -TERM "-$…"`). A leaf-only kill bounds nothing: hooks spawn `jq` and `grep` children that inherit stdout, and both hosts wait for the stream to close rather than for the process to exit. The grep catches a silent revert to a plain `exec`; Gate 16's wall-clock fixture is what proves the bound actually holds.

@@ -1,0 +1,22 @@
+# lychee link-checker configuration – run through scripts/check-docs.sh.
+# Local links and #fragments are always checked; web links are checked unless
+# --offline is passed (the default in the gate runner, so CI flakiness on third-party
+# sites never blocks a merge; the docs CI job checks them with retries).
+include_fragments = "anchor-only"
+max_retries = 3
+retry_wait_time = 2
+timeout = 20
+accept = ["200..=299", "429"]
+exclude_path = [
+  "node_modules",
+  ".local",
+  "skills/article/templates",
+  "tests/skill/fixtures",
+]
+exclude = [
+  # Placeholder and sample URLs used in examples.
+  '^https?://(www\.)?example\.(com|org)',
+  '^https?://localhost',
+  # Pages that refuse automated clients; checked by hand at release.
+  '^https://(www\.)?linkedin\.com',
+]

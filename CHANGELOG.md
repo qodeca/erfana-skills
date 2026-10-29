@@ -3,13 +3,30 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.2.1] - 2026-10-29
+
+### Changed
+
+- **New documentation, arranged by what you want to do.** A [tutorial](docs/tutorial.md) for a first session, [how-to guides](docs/how-to.md) for real tasks (install on Claude Code or Qwen Code, pick a skill, write a spec, run an unattended session, report a security problem), a [reference](docs/reference.md) of every skill, agent, command, and hook, and an [explanation](docs/explanation.md) of how erfana is built. `README.md` is the entry point, and each page names the erfana version it describes.
+- **`SECURITY.md` states its promises.** Only the latest release gets security fixes; no fixed timeline for a fix is promised; GitHub is the only way to report; a problem seen only on Qwen Code with an unclear cause goes privately to erfana first.
+
+### Fixed
+
+- **`erfana:spec` can write the first spec in a new project.** With no `specs/registry.json` yet, the skill now creates the registry and says so, instead of stopping before it writes the spec.
+- **`erfana:article` links the live OWASP LLM top-10 page.** The old link returned 404.
+
+### Internal
+
+- **The reference is generated and checked.** `scripts/gen-reference.sh` writes `docs/reference.md` from the plugin files. The new Gate 19 fails when the page and the files disagree, or when a user page names a different version than `plugin.json`.
+- **Docs are checked in CI.** `scripts/check-docs.sh` runs lychee (links), vale (house style), markdownlint-cli2, and the tutorial's own commands; the new `docs` job in `verify.yml` runs it with `--offline`.
+
 ## [9.2.0] - 2026-10-29
 
 ### Changed
 
 - **Paste-ready text has a clear start and end.** `erfana:draft-goal` and `erfana:autopilot` print the `/goal` line between `===== GOAL – START … =====` and `===== GOAL – END =====` lines, and `erfana:raise-the-bar` does the same for its rewritten request (`REQUEST`). The markers sit outside the code block, so you copy only the line inside it; the hand-off also points to `/copy` and to the `/goal` active indicator.
 - **Hard length limit.** The paste-ready text stays at or under about 3,500 characters (about 450 words), so it never reaches the 4,000-character limit where Claude Code refuses a `/goal`. Text over the limit is never printed as ready to paste; the skill says what to cut instead.
-- **`erfana:autopilot` uses a goal you already set.** When a `/goal` is running, autopilot writes no new goal: it records yours, shows the batch, what it may do, and its run rules, and ends its reply so your goal starts the work. Outward actions (push, pull request, messages) still need your own words. A leftover or unrelated goal starts nothing. After a compaction it treats the goal as still running and never reprints your own goal; `stop` clears only a goal autopilot wrote.
+- **`erfana:autopilot` uses a goal you already set.** When a `/goal` is running, autopilot writes no new goal: it records yours, shows the batch, what it may do, and its run rules, and ends its reply so your goal starts the work. Outward actions (push, pull request, messages) still need your own words. A leftover or unrelated goal starts nothing. On resume after a compaction it treats the goal as still running and never reprints your own goal; `stop` clears only a goal autopilot wrote.
 - **`post-compact-reminder` hook** also names the autopilot Run rules section.
 
 ## [9.1.0] - 2026-10-28
@@ -107,7 +124,7 @@ Kept under the same name: `architecture-reviewer`, `article-researcher`, `articl
 - The `issue` run-state comment and resume.
 - The `report` `thorough` level and advisory quality score.
 
-### Maintainers
+### Internal
 
 - Gate 2 fails any agent whose prompt does not open with the top 1% bar.
 - Gate 15 matches a skill only on an explicit mention (backticked, `erfana:`-namespaced, or a `skills/<name>/` path), because the new skill names are common words.
@@ -309,6 +326,7 @@ default** of an unlabeled issue in a public repo with no e2e harness; Phase 11
 offers two further interactions, so a typical run lands at 18-19.
 
 ### Added
+
 - managing-issues: **three deep-review sub-gates** inside the existing phases –
   `QG-4a` (user-run `/erfana:lens-review` of the design), `QG-4b` (architecture
   acceptance, runs on every pass including a clean review) and `QG-11a`
@@ -377,6 +395,7 @@ offers two further interactions, so a typical run lands at 18-19.
   declares its task-list advance as an output artifact.
 
 ### Changed
+
 - managing-issues: **eight existing gates - nine prompt sites - turned from
   prose checkpoints into real blocking `AskUserQuestion` calls**,
   tier-conditionally: QG-2, QG-3, QG-4, QG-6, QG-8, QG-9, QG-11 and QG-12,
@@ -501,6 +520,7 @@ offers two further interactions, so a typical run lands at 18-19.
 ## [6.4.0] - 2026-08-03
 
 ### Added
+
 - managing-skills: **coverage-map requirements interrogation across all four
   operations**. Create always interviews; Modify, Modernize, and Review open
   with a gate question ("particular ideas or reasons?" / "observations,
@@ -529,6 +549,7 @@ offers two further interactions, so a typical run lands at 18-19.
   obligation inherited by the eventual release): `docs/known-caveats.md`.
 
 ### Changed
+
 - managing-skills: Create Step 0 pipeline rewritten (grill-planner plan →
   orchestrator-run interview → merge by `maps_to` → `ms-requirements-validator`,
   whose contract is unchanged and Create-only — extra audit fields
@@ -538,6 +559,7 @@ offers two further interactions, so a typical run lands at 18-19.
   budget bands; `guides/quick-start.md` FAQ updated.
 
 ### Removed
+
 - **BREAKING:** `agents/ms-requirements-gatherer.md` retired, superseded by
   `grill-planner` (net shared-agent count unchanged at 87). Migration for
   downstream consumers: the old agent's output (`extracted_requirements:
@@ -551,6 +573,7 @@ offers two further interactions, so a typical run lands at 18-19.
 ## [6.3.0] - 2026-08-03
 
 ### Added
+
 - managing-skills: `guides/claude-5-patterns.md` — the current model-pattern
   reference for the Claude 5 family (Opus 5, Fable 5): reasoning-display
   hazard, effort recalibration (one step cooler), delegation calibration,
@@ -577,6 +600,7 @@ offers two further interactions, so a typical run lands at 18-19.
   non-mapping frontmatter FAIL, absolute line numbers).
 
 ### Changed
+
 - managing-skills Claude 5 refresh (research-driven audit, 2026-08-02, plus
   full remediation of the follow-up 5-lens review's 31 findings, 2026-08-03):
   - Checklist item 12.4 repurposed in place: "Explicit fan-out" (4.7-era,
@@ -644,6 +668,7 @@ offers two further interactions, so a typical run lands at 18-19.
 ## [6.2.0] - 2026-07-22
 
 ### Changed
+
 - grill-me: rewritten from a 4-rule prose sketch (23 lines, imported verbatim
   from upstream superpowers:grill-me in v4.2.3) into a machine-checkable
   interrogation protocol. Research-grounded design (three research tracks:
@@ -658,6 +683,7 @@ offers two further interactions, so a typical run lands at 18-19.
   understanding is reached") is gone - completion is a property of the map.
 
 ### Added
+
 - grill-me: `references/question-stems.md` - the 16-dimension question-stem
   library with verbatim battle-tested stems (Gause & Weinberg context-free
   questions, Klein premortem, Shostack Four Questions, UK MOD red-teaming
@@ -679,12 +705,14 @@ offers two further interactions, so a typical run lands at 18-19.
   the gate, PowerShell via a local pwsh replay of all 15 fixtures.
 
 ### Fixed
+
 - docs/gates/16-hook-fixtures.md: pass-criteria symmetry count corrected
   from the stale "currently 5" to the actual per-file arithmetic (the
   v4.2.20 `.ps1` additions were never reflected in the doc; the script
   always counted correctly).
 
 ### Evaluation
+
 - RED/GREEN pressure-tested per Anthropic skill-authoring guidance: 3
   scenarios (trivial plan, multi-branch plan, hostile impatient persona)
   x 2 repetitions per condition, before and after. Baseline (old skill):
@@ -703,6 +731,7 @@ offers two further interactions, so a typical run lands at 18-19.
 ## [6.1.0] - 2026-07-22
 
 ### Fixed
+
 - managing-reports: CREATE interview moved to the main conversation – the
   gather-report-requirements subagent could never call AskUserQuestion
   (2026-07-22 lens review, findings 1-2). New reference/interview-questions.md
@@ -716,18 +745,21 @@ offers two further interactions, so a typical run lands at 18-19.
   with the other five validators (findings 4, 16).
 
 ### Added
+
 - managing-reports: approval gates and pre-edit backups for MODIFY, VERSION,
   RESTORE, and structure writes; delimiter discipline appended to every
   agent trust boundary; examples/ directory linked from SKILL.md; TOCs on
   all reference files (findings 6-8, 12, 18-19).
 
 ### Changed
+
 - managing-reports: style thresholds deduplicated into reference files as
   the single source of truth, with agents reading them at run start;
   execution-ceremony prose collapsed; maintenance calendar removed
   (findings 3, 13-14, 25).
 
 ### Deferred
+
 - validate-capitalization stays on sonnet (finding 17) – no eval harness to
   verify haiku accuracy parity on proper-noun edge cases.
 
@@ -1223,7 +1255,7 @@ Stakeholder rewrite of the two existing status slash commands (`/erfana:project-
 
 ### Added
 
-- **Hallucination guards section (mandatory before drafting)** – identical in both command protocols. Hard rules: source attribution (every fact must trace to a tool call output or conversation content), no acronym expansion without evidence (RBAC, FIC, MI, RU, PE, DNS, SDK, CRUD stay verbatim unless the gathered state itself includes the expansion), no evaluative adverbs without evidence ("successfully", "smoothly", "cleanly", "on schedule" banned without explicit confirmation), quantifier grounding (every number ties to a tool output or explicit statement), status-label criteria (stable / in-flight / blocked each have explicit triggers; if none apply, drop the label), date discipline (relative dates computed against the actual current date), grounded issue/PR translations (translate only if title/body fetched), banned narrative phrases ("the team", "as planned", "on track", "moving forward", "good shape", "healthy state"), and a confidence-calibration headline ("Session state unclear – limited context available" / "<repo-name> state unclear – partial signals available") when the gathered state cannot support a confident narrative.
+- **Hallucination guards section (mandatory before drafting)** – identical in both command protocols. Hard rules: source attribution (every fact must trace to a tool call output or conversation content), no acronym expansion without evidence (RBAC, FIC, MI, RU, PE, DNS, SDK, CRUD stay verbatim unless the gathered state itself includes the expansion), no evaluative adverbs without evidence ("successfully", "smoothly", "cleanly", "on schedule" banned without explicit confirmation), quantifier grounding (every number ties to a tool output or explicit statement), status-label criteria (stable / in-flight / blocked each have explicit triggers; if none apply, drop the label), date discipline (relative dates computed against the actual current date), grounded issue/PR translations (translate only if title/body fetched), banned narrative phrases ("the team", "as planned", "on track", "moving forward", "good shape", "healthy state"), and a confidence-calibration headline ("Session state unclear – limited context available" / "\<repo-name> state unclear – partial signals available") when the gathered state cannot support a confident narrative.
 
 ### Accepted risks
 
@@ -1516,7 +1548,7 @@ Non-breaking — existing skills continue to load. The new Section 12 of `pre-re
 
 - **Pass thresholds in `pre-release-checklist.md`** are now skill-shape-aware (orchestrator 66/70, focused-reviewer 64/68, focused 63/66.5 — all ~95% of applicable max). Was a single 59/62 threshold. Section 12.7 (deprecated APIs) hard-blocking regardless of total score.
 - **`managing-skills/SKILL.md`** Critical Architectural Rules 9 and 10 modernized: validation now applies to irreversible-side-effect steps only (file writes, agent file creation, breaking changes), not every step. Strips the always-verify scaffolding Anthropic explicitly recommends removing for Opus 4.7.
-- **`pre-release-checklist.md` item 7.4** corrected from "1024 chars" to "1,536 chars combined description+when_to_use" (Anthropic-documented limit per https://code.claude.com/docs/en/skills).
+- **`pre-release-checklist.md` item 7.4** corrected from "1024 chars" to "1,536 chars combined description+when_to_use" (Anthropic-documented limit per <https://code.claude.com/docs/en/skills>).
 - **`pre-release-checklist.md` item 1.7** softened from "EVERY step has post-step validation" to "Post-step validation present where required (irreversible side effects)" — mirrors SKILL.md Rule 9 wording, eliminates Section 12.3 self-detection on the checklist itself.
 - **All skill templates** (skill-md, simple-skill, multi-tool-skill, shared-agent, agent, code-writer, read-only, research) now ship the new patterns: effort/model fields documented, Model Selection Guide referenced, deprecated-API negative-test sections added, fan-out + find-vs-filter optional patterns templated.
 - **Step 1.5 fan-out** explicit in both `managing-skills/SKILL.md` and `guides/creating-skills.md`: ms-agent-discoverer + ms-agent-matcher run as concurrent Task calls in the same orchestrator turn (Opus 4.7 defaults to sequential delegation).
@@ -1549,7 +1581,7 @@ Non-breaking — existing skills continue to load. The new Section 12 of `pre-re
 
 ### Known limitations (deferred to later releases)
 
-- **Sibling cascade** to design-* and other managing-* skills: v5.0.0 plan (separate). After v4.2.0 ships, `Modernize <sibling>` is the cascade primitive. Phase 8 smoke-tests Modernize against design-review (small case) but NOT against managing-articles (23 nested agents, the harder architectural case). v5.0.0 plan must include a separate proof-of-concept against managing-articles before committing to wholesale cascade.
+- **Sibling cascade** to design-\* and other managing-\* skills: v5.0.0 plan (separate). After v4.2.0 ships, `Modernize <sibling>` is the cascade primitive. Phase 8 smoke-tests Modernize against design-review (small case) but NOT against managing-articles (23 nested agents, the harder architectural case). v5.0.0 plan must include a separate proof-of-concept against managing-articles before committing to wholesale cascade.
 - **Generic-named agent renames** (code-reviewer, software-developer, commit-writer, architecture-reviewer, security-auditor, solution-architect, technical-architect, ux-reviewer): v5.0.0 (breaking change — eight unprefixed agents at risk of cross-plugin collision per the documented "last-loaded wins" non-determinism).
 - **`managing-articles` + `managing-reports` nested-agent migration** to plugin-root: v5.0.0 (architectural). Modernize op's Step 1a early-exit guard surfaces the v5.0.0-cascade caveat to users who try to modernize these skills today, preventing misleading green-light scenarios.
 - **MEDIUM-priority polish** identified by Lane 2/4 reviews but deferred per Option B scope: ms-validator example outputs were already updated to 70-point shape in this release; remaining M-items (M9 partial, M10/M11/M12) addressed in this release. Two new cosmetic items (creating-skills.md threshold prose, SKILL.md Operation: Create threshold listing) also fixed before tag.
@@ -1588,7 +1620,7 @@ Doc-sync widening + structural cleanup. Extends Gate 15 from 3 to 6 check classe
 
 All 15 gates plus `claude plugin validate` pass on the post-fix tree. Gate 15 self-validates that all six prose-claim classes are synced with the filesystem post-edit:
 
-```
+```text
 PASS: CLAUDE.md "Current version" v4.1.3 matches plugin.json
 PASS: per-skill agent-count claims align with filesystem (2 skill(s) with internal agents; 4 doc(s) scanned)
 PASS: plugin-root agents/ count 75 aligns with all "X shared agents" claims
@@ -1611,7 +1643,7 @@ Release-quality hardening. Adds Gate 15 (doc-claim sync) – a hard verification
 
 - **`scripts/gate-15-doc-claims.sh`** – new hard gate. Three checks:
   1. `CLAUDE.md` `Current version: **vX.Y.Z**` matches `.claude-plugin/plugin.json` `version`. v4.1.1 banner-miss now caught at PR time.
-  2. Per-skill internal agent counts in `CLAUDE.md`, `README.md`, `docs/architecture.md` match `ls skills/managing-*/agents/`. Patterns covered: `Ships <N> internal agents`, `<N> skill-internal agents`, `<N> internal agents`, and inline `<skill>/agents/` (<N>). False-positive guard: only check lines that mention exactly one `managing-*` skill.
+  2. Per-skill internal agent counts in `CLAUDE.md`, `README.md`, `docs/architecture.md` match `ls skills/managing-*/agents/`. Patterns covered: `Ships <N> internal agents`, `<N> skill-internal agents`, `<N> internal agents`, and inline `<skill>/agents/` (\<N>). False-positive guard: only check lines that mention exactly one `managing-*` skill.
   3. Plugin-root `agents/` count matches every `<N> shared agents` claim.
   Wired into `scripts/run-all-gates.sh` between Gate 14 (hooks) and Gate 13 (brandbook hex). Standalone runnable. Gate count is now **15 (14 hard + 1 soft)**.
 - **`docs/verification-gates.md` Gate 15 section** – documents the three checks, false-positive guard, pattern allowlist, limitations, and how to add a new prose-claim pattern.
@@ -1645,7 +1677,7 @@ Documentation staleness sweep on top of v4.1.0. No behavioural change, no schema
 ### Changed
 
 - **`CLAUDE.md` L23, L89** – `managing-articles` "Ships 22 internal agents" → "Ships 23 internal agents". Verified via `ls skills/managing-articles/agents/ | wc -l`. The v4.0.0-fixup commit corrected the same claim in README / CHANGELOG / `docs/architecture.md` but missed the CLAUDE.md instances.
-- **`CLAUDE.md` L27** – `managing-specs` "Ships 22 management agents" → "Delegates to 23 plugin-root `spec-*` agents (no skill-internal agents)". `skills/managing-specs/agents/` is empty; the 23 spec-* agents live at plugin root so they stay reusable across any future managing-* skill that needs spec lifecycle. The fix documents the architectural distinction (true skill-internal agents vs. delegation pattern), not just the count.
+- **`CLAUDE.md` L27** – `managing-specs` "Ships 22 management agents" → "Delegates to 23 plugin-root `spec-*` agents (no skill-internal agents)". `skills/managing-specs/agents/` is empty; the 23 spec-\* agents live at plugin root so they stay reusable across any future managing-* skill that needs spec lifecycle. The fix documents the architectural distinction (true skill-internal agents vs. delegation pattern), not just the count.
 - **`README.md` L6** – "12 orchestration skills" → "6 orchestration skills". Typo from the v4.0.0 docs commit; the orchestration table directly below the line lists exactly 6 (`managing-{agents,articles,issues,reports,skills,specs}`).
 - **`docs/verification-gates.md` L12-19** – Layout reference block rewritten from `(v2.0+)` + "8 skills" to `(v4.0+)` + 13 skills, with new lines for plugin-root agents (75), per-skill nested agents (managing-articles 23, managing-reports 11, others 0), brand bundles, and the `hooks/` directory.
 - **`docs/verification-gates.md` L282** – Dropped the obsolete parenthetical describing the deprecated `erfana:design` meta-skill as `disable-model-invocation`. The skill was removed in v4.0.0 (commit `8ef509f`); the parenthetical described a state that no longer existed. Reworded to clarify Gate 8's design-only scope.
@@ -1804,11 +1836,13 @@ Major release. Two streams converged: the **erfana brand removal** (breaking) an
 The `/erfana:` slash-command prefix and the seven user-facing skill names (`erfana:design-direction`, `erfana:design-prototype`, `erfana:design-slides`, `erfana:design-motion`, `erfana:design-infographic`, `erfana:design-review`, `using-erfana`) are unchanged. The deprecated `erfana:design` meta-skill (`disable-model-invocation: true`) also remains in this release; its removal is rescheduled to a later v3.x.
 
 ### Removed (breaking)
+
 - `skills/design-shared/brands/erfana/` bundle and its 11 files. Active brand is now `qodeca`. External consumers that pinned to `brands/erfana/` paths (or to the `Created with Erfana` watermark literal) must migrate to `brands/qodeca/` or their own brand bundle. The migration is a one-character edit to `skills/design-shared/brands/ACTIVE_BRAND` for in-tree readers.
 - `Created with Erfana` watermark literal removed from `demos/hero-animation-v10.html` and every `voice.watermark` source-of-truth reference. Gate 9 allowlist now contains exactly one literal (`Created with Qodeca`).
 - "Erfana" brand-noun scrubbed from skill prose, top-level docs, plugin manifests, brand-system internals, demo HTMLs (10 files: watermarks + wordmarks), `banner.svg` H1, motion-reference titles, the qodeca `tokens.tokens.json` description, and historical CHANGELOG entries.
 
 ### Added
+
 - `skills/design-shared/brands/qodeca/brandbook/` – source brandbook subfolder. Ships `qodeca-brandbook-2025-pl.pdf` (5.9 MB, 20 pages, canonical source), `qodeca-brandbook-2025-en.pdf` (3.2 MB, English counterpart), `qodeca-brandbook-2025-pl.ocr.md` (706-line OCR derivative via liteparse, lossy on diacritics / diagrams – use for full-text search only), and `screenshots/qodeca-brandbook-2025-pl/page-001.png` … `page-020.png` per-page rasters (~29 MB total). Out-of-band provenance, NOT consumed by sub-skills – self-documented by `brandbook/CLAUDE.md` which formalises the convention (year-stamped naming, `*.ocr.md` infix, screenshots subdir layout, OCR caveats, when-to-consult guidance). Brandbook is in scope for Gate 1 (CJK ban) and Gate 7 (cross-references) but explicitly OUT of scope for Gate 12's INDEX.md cross-checks.
 - `skills/design-shared/brands/qodeca/brand.json` v0.4.0 – brand bundle bumped from v0.3.0. Adds the supplementary palette (4 neutrals + 5 accents from brandbook page 14) on top of the page-13 primaries; switches typography to **Plus Jakarta Sans** (primary + display per brandbook page 15, replacing the prior choice; six numeric weights 200/300/400/500/700/800); embeds Pantone / CMYK print metadata under `$extensions."com.qodeca.print"` for downstream print pipelines; cross-links the new per-library `RULES.md` companions.
 - Per-library `RULES.md` convention (v0.4.0+) – brandbook-derived deep prose co-located with `INDEX.md` for selected libraries. Three shipped under `qodeca/`: `logo/RULES.md` (construction grid, clear space, minimum 15 mm / 50 px width, the nine forbidden uses), `photos/RULES.md` (three compositional rules + four depictable subject categories), `shapes/RULES.md` (53° base / 37° apex isosceles triangle geometric module, pattern grammar). Optional per library – ship a RULES.md only when the brandbook has rules beyond what INDEX.md catalogues. RULES.md may cite brandbook screenshot paths inline as audit-trail references using bare backticks (NOT markdown links – Gate 7 only validates markdown-link syntax, so reorganising the brandbook subfolder does not break CI).
@@ -1818,6 +1852,7 @@ The `/erfana:` slash-command prefix and the seven user-facing skill names (`erfa
 - `scripts/_lib/brandbook-hex-inventory.json` – Gate 13's data plane. Keyed by brand id; each brand entry names its tokens file, source PDF, and page-grouped hex arrays. Update in lockstep with `tokens.tokens.json` when a brandbook revision changes the palette; the verifier picks it up automatically.
 
 ### Changed
+
 - `skills/design-shared/brands/ACTIVE_BRAND` flipped from `erfana` to `qodeca`.
 - `scripts/gate-12-brand-manifests.sh` `PRODUCTION_BRANDS` allowlist now `['qodeca']` (previously `['erfana']`).
 - `scripts/run-all-gates.sh` Gate 9 watermark allowlist tightened to a single literal: `Created with Qodeca`. The `Created with Erfana` allowlist entry was removed.
@@ -1834,6 +1869,7 @@ The `/erfana:` slash-command prefix and the seven user-facing skill names (`erfa
 Hardening + correctness patch for the v2.3.0 brand-system layer. Closes 15 findings raised by an independent four-reviewer audit (architecture, security, code-review, design-system / DTCG spec). Strictly additive — every change is a fix, hardening, or non-breaking schema extension. Existing v2.3.0 manifests are forward-compatible and revalidate cleanly under the new schema.
 
 ### Fixed
+
 - `skills/design-shared/brands/README.md` "Active brand" section rewritten. The previous text falsely claimed `render-video.js` honors a `BRAND=<id>` env var. The script never read it. Replaced with the real mechanism: a single-line `ACTIVE_BRAND` pointer file consumed by Claude at HTML-generation time. Runtime resolver is explicitly deferred to v2.4 (review finding A — three reviewers).
 - `skills/design-motion/SKILL.md` Process step 7 (watermark) rewritten to make generation-time-vs-runtime resolution explicit. The instruction now says "copy the resolved literal into the HTML text content at generation time" and "do NOT modify `render-video.js`" (review finding S1).
 - `skills/using-erfana/SKILL.md` red-flag-table row "Questions are tasks. Invoke `erfana:design`" pointed at the deprecated meta-skill (`disable-model-invocation: true`). Routed at `erfana:design-direction` for vague briefs, otherwise the deliverable-specific sub-skill (review finding J).
@@ -1845,6 +1881,7 @@ Hardening + correctness patch for the v2.3.0 brand-system layer. Closes 15 findi
 - `imagery.illustrationStyle` in both manifests now points at `./illustration.md` instead of `./voice.md`. Voice and illustration are separate concerns; the v2.3.0 schema enshrining the SRP smell is gone (review finding N / Architecture #5).
 
 ### Added
+
 - `skills/design-shared/brands/ACTIVE_BRAND` — single-line text file naming the active brand id (defaults to `erfana`). Sub-skills read it at HTML-generation time. Becomes the convention-over-configuration declaration of the active brand without needing a runtime resolver in `render-video.js`.
 - `skills/design-shared/brands/brand.schema.json` v1.1 — `tokensContract` field (optional; default applies when omitted) maps dotted token paths to expected DTCG `$type`s. Encodes the LSP contract every brand must satisfy (default: `color.brand.{primary,accent,surface-dark,text-light}` of `$type: color` plus `typography.fontFamily.{primary,display,mono}` of `$type: fontFamily`). Closes review finding B (Architecture #2).
 - `brand.schema.json` v1.1 — `voice.watermark` accepts both bare-string form and an object form `{ text, position?, color?, font? }` (forward-compatible; consumers ship in v2.4). Closes review finding M (Solution-reviewer #4).
@@ -1858,6 +1895,7 @@ Hardening + correctness patch for the v2.3.0 brand-system layer. Closes 15 findi
 - `brand.schema.json` v1.1 — `platforms` enum opened to a pattern (`^[a-z][a-z0-9-]*$`) so brands needing `tv`, `watch`, `embed` can declare them without editing the shared schema. Canonical values listed in description as conventions, not constraints (review finding C / Architecture #4).
 
 ### Changed
+
 - `scripts/gate-12-brand-manifests.sh` rebuilt around `json_schema_lite`. Shape validation delegated to the schema; cross-file invariants (id == folder, path traversal, alias resolution, tokensContract enforcement, ACTIVE_BRAND pointer, production allowlist) remain in code. ~70% of duplicated validation logic between schema and gate is gone.
 - `example-acme/logo/example-acme-primary.svg` replaced with a loud-failing placeholder — a bright red rectangle with literal `PLACEHOLDER` text. Renders fail visibly the moment a maintainer forgets to swap real artwork. Real artwork is a separate design task (review finding K).
 - `skills/design-shared/brands/qodeca/voice.md` — illustration section removed (now in `illustration.md`); the voice file links to it.
@@ -1867,6 +1905,7 @@ Hardening + correctness patch for the v2.3.0 brand-system layer. Closes 15 findi
 - `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped to 2.3.1.
 
 ### Deferred (intentionally out of scope, tracked for v2.4+)
+
 - Runtime `BRAND=<id>` env-var resolver in `render-video.js`. The v2.3.0 README falsely advertised this; v2.3.1 removes the false claim and ships the static `ACTIVE_BRAND` pointer instead. The real resolver lands when a second production brand exists.
 - `voice.watermark` object-form consumer code. The schema accepts the object form in v2.3.1; render-time consumers ship in v2.4 alongside the runtime resolver.
 - Component-tier tokens (`button.color.background` etc.). Deferred from v2.3.0; same reasoning.
@@ -1874,6 +1913,7 @@ Hardening + correctness patch for the v2.3.0 brand-system layer. Closes 15 findi
 - Style Dictionary export pipeline (CSS / iOS / Android / Figma). Opt-in v2.5 work.
 
 ### Why this lands as 2.3.1, not 2.4.0
+
 Every change is a fix or non-breaking schema extension. The schema's new `anyOf` / `oneOf` extensions for `voice.watermark`, `logos[].usage`, `voice.attributes` are non-breaking — existing string values continue to validate. The `tokensContract` field is optional with a sensible default. The `platforms` enum opens (broader, not narrower). No SKILL.md trigger phrases change. CI gates become stricter, but only catch real bugs that should have failed v2.3.0 too. Existing brand manifests authored against v2.3.0 schema remain valid against v2.3.1 schema.
 
 ## [2.3.0] - 2026-04-29
@@ -1881,6 +1921,7 @@ Every change is a fix or non-breaking schema extension. The schema's new `anyOf`
 Multi-brand brand-system layer. Brand identity (colors, typography, voice / tone, watermark, logo files) is now sourced from versioned, validated manifest files under `skills/design-shared/brands/<id>/`, following the W3C Design Tokens Format Module 2025.10 plus a custom `brand.schema.json` for non-token brand data. Adding a new brand is a folder-copy operation; no skill code needs to change. SOLID-aligned: SRP (one brand per manifest), OCP (filesystem extension point), DIP (skills depend on the manifest contract instead of hardcoded Qodeca strings).
 
 ### Added
+
 - `skills/design-shared/brands/brand.schema.json` — JSON Schema 2020-12 contract for brand manifests. Required: `id`, `displayName`, `legalName`, `version`, `voice.watermark`. Optional: `tokens` (DTCG file path), `logos[]`, `typography`, `voice.attributes` / `voice.doNotUse` / `voice.guide`, `imagery`, `platforms`.
 - `skills/design-shared/brands/qodeca/` — canonical default brand. `brand.json` manifest, `tokens.tokens.json` (DTCG 2025.10 — primitive colors `violet`/`lime`/`black`/`white` plus brand-role aliases via `{qodeca.color.violet}` syntax, font-family roles), `voice.md` (long-form voice / tone), logo SVG variants (`primary` / `inverse` / `wordmark`), `photos/` slot.
 - `skills/design-shared/brands/example-acme/` — placeholder example brand demonstrating the schema for future maintainers. Uses a different watermark verb (`Made by ACME Corp`) to show that brand swap really does change the output without colliding with Gate 9's `Created (by|with)` filter.
@@ -1889,6 +1930,7 @@ Multi-brand brand-system layer. Brand identity (colors, typography, voice / tone
 - `docs/verification-gates.md` — Gate 12 section.
 
 ### Changed
+
 - `skills/using-erfana/SKILL.md` — "Brand context" section rewritten. The inline color list and hardcoded watermark literal are replaced with pointers to `brands/qodeca/brand.json` + `tokens.tokens.json` + `voice.md`. Documents how Claude reads the manifest as priority #4 in the `design-context.md` hierarchy and how to add additional brands (folder drop).
 - `skills/design-motion/SKILL.md` — opening line and Process step 7 (watermark) updated. Watermark text is now sourced from `voice.watermark` in the active brand manifest instead of a hardcoded literal. References section adds `../design-shared/brands/README.md`.
 - `scripts/run-all-gates.sh` — Gate 3 (JSON parse) extended to include `brand.schema.json`. Gate 12 invocation inserted after Gate 11 and before `claude plugin validate`.
@@ -1897,6 +1939,7 @@ Multi-brand brand-system layer. Brand identity (colors, typography, voice / tone
 - `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — version bumped to 2.3.0.
 
 ### Why this lands as 2.3.0 instead of 2.2.2
+
 Net-new capability: multi-brand extensibility. Existing skills continue to work unchanged because the migrated `using-erfana` and `design-motion` SKILL.md instructions still resolve to `Created with Qodeca` for the default `erfana` brand. The schema and Gate 12 are additive. No downstream consumer needs to change anything to upgrade.
 
 ## [2.2.1] - 2026-04-28
@@ -1904,16 +1947,19 @@ Net-new capability: multi-brand extensibility. Existing skills continue to work 
 CI gate hardening. End-user behavior is unchanged.
 
 ### Changed
+
 - `scripts/run-all-gates.sh` — Gates 7 (cross-references resolve) and 8 (trigger-phrase coverage) wired into the runner. Both were previously documented as diagnostic snippets that did not run in CI. The runner now enforces all 11 gates plus `claude plugin validate`.
-- Gate 7 algorithm rewritten. The previous regex matched any backtick-wrapped path-shaped string anywhere in any file, producing 20 false positives against descriptive prose like `` the `assets/foo.jsx` Stage component ``. The new algorithm runs in two passes: (a) inside SKILL.md structural sections (`## References`, `## Scripts`, `## Examples`, `## Assets`, `## Demos`, plus the `## See also` / `## Related` variants), it extracts the FIRST backtick-wrapped token from each `- ` bullet (subsequent backticks describe the path); (b) across every SKILL.md and `references/*.md`, it walks unambiguous `[text](path)` markdown links. Glob patterns and external URLs are skipped. Code fences inside structural sections are skipped.
+- Gate 7 algorithm rewritten. The previous regex matched any backtick-wrapped path-shaped string anywhere in any file, producing 20 false positives against descriptive prose like `` the `assets/foo.jsx` Stage component ``. The new algorithm runs in two passes: (a) inside SKILL.md structural sections (`## References`, `## Scripts`, `## Examples`, `## Assets`, `## Demos`, plus the `## See also` / `## Related` variants), it extracts the FIRST backtick-wrapped token from each `- ` bullet (subsequent backticks describe the path); (b) across every SKILL.md and `references/*.md`, it walks unambiguous `[text](path)` markdown links. Glob patterns and external URLs are skipped. Code fences inside structural sections are skipped. <!-- markdownlint-disable-line MD038 -->
 - `docs/verification-gates.md` — Gate 7 documentation rewritten to match the new algorithm; "Run all gates" closing paragraph updated; "What these gates do NOT cover" section updated to point at the new MAINTAINER.md pre-release smoke checklist.
 
 ### Fixed
+
 - `skills/design-motion/references/hero-animation-case-study.md` — broken markdown link `[demos/hero-animation-v10.html](../demos/hero-animation-v10.html)` corrected to `[design-shared/demos/hero-animation-v10.html](../../design-shared/demos/hero-animation-v10.html)`. The new Gate 7 algorithm caught this (first wired-in run found it). The link had been broken since the v2.0 decomposition moved demos under `design-shared/`.
 - `README.md` Troubleshooting — entry "Trigger phrases don't activate `erfana:design`" rewritten as "Trigger phrases don't activate the right sub-skill". The previous wording described an impossible symptom: post-v2.0, `erfana:design` is `disable-model-invocation: true` and cannot be activated by trigger phrases.
 - `README.md` version-pin example — bumped from `v1.1.0` to `v2.1.0` with "(for example)" annotation. The previous example was two majors behind current and could mislead readers scanning version markers.
 
 ### Added
+
 - `MAINTAINER.md` — "Pre-release smoke checklist" section after the routine release authority block. Three manual checks: Path A deck export, motion MP4 render, second-machine plugin install. Replaces the runtime-correctness gap previously left to "for maximally rigorous review before a major release" prose in `docs/verification-gates.md`.
 
 ## [2.2.0] - 2026-04-28
@@ -1921,17 +1967,20 @@ CI gate hardening. End-user behavior is unchanged.
 Substantial improvements to `erfana:design-slides`: new live-presentation transition pattern, expanded production guardrails, and safe-DOM hardening of the deck infrastructure so it runs cleanly under hook-strict environments.
 
 ### Added
+
 - `skills/design-slides/references/transitions.md` — new reference covering the two-iframe ping-pong curtain-wipe pattern for live in-browser presentation. Includes stale-load guard, `try / finally` lock recovery, first-paint guard, and direction-aware traveling rule with hand-tuned `cubic-bezier(0.7, 0, 0.2, 1)` easing.
 - `skills/design-slides/references/slide-decks.md` — pre-flight checklist (5 items run before any slide HTML is written), class-name collision warning, mandatory 3-zone flex layout (`zone-top` / `zone-mid` / `zone-bot`), small-type minimums (mono labels >=14px, footer page numbers >=15px, side-index/agenda items >=16px), and Path B parity warnings translating each Path A guardrail to `<deck-stage>` shells.
 - `skills/design-shared/references/verification.md` — mid-animation snapshots via the Web Animations API (pause at chosen `currentTime` for frame-perfect captures, replacing unreliable `Bash sleep` + screenshot), and a strict slide-fit overflow check that walks every element rather than relying on `scrollHeight === 1080` (which silently lies under `body { overflow: hidden }`).
 
 ### Changed
+
 - `skills/design-shared/assets/deck_index.html` — counter and print-stack writes refactored from `innerHTML` template-literal assignment to safe-DOM construction (`createElement` + `replaceChildren`). Drops the inner-HTML setter so PreToolUse XSS-prevention hooks don't reject the script. Added empty-MANIFEST guard so the counter renders `0 / 0` instead of `1 / 0`. No behavior change for non-empty decks.
 - `skills/design-shared/assets/deck_stage.js` — shadow-root template rebuilt with the same safe-DOM approach; CSS now lives as `textContent` on a `<style>` element. Hook-friendly without altering rendering.
 - `skills/design-slides/SKILL.md` — Process section restructured around the new pre-flight checklist, 2-showcase requirement (cover + densest content page), 3-zone layout, and tag-qualified shared selectors. References section gains pointers to `transitions.md` and the new verification subsections.
 - `skills/design-shared/demos/c2-slides-pptx.html` — header comment clarifies this demo is an animated single-file motion showcase, not a canonical Path A template. Use it as an export-pipeline reference; build a fresh deck for layout examples.
 
 ### Why this lands as 2.2.0 instead of 2.1.2
+
 The new transitions.md reference and 3-zone layout guidance are net-new capabilities surfaced through skill content, not pure documentation polish. Existing Path A decks built against 2.1.x continue to work unchanged — the safe-DOM refactor is internally observable only to security hooks.
 
 ## [2.1.1] - 2026-04-28
@@ -1939,15 +1988,18 @@ The new transitions.md reference and 3-zone layout guidance are net-new capabili
 Documentation-only patch standardizing on the namespaced `/erfana:` invocation form.
 
 ### Documentation
+
 - `README.md` — added "Invocation forms — bare vs. namespaced" subsection after the verify step, explaining that `/erfana:design-prototype` is the canonical form and `/design-prototype` is the Claude Code built-in fallback. Both register simultaneously; the bare form cannot be disabled today.
 - `README.md` — added Troubleshooting entry covering the same dual-form behavior so employees who notice both paths in autocomplete have an authoritative answer.
 - `README.md` — verify step bumped from "v1.0.x" to "v2.1.x" so the install confirmation matches current released version.
 - `CLAUDE.md` — clarified the skill-namespacing rule. The `/erfana:` prefix is derived from `plugin.json` `"name": "erfana"`, not from each SKILL.md `name:` field. The SKILL.md `name:` is a display field per the [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference); we keep the folder-name-equivalence mandate so the autocomplete listing stays consistent.
 
 ### Tracked upstream
+
 - [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695) — open feature request for a `require-namespace: true` frontmatter field that would remove the bare `/skill` form. When implemented, this plugin will adopt it and drop the dual-form documentation.
 
 ### Why no functional changes
+
 The `/erfana:` prefix already works today — Claude Code derives it automatically from `plugin.json` `name`. Both `/erfana:design-prototype` and `/design-prototype` resolve to the same skill. This release tightens the documentation surface so the namespaced form is the canonical one shown to employees, matching the convention used by `obra/superpowers`.
 
 ## [2.1.0] - 2026-04-28
@@ -1955,12 +2007,14 @@ The `/erfana:` prefix already works today — Claude Code derives it automatical
 Closes the four-reviewer audit of v2.0.0. All findings (critical + high + polish) addressed.
 
 ### Changed (skill content quality)
+
 - All six sub-skill `description:` fields rewritten as pure trigger statements (Reviewer 2 critical: writing-skills meta-rule violation). Workflow language moved out of frontmatter.
 - `skills/using-erfana/SKILL.md`: added `when_to_use:` field with explicit trigger phrases so Opus 4.7's skill calibration invokes the bootstrap on design-related conversation start.
 - `skills/design/SKILL.md` (deprecated meta-skill): added `disable-model-invocation: true` so Claude does not auto-invoke the deprecated v1 meta-skill on vague prompts. Removed the legacy-trigger `when_to_use:` block. Users can still invoke `/erfana:design` explicitly.
 - `skills/design-review/SKILL.md`: added `disable-model-invocation: true` so Claude does not volunteer reviews unsolicited; the skill is now user-invoked only.
 
 ### Changed (README onboarding)
+
 - Opening paragraph rewritten to pass the 30-second pitch test (concrete deliverable types instead of "extends Qodeca's design system"). Added Quick-start callout pointing to Path B.
 - New "Typical workflows" section showing direction → output → review chains for 4 common scenarios.
 - Path A: added shell-config creation note (`touch ~/.zshrc`) and Windows / WSL2 fallback callout.
@@ -1970,17 +2024,20 @@ Closes the four-reviewer audit of v2.0.0. All findings (critical + high + polish
 - Troubleshooting: added corporate-firewall section, skill scope precedence note, local-development workflow.
 
 ### Added
+
 - `MAINTAINER.md` — succession plan, bus-factor handoff procedure, onboarding instructions for a backup maintainer (Reviewer 3 high finding).
 - `.github/dependabot.yml` — weekly Dependabot updates for the github-actions ecosystem.
 - `marketplace.json` `metadata` block — `category: design`, tags, `supportUrl`, `docsUrl` for marketplace discoverability (Reviewer 1).
 - `plugin.json` keywords expanded to include `claude-code-plugin`, `design-system`, `prototyping`, `motion-design`.
 
 ### Infrastructure (GitHub side)
+
 - Enabled secret scanning + push protection on the repo (Reviewer 3 critical).
 - Updated `main-protection` ruleset to add `required_signatures` (signed commits / tags) and `pull_request` rule with `require_code_owner_review: true`. Repo-admin bypass actor configured so the solo maintainer can still push for routine releases. (Reviewer 3 critical + high.)
 - Backfilled GitHub Releases for v1.0.1, v1.1.0, v1.2.0, v2.0.0 (Reviewer 3 high). v1.0.0 deliberately skipped (broken historical tag).
 
 ### Maintainer setup
+
 - Configured local git for SSH commit + tag signing using the existing release signing key registered on GitHub. This release is the first signed release.
 
 ## [2.0.0] - 2026-04-28
@@ -1990,6 +2047,7 @@ Closes the four-reviewer audit of v2.0.0. All findings (critical + high + polish
 The single 800-line `erfana:design` skill is decomposed into six purpose-built sub-skills, each ~150 lines, each with trigger-shaped frontmatter following the superpowers convention. The legacy `erfana:design` invocation still works as a deprecated meta-skill that routes to the appropriate sub-skill — this preserves v1.x compatibility but new invocations should target the specific sub-skill directly.
 
 ### Added
+
 - `skills/design-prototype/SKILL.md` — hi-fi clickable UI prototypes (iOS, Android, web, desktop).
 - `skills/design-slides/SKILL.md` — 1920×1080 HTML / PDF / editable PPTX presentation decks.
 - `skills/design-motion/SKILL.md` — timeline animations exported as MP4 / GIF with optional BGM + SFX.
@@ -2001,6 +2059,7 @@ The single 800-line `erfana:design` skill is decomposed into six purpose-built s
 - `.github/workflows/verify.yml` — GitHub Actions CI workflow runs `scripts/run-all-gates.sh` on every push and PR. Catches regressions before merge.
 
 ### Changed
+
 - `skills/using-erfana/SKILL.md` — Available skills table, decision flow, and process-first ordering rules updated for the 6 sub-skills + deprecated meta-skill.
 - `skills/design/SKILL.md` — rewritten as a thin (~50-line) deprecation router pointing each intent at the right sub-skill. Will be removed in v3.0.
 - 20 reference files distributed from `skills/design/references/` into the appropriate sub-skill: 9 motion-related → `design-motion/`, 2 slide-related → `design-slides/`, 2 prototype-related → `design-prototype/`, 2 direction-related → `design-direction/`, 1 review-related → `design-review/`, 4 cross-cutting → `design-shared/`.
@@ -2024,6 +2083,7 @@ The `/erfana:design` invocation continues to work via the deprecated meta-skill 
 ## [1.2.0] - 2026-04-28
 
 ### Added
+
 - `.github/CODEOWNERS` — `@marcinobel` is sole code owner until a backup maintainer joins.
 - `SECURITY.md` — vulnerability disclosure path (private email + Slack DM), scope, known limitations.
 - `README.md` — version-pinning section explaining `/plugin install erfana@erfana-skills@vX.Y.Z` for stability-conscious users.
@@ -2033,17 +2093,20 @@ The `/erfana:design` invocation continues to work via the deprecated meta-skill 
 - GitHub branch ruleset `main-protection`: blocks deletion + non-fast-forward pushes on `main`. Required-signatures rule will be added in a follow-up commit once the maintainer's SSH signing key is wired into local git config.
 
 ### Changed
+
 - `README.md` install section rewritten with three paths: Path A (fine-grained PAT scoped to `Contents: Read-only` on `qodeca/erfana-skills` only + macOS Keychain), Path B (`gh auth token` shortcut), Path C (Linux `pass` / envchain). Plaintext-PAT-in-shell-config is deprecated.
 - `LICENSE` tightened with explicit "current employees and contractors of Qodeca sp. z o.o. for internal business purposes" scope clause; sub-processor notice naming Anthropic; pointer to README Confidentiality policy.
 - GitHub repo settings: `deleteBranchOnMerge: true`, squash-only merge strategy.
 
 ### Deferred
+
 - `engines` field in `plugin.json` — Claude Code plugin schema does not yet define this field as of April 2026; revisit when CC 2.2+ ships.
 - Mega-skill decomposition — `erfana:design` remains a single 800-line skill in v1.2; v2.0 splits it into six sub-skills.
 
 ## [1.1.0] - 2026-04-28
 
 ### Changed
+
 - `skills/design/SKILL.md` frontmatter: removed "Output types:" line from `when_to_use:` (was workflow language, violated superpowers writing-skills convention). Output types moved into body as a "Deliverable types this skill produces" subsection.
 - `skills/design/SKILL.md` body: added v1 scope note after the H1 explaining the planned v2.0 split into 6 sub-skills (`erfana:design-prototype`, `:slides`, `:motion`, `:direction`, `:infographic`, `:review`).
 - `skills/design/SKILL.md` watermark section: added a clarifying preamble distinguishing the brand mark (`erfana · DESIGN`) from the promotion watermark (`Created with Qodeca`).
@@ -2054,16 +2117,19 @@ The `/erfana:design` invocation continues to work via the deprecated meta-skill 
 ## [1.0.3] - 2026-04-28
 
 ### Changed
+
 - README onboarding: document `gh auth token` shortcut as a faster alternative to manual PAT generation, and capture the verified end-to-end update behavior (v1.0.1 → v1.0.2 propagated via `/plugin marketplace update` + `/plugin update`).
 
 ## [1.0.2] - 2026-04-28
 
 ### Changed
+
 - Cosmetic version bump used to verify the auto-update mechanism end-to-end against the private GitHub marketplace. No functional changes.
 
 ## [1.0.1] - 2026-04-28
 
 ### Fixed
+
 - `marketplace.json` plugin source path bumped from `.` to `./` to satisfy the CC plugin schema (source paths must start with `./`). v1.0.0 failed `claude plugin validate`; v1.0.1 is the first installable release.
 
 ## [1.0.0] - 2026-04-28
@@ -2071,6 +2137,7 @@ The `/erfana:design` invocation continues to work via the deprecated meta-skill 
 Initial release of the erfana plugin for Claude Code.
 
 ### Added
+
 - `erfana:design` skill — design work for hi-fi prototypes, slide decks, motion graphics, infographics, and design critique. Bundled scenes, references, audio assets, and showcases enable production-grade output without external tooling.
 - `using-erfana` bootstrap skill — entry point that lists skills and establishes invocation conventions.
 - Single-plugin private GitHub marketplace at `qodeca/erfana-skills`. Auto-update at session start when `GITHUB_TOKEN` is set in the shell environment.

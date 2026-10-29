@@ -1,0 +1,7 @@
+# House style: en dashes with spaces, never em dashes.
+extends: existence
+message: "Use an en dash (–) with spaces instead of an em dash."
+level: error
+nonword: true
+tokens:
+  - '—'

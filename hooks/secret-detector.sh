@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
+# Summary: Blocks a file write that would put a credential, such as an API key or private key, into your code.
 # PreToolUse hook: detect hardcoded secrets in Write/Edit/MultiEdit content.
 #
 # Scans tool_input for leaked credentials before the file is written.
