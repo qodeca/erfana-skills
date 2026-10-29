@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file MD041 -- GitHub pull request templates start below the title field, so they open at H2. -->
 <!-- Thanks for contributing to erfana! Please fill this in. -->
 
 ## What this changes

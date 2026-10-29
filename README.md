@@ -1,345 +1,132 @@
-<div align="center">
-
-# Erfana Skills
-
-**An open-source orchestration toolkit for Claude Code and Qwen Code (GPL-3.0-only).**
-
-by [Qodeca](https://github.com/qodeca)
+# Erfana skills for Claude Code and Qwen Code
 
 [![CI](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml/badge.svg)](https://github.com/qodeca/erfana-skills/actions/workflows/verify.yml)
 [![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue.svg)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/qodeca/erfana-skills)](https://github.com/qodeca/erfana-skills/releases/latest)
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
 ![Qwen Code compatible](https://img.shields.io/badge/Qwen_Code-compatible-555)
-[![Made by Qodeca](https://img.shields.io/badge/made_by-Qodeca-1f2937)](https://github.com/qodeca)
 
-</div>
+**erfana** is an open-source plugin, by [Qodeca](https://github.com/qodeca), that adds ready-made ways of working to your coding agent: writing requirements specs, working GitHub issues end to end, reviewing code, writing reports and articles, drafting prompts and goals, and running long sessions without you watching every step.
 
-Manage Claude Code agents and skills, GitHub issues, consulting reports, articles, and 4-tier specifications from inside your coding agent. 18 skills – 6 orchestration skills plus process, verification, prompting, work-session, and session-closeout skills and a router – and 33 shared agents. Work you steer runs in your conversation; reviews go to separate checker agents that see only the work and the standard.
+It is for developers and the people who work with them – product owners, analysts, consultants – who use Claude Code or Qwen Code and want repeatable, reviewed results instead of one-off prompts. You decide; Claude does the work. Work you steer runs in your own conversation, and reviews go to separate checker agents (helper models that see only the work and the standard, not your conversation).
 
-It ships as a Claude Code plugin and also runs on **Qwen Code**, which converts Claude Code plugins at install time – one repository, one release, two hosts. What differs between them is recorded in [`docs/hosts.md`](docs/hosts.md).
-
-Free and open source under the [GNU General Public License v3.0 only](LICENSE). Contributions are welcome – see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md); they require agreeing to the project [Contributor License Agreement](CLA.md) (by opening a PR you agree to its terms). To report a vulnerability, follow [`SECURITY.md`](SECURITY.md). "Erfana" and "Qodeca" names and logos are trademarks; the license does not grant rights to them – see [`TRADEMARKS.md`](TRADEMARKS.md). "Claude" and "Claude Code" are trademarks of Anthropic; Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic. "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc.; Erfana Skills integrates via their public API and is not affiliated with or endorsed by GitHub or Microsoft. "Playwright" is a trademark of Microsoft Corporation; Erfana Skills ships agents that author and review Playwright tests and is not affiliated with or endorsed by Microsoft. "Qwen" and "Qwen Code" are trademarks of their respective owners; Erfana Skills is an independent, third-party plugin that Qwen Code can convert and run, and is not affiliated with or endorsed by them.
-
----
-
-## What's in this plugin
-
-### Orchestration skills
-
-| Skill | What it does | Triggers |
-|---|---|---|
-| `erfana:agent` | Lifecycle management for Claude Code agents – Create, Review, Modify, and Pairs (a doer agent plus its reviewer). Design and edits run in your conversation against one agent standard; `agent-researcher` gathers best practices and the blinded `agent-reviewer` judges readiness. | "create agent", "review agent", "modify agent" |
-| `erfana:article` | End-to-end medium-form article authoring (research → outline → draft → review → publish), bilingual Polish/English. Researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation. | "write article", "research article", "publish article" |
-| `erfana:issue` | Full GitHub-issue lifecycle: create issues, implement them through phased quality gates, and review code or PRs. Runs on `main`-default repos, stack-agnostic, with a skill-wide untrusted-data boundary and confirm-before-destructive git ops. The Implement operation is **autonomous** – it designs, builds, reviews, and fixes the technical work without blocking on intermediate approvals, resolving every architecture/technical decision by best practice plus judgment. Its reviews are **embedded**: it fans out its own reviewer agents (no manual `/erfana:lens-review`), auto-fixes CRITICAL/HIGH findings inline, and routes MEDIUM/LOW to a judge. It asks a human only to clarify requirements (business-analysis phase), to accept at UAT, and to confirm the final git actions. A headless run (`claude -p`) cannot finish – it stops before creating a branch – and a CI run is refused at the first gate. An interrupted Implement run starts over; no progress comment is written to the issue. See [`docs/architecture.md`](docs/architecture.md). | "create issue", "implement issue", "review code", "review PR" |
-| `erfana:report` | Professional consulting reports with Pyramid Principle, SCQA, Five Cs framework, sentence-case validation. Reviews run six house checks through two shared checker agents (`report-language-checker`, `report-structure-checker`). | "create report", "review report", "validate report" |
-| `erfana:skill` | Lifecycle management for Claude Code skills against one skill standard – Create, Review, Modify, and the **Modernize operation**, which brings an older skill up to the current standard with the changes you pick. Reviews run through the blinded `skill-reviewer`. Every operation opens with a coverage-map requirements interview – Create always interviews; Modify/Review/Modernize gate first and interview on yes. | "create skill", "review skill", "modify skill", "modernize skill", "apply Claude 5 patterns" |
-| `erfana:spec` | 4-tier specification management: T1 issue, T2 spec, T3 lite, T4 standard. Requirements, creation, and edits run in your conversation; `spec-validator` reviews blind and `spec-compliance-checker` compares a spec with the code. Spec IDs come from a registry and are never reused. See [`docs/architecture.md`](docs/architecture.md). | "create spec", "validate spec", "T3 lite spec", "T4 standard" |
-
-### Process skills
-
-| Skill | What it does | Triggers |
-|---|---|---|
-| `erfana:grill-me` | One-at-a-time Socratic interrogation of a plan or design – walks the decision tree, recommends an answer per branch, explores the codebase first when the answer is already there. Since v6.6.0 the interview is sized to the plan – three depths selected from blast radius, reversibility, cost of being wrong, and consumers, with skips batched into one stated sizing statement rather than one question each. Imported from upstream `superpowers:grill-me` in v4.2.3. | "grill me", "quick grill", "grill me lightly", "stress-test this plan", "interview me about this", "challenge my plan", "poke holes in this", "walk the decision tree" |
-
-### Verification skills
-
-| Skill | What it does | Triggers |
-|---|---|---|
-| `erfana:fact-checking` | Validates markdown analysis documents against source materials (interviews, vendor docs, knowledge-base) to catch AI hallucinations – extracts atomic factual claims, traces each to its source passage, classifies findings by severity (Critical / Error / Warning / Info), and applies user-approved corrections. Sources, claims, and fixes are handled in your conversation; one blinded verifier, `fact-checking-verifier`, returns a verdict with a quoted source passage per claim. A correction is applied only after you see its exact replacement text. Manual-only via `/erfana:fact-checking <target-file>`; not auto-discovered. Treats every ingested document as untrusted data. | "fact-check this document", "verify against sources", "validate analysis", "check for hallucinations", "verify document" |
-
-### Prompting skills
-
-| Skill | What it does | Triggers |
-|---|---|---|
-| `erfana:prompt` | Interviews you one decision at a time, confirms a brief, and writes or improves a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1 – packaged for chat, a Claude project, Claude Code, or the API, with setup notes (starting effort level, settings) and proposed evaluation cases. The prompts it writes follow Anthropic's guidance for Claude 5-generation models: calm instructions with reasons, positive phrasing, examples only where they earn their place, and effort settings instead of thinking rituals. An optional ambition pass checks the goal for a more ambitious version before the brief is confirmed. | "write a prompt", "improve my prompt", "help me prompt Claude", "review this system prompt" |
-| `erfana:raise-the-bar` | Rewrites a request you are about to give Claude into a more ambitious one: aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields. It keeps only the raises Claude can support in your workspace, names an outside check for each one (tests, data, a reviewer – not Claude grading itself), and prints the rewritten request with any setup it needs. It rewrites the request only; you run it. Adapted from Felix Rieseberg's "How to be more ambitious" tutorial. | "raise the bar", "be more ambitious with this", "aim higher", "what would a top expert do here" |
-| `erfana:draft-goal` | Turns what you want done into a `/goal` completion condition that Claude Code's goal evaluator can judge from the conversation – one outcome, numbered checks whose proof is shown, explicit exclusions, an owner-decisions clause so a recommendation you decline stops blocking the goal, and a turn bound – and prints it once, between START and END marker lines, ready to paste. The line stays under about 3,500 characters, because Claude Code refuses a `/goal` over 4,000. It writes the condition only; you run `/goal`. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0), with new wording. | "draft a goal", "help me write a /goal", "tighten my goal", "why does my goal never finish" |
-
-### Work-session skills
-
-For long, unattended, or parallel work: pick the work, keep sessions from colliding, run it without babysitting, and get specialists to review the plan.
-
-| Skill | What it does | Trigger phrases |
-|---|---|---|
-| `erfana:autopilot` | Sets up an unattended run: writes the `/goal` condition from the session itself, keeps one state file (`.local/autopilot.md`) with progress and a queue of what needs you, keeps the task list down to open work, and resumes after a restart or compaction. Prints the `/goal` line for you to paste; never starts it itself. If a `/goal` is already running, it writes no new one: it records yours, shows the batch and what it may do, and lets your goal start the work. | "work unattended", "prepare the goal for this session", "resume the work", "do you need anything from me?" |
-| `erfana:next-batch` | Picks the next issues: skips the ones other sessions claimed, ranks the rest by impact on delivery, groups the top ten by theme, and saves the batch for `autopilot`. Read-only on GitHub. | "pick the next issues", "next batch", "what should we work on next" |
-| `erfana:coordinate` | Keeps parallel sessions on one repository apart: claims issues on GitHub (a `claimed` label plus a marked comment), shows who holds what, releases claims, and exchanges status with sibling sessions on the same machine. | "claim #N", "which issues are taken", "check with the other sessions" |
-| `erfana:expert-panel` | Runs a panel of top-practitioner reviewers over a plan, design, or documents, merges their findings, asks you the decisions, and writes an improved version to a new file. | "fan out top 1% specialists", "expert review of the design", "panel review" |
-
-### Session closeout skills
-
-Both run only when you type them, because they act outside the conversation.
-
-| Skill | What it does | Invocation |
-|---|---|---|
-| `erfana:ship` | Takes the current work as far as you say: commit, push, open or update the pull request, or merge it – waiting up to 30 minutes for the checks, then deleting the branch, closing the linked issue, and cleaning up merged branches and worktrees. `cleanup` runs only the tidy-up and lists what is left. Reads the project's own branch and PR rules first and stops where they forbid a step; never force-pushes; never merges over a failing check. | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` (default `pr`) |
-| `erfana:handoff` | Writes a handoff document to the OS temp directory so another agent, harness, directory, or colleague can continue the work – references existing specs, issues, and diffs instead of copying them, redacts secrets, and suggests which skills to load next. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT). | `/erfana:handoff [what the next session is for]` |
-
-### Bootstrap and shared agents
-
-| Component | What it does |
-|---|---|
-| `using-erfana` | Short routing guide: points a request at the right erfana skill and names the slash command for the skills only you can start (`fact-checking`, `ship`, `handoff`). |
-| `agents/` (33 shared agents) | Shared agent pool the orchestration skills delegate to via the `Task` tool. Prefix breakdown (each skill-owned agent starts with its skill's name): `spec-` (3), `issue-` (1), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2), `lens-` (1), `e2e-` (4), `release-` (2), generic (14). |
-
-### Safety hooks (v4.1+)
-
-Six hooks run silently in the background once the plugin is enabled, providing a project-agnostic safety net:
-
-| Hook | When | What it does |
-|---|---|---|
-| `bash-safety` | Before any Bash tool call | Blocks destructive shell patterns – `rm -rf` of system/home dirs, force-push to protected branches, IMDS metadata exfiltration, privilege escalation (`sudo`/`doas`), `tar --absolute-names`, `curl|bash` and process-substitution variants, cloud teardown commands, persistence backdoors. Pattern set informed by 2025-2026 agent self-deletion incidents and CVE-2025-54794/-54795. Since v9.1.0 it lets through what real sessions showed to be safe: `rm -rf` well inside a project or temp folder, a download piped into a JSON parser (`python3 -c`, `jq`), and `sudo` or `DROP` inside heredoc file content. |
-| `secret-detector` | Before Write/Edit/MultiEdit | Blocks ~20 secret/token patterns before they hit disk – AWS, OpenAI, Anthropic, GitHub, GitLab, Hugging Face, Sentry, Postman, Slack, npm, Stripe, Google, Azure, database URIs, JWTs, PEM keys. Skips test fixtures, examples, markdown docs. |
-| `post-compact-reminder` | After context compaction | Re-injects load-bearing facts (temporal awareness, honesty discipline, verification rules, agent delegation) plus the current git branch + status snapshot. While an `erfana:autopilot` run is active (`.local/autopilot.md` starts with `Status: active`), it also points the session to that state file so the run resumes. |
-| `verify-completion` | When the agent considers stopping | Asks the agent to keep working when it claims success without citing executed tests, exit codes, gate output, or screenshots. v4.2.9+ allowlist: messages carrying the `<!-- erfana:status-template -->` sentinel emitted by the status commands bypass the check; Gate 16 enforces sentinel symmetry across the two command files and the hook. Falls back to the unstripped body when the reply has an odd number of code fences so success claims after an unclosed fence stay visible. |
-| `grill-guard` | When the agent considers stopping | Blocks one stop attempt while `grill-me`'s open-marker sentinel is still in the reply – a backstop for the coverage-map interview, not the protocol itself. |
-| `ms-grill-guard` | When the agent considers stopping | The same, for the `skill` skill's requirements interview and its own sentinel. |
-
-The first four are the project-agnostic safety net – no personal style preferences. The two interview guards are erfana-specific and fire only while an interview marker is open. They activate only after the next Claude Code session restart following plugin install or update.
-
-**Cross-platform (v4.2.20+).** Each hook ships a `.sh` (macOS/Linux) and a `.ps1` (Windows) sibling, run through the `dispatch.sh` launcher so the safety net works on native Windows too (where Git Bash ships without `jq`). The mechanism and the one uncovered case (a Windows host with no Git Bash) are documented in [`docs/architecture.md`](docs/architecture.md).
-
-**Interview guards.** Two of the six hooks belong to a skill rather than to the safety net: `grill-guard` (for `grill-me`, v6.2.0+) and `ms-grill-guard` (for `skill`). Each nudges once when an interview is still open – that is, while the skill's open-marker sentinel is present in the reply. Since v7.1.0 both are registered in `hooks/hooks.json` like every other hook, not in the skill's SKILL.md `hooks:` frontmatter, because Qwen Code does not read that frontmatter and a skill-scoped registration would have been dead on one of the two supported hosts (see [`docs/hosts.md`](docs/hosts.md)). The sentinel alone scopes them to a live interview. Validated by Gate 16 fixtures plus a guard-drift check.
-
-### Slash commands
-
-| Command | What it does |
-|---|---|
-| `/erfana:doc-update` | Refreshes project documentation against the current state of the code – detects the change set from the working tree, sweeps the whole doc surface (`docs/`, `README`, `CHANGELOG`, `CLAUDE.md` / `AGENTS.md`, API specs, ADRs), and evicts status/changelog content into its home docs. Takes no git action by default; deletions and new files are confirmed via `AskUserQuestion`. Flags: `path-or-glob`, `--dry-run`, `--offline`, `--commit` / `--push`. Full contract: [`commands/doc-update.md`](commands/doc-update.md). |
-| `/erfana:project-status` | One-shot Pyramid-Principle project-status brief for a Product Owner / PM / BA audience – three axes (what we worked on, what we accomplished, where we landed) plus a recommended next step, grounded in git and GitHub state. Read-only, no side effects. Useful when context-switching across many Claude Code tabs. Full contract: [`commands/project-status.md`](commands/project-status.md). |
-| `/erfana:session-status` | The same Pyramid-Principle brief scoped to the current Claude Code session – same PO/PM/BA audience and three axes, sourced from the in-context conversation with a light git probe. Read-only; use it after a context compaction or when returning to a long-running tab. Full contract: [`commands/session-status.md`](commands/session-status.md). |
-| `/erfana:explain-issue` | Translates a single GitHub issue into a Product Owner / PM / BA brief (accepts a bare number, `#N`, or full URL). Pulls the issue, comments, linked PRs, and referenced files/specs to ground the translation, but stays purely descriptive – no suggested next step. Non-interactive, read-only. Full contract: [`commands/explain-issue.md`](commands/explain-issue.md). |
-| `/erfana:lens-review` | Researched multi-lens code review over any target – `/erfana:lens-review <path \| #PR \| "description"> [--lens a,b,c] [--out file.md]`. Fans out reviewers (up to 10, chosen at runtime), each grounded in cited best practices from the last ~12 months, then returns one severity-ranked, plain-language report (PM/PO-facing, with full technical detail kept for engineers). Manual trigger only; distinct from `/review` by its live research and any-target scope. Full contract: [`commands/lens-review.md`](commands/lens-review.md). |
-
-Skills auto-discovered from `skills/*/SKILL.md`; agents from `agents/*.md` (plugin root – no skill ships its own `agents/` folder); hooks from `hooks/hooks.json`; commands from `commands/*.md`. Every skill is self-contained – there is no shared content bundle.
-
-> **Heads-up: generic-name agents.** The plugin ships 14 agents with generic names – any agent in `agents/` whose name does not start with a skill or team prefix (`agent-`, `skill-`, `issue-`, `spec-`, `article-`, `report-`, `fact-checking-`, `lens-`, `e2e-`, `release-`): `architecture-reviewer`, `bug-investigator`, `code-reviewer`, `commit-writer`, `security-auditor`, `software-developer`, `solution-architect`, `solution-reviewer`, `technical-architect`, `test-writer`, `ui-designer`, `ui-reviewer`, `ux-designer`, `ux-reviewer`. They may collide with built-in Claude Code agents or with agents shipped by other plugins (`superpowers:*`, `feature-dev:*`, etc.). Last-loaded wins; behavior in mixed-plugin environments is non-deterministic. To target this plugin's copies specifically, prefer prefix-named agents in the `Task` tool (e.g. `spec-compliance-checker`, `agent-reviewer`). Full security implications including the highest-trust shadow target are documented in `SECURITY.md`.
-
----
-
-## Confidentiality
-
-Prompts you send through any skill or agent in this plugin are forwarded to Anthropic's Claude API for processing. Anthropic acts as a sub-processor of any data contained in your prompts.
-
-Treat the plugin like any other AI tool routed through external infrastructure:
-
-- **Do not paste**: client-confidential data, customer PII, financial figures marked sensitive, unreleased product specs, internal credentials, or anything covered by an NDA you signed.
-- **For sensitive work**, review the agent prompts before granting tool permissions in your session.
-
-Review Anthropic's data-usage and privacy terms before routing sensitive material through any Claude-based tool, and treat the conservative defaults above as policy.
-
----
+It ships as a Claude Code plugin and also runs on Qwen Code, which converts Claude Code plugins when you install them – one repository, one release, two hosts.
 
 ## Install
 
-The same repository installs on both supported hosts. Nothing is host-specific in the package: Qwen Code converts the Claude Code plugin on your machine at install time, from the same tag Claude Code users install.
+Before you start:
 
-### Claude Code
+- **Claude Code** or **Qwen Code** 0.22.3 or later.
+- **`jq`** on your `PATH` (macOS: `brew install jq`). Without it, five of the six safety hooks skip themselves and protect nothing. On Windows, the hooks need Git Bash and `powershell.exe` instead.
+- **GitHub CLI (`gh`), signed in**, only for the skills and commands that read or change GitHub: `issue`, `next-batch`, `coordinate`, `ship`, `explain-issue`, `project-status`, and `lens-review` on a pull request.
 
-Installing from a **public** marketplace needs no GitHub token or special access.
+On **Claude Code**, run these inside a session:
 
-#### 1. Add the marketplace and install
-
-Inside Claude Code:
-
-```
+```text
 /plugin marketplace add qodeca/erfana-skills
 /plugin install erfana@erfana-skills
 ```
 
-The marketplace registers under the name `erfana-skills` (matches `marketplace.json`). The install line uses `erfana@erfana-skills` – the plugin name `@` the marketplace name.
+Then restart Claude Code, because skills, agents, and hooks load when a session starts. To check it worked, type `/erfana:` – autocomplete lists the erfana skills and commands.
 
-#### 2. Verify
-
-```
-/plugin list
-```
-
-You should see `erfana@erfana-skills` enabled. Then type a trigger phrase like:
-
-> create an issue for the login bug
-
-`erfana:issue` should activate.
-
-### Qwen Code
-
-From a shell:
+On **Qwen Code**, run this in a shell and accept the prompt Qwen shows:
 
 ```bash
 qwen extensions install qodeca/erfana-skills:erfana
+qwen extensions list
 ```
 
-Accept the install prompt Qwen shows, then verify with `qwen extensions list`. If erfana is already installed, `install` refuses; run `qwen extensions update erfana` instead. There is no second package, no second manifest and no build step – the installer reads this repository's `.claude-plugin/marketplace.json` and converts skills, agents and commands as it copies them.
+On Qwen Code, every skill and command uses its bare name: `/issue`, not `/erfana:issue`.
 
-Two things read differently there: slash commands register **unnamespaced** (`/lens-review`, not `/erfana:lens-review`), and a few frontmatter fields the converter does not carry over are simply ignored. Tested against Qwen Code 0.22.3. The full list of what works, what degrades, and what is not verified yet lives in [`docs/hosts.md`](docs/hosts.md) – including the honest caveat that no erfana skill has been run end to end inside a Qwen session, so the checks that exist prove the loader and the conversion, not the executor.
+Updating, removing, proxies, and other install problems are covered in the [how-to guides](docs/how-to.md#install-on-claude-code).
 
-### Invocation forms – bare vs. namespaced
+## Where next
 
-Both forms resolve to the same skill:
+| You want to | Read |
+|---|---|
+| Try erfana for the first time | The [tutorial](docs/tutorial.md) – your first session, step by step |
+| Get a specific job done | The [how-to guides](docs/how-to.md) |
+| Look up a skill, agent, command, or hook | The [reference](docs/reference.md) |
+| Understand how erfana works and why | The [explanation](docs/explanation.md) |
+| See every page, including maintainer docs | The [docs home](docs/README.md) |
 
-```
-/erfana:issue     # canonical, namespaced (use this)
-/issue            # bare form, also works
-```
+## What is inside
 
-Use the **namespaced form** in shared docs, screenshots, and team conversations. The bare form is a built-in Claude Code convenience – it exists for autocomplete brevity but collides with personal or other-plugin skills of the same name. The `/erfana:` prefix prevents that collision and makes the source explicit.
+erfana ships 18 skills, 33 shared agents, 5 slash commands, and 6 safety hooks. A skill is a packaged way of doing one kind of task; Claude loads it when your words match its trigger phrases, or you start it with `/erfana:<name>`. Not sure which one fits? Ask Claude "which erfana skill should I use for this?" and the [`erfana:using-erfana`](docs/reference.md#erfanausing-erfana) router points you to one.
 
-Tracked upstream: [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695) requests a `require-namespace: true` flag to remove the bare form. When that ships, this plugin will adopt it.
+**Build and plan:**
 
-On Qwen Code the choice does not exist – its converter registers only the bare form, so a slash command there is `/doc-update`, never `/erfana:doc-update`. See [`docs/hosts.md`](docs/hosts.md).
+- [`erfana:spec`](docs/reference.md#erfanaspec) – writes right-sized requirements specs in four tiers, from an issue-sized note to a full standard spec.
+- [`erfana:issue`](docs/reference.md#erfanaissue) – drafts GitHub issues, implements an issue end to end with built-in reviews, reviews code or a pull request, and shows issues.
+- [`erfana:grill-me`](docs/reference.md#erfanagrill-me) – questions you about a plan one question at a time, sized to the stakes; it recommends answers on facts and routine choices and asks about your judgment calls without leaning.
+- [`erfana:expert-panel`](docs/reference.md#erfanaexpert-panel) – has a panel of specialist reviewers critique a plan or design, then writes an improved version.
 
----
+**Write:**
 
-## How updates work
+- [`erfana:report`](docs/reference.md#erfanareport) – creates and reviews consulting reports to a house standard.
+- [`erfana:article`](docs/reference.md#erfanaarticle) – researches, drafts, reviews, and publishes 2,000–3,000-word articles in English, Polish, or both.
+- [`erfana:fact-checking`](docs/reference.md#erfanafact-checking) – traces each claim in a document to a passage in your local source files.
 
-### Qwen Code
+**Prompts and goals:**
 
-```
-qwen extensions update erfana
-```
+- [`erfana:prompt`](docs/reference.md#erfanaprompt) – interviews you and writes or improves a prompt for a current Claude model.
+- [`erfana:draft-goal`](docs/reference.md#erfanadraft-goal) – turns what you want done into a `/goal` condition, ready to paste.
+- [`erfana:raise-the-bar`](docs/reference.md#erfanaraise-the-bar) – rewrites a request into a more ambitious one before you run it.
 
-Or `qwen extensions update --all`. Qwen installs erfana from the **latest GitHub release tag**, not from a branch – `qwen extensions list` shows the tag it resolved – so a change reaches you when it is released, not when it is merged.
+**Long and parallel sessions:**
 
-### Claude Code
+- [`erfana:next-batch`](docs/reference.md#erfananext-batch) – picks the next GitHub issues to work on (10 by default, up to 25) and groups them by theme.
+- [`erfana:coordinate`](docs/reference.md#erfanacoordinate) – keeps several sessions on one repository from taking the same issue.
+- [`erfana:autopilot`](docs/reference.md#erfanaautopilot) – prepares an unattended run and picks it up again after a restart.
 
-Third-party marketplaces like this one have **auto-update off by default** – only Anthropic's own marketplaces auto-update without asking ([docs](https://code.claude.com/docs/en/discover-plugins#configure-auto-updates)). So by default you pull new releases manually:
+**Claude Code itself:**
 
-```
-/plugin marketplace update erfana-skills
-/plugin update erfana@erfana-skills
-```
+- [`erfana:skill`](docs/reference.md#erfanaskill) and [`erfana:agent`](docs/reference.md#erfanaagent) – create, review, and change your own Claude Code skills and agents.
 
-(After `/plugin update`, restart Claude Code to apply.)
+**Closing a session:**
 
-To have releases picked up automatically at session start instead, opt in once: run `/plugin`, open the **Marketplaces** tab, select `erfana-skills`, and choose **Enable auto-update**. Org admins can set `"autoUpdate": true` on the marketplace's `extraKnownMarketplaces` entry in managed settings to enable it for everyone.
+- [`erfana:ship`](docs/reference.md#erfanaship) – commits, pushes, opens or merges the pull request, as far as you say.
+- [`erfana:handoff`](docs/reference.md#erfanahandoff) – writes a handoff document so another session or colleague can continue.
 
-If still stale, clear the cache and restart Claude Code:
+Three skills never start from a phrase, because Claude may not start them on its own: `fact-checking`, `ship`, and `handoff`. Type their slash command. The same holds for the `/erfana:project-status` and `/erfana:session-status` commands.
 
-```bash
-rm -rf ~/.claude/plugins/cache/
-```
+The [slash commands](docs/reference.md#slash-commands-5) cover status briefs, documentation refresh, issue explanations, and researched code review. The [safety hooks](docs/reference.md#safety-hooks-6) run on their own and block risky actions, such as deleting your home folder or writing an API key into a file. The [33 shared agents](docs/reference.md#agents-33) are the helpers the skills hand work to.
 
-SSH-based marketplace URLs are not recommended (known Windows issue).
+## Your data
 
----
+Everything you send through a skill or agent goes to the model provider your host uses – for Claude Code, Anthropic's Claude API. Treat erfana like any other AI tool that runs on outside infrastructure:
 
-## Upgrading to 9.0
+- Do not paste client-confidential data, customer personal data, sensitive financial figures, unreleased product specs, credentials, or anything covered by an NDA.
+- For sensitive work, read the agent prompts in [`agents/`](agents/) before you grant tools in your session.
+- Read your provider's data-use and privacy terms before you send sensitive material.
 
-Version 9.0 renames skills and agents, so check these before you update:
+## Help and contributing
 
-- **Skills renamed.** `/erfana:managing-agents` is now `/erfana:agent`; likewise `managing-skills` → `skill`, `managing-issues` → `issue`, `managing-specs` → `spec`, `managing-articles` → `article`, `managing-reports` → `report`. The old commands no longer exist – update scripts, `CLAUDE.md` files, and saved prompts.
-- **Agents renamed, merged, or removed.** The shared agent pool shrank from 87 to 33. If a prompt or `CLAUDE.md` calls an agent by name, look it up in the migration table in [`CHANGELOG.md`](CHANGELOG.md); most removed agents' work now runs in the skill's own conversation, so call the skill instead.
-- **Finish in-flight issue runs first.** `erfana:issue` no longer saves progress to the issue, so an Implement run interrupted by the update starts over.
-- **Restart after updating.** Skills, agents, and hooks load at session start.
+- **Questions and bugs:** see [`SUPPORT.md`](SUPPORT.md).
+- **Security issues:** report them privately, as [`SECURITY.md`](SECURITY.md) describes – not in a public issue.
+- **Contributing:** see [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). Contributions are accepted under the project [Contributor License Agreement](CLA.md); by opening a pull request you agree to its terms.
+- **What is changing:** [`CHANGELOG.md`](CHANGELOG.md) and [`ROADMAP.md`](ROADMAP.md).
 
-There is no version pin documented here: we could not confirm a per-version install syntax for Claude Code. Auto-update is off by default for this marketplace, so to stay on 8.x, do not run `/plugin update` (and leave auto-update off) until you are ready. Qwen Code installs the latest release tag on `qwen extensions update`; a way to roll back to an older tag there is not verified.
-
----
-
-## Typical workflows
-
-Skills compose. The most common chains:
-
-**Feature from idea to merged code**
-
-1. `erfana:spec` – right-size the requirements (T1 issue through T4 standard spec)
-2. `erfana:issue` create – file the issue against the spec
-3. `erfana:issue` implement – autonomous build through 13 phased quality gates, embedded reviews, human only at requirements, UAT and the final git confirm
-
-Sample opener: *"Spec out the new export feature, then create and implement the issue."*
-
-**Stress-test a plan before implementing** (process skill, v4.2.3+)
-
-1. `erfana:grill-me` – Socratic walk through the decision tree; one question at a time, recommended answer per branch, explores the codebase before asking when the answer is already encoded there. Depth scales to the plan: a small reversible change gets a short pass, anything with a one-way door gets the full sweep
-2. Downstream skill of choice – `erfana:issue` create / `erfana:spec` (T1–T4), depending on what the locked plan is meant to produce
-
-Sample opener: *"Grill me on this rollout plan before we build it – I want to ship X by Friday, here's my draft approach."*
-
-**Publish a researched article**
-
-1. `erfana:article` – research, outline, draft, review, revise, publish (bilingual Polish/English supported)
-2. `erfana:fact-checking` – trace every factual claim in the draft back to a source passage before it ships
-
-Sample opener: *"Write a 2500-word article comparing managed Postgres providers, then fact-check it."*
-
-**Why workflows matter**: each skill works alone, but locking requirements first and verifying claims last catches problems that are expensive to fix after delivery.
-
----
-
-## Troubleshooting
-
-**`/plugin marketplace add` fails or hangs**
-Check network access to `api.github.com` and `raw.githubusercontent.com` (a corporate proxy may block them – see the proxy note below). The public marketplace needs no token.
-
-**Auto-updates haven't appeared in 2+ sessions**
-Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin update erfana@erfana-skills`, then restart Claude Code. If still stale, clear the cache: `rm -rf ~/.claude/plugins/cache/` and restart.
-
-**`/plugin install` reports "marketplace not found"**
-The registered marketplace name comes from `marketplace.json` (`erfana-skills`). Make sure step 3 ran successfully – `/plugin marketplace list` should show it.
-
-**Trigger phrases don't activate the right sub-skill**
-Confirm the plugin is enabled (`/plugin list`) and try a trigger phrase from the skill table above. Each sub-skill has its own keyword set – if your phrasing is far from the listed triggers, name the artifact explicitly ("issue", "spec", "article", "report", "agent", "skill").
-
-**`/erfana:issue` and `/issue` both appear in autocomplete**
-Expected behavior. Plugin skills are registered at both the bare path (`/issue`) and the namespaced path (`/erfana:issue`) – see [Invocation forms](#invocation-forms--bare-vs-namespaced). Use the namespaced form to avoid collisions with personal or other-plugin skills.
-
-**Plugin updated but Claude Code still uses old behavior**
-Force a refresh: `/plugin marketplace update erfana-skills`, then `/plugin update erfana@erfana-skills`, then restart Claude Code. If still stuck, clear the cache: `rm -rf ~/.claude/plugins/cache/` and restart Claude Code.
-
-**Marketplace add hangs / silently fails behind a corporate proxy**
-If your network blocks `api.github.com` or `raw.githubusercontent.com`, marketplace operations fail without a clear error. Ask IT to allowlist both. As a workaround, `git clone` the repo locally and register it as a local-path marketplace: `/plugin marketplace add /absolute/path/to/erfana-skills`. Pull updates manually with `git pull` + `/plugin marketplace update erfana-skills`.
-
-**`qwen extensions install` reports the extension was not found**
-Check the source spelling – it is `qodeca/erfana-skills:erfana`, the repository followed by the plugin name inside its marketplace, not the repository alone. The install is a network operation against GitHub, so the proxy note above applies here too, and Qwen shows a security prompt that has to be accepted before anything is written to `~/.qwen/extensions/`.
-
-**Slash commands appear unnamespaced (`/doc-update`, not `/erfana:doc-update`)**
-Expected on Qwen Code – its converter registers commands without the plugin namespace. Use the bare form there. If a name collides with a Qwen builtin, the builtin takes the bare name and the erfana command is renamed to `erfana.<name>` rather than dropped; see [`docs/hosts.md`](docs/hosts.md).
-
-**Safety hooks do not fire on Qwen Code**
-First check that [`jq`](https://jqlang.github.io/jq/) is installed and on `PATH` – most hooks parse their JSON payload with it, and the `dispatch.sh` launcher skips a hook it cannot run rather than blocking your work, printing a diagnostic to stderr. The hooks fail open by design, so a missing `jq` looks like silence, not an error. `hooks/hooks.json` needs no Qwen-specific declaration; if `jq` is present and hooks still do nothing, restart the Qwen session so the extension is re-read.
-
-**Skill scope precedence**
-If you have a personal or project skill that shares a name with one in this plugin (e.g. you also have `~/.claude/skills/issue/SKILL.md`), Claude Code resolves in order: project (`.claude/skills/`) → personal (`~/.claude/skills/`) → plugin (`erfana@erfana-skills`). To force the plugin version, rename your personal copy or add it to a different namespace.
-
-**Local development (testing changes before they hit main)**
-Clone the repo locally, then register it as a local-path marketplace:
-```
-/plugin marketplace add /absolute/path/to/your/clone
-/plugin install erfana@erfana-skills
-```
-Iterate on your fork. When ready, push a `feature/...` branch (cut from `develop`) and open a PR against `develop`. Once it ships in a release, switch back to the published marketplace: `/plugin marketplace remove erfana-skills` then `/plugin marketplace add qodeca/erfana-skills` and `/plugin update erfana@erfana-skills`.
-
----
-
-## Security
-
-To report a vulnerability, follow [`SECURITY.md`](SECURITY.md) – please use private disclosure, not a public issue. Supported versions and the disclosure process are documented there.
-
----
-
-## License
+## License and trademarks
 
 Copyright © 2025-2026 Qodeca sp. z o.o.
 
-Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-only`). You are free to use, study, share, and modify it; distributed derivatives must remain under the same license and ship their source. The license covers code, documentation, and bundled assets – it does **not** grant rights to the "Erfana" or "Qodeca" names or logos (see [`TRADEMARKS.md`](TRADEMARKS.md)). Per-file licensing follows the [REUSE](https://reuse.software) specification; run `reuse lint` to verify. Contributions are accepted under the project [Contributor License Agreement](CLA.md) (see [`CONTRIBUTING.md`](CONTRIBUTING.md)).
+Licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-only`). You are free to use, study, share, and change it; distributed derivatives must stay under the same license and ship their source. The license covers code, documentation, and bundled assets. Per-file licensing follows the [REUSE](https://reuse.software) specification; run `reuse lint` to check it.
 
----
+The license does not grant rights to the "Erfana" or "Qodeca" names or logos, which are trademarks of Qodeca sp. z o.o. – see [`TRADEMARKS.md`](TRADEMARKS.md).
 
-## Related projects
+- "Claude" and "Claude Code" are trademarks of Anthropic. Erfana Skills is an independent, third-party plugin and is not affiliated with, sponsored by, or endorsed by Anthropic.
+- "GitHub" and "GitHub Actions" are trademarks of GitHub, Inc. Erfana Skills works through their public API and is not affiliated with or endorsed by GitHub or Microsoft.
+- "Playwright" is a trademark of Microsoft Corporation. Erfana Skills ships agents that write and review Playwright tests and is not affiliated with or endorsed by Microsoft.
+- "Qwen" and "Qwen Code" are trademarks of their respective owners. Erfana Skills is an independent, third-party plugin that Qwen Code can convert and run, and is not affiliated with or endorsed by them.
 
-Erfana Skills is part of the **Erfana** family from Qodeca:
+## About
 
-- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (desktop app). It is a separate project; this repository is the coding-agent plugin, not the app.
-- **[8cli](https://github.com/qodeca/8cli)** – an AI-first, JSON-native CLI for remotely managing n8n instances.
+Erfana Skills is part of the Erfana family from Qodeca:
 
-Built by **[Qodeca](https://qodeca.com)** – [qodeca.com](https://qodeca.com) · [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)
+- **[Erfana](https://github.com/qodeca/erfana)** – the agent-native Markdown workspace (a desktop app). It is a separate project; this repository is the coding-agent plugin, not the app.
+- **[8cli](https://github.com/qodeca/8cli)** – an AI-first, JSON-native command-line tool for managing n8n instances remotely.
 
----
+Repository: `github.com/qodeca/erfana-skills`. Maintainer: Marcin Obel ([@marcinobel](https://github.com/marcinobel)). Governance: [`GOVERNANCE.md`](GOVERNANCE.md).
 
-## Maintainer info
-
-Repository: `github.com/qodeca/erfana-skills`
-Maintainer: Marcin Obel ([@marcinobel](https://github.com/marcinobel)). Governance: [`GOVERNANCE.md`](GOVERNANCE.md). Support: [`SUPPORT.md`](SUPPORT.md).
-
-> Note: the `v1.0.0` git tag exists but is not installable (it predates a `marketplace.json` schema fix shipped in `v1.0.1`). If you pin to an exact version, start from `v1.0.1` or later.
+Built by [Qodeca](https://qodeca.com) – [LinkedIn](https://www.linkedin.com/company/qodecasoftwaredevelopment) · [hi@qodeca.com](mailto:hi@qodeca.com)

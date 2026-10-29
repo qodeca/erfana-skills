@@ -8,7 +8,7 @@ We pledge to act and interact in ways that contribute to an open, welcoming, div
 
 ## Our standards
 
-This project adopts the **[Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)** as its code of conduct. The canonical, full text — including the detailed list of expected behaviors and of unacceptable behavior — is published at that link and is incorporated here by reference.
+This project adopts the **[Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)** as its code of conduct. The canonical, full text – including the detailed list of expected behaviors and of unacceptable behavior – is published at that link and is incorporated here by reference.
 
 In short:
 
@@ -21,7 +21,7 @@ This Code of Conduct applies within all project spaces (the repository, issues, 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported **confidentially** to **hi@qodeca.com**, monitored by the maintainer ([@marcinobel](https://github.com/marcinobel)). If you prefer, you can instead open a confidential report through GitHub.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported **confidentially** to **<hi@qodeca.com>**, monitored by the maintainer ([@marcinobel](https://github.com/marcinobel)).
 
 All reports will be reviewed and investigated promptly and fairly. The maintainer is obligated to respect the privacy and security of the reporter of any incident.
 

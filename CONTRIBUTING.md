@@ -28,6 +28,14 @@ git checkout -b feature/my-change
 
 `main` is the stable branch the plugin marketplace serves; `develop` is the integration branch. Cut your `feature/...` branch from `develop` and open your PR against `develop`.
 
+You need these tools on your machine:
+
+- `bash`, `git`, and a full clone (not shallow), because Gate 18 reads each skill's commit history.
+- `python3` with PyYAML (`pip install pyyaml`), because the gate runner parses frontmatter with it.
+- `jq`, because Gate 16 runs the hooks and every hook except `post-compact-reminder` needs it.
+- Optional: the `claude` CLI (the runner calls `claude plugin validate` when it is on your `PATH`) and the `qwen` CLI (for the cross-host check below).
+- For the documentation checks: `lychee`, `vale`, and Node 20 or later (for `npx`).
+
 Before opening a PR, the full verification suite must pass:
 
 ```bash
@@ -35,7 +43,26 @@ bash scripts/run-all-gates.sh        # expect: === ALL GATES PASSED ===
 claude plugin validate .             # expect: Validation passed
 ```
 
-The gates enforce hard project invariants (valid manifests, no CJK characters, cross-references resolve, doc-claims match the filesystem, skill-registry sync, hook health, publication-readiness, and more). See [`docs/verification-gates.md`](docs/verification-gates.md).
+The gates enforce hard project invariants (valid manifests, no CJK characters, cross-references resolve, doc-claims match the filesystem, skill-registry sync, reference sync, hook health, publication-readiness, and more). See [`docs/verification-gates.md`](docs/verification-gates.md).
+
+### Documentation checks
+
+If you change any Markdown file, run the documentation checks too. They test that every link resolves (lychee), that the prose follows the house style (vale), and that the Markdown is well formed (markdownlint-cli2):
+
+```bash
+bash scripts/check-docs.sh             # all three checks, web links included
+bash scripts/check-docs.sh --offline   # local links and #fragments only – what CI blocks on
+```
+
+A missing tool counts as a failure, not a skip. CI runs the `--offline` form as a blocking step and checks web links in a separate step that reports but does not block.
+
+[`docs/reference.md`](docs/reference.md) is generated from the skill, agent, command, and hook files – never edit it by hand. If you change any of their frontmatter, or add or remove one, regenerate it and commit the result with your change:
+
+```bash
+bash scripts/gen-reference.sh          # rewrites docs/reference.md
+```
+
+Gate 19 fails when the committed file differs from a fresh run.
 
 ### Cross-host check
 
@@ -46,7 +73,7 @@ bash scripts/run-all-gates.sh        # Gates 2, 14 and 15 carry the cross-host r
 bash scripts/qwen-smoke.sh           # only if you have the qwen CLI installed
 ```
 
-The smoke test installs the working tree into a throwaway Qwen profile and checks that the conversion produced something usable. It is deliberately not part of `run-all-gates.sh` – that runner has to stay executable with only bash and Python – and it skips cleanly when `qwen` is not on your `PATH`, so it is optional locally. CI runs it with `--require`, which turns the skip into a failure.
+The smoke test installs the working tree into a throwaway Qwen profile and checks that the conversion produced something usable. It is deliberately not part of `run-all-gates.sh`, because the gates must run without Qwen Code installed, and it skips cleanly when `qwen` is not on your `PATH`, so it is optional locally. CI runs it with `--require`, which turns the skip into a failure.
 
 To actually *use* your branch on Qwen while working on it, link it instead of installing a copy:
 
@@ -69,8 +96,10 @@ CI runs two secret scanners (the `secret-scan` job in `verify.yml`) on every pus
 
 ```bash
 gitleaks detect --source . --log-opts="--all" --redact -v
-trufflehog git "file://$PWD" --results=verified,unknown --no-update
+trufflehog git "file://$PWD" --results=verified --fail --no-update
 ```
+
+These are the same flags CI uses, so a clean local run means a clean CI run.
 
 If a scanner flags a known false positive, add a narrow allowlist (gitleaks: an `[allowlist]` entry in a `.gitleaks.toml` with `[extend] useDefault = true`; trufflehog: a path in an `--exclude-paths` file) rather than disabling the scan. Never commit a real secret, even to history – rewrite it out and rotate the credential.
 
@@ -86,7 +115,8 @@ If a scanner flags a known false positive, add a narrow allowlist (gitleaks: an 
 - [ ] Cross-host rules respected: no `timeout` key in `hooks/hooks.json`, and a hook matcher naming a Claude-only tool also names its Qwen counterpart (Gate 14 enforces both).
 - [ ] Agent and skill prose names the action, not the tool – no Claude tool-call syntax in a body, and Claude tool names left untouched in frontmatter `tools:`.
 - [ ] Any claim about how the two hosts differ links to [`docs/hosts.md`](docs/hosts.md) instead of restating it, and `bash scripts/qwen-smoke.sh` was run if you have the `qwen` CLI.
-- [ ] If you added, removed, or renamed a skill: **do not** regenerate `docs/skill-registry.md` in this PR. The registry records each skill's latest commit subject, and a squash-merge rewrites that subject - so a regen bundled with skill edits captures the pre-squash text and Gate 18 hard-fails the moment the PR lands. A maintainer runs `bash scripts/gen-skill-registry.sh` as a separate registry-only PR afterwards.
+- [ ] `bash scripts/check-docs.sh --offline` passes if you changed any Markdown, and `docs/reference.md` is regenerated with `bash scripts/gen-reference.sh` if you changed a skill, agent, command, or hook.
+- [ ] If your PR touches anything under `skills/`: **do not** regenerate `docs/skill-registry.md` in this PR. The registry records each skill's latest commit subject, and a squash-merge rewrites that subject – so a regen bundled with skill edits captures the pre-squash text and Gate 18 hard-fails the moment the PR lands. A maintainer runs `bash scripts/gen-skill-registry.sh` as a separate registry-only PR afterwards.
 - [ ] Once the CLA-assistant check is enabled, it is green.
 
 ## Code of style
