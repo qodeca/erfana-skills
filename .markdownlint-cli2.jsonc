@@ -1,0 +1,15 @@
+// markdownlint-cli2 configuration for erfana's documentation.
+// Run through scripts/check-docs.sh (locally and in CI).
+{
+  "config": {
+    "default": true,
+    // The repository writes one paragraph per line; wrapping is the reader's editor's job.
+    "MD013": false,
+    // Keep a Changelog repeats "Added" / "Changed" under each version.
+    "MD024": { "siblings_only": true },
+    // HTML comments mark generated files; <details> keeps long tables folded.
+    "MD033": { "allowed_elements": ["details", "summary", "br", "img", "picture", "source"] }
+  },
+  "globs": ["*.md", "docs/**/*.md", ".github/**/*.md"],
+  "ignores": ["node_modules/**", ".local/**", "docs/release-notes-v6.0.0.md"]
+}

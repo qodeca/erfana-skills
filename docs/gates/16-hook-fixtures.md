@@ -46,7 +46,7 @@ Validates the `verify-completion` Stop hook and the plugin-root `grill-guard` an
 
 4. **Guard-drift check** (v6.4.0). `ms-grill-guard.sh` is a copy of `grill-guard.sh` differing only in header comments, the sentinel literal, and the block-reason JSON. The gate normalizes both (comments and reason stripped, sentinel unified) and FAILs on any remaining diff, so a fence-stripping or anchoring fix can never land in one guard family only.
 
-   **Coverage note.** The fixture replay exercises only the OS-native implementation (`.sh` on macOS/Linux CI). The `.ps1` siblings are literal-checked here and PowerShell-parsed by Gate 14; behavioural `.ps1` replay requires a local `pwsh` run (documented in the release checklist) or a Windows runner.
+   **Coverage note.** The fixture replay exercises the OS-native implementation. On macOS and Linux that is the `.sh` hook. CI also has a `powershell` job (`windows-latest`, not a required check) that runs this script under Git Bash: there `dispatch.sh` takes its Windows branch, so every fixture replays through the `.ps1` hooks. The launcher-guarantee checks (section 1b below – the watchdog and the jq probe) are skipped on that runner, because Git Bash does not put the hook in its own process group, so the Windows launcher bounds only the hook process.
 
 ## Implementation
 
@@ -60,7 +60,7 @@ It is invoked from `scripts/run-all-gates.sh` directly after Gate 14 (`hooks val
 
 ## Pass criteria
 
-`PASS: <N> fixture(s) + <M> sentinel symmetry check(s)` where `<N>` is the sum of the script's `CASES` (10), `GRILL_CASES` (5), and `MS_GRILL_CASES` (5) arrays, currently 20, and `<M>` is the sum of status-family files (4), explain-family files (3), grill-family files (3), and ms-grill-family files (4), currently 14. The guard-drift check adds one more PASS/FAIL line outside these counts. (Note: before v6.2.0 this section undercounted `<M>` as 5 – the v4.2.20 `.ps1` additions were never reflected here; the script itself always counted correctly.) Any per-fixture or per-symmetry failure tags the run as a failure and increments the failure counter; the script then exits non-zero with a summary line.
+`PASS: <N> fixture(s) + <M> sentinel symmetry check(s)` where `<N>` is the sum of the script's `CASES` (10), `GRILL_CASES` (8), `MS_GRILL_CASES` (8), `SECRET_CASES` (9), and `BASH_SAFETY_CASES` (47) arrays, currently 82, and `<M>` is the sum of status-family files (4), explain-family files (3), grill-family files (3), and ms-grill-family files (4), currently 14. The guard-drift check adds one more PASS/FAIL line outside these counts. (Note: before v6.2.0 this section undercounted `<M>` as 5 – the v4.2.20 `.ps1` additions were never reflected here; the script itself always counted correctly.) Any per-fixture or per-symmetry failure tags the run as a failure and increments the failure counter; the script then exits non-zero with a summary line.
 
 ## Adding a new fixture
 
@@ -76,7 +76,7 @@ It is invoked from `scripts/run-all-gates.sh` directly after Gate 14 (`hooks val
 
 ## Renaming a sentinel
 
-If either sentinel literal ever changes:
+If any sentinel literal changes:
 
 **Status family** (`<!-- erfana:status-template -->`):
 
@@ -99,15 +99,15 @@ If either sentinel literal ever changes:
 1. Update the `GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
 2. Update the marker literal in `skills/grill-me/SKILL.md` (Sentinel section).
 3. Update the match in `hooks/grill-guard.sh` (`grep -qF`) and `grill-guard.ps1` (`.Contains`).
-4. Update the eight `tests/hooks/grill-guard/*.json` fixtures that embed the literal.
+4. Update every `tests/hooks/grill-guard/*.json` fixture that embeds the literal (7 today – `no-marker-passes.json` does not).
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.
 
 **Ms-grill family** (`<!-- erfana:ms-grill-open -->`, v6.4.0):
 
 1. Update the `MS_GRILL_SENTINEL=` constant at the top of `scripts/gate-16-hook-fixtures.sh`.
 2. Update the marker literal in `skills/skill/SKILL.md` ("The interview") and `skills/skill/references/interview-protocol.md` (Sentinel section).
-3. Update the match in `hooks/ms-grill-guard.sh` (`grep -qF`) and `ms-grill-guard.ps1` (`.Contains`) — the guard-drift normalizer's `sed` mapping in the gate script must track the new literal too.
-4. Update the eight `tests/hooks/ms-grill-guard/*.json` fixtures that embed the literal.
+3. Update the match in `hooks/ms-grill-guard.sh` (`grep -qF`) and `ms-grill-guard.ps1` (`.Contains`) – the guard-drift normalizer's `sed` mapping in the gate script must track the new literal too.
+4. Update every `tests/hooks/ms-grill-guard/*.json` fixture that embeds the literal (7 today – `no-marker-passes.json` does not).
 5. Re-run `bash scripts/run-all-gates.sh`. Gate 16 catches any of the sites being missed.
 
 ## PreToolUse fixtures and launcher guarantees (v7.1.0)

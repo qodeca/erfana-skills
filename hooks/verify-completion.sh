@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
+# Summary: When Claude says work is done without showing proof, asks it once to show the check that proves it.
 # Stop hook: nudge the agent back to verification when it claims success
 # without citing evidence.
 #

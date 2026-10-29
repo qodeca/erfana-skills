@@ -20,7 +20,7 @@ These hold in every operation:
 - **IDs are never reused.** Spec IDs come from the registry's `sequence.next`; a deleted, failed, or archived spec keeps its ID forever. Requirement IDs inside a spec are never reused either. Write the registry one change at a time.
 - **The user agrees before files change.** A new spec is written only after the user agrees its tier and requirements. An existing spec changes only when the user's request states the exact change or the user approves a change list. Manifest bookkeeping that follows from the files (statistics, indexes, `updated`) is not a decision and may be fixed directly. Archiving and writing to the project's `CLAUDE.md` need an explicit yes for that action.
 - **The verdict is the checker's.** Whether a spec passes review comes from `spec-validator`, which sees the spec and the checks only. Never report a failing spec as passing.
-- **Blocked means stop and say so.** If the registry is missing or broken, a spec is not found, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a step fails, stop that part, finish what does not depend on it, and report exactly what is blocked. Never leave a registry entry `reserved`.
+- **Blocked means stop and say so.** If the registry is broken, or missing while spec folders exist, a spec is not found, a decision needs a user who cannot answer (a headless run – the question tool is missing or denied, as in `claude -p`), or a step fails, stop that part, finish what does not depend on it, and report exactly what is blocked. Never leave a registry entry `reserved`.
 - **Questions come from here.** Ask the user in the main conversation, one decision at a time; agents cannot ask anyone.
 
 ## What to read
@@ -41,7 +41,7 @@ The result is a new spec at the tier the user agreed, with a confirmed registry 
 - **Understand the feature first.** Look at the project for context (stack, existing specs that touch the same area) and read what the user gave you. Recommend a tier with its reason (`tiers.md`) and let the user decide.
 - **Ask what the draft cannot be written without** – the goal and users, what is in and out of scope, the requirements and how each will be tested, quality targets with numbers – one question at a time, skipping what is already clear. For T3 and T4, offer research on how similar products solve it; `spec-app-researcher` does it in its own context and returns patterns with sources.
 - **Show the requirements before writing**: the tier, the scope, and the numbered requirements with their acceptance criteria. Change them until the user agrees. In a headless run, stop here: write nothing, say which tier you recommend and what you need.
-- **Write** with the registry transaction in `registry.md` (reserve, create the files from the tier's template, confirm; mark `failed` if creation fails). Fill the manifest's statistics and index from the files you wrote.
+- **Write** with the registry transaction in `registry.md` – in a project with no specs yet, start the registry first, as its "Starting a registry" section says – (reserve, create the files from the tier's template, confirm; mark `failed` if creation fails). Fill the manifest's statistics and index from the files you wrote.
 - **Review** the new spec with `spec-validator`, fix what the user agrees to fix, then offer the next steps in `downstream.md`.
 
 ## Change

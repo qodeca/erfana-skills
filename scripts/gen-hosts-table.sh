@@ -73,11 +73,12 @@ rows = []
 for key in sorted(HOSTS):
     host = HOSTS[key]
     rows.append(
-        '| {display} | `{key}` | {consumes} | `{install}` | {tested} | {unit}, default {default} |'.format(
+        '| {display} | `{key}` | {consumes} | {install} | {tested} | {unit}, default {default} |'.format(
             display=host['display'],
             key=key,
             consumes=host['consumes'],
-            install=host['install'],
+            # One or more commands, run in order.
+            install=', then '.join(f'`{cmd}`' for cmd in host['install']),
             tested=cell(host['tested_version']),
             unit=host['hook_timeout_unit'],
             default=host['hook_timeout_default'],

@@ -1,6 +1,6 @@
 # Gate 4 – script syntax (Python)
 
-Cheap parse-only check that all scripts in the plugin have valid syntax. Catches edit-induced corruption before runtime.
+Parse-only check of every Python module under `scripts/_lib/`. Catches edit-induced corruption before runtime. Shell scripts are not checked here: the hook `.sh` files get `bash -n` in Gate 14.
 
 ## Implementation
 
@@ -20,4 +20,4 @@ EOF
 
 ## Pass criteria
 
-One `PASS:` line per script file. Parse failures surface as a Python `SyntaxError` trace with file + line.
+The runner prints one `PASS: scripts/_lib/<module>.py` line per module and stops at the first failure with `FAIL: <path>: <error>`, which names the file and line. The standalone snippet above prints a single summary line instead, and a parse failure there surfaces as a Python `SyntaxError` trace.

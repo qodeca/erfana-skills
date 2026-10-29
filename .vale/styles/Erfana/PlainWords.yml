@@ -1,0 +1,25 @@
+# Plain words: the short, common word reads faster for every reader,
+# including readers whose first language is not English.
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: error
+ignorecase: true
+swap:
+  utilize: use
+  utilise: use
+  utilization: use
+  leverage: use
+  in order to: to
+  prior to: before
+  subsequent to: after
+  commence: start
+  facilitate: help
+  endeavor: try
+  endeavour: try
+  ascertain: find out
+  approximately: about
+  numerous: many
+  in the event that: if
+  at this point in time: now
+  due to the fact that: because
+  a number of: some

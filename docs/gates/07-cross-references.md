@@ -4,7 +4,7 @@ Check that every cross-reference in `skills/*/SKILL.md`, `skills/*/references/*.
 
 The algorithm runs in two passes to keep false positives at zero:
 
-1. **SKILL.md structural sections** (`## References`, `## Scripts`, `## Examples`, `## Assets`, `## Demos`, plus the variants `## See also`, `## Related`, `## Related references`). Inside those sections only, extract the FIRST backtick-wrapped token from each `- ` bullet. Subsequent backticks describe the path; treating them as paths trips the regex on names like `` `<deck-stage>` `` or `` `c2-slides-pptx.html` ``. Code fences (```...```) inside the section are skipped.
+1. **SKILL.md structural sections** (`## References`, `## Scripts`, `## Examples`, `## Assets`, `## Demos`, plus the variants `## See also`, `## Related`, `## Related references`). Inside those sections only, extract the FIRST backtick-wrapped token from each `-` bullet. Subsequent backticks describe the path; treating them as paths trips the regex on names like `` `<deck-stage>` `` or `` `c2-slides-pptx.html` ``. Code fences (```...```) inside the section are skipped.
 2. **Markdown links anywhere** in any SKILL.md, `references/*.md`, or `agents/*.md` (the plugin-root agent prompts; v4.0.0+). `[text](path)` syntax is unambiguous, so descriptive prose citing a filename in backticks cannot trip it. This pass catches genuine broken links inside reference prose and inside agent prompts without the false-positive risk of a bare-backtick walk.
 
 Glob patterns (`*`, `?`, `[`) and externally-resolved targets (`http://`, `https://`, `#`, `mailto:`) are skipped in both passes.
@@ -78,12 +78,12 @@ PYEOF
 
 The pass-2 glob is `skills/*/references/*.md` – **plural**. A skill that spelled the directory in the singular, `reference/`, would have every link inside those files unchecked; `issue` did until its brief rebuild moved everything to `references/`. The claim in the intro that pass 2 "catches genuine broken links inside reference prose" holds for the plural spelling only.
 
-The same glob list omits `skills/<name>/phases/*.md`, `operations/*.md` and `examples/*.md` entirely, so links **originating** in those files are unchecked no matter where they point. No shipped skill uses those folders since `issue` was rebuilt as a brief.
+The same glob list covers only `SKILL.md`, `references/*.md`, and the plugin-root `agents/*.md`, so links **originating** in any other folder are unchecked no matter where they point. Two such folders ship today: `skills/report/examples/` and every `skills/*/templates/` folder (top level and nested). No shipped skill uses `phases/` or `operations/` since `issue` was rebuilt as a brief.
 
-History: before the brief rebuild, the `issue` skill's `reference/`, `operations/`, `phases/`, and `examples/` files (including the Implement hardening of PR #24) sat in this blind spot and were covered by a **manual link-resolution pass** instead – [`../known-caveats.md`](../known-caveats.md) records that gap as an accepted risk. Those folders no longer exist. Still outside the glob today: the nested templates under `skills/issue/templates/*/` and `skills/spec/templates/t3-lite-spec/` / `t4-standard-spec/`.
+History: before the brief rebuild, the `issue` skill's `reference/`, `operations/`, `phases/`, and `examples/` files (including the Implement hardening of PR #24) sat in this blind spot and were covered by a **manual link-resolution pass** instead – [`../known-caveats.md`](../known-caveats.md) records that gap as an accepted risk. Those folders no longer exist. Still outside the glob today: `skills/report/examples/` and all templates, including the nested ones under `skills/issue/templates/*/` and `skills/spec/templates/t3-lite-spec/` / `t4-standard-spec/`.
 
 Widening the glob is a code change to `scripts/run-all-gates.sh`, deliberately not made here: this file documents the limit so the gate doc does not contradict the accepted caveat.
 
 ## Pass criteria
 
-`PASS: <N> cross-references resolve` with `N` around 25 against current content (v7.0.0 removed the design skills and the brand-prose glob, dropping the count from ~84). The first-backtick-only rule is a content-shape contract: when authoring SKILL.md, write each path as the leading backtick of its bullet; if you need two real paths in one line, split into two bullets.
+`PASS: <N> cross-references resolve`, with `N` about 70 against current content (v7.0.0 removed the design skills and the brand-prose glob, which dropped the count from about 84 for a while). The first-backtick-only rule is a content-shape contract: when authoring SKILL.md, write each path as the leading backtick of its bullet; if you need two real paths in one line, split into two bullets.

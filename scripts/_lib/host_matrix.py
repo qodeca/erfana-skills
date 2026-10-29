@@ -51,7 +51,11 @@ HOSTS = {
     "claude-code": {
         "display": "Claude Code",
         "consumes": "native plugin",
-        "install": "/plugin marketplace add qodeca/erfana-skills",
+        # Two steps: adding the marketplace alone installs nothing.
+        "install": (
+            "/plugin marketplace add qodeca/erfana-skills",
+            "/plugin install erfana@erfana-skills",
+        ),
         "hook_timeout_unit": "seconds",
         "hook_timeout_default": 600,
         "min_version": None,      # no floor established; the plugin API is stable
@@ -60,7 +64,7 @@ HOSTS = {
     "qwen-code": {
         "display": "Qwen Code",
         "consumes": "converted at install time",
-        "install": "qwen extensions install qodeca/erfana-skills:erfana",
+        "install": ("qwen extensions install qodeca/erfana-skills:erfana",),
         "hook_timeout_unit": "milliseconds",
         "hook_timeout_default": 60000,
         # Only 0.22.3 has been read and exercised. The floor is set equal to the

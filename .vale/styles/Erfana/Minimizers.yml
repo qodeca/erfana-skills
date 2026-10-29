@@ -1,0 +1,12 @@
+# Minimizing words: "simply" or "easily" tells a reader who is stuck that
+# the step should not be hard for them. Say what to do instead.
+extends: existence
+message: "Remove '%s'; it tells a stuck reader the step should be easy."
+level: error
+ignorecase: true
+tokens:
+  - simply
+  - easily
+  - obviously
+  - of course
+  - trivially

@@ -19,7 +19,7 @@ This is a deliberately lightweight model appropriate to the project's size. It i
 
 ## Releases
 
-Release authority, the pre-release checklist, signing, and the bus-factor / succession procedure are documented in [`MAINTAINER.md`](MAINTAINER.md). Releases use semantic versioning and [Keep a Changelog](https://keepachangelog.com/); behaviour-changing releases go through a staged (`-rc.N`) rollout.
+Release authority, the pre-release checklist, signing, and the bus-factor / succession procedure are documented in [`MAINTAINER.md`](MAINTAINER.md). Releases use semantic versioning and [Keep a Changelog](https://keepachangelog.com/); behaviour-changing releases may go through a staged (`-rc.N`) rollout; skipped rollouts are recorded as overrides in [`docs/known-caveats.md`](docs/known-caveats.md).
 
 ## Becoming a maintainer
 
@@ -27,8 +27,8 @@ Contributors who show sustained, high-quality involvement (reviewed PRs, issue t
 
 ## Code of conduct
 
-Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). Enforcement is handled by the maintainer via the confidential channel described there.
+Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). Enforcement is handled by the maintainer through the confidential email address given there.
 
 ## Trademarks
 
-Open-sourcing the code does not open the project's name or logo — see [`TRADEMARKS.md`](TRADEMARKS.md).
+Open-sourcing the code does not open the project's name or logo – see [`TRADEMARKS.md`](TRADEMARKS.md).

@@ -19,4 +19,4 @@ print(f'{\"PASS\" if not m else \"FAIL\"}: {len(m)} CJK chars in commit subjects
 
 ## Pass criteria
 
-`PASS: 0 CJK chars in commit subjects`.
+The runner prints a bare `PASS`, or `FAIL: <N> CJK chars in commit subjects` and exits non-zero. The standalone snippet above prints `PASS: 0 CJK chars in commit subjects` instead.
