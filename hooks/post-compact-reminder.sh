@@ -44,5 +44,5 @@ EOF
 if [ -f .local/autopilot.md ] && head -n 1 .local/autopilot.md | grep -q '^Status: active'; then
   echo ""
   echo "AUTOPILOT RUN ACTIVE: read .local/autopilot.md and continue from its"
-  echo "Progress and Owner queue sections (erfana:autopilot resume)."
+  echo "Run rules, Progress and Owner queue sections (erfana:autopilot resume)."
 fi
