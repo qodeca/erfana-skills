@@ -12,6 +12,10 @@ The registry and every spec live under the project's `specs/` folder, resolved f
 - IDs are global across tiers, 3-digit zero-padded, and taken from `sequence.next`. The sequence only goes up; gaps from deleted or failed specs are normal.
 - Requirement IDs inside a spec are `{spec_id:03d}-{TYPE}-{seq:03d}` – `001-FR-004`, `001-NFR-002`, `001-AC-007`, `001-UC-001`. A removed requirement's ID is not reused either.
 
+## Starting a registry
+
+A project's first spec has no registry to write into. When `specs/registry.json` does not exist and no `manifest.json` exists anywhere under `specs/`, create `specs/registry.json` from the schema with `sequence: {"current": 0, "next": 1}`, an empty `registry` array, and `metadata` holding `schema_version: "3.0.0"`, `version: 0`, and `created` and `last_updated` set to now. Tell the user the file was created. If manifests exist but the registry does not, the registry was lost: rebuild it as "Rebuilding" says instead, because starting at 1 would reuse IDs.
+
 ## Creating an entry safely
 
 A new spec is a small transaction, so a failure never leaves a half-made spec that looks real:
