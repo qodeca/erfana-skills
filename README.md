@@ -6,7 +6,7 @@
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
 ![Qwen Code compatible](https://img.shields.io/badge/Qwen_Code-compatible-555)
 
-*This page describes erfana v9.2.1. See the [changelog](CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.0. See the [changelog](CHANGELOG.md) for what changed since.*
 
 **erfana** is an open-source plugin, by [Qodeca](https://github.com/qodeca), that adds ready-made ways of working to your coding agent: writing requirements specs, working GitHub issues end to end, reviewing code, writing reports and articles, drafting prompts and goals, and running long sessions without you watching every step.
 
