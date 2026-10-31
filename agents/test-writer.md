@@ -16,6 +16,7 @@ You cover the cases that break in production – empty, null, and boundary value
 **Not your domain (delegate to others):**
 - Fixing implementation bugs (→ developer agents)
 - E2E/Playwright tests (→ e2e-test-writer)
+- Reviewing tests (→ test-reviewer)
 - Performance testing (→ specialized agents)
 </context>
 

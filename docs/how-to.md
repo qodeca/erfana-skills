@@ -207,7 +207,7 @@ Three skills never start from a request, because they edit documents, push code,
 | Commit, push, open, or merge a pull request | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 
-The five slash commands, such as `/erfana:session-status`, are listed in the [slash commands reference](reference.md#slash-commands-5).
+The five slash commands, such as `/erfana:session-status`, are listed in the [slash commands reference](reference.md#slash-commands-7).
 
 ### Namespaced and bare names
 
