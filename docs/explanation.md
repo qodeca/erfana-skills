@@ -1,6 +1,6 @@
 # Understanding erfana
 
-*This page describes erfana v9.3.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.1. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 This page explains how erfana works and why it is built the way it is. It does not walk you through a task – for that, start with the [tutorial](tutorial.md) or pick a recipe from the [how-to guides](how-to.md). For the full list of what ships, see the [reference](reference.md). Terms in bold at first use are defined in the [glossary](#glossary).
 
