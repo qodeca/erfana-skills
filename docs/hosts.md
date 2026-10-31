@@ -35,8 +35,8 @@ happens on the user's machine, after the release.
 **Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
 real install of a newer Qwen release than the tested one: `qwen extensions list`
 reports a header line
-`✓ erfana (9.3.0)`, then `Source: https://github.com/qodeca/erfana-skills
-(Type: github-release)` and `Release tag: v9.3.0`. Two consequences for maintainers. A fix reaches Qwen
+`✓ erfana (9.3.1)`, then `Source: https://github.com/qodeca/erfana-skills
+(Type: github-release)` and `Release tag: v9.3.1`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
 is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by
@@ -75,7 +75,7 @@ example, match both `Write|write_file` and `Edit|edit`.
 | Where a tool is named | Converted by Qwen? | Rule |
 |---|---|---|
 | Agent `tools:` frontmatter | Yes | Write Claude names. The converter remaps them (`Bash` to `Shell`, `Read` to `ReadFile`, `Write` to `WriteFile`, `TodoWrite` to `TodoList`). Writing Qwen names here would break Claude Code. |
-| Skill `allowed-tools:` | Read, but under a different key | Write Claude names, because Claude Code enforces them. See the degradation list below. |
+| Skill `allowed-tools:` | Read, but under a different key | Write Claude names, because Claude Code reads them. There they pre-approve tools and restrict nothing. See the degradation list below. |
 | Hook `matcher:` | **No** | Name both hosts' tools. Gate 14 enforces this. |
 | Prose inside skill and agent bodies | No | Name the action, not the tool. |
 
@@ -138,9 +138,9 @@ would live upstream or would cost Claude Code users something.
   reading skill `hooks:`, the guards would register twice.
 - **Skill `allowed-tools:` is inert.** Qwen's extension parser reads
   `allowedTools` in camelCase; erfana writes the hyphenated Claude spelling. The
-  field is never read, so erfana's skills run unrestricted there. The spelling
-  stays as it is because Claude Code does enforce it.
-- **Command `allowed-tools:` is not enforced either**, so the scoped
+  field is never read, so erfana's skills get no pre-approved tools there. The
+  spelling stays as it is because Claude Code reads it to pre-approve tools.
+- **Command `allowed-tools:` has no effect either**, so the scoped
   `Bash(...)` grants in commands become approval prompts.
 - **Agent `effort:` and `capabilities:` are dropped** by the converter, along
   with `type:` and `file_restrictions:`. They stay in the files because Claude

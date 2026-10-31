@@ -1,6 +1,6 @@
 # How-to guides
 
-*This page describes erfana v9.3.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.1. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Each section below is a recipe for one goal. It assumes you know what you want to do and need the steps. If you are new to erfana, start with the [tutorial](tutorial.md). For every skill, agent, command, and hook in one list, see the [reference](reference.md). For why erfana works the way it does, see the [explanation](explanation.md).
 
@@ -37,7 +37,7 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
 
    ```text
      ❯ erfana@erfana-skills
-       Version: 9.3.0
+       Version: 9.3.1
        Scope: user
        Status: ✔ enabled
    ```
@@ -67,7 +67,7 @@ To go back to the published release, remove the local marketplace and add the pu
 /plugin install erfana@erfana-skills
 ```
 
-Then restart Claude Code.
+Then restart Claude Code, or run `/reload-plugins`.
 
 ## Install on Qwen Code
 
@@ -94,24 +94,24 @@ Then start a new `qwen` session, because skills, agents, and hooks load at sessi
 Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the output starts like this, followed by the lists of commands and skills:
 
 ```text
-✓ erfana (9.3.0)
+✓ erfana (9.3.1)
  Path: /Users/you/.qwen/extensions/erfana
  Source: https://github.com/qodeca/erfana-skills (Type: github-release)
  Origin: Claude
- Release tag: v9.3.0
+ Release tag: v9.3.1
 ```
 
 The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
 
-To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-goal` and `/issue`, and the five commands – `/doc-update`, `/project-status`, `/session-status`, `/lens-review`, and `/explain-issue` – should appear. On Qwen Code 0.26.2, skills register as bare slash commands; this has not been checked on 0.22.3. If `/issue` does not appear on your version, start the skill with a request in plain words that names it, such as "use the erfana issue skill to show issue #12".
+To check from inside a session, type `/` in `qwen`. The skills, such as `/draft-goal` and `/issue`, and the seven commands – `/doc-update`, `/project-status`, `/session-status`, `/session-watch`, `/cleanup`, `/lens-review`, and `/explain-issue` – should appear. On Qwen Code 0.26.2, skills register as bare slash commands; this has not been checked on 0.22.3. If `/issue` does not appear on your version, start the skill with a request in plain words that names it, such as "use the erfana issue skill to show issue #12".
 
 A few things work differently on Qwen Code:
 
 - Slash commands have no `erfana:` prefix: `/doc-update`, not `/erfana:doc-update`. Skills are started the same way, by a request in plain words or by the bare name, such as `/autopilot resume`.
-- A slash command (not a skill) whose name clashes with a Qwen Code built-in command becomes `/erfana.<name>`. Checked against Qwen Code 0.26.2, no erfana command clashes.
+- A slash command (not a skill) whose name clashes with a Qwen Code built-in command becomes `/erfana.<name>`. Checked against Qwen Code 0.26.2, the five older commands do not clash; `/session-watch` and `/cleanup` have not been checked.
 - Skills are not renamed on a clash. Qwen Code ships its own bundled skill named `coordinate`. Which of the two `/coordinate` starts has not been verified in a session; if Qwen's starts, say what you want in plain words, such as "claim #12 with erfana coordinate".
 - Qwen Code may be less reliable at picking a skill from your request. Naming the skill helps.
-- Skills run without their tool limits, because Qwen Code does not read the `allowed-tools` field.
+- Skills get no pre-approved tools, because Qwen Code does not read the `allowed-tools` field.
 - No erfana skill has yet been run end to end inside a Qwen Code session. The automated checks prove the install and the conversion, not a full run.
 
 The full list of differences is in [`docs/hosts.md`](hosts.md). Why one package serves both hosts is in [one package, two hosts](explanation.md#one-package-two-hosts).
@@ -127,7 +127,7 @@ Auto-update is off by default for third-party marketplaces such as this one; onl
 /plugin update erfana@erfana-skills
 ```
 
-Then restart Claude Code to apply the update.
+Then restart Claude Code, or run `/reload-plugins`, to apply the update.
 
 To get new releases at session start without asking, turn auto-update on once: run `/plugin`, open the **Marketplaces** tab, select `erfana-skills`, and choose **Enable auto-update**. An organisation admin can turn it on for everyone by setting `"autoUpdate": true` on the marketplace's `extraKnownMarketplaces` entry in managed settings.
 
@@ -139,7 +139,7 @@ If the old version still loads, see [an update does not show up](#an-update-does
 qwen extensions update erfana
 ```
 
-Or run `qwen extensions update --all`. Then start a new `qwen` session, because skills, agents, and hooks load at session start. What the update command prints on success has not been recorded here. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
+Or run `qwen extensions update --all`. The update lists the extension's contents and asks `Do you want to continue? [Y/n]`, so run it in a terminal where you can answer. With no answer, it stops and the old version stays. On success it prints `Extension "erfana" successfully updated`, with the old and new versions. Then start a new `qwen` session, because skills, agents, and hooks load at session start. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
 
 Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
 
@@ -150,7 +150,7 @@ Version 9.0 renamed skills and agents. Check these before you update:
 - **Skills renamed.** `/erfana:managing-agents` is now `/erfana:agent`. Likewise `managing-skills` became `skill`, `managing-issues` became `issue`, `managing-specs` became `spec`, `managing-articles` became `article`, and `managing-reports` became `report`. The old names no longer exist, so update your scripts, `CLAUDE.md` files, and saved prompts.
 - **Agents renamed, merged, or removed.** The shared agent pool went from 87 agents to 33. If a prompt or `CLAUDE.md` calls an agent by name, look it up in the migration table in [`CHANGELOG.md`](../CHANGELOG.md). Most removed agents' work now runs in the skill's own conversation, so call the skill instead.
 - **Finish running issue work first.** `erfana:issue` does not save progress to the issue, so an Implement run cut off by the update starts over.
-- **Restart after updating.** Skills, agents, and hooks load at session start.
+- **Reload after updating.** Restart Claude Code or run `/reload-plugins`, because a running session keeps the version it loaded.
 
 No way to pin a version is documented here, because a per-version install syntax for Claude Code could not be confirmed. To stay on 8.x, do not run `/plugin update` and leave auto-update off until you are ready.
 
@@ -207,7 +207,17 @@ Three skills never start from a request, because they edit documents, push code,
 | Commit, push, open, or merge a pull request | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 
-The five slash commands, such as `/erfana:session-status`, are listed in the [slash commands reference](reference.md#slash-commands-7).
+The seven slash commands, such as `/erfana:session-status`, are listed in the [slash commands reference](reference.md#slash-commands-7).
+
+### Keep a project in order
+
+Three commands keep a session and its project tidy:
+
+| You want to | Type | What to expect |
+|---|---|---|
+| Keep the task list right while you are away | `/erfana:session-watch` | A check every 30 minutes that changes only the task list. It runs only when the session is idle. It stops when the session closes, returns if you resume it, and ends after 7 days. To end it sooner, ask Claude to cancel the timer. |
+| Bring the docs up to date with recent work | `/erfana:doc-update` | It updates docs and adds what future sessions need, and three reviewers check the result. It asks before it changes `CLAUDE.md` or a similar file. Add `--dry-run` to see the plan first, or `--quick` to skip the review. |
+| Clear up after finished work | `/erfana:cleanup` | It lists leftover files, worktrees, branches, and issue actions, then asks you to approve each group. Files go to `.local/cleanup-trash/`, and each deleted branch gets a restore line. |
 
 ### Namespaced and bare names
 
@@ -540,7 +550,7 @@ This covers both an update that has not arrived after two or more sessions and a
 /plugin update erfana@erfana-skills
 ```
 
-Then restart Claude Code. If the old version still loads, clear the plugin cache and restart again:
+Then restart Claude Code, or run `/reload-plugins`. If the old version still loads, clear the plugin cache and restart:
 
 ```bash
 rm -rf ~/.claude/plugins/cache/
@@ -575,7 +585,7 @@ This is expected: Qwen Code registers extension commands without the plugin name
 On either host:
 
 1. **On macOS and Linux, check `jq`.** Run `command -v jq`. Five of the six hooks need it; without it, the hook launcher skips them and prints a note to stderr that you may never see. The hooks fail open – a hook that cannot run allows the action – so a missing `jq` looks like silence, not an error. On macOS, install it with `brew install jq`.
-2. **Restart.** Hooks load at session start, so they are active only after a restart following an install or update. On Qwen Code, restart the session so the extension is read again; `hooks/hooks.json` needs nothing Qwen-specific.
+2. **Reload.** A running session keeps the hooks it loaded, so restart Claude Code or run `/reload-plugins` after an install or update. On Qwen Code, restart the session so the extension is read again; `hooks/hooks.json` needs nothing Qwen-specific.
 3. **On Windows, check Git Bash.** The hooks start through Git Bash; with no Git Bash installed, no hook runs.
 
 Each hook has five seconds to finish. A hook that runs longer is stopped and the action goes through. To allow more time, set the `ERFANA_HOOK_TIMEOUT` environment variable to a whole number of seconds from 1 to 60. Why the hooks fail open is explained in [safety hooks and why they fail open](explanation.md#safety-hooks-and-why-they-fail-open).

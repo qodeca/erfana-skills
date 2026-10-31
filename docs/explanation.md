@@ -1,6 +1,6 @@
 # Understanding erfana
 
-*This page describes erfana v9.3.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.1. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 This page explains how erfana works and why it is built the way it is. It does not walk you through a task – for that, start with the [tutorial](tutorial.md) or pick a recipe from the [how-to guides](how-to.md). For the full list of what ships, see the [reference](reference.md). Terms in bold at first use are defined in the [glossary](#glossary).
 
@@ -13,11 +13,11 @@ The plugin is four kinds of parts in one folder:
 | Part | Where it lives | Count today |
 |---|---|---|
 | Skills | `skills/<name>/SKILL.md` | 18 |
-| Agents | `agents/<name>.md` | 33 |
-| Slash commands | `commands/<name>.md` | 5 |
+| Agents | `agents/<name>.md` | 38 |
+| Slash commands | `commands/<name>.md` | 7 |
 | Safety hooks | `hooks/`, wired in `hooks/hooks.json` | 6 |
 
-Claude Code finds each part by itself: it reads every skill folder, every agent file, every command file, and the hook wiring when a session starts. There is no build step and no list to keep in sync. Because parts load at session start, a new install or an update takes effect after you restart Claude Code.
+Claude Code finds each part by itself: it reads every skill folder, every agent file, every command file, and the hook wiring when a session starts. There is no build step and no list to keep in sync. Because parts load at session start, a new install or an update takes effect after you restart Claude Code or run `/reload-plugins`.
 
 Three design rules shape the rest of this page:
 
@@ -35,14 +35,14 @@ The four kinds of parts do different jobs, and knowing which is which tells you 
 |---|---|---|
 | Skill | A written brief that tells Claude how to do one kind of work. | Claude, when your request matches it, or you, by typing `/erfana:<name>`. |
 | Agent | A helper Claude starts in a separate context for one focused task. | A skill, or Claude on its own. |
-| Slash command | A one-shot prompt you start by typing its name. | You; three of the five can also be started by Claude. |
+| Slash command | A one-shot prompt you start by typing its name. | You; three of the seven can also be started by Claude. |
 | Hook | A small script that runs at a fixed moment, such as before a shell command. | Claude Code itself, every time that moment comes. |
 
 **Skills** are the main way you use erfana. Each skill lists **trigger phrases** – the kind of thing you would say when you need it, such as "create an issue" or "grill me". When your request matches, Claude loads the skill and follows it. You can also start any skill by name, for example `/erfana:issue`. Three skills never start on their own because they act outside the conversation: `fact-checking` edits your document, `ship` pushes code, and `handoff` ends a session's work. For those, you type the command yourself.
 
-**Agents** do the focused parts of a skill's work. An agent runs in its own context: it sees only what the skill hands it, does its task, and returns a result. That separation is what makes [blinded reviews](#why-reviews-are-blinded) possible. It also means an agent cannot ask you a question – Claude Code does not give agents the question tool – so every erfana agent returns its questions to the main conversation, and the skill asks you there. Most agents belong to one skill and start with that skill's name, such as `spec-validator` or `article-reviewer`. Fourteen have general names, such as `code-reviewer`; if another plugin ships an agent with the same name, which one runs is not predictable, so prefer the prefixed names when you call an agent directly. [SECURITY.md](../SECURITY.md#known-limitations) explains the risk.
+**Agents** do the focused parts of a skill's work. An agent runs in its own context: it sees only what the skill hands it, does its task, and returns a result. That separation is what makes [blinded reviews](#why-reviews-are-blinded) possible. It also means an agent cannot ask you a question – Claude Code does not give agents the question tool – so every erfana agent returns its questions to the main conversation, and the skill asks you there. About half of the agents belong to one skill and start with that skill's name, such as `spec-validator` or `article-reviewer`. Nineteen have general names, such as `code-reviewer`; if another plugin ships an agent with the same name, which one runs is not predictable, so prefer the prefixed names when you call an agent directly. [SECURITY.md](../SECURITY.md#known-limitations) explains the risk.
 
-**Slash commands** are for quick, single-step jobs: a project status brief, a plain-language explanation of a GitHub issue, a documentation refresh, or a multi-reviewer code review. `/erfana:project-status` and `/erfana:session-status` run only when you type them; the other three can also be started by Claude. See the [slash commands reference](reference.md#slash-commands-7).
+**Slash commands** are for quick, single-step jobs: a project status brief, a plain-language explanation of a GitHub issue, a documentation refresh, a task list timer, a project cleanup, or a multi-reviewer code review. `/erfana:project-status`, `/erfana:session-status`, `/erfana:session-watch`, and `/erfana:cleanup` run only when you type them; the other three can also be started by Claude. See the [slash commands reference](reference.md#slash-commands-7).
 
 **Hooks** run without being asked. Four of them form a general safety net that works in any project; the other two only back up erfana's interviews. They are explained in [Safety hooks and why they fail open](#safety-hooks-and-why-they-fail-open).
 
@@ -127,7 +127,7 @@ What you notice as a Qwen Code user:
 
 - **Slash commands have no prefix.** You type `/lens-review`, not `/erfana:lens-review`. If a name clashes with a Qwen Code built-in command, the erfana command becomes `/erfana.<name>`.
 - **Updates come from releases.** Qwen Code installs the latest tagged GitHub release, so a fix reaches you when it is released, not when it is merged.
-- **Some limits are not applied.** The tool limits that skills and commands declare are not enforced on Qwen Code, and a few agent settings are dropped during the conversion.
+- **Some limits are not applied.** The tool pre-approvals that skills and commands declare are not read on Qwen Code, and a few agent settings are dropped during the conversion.
 - **The compaction reminder has no effect.** The hook runs, but Qwen Code discards its output. On Claude Code the output also stays out of the model's context, so on both hosts you resume a compacted autopilot run yourself (`/autopilot resume` here).
 - **Skills may load less reliably.** Qwen Code can be slower to recognise that a request matches a skill. Naming the skill or the kind of work directly helps.
 

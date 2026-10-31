@@ -3,6 +3,22 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.3.1] - 2026-10-31
+
+### Fixed
+
+- **The plugin list shows the right counts.** The plugin and marketplace descriptions said 33 agents and five commands. They now say 38 agents and seven commands, and they name `session-watch` and `cleanup`.
+- **The docs match the plugin.** Counts and command lists are correct, and `allowed-tools` is described as what it is: it pre-approves tools and restricts nothing.
+
+### Added
+
+- **A how-to for keeping a project in order.** [Keep a project in order](docs/how-to.md#keep-a-project-in-order) covers `/erfana:session-watch`, `/erfana:doc-update`, and `/erfana:cleanup`.
+- **`/reload-plugins` as an alternative to a restart.** The docs now name it on Claude Code, with the Qwen Code update prompt and its success message.
+
+### Changed
+
+- **Gate 15 reads total counts in words and in the manifests.** Check 9 fails a release when a phrase such as "five slash commands" disagrees with the files.
+
 ## [9.3.0] - 2026-10-31
 
 ### Added

@@ -20,6 +20,9 @@ temp/
 .backups-*/
 **/.backups-*/
 
+# Backups next to the file they protect (skill, agent, and expert-panel edits)
+*.bak-*
+
 # Python bytecode cache
 __pycache__/
 *.pyc
