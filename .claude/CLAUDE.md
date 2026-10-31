@@ -6,7 +6,7 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v9.2.1**. The plugin ships 18 auto-discovered skills + 33 shared agents + 6 safety hooks + 5 slash commands. Load-bearing summary below.
+Current version: **v9.2.1**. The plugin ships 18 auto-discovered skills + 38 shared agents + 6 safety hooks + 7 slash commands. Load-bearing summary below.
 
 **Skills (18)** – all invoke as `/erfana:<name>`:
 
@@ -19,7 +19,7 @@ Current version: **v9.2.1**. The plugin ships 18 auto-discovered skills + 33 sha
 
 **Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings): `bash-safety`, `secret-detector`, `post-compact-reminder`, `verify-completion`, and the interview guards `grill-guard` / `ms-grill-guard` (Stop hooks that block one stop while their open-marker sentinel is present; they evaluate every stop, so the sentinel alone scopes them). All are registered in `hooks/hooks.json` and launched by `hooks/dispatch.sh`, each with a `.sh` and a `.ps1` sibling. Registration rules are under Hard constraints (Gate 14); behaviour and fixtures: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md).
 
-**Slash commands (5)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
+**Slash commands (7)** under `commands/`, registered as `/erfana:<name>`. Per-command contracts live in each `commands/<name>.md`; the user-facing summary is in `README.md`.
 
 Each skill lives in `skills/<name>/`: `SKILL.md` plus its own `references/` and `templates/`. No skill ships its own `agents/` folder; every agent lives in the plugin-root `agents/`. There is no shared asset bundle. One sanctioned exception: a skill may link a sibling skill's reference inside this plugin (`autopilot` -> `draft-goal/references/condition-patterns.md`, `next-batch` -> `coordinate/references/claims.md`, `skill` -> `agent/references/agent-standard.md`); Gate 7 checks that those links resolve. Claude Code discovers a new `skills/<name>/SKILL.md` on its own, but a new skill also needs the router row, the count updates (Gate 15) and a registry regeneration (Gate 18) – follow the [new-skill checklist](../docs/architecture.md#adding-a-new-sibling-skill--checklist).
 

@@ -141,7 +141,7 @@ would live upstream or would cost Claude Code users something.
   field is never read, so erfana's skills run unrestricted there. The spelling
   stays as it is because Claude Code does enforce it.
 - **Command `allowed-tools:` is not enforced either**, so the scoped
-  `Bash(...)` grants in all five commands become approval prompts.
+  `Bash(...)` grants in commands become approval prompts.
 - **Agent `effort:` and `capabilities:` are dropped** by the converter, along
   with `type:` and `file_restrictions:`. They stay in the files because Claude
   Code uses them.
