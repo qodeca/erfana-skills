@@ -1,6 +1,6 @@
 # Understanding erfana
 
-*This page describes erfana v9.2.1. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 This page explains how erfana works and why it is built the way it is. It does not walk you through a task – for that, start with the [tutorial](tutorial.md) or pick a recipe from the [how-to guides](how-to.md). For the full list of what ships, see the [reference](reference.md). Terms in bold at first use are defined in the [glossary](#glossary).
 
@@ -42,7 +42,7 @@ The four kinds of parts do different jobs, and knowing which is which tells you 
 
 **Agents** do the focused parts of a skill's work. An agent runs in its own context: it sees only what the skill hands it, does its task, and returns a result. That separation is what makes [blinded reviews](#why-reviews-are-blinded) possible. It also means an agent cannot ask you a question – Claude Code does not give agents the question tool – so every erfana agent returns its questions to the main conversation, and the skill asks you there. Most agents belong to one skill and start with that skill's name, such as `spec-validator` or `article-reviewer`. Fourteen have general names, such as `code-reviewer`; if another plugin ships an agent with the same name, which one runs is not predictable, so prefer the prefixed names when you call an agent directly. [SECURITY.md](../SECURITY.md#known-limitations) explains the risk.
 
-**Slash commands** are for quick, single-step jobs: a project status brief, a plain-language explanation of a GitHub issue, a documentation refresh, or a multi-reviewer code review. `/erfana:project-status` and `/erfana:session-status` run only when you type them; the other three can also be started by Claude. See the [slash commands reference](reference.md#slash-commands-5).
+**Slash commands** are for quick, single-step jobs: a project status brief, a plain-language explanation of a GitHub issue, a documentation refresh, or a multi-reviewer code review. `/erfana:project-status` and `/erfana:session-status` run only when you type them; the other three can also be started by Claude. See the [slash commands reference](reference.md#slash-commands-7).
 
 **Hooks** run without being asked. Four of them form a general safety net that works in any project; the other two only back up erfana's interviews. They are explained in [Safety hooks and why they fail open](#safety-hooks-and-why-they-fail-open).
 

@@ -28,7 +28,7 @@ You check that the suite runs in parallel and in any order, with each test creat
 
 **Out of scope (name it in your findings so the caller can route it):**
 - Writing or fixing e2e tests --> e2e-test-writer
-- Unit/integration test review --> code-reviewer
+- Unit/integration test review --> test-reviewer
 - Implementation bugs --> developer agents
 - General code quality review --> code-reviewer
 </context>
@@ -148,7 +148,7 @@ Audit e2e test suites for reliability, maintainability, isolation, and adherence
 <scope_exclusions>
 **What NOT to focus on:**
 - Writing or fixing e2e tests (use e2e-test-writer)
-- Unit/integration test quality (use code-reviewer)
+- Unit/integration test quality (use test-reviewer)
 - Implementation code quality (use code-reviewer)
 - Performance benchmarking (specialized tools)
 - Infrastructure/CI pipeline implementation (specialized agents)
