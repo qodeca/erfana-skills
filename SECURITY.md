@@ -49,7 +49,7 @@ diff hooks/hooks.json ~/.qwen/extensions/erfana/hooks/hooks.json   # expect no o
 
 **Reduced hook coverage on Qwen, and two fail-open directions on both hosts.** Read [`docs/hosts.md`](docs/hosts.md) for the full matrix; the security-relevant parts:
 
-- Skill `allowed-tools` is **inert** on Qwen. Its extension parser reads a camelCase `allowedTools` key, so erfana's hyphenated key is never read and every erfana skill runs unrestricted there. On Claude Code the restriction applies as written.
+- Skill `allowed-tools` is **inert** on Qwen. Its extension parser reads a camelCase `allowedTools` key, so erfana's hyphenated key is never read and no erfana skill gets pre-approved tools there. On Claude Code the field only pre-approves the listed tools; it does not take other tools away.
 - On macOS and Linux, every hook except `post-compact-reminder` parses its payload with `jq` (the Windows `.ps1` siblings do not need it). Without `jq` on `PATH` – the stock macOS default – `hooks/dispatch.sh` skips those hooks and exits 0, so both `PreToolUse` hooks and all three `Stop` hooks (`verify-completion`, `grill-guard`, `ms-grill-guard`) are off. `dispatch.sh` prints a diagnostic, but on exit 0 that diagnostic may not be shown. **Install `jq` if you rely on these hooks.**
 - Hooks are bounded to five seconds inside `dispatch.sh`, and a killed hook exits 143 (SIGTERM) or dies by signal – never 2 – so neither host reads it as a block. A hook killed by the watchdog therefore **allows** the tool call. This is the same direction as the pre-v7.1.0 behaviour, but it is now the only bound.
 
