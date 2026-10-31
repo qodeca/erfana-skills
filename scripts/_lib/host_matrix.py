@@ -199,9 +199,9 @@ QWEN_AGENT_NAME_MAX = 50
 #
 # Qwen's EXTENSION skill parser reads these keys and nothing else. Note
 # `allowedTools` in camelCase: erfana writes `allowed-tools:`, so the field is
-# never read and erfana's skills run unrestricted on Qwen. Keep the hyphenated
-# Claude spelling anyway - Claude Code enforces it, and renaming would trade a
-# real restriction for a cosmetic one.
+# never read and erfana's skills get no pre-approved tools on Qwen. Keep the
+# hyphenated Claude spelling anyway - Claude Code reads it to pre-approve tools
+# (it restricts nothing), and renaming would lose those approvals.
 #
 # A DIFFERENT parser, parseAgentPluginSkill, reads the hyphenated `allowed-tools`
 # and throws "Agent Skills allowed-tools must be a string." on a non-string,

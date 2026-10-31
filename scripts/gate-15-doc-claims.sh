@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 # SPDX-License-Identifier: GPL-3.0-only
 # gate-15-doc-claims.sh – verifies that prose claims about plugin shape stay
-# in sync with the actual filesystem. Catches seven classes of drift that
-# manual review repeatedly missed pre-v4.1.2:
+# in sync with the actual filesystem. Catches nine classes of drift that
+# manual review repeatedly missed:
 #
 #   1. CLAUDE.md "Current version: **vX.Y.Z**" banner not bumped on release
 #      (v4.1.1 release commit shipped with the banner still at v4.1.0).
@@ -24,6 +24,10 @@
 #      "gates/01-16") that diverge from `ls docs/gates/*.md` (added v6.0.0;
 #      the v6.0.0 "16 -> 17" drift on Gate 17 shipped because no check
 #      covered this class).
+#   8. Qwen Code version claims that diverge from scripts/_lib/host_matrix.py.
+#   9. Total counts written as words or digits in the wider set of user-facing
+#      files, including the plugin manifests (v9.3.0 shipped "33 shared agents"
+#      and "five slash commands" in them while checks 3 and 6 passed).
 #
 # Hard gate. Wired into scripts/run-all-gates.sh between Gate 14 (hooks)
 # and Gate 17 (publication readiness).
@@ -322,6 +326,51 @@ if tested:
         f'Qwen Code version {tested} agrees across host_matrix.py and '
         f'{len(version_sites)} stated site(s)'
     )
+
+# === Check 9: total counts in words or digits, across user-facing files ===
+# Checks 3-6 match digits only, in docs_to_scan only. Words need a narrow
+# pattern, because most word counts name a subset ("three skills", "the two
+# commands"). So this check reads only phrasings that claim a total.
+NUMBER_WORDS = {w: i for i, w in enumerate(
+    'zero one two three four five six seven eight nine ten eleven twelve '
+    'thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split())}
+TENS_WORDS = {'twenty': 20, 'thirty': 30, 'forty': 40, 'fifty': 50,
+              'sixty': 60, 'seventy': 70, 'eighty': 80, 'ninety': 90}
+NUM = (r'(\d+|(?:' + '|'.join(TENS_WORDS) + r')(?:-[a-z]+)?|'
+       + '|'.join(sorted(NUMBER_WORDS, key=len, reverse=True)) + r')')
+
+def to_int(text):
+    text = text.lower()
+    if text.isdigit():
+        return int(text)
+    if text in NUMBER_WORDS:
+        return NUMBER_WORDS[text]
+    tens, _, unit = text.partition('-')
+    return TENS_WORDS[tens] + NUMBER_WORDS.get(unit, 0)
+
+total_files = sorted(set(docs_to_scan) | {
+    '.claude-plugin/plugin.json', '.claude-plugin/marketplace.json',
+    'SECURITY.md', 'docs/README.md', 'docs/how-to.md', 'docs/explanation.md',
+})
+total_claims = [
+    (re.compile(rf'(?<![\w-]){NUM}\s+shared\s+agents\b', re.I), plugin_root_count, 'agents/*.md'),
+    (re.compile(rf'(?<![\w-]){NUM}\s+slash\s+commands?\b', re.I), commands_count, 'commands/*.md'),
+    (re.compile(rf'\b(?:the|all|has|ships)\s+{NUM}\s+commands\b', re.I), commands_count, 'commands/*.md'),
+    (re.compile(rf'(?<![\w-]){NUM}\s+safety\s+hooks?\b', re.I), hooks_count, 'hooks/*.sh'),
+    (re.compile(rf'\b(?:the|all|has|ships)\s+{NUM}\s+hooks\b', re.I), hooks_count, 'hooks/*.sh'),
+    (re.compile(rf'\b(?:all|ships)\s+{NUM}\s+skills\b', re.I), skills_count, 'skills/'),
+]
+checked = 0
+for doc in total_files:
+    if not os.path.isfile(doc):
+        continue
+    for i, line in enumerate(open(doc).read().split('\n'), start=1):
+        for pattern, actual, source in total_claims:
+            for m in pattern.finditer(line):
+                checked += 1
+                if to_int(m.group(1)) != actual:
+                    errors.append(f'{doc}:{i}: "{m.group(0)}" disagrees with {source} count ({actual})')
+passes.append(f'{checked} total-count claim(s) in words or digits align across {len(total_files)} file(s)')
 
 # === Output ===
 if errors:
