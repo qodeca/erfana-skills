@@ -150,3 +150,10 @@ v9.2.0 changes what `draft-goal`, `autopilot`, and `raise-the-bar` print (START 
 2. **The compaction pointer does not reach the model.** `post-compact-reminder` runs on `PostCompact`, whose output goes to the debug log and not to Claude's context, so the autopilot pointer it prints is not seen. Users resume with `/erfana:autopilot resume` by hand, as the docs now say. Moving the pointer to a `SessionStart` hook with the `compact` matcher is planned as a staged (rc) release.
 
 **Staged rollout: not used.** v9.2.0 shipped as a routine release with no `rc.N` tag; the owner confirmed recording it here on 2026-10-29. This is the **eighteenth consecutive no-soak release**.
+
+## v9.3.0 – two new commands, five new agents, and a command review, shipped without an rc soak (accepted risk)
+
+1. **No rc soak and no live run of the new or changed commands.** The evidence is the gate suite, the docs checks, CI, a panel review of all seven commands, a blinded `agent-reviewer` pass on each new agent, and one read-only run of the new `gh` and `git` calls. No command ran end to end in a session.
+2. **`/erfana:doc-update` and `/erfana:lens-review` behave differently.** `doc-update` asks for more permissions and adds docs by itself; `lens-review` no longer picks reviewers with shell tools, so a security lens may have less depth.
+
+**Staged rollout: waived by explicit maintainer decision (2026-10-31).** The owner chose a direct release in this session. This is the **nineteenth consecutive no-soak release**.

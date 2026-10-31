@@ -35,8 +35,8 @@ happens on the user's machine, after the release.
 **Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
 real install of a newer Qwen release than the tested one: `qwen extensions list`
 reports a header line
-`✓ erfana (9.2.1)`, then `Source: https://github.com/qodeca/erfana-skills
-(Type: github-release)` and `Release tag: v9.2.1`. Two consequences for maintainers. A fix reaches Qwen
+`✓ erfana (9.3.0)`, then `Source: https://github.com/qodeca/erfana-skills
+(Type: github-release)` and `Release tag: v9.3.0`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
 is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by

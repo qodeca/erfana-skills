@@ -3,6 +3,28 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.3.0] - 2026-10-31
+
+### Added
+
+- **`/erfana:session-watch` keeps the task list right while you are away.** A 30-minute timer shows the session status and live progress and removes completed tasks. It changes only the task list.
+- **`/erfana:cleanup` closes out a block of work.** It finds leftover files, worktrees, branches, closable GitHub issues, and needed follow-ups, then acts on each group only after you approve it. Files go to a trash folder, and each deleted branch gets a restore line.
+- **Five new agents.** `documentation-writer` and `documentation-reviewer` form a new pair, `test-reviewer` pairs with `test-writer`, and `devops-reviewer` and `performance-reviewer` cover CI, deployment, and speed.
+
+### Changed
+
+- **`/erfana:doc-update` does more than fix stale text.** It reviews the session and recent commits, adds docs that help future agent sessions, and passes a three-reviewer step. It asks before it writes to agent instruction files such as `CLAUDE.md`.
+- **`/erfana:doc-update` asks more often.** File writes, web lookups, and commits are no longer pre-approved. `--quick` now also skips the review, and it cannot be combined with `--push`.
+- **`/erfana:lens-review` uses read-only reviewers.** Agents with write or shell tools are no longer lens reviewers, so `code-reviewer` and `security-auditor` are no longer picked. Project agents are left out of the choice by default, and every finding carries a quote that is checked.
+- **Shorter status and issue briefs.** `/erfana:project-status`, `/erfana:session-status`, and `/erfana:explain-issue` have simpler rules and clearer status labels.
+
+### Fixed
+
+- **`/erfana:lens-review` reviews the right pull request.** A URL from another repository no longer falls back to the same number in the current one.
+- **`/erfana:project-status` reports real issue totals, and suggests a merge only for an approved pull request from the same repository.**
+- **`/erfana:explain-issue` uses GitHub's real pull request links,** and its commit search no longer matches longer issue numbers.
+- **Argument hints show in full.** Two commands lost part of their hint at the `#` character.
+
 ## [9.2.1] - 2026-10-29
 
 ### Changed

@@ -6,7 +6,7 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v9.2.1**. The plugin ships 18 auto-discovered skills + 38 shared agents + 6 safety hooks + 7 slash commands. Load-bearing summary below.
+Current version: **v9.3.0**. The plugin ships 18 auto-discovered skills + 38 shared agents + 6 safety hooks + 7 slash commands. Load-bearing summary below.
 
 **Skills (18)** – all invoke as `/erfana:<name>`:
 

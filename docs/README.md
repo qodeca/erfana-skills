@@ -1,6 +1,6 @@
 # erfana documentation
 
-*This page describes erfana v9.2.1. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.3.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Start here to find the right page. The user docs follow four types: a tutorial to learn, how-to guides to get a job done, a reference to look things up, and an explanation to understand why. The [front page](../README.md) has the short overview and the install commands.
 
