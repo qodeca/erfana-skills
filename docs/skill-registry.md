@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| design | 2026-11-01 | fix(design): stop naming the agent model |
+| design | 2026-11-01 | feat(design): draw a current phone shape |
 | using-erfana | 2026-11-01 | feat(design): add design skill for HTML and CSS review pages |
 | article | 2026-10-29 | docs: restructure the docs, generate the reference, and check docs in... |
 | autopilot | 2026-10-29 | fix: harden autopilot against replacing or losing a running goal (#73) |
