@@ -11,6 +11,7 @@
   --ink-800: #3a2f35;
   --ink-900: #241b1f;
   --night-400: #9a8d93;
+  --night-600: #4a4147;
   --night-700: #3a3237;
   --night-800: #2a2428;
   --night-900: #1e191c;
@@ -35,7 +36,14 @@
   --size-11: 2.75rem;
   --size-13: 3.25rem;
   --size-22: 5.5rem;
+  --size-24: 6rem;
+  --size-40: 10rem;
+  --size-48: 12rem;
+  --size-64: 16rem;
+  --size-72: 18rem;
   --size-80: 20rem;
+  --size-160: 40rem;
+  --size-320: 80rem;
   --line-thin: 1px;
   --line-thick: 2px;
   --line-tick: 12px;
@@ -62,12 +70,14 @@
   --coral-muted: #ee8a72;
   --coral-mutedlight: #f4a592;
   --coral-muteddeep: #e27a61;
+  --view-full: 100dvh;
   /* semantic */
   --color-surface: var(--plaster-100);
   --color-raised: var(--plaster-50);
   --color-sunken: var(--plaster-200);
   --color-text: var(--ink-900);
   --color-muted: var(--ink-700);
+  --color-hover: var(--plaster-300);
   --color-edge: var(--ink-500);
   --color-edge-strong: var(--ink-900);
   --color-focus: var(--ink-900);
@@ -119,11 +129,31 @@
   --measure-aside: var(--size-80);
   --measure-time-column: var(--size-22);
   --measure-tick: var(--line-tick);
+  --measure-keyboard: var(--size-72);
+  --measure-choice: var(--size-24);
+  --measure-choice-tall: var(--size-40);
+  --measure-pane-week: var(--size-48);
+  --measure-pane-card: var(--size-64);
+  --measure-pane-aside: var(--size-72);
+  --measure-reading: var(--size-160);
+  --measure-page: var(--size-320);
+  --measure-screen: var(--view-full);
 }
 
 :root,
 [data-theme] {
   /* component */
+  --app-page-max: var(--measure-page);
+  --app-min-height: var(--measure-screen);
+  --choice-height: var(--measure-choice);
+  --choice-height-tall: var(--measure-choice-tall);
+  --book-week: var(--measure-pane-week);
+  --book-aside: var(--measure-aside);
+  --book-aside-compact: var(--measure-pane-aside);
+  --book-card: var(--measure-pane-card);
+  --book-reading: var(--measure-reading);
+  --keyboard-height: var(--measure-keyboard);
+  --daypage-next: var(--measure-pane-card);
   --button-height: var(--control-height);
   --button-height-compact: var(--control-height-compact);
   --button-padding: var(--space-group);
@@ -138,6 +168,8 @@
   --link-height: var(--control-height-compact);
   --ticket-strip: var(--space-control);
   --day-height: var(--control-height);
+  --day-height-row: var(--control-height-compact);
+  --day-name-width: var(--control-height-compact);
   --notice-edge: var(--space-control);
   --skeleton-height: var(--measure-skeleton);
   --skeleton-height-tall: var(--control-height);
@@ -153,6 +185,7 @@
   --color-sunken: var(--night-700);
   --color-text: var(--plaster-100);
   --color-muted: var(--plaster-300);
+  --color-hover: var(--night-600);
   --color-edge: var(--night-400);
   --color-edge-strong: var(--plaster-100);
   --color-focus: var(--plaster-50);

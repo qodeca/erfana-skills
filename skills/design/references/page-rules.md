@@ -55,7 +55,7 @@ A menu, a modal, or a tooltip is drawn open, as its own labelled state. Rules th
 ## Draw states, do not simulate them
 
 - Each state is a `figure.ds-frame.design-state` inside `.ds-states`, with its own `id`, a `.design-frame`, and a `.design-state__label` in its caption [states]. A frame on a screen page always sits in a state.
-- A frame on a screen page has a fixed width: `.design-frame--narrow` (320), `--phone` (375), `--phone-small` (320), `--tablet`, or `--desktop`. Use `--phone` and `--phone-small` for anything seen on a phone: `docs.css` draws a phone body around the screen in plain CSS, adds empty space at the top and bottom for the camera and home bar, and keeps the root element's `::after` for the side buttons, so a design must not use it. Use `--narrow` only for a narrow desktop window. Worked examples are in `examples/web-sample/` and `examples/mobile-sample/`. A fixed width makes the picture the same in any window. Never wrap a frame in a scrolling box: part of it would be out of sight. A wide frame makes the page itself wider.
+- A frame on a screen page has a fixed width, set by its size class: `.design-frame--desktop` (1280), `--tablet` (768), `--tablet-landscape` (1024), `--phone` (375), `--phone-small` (320), or `--narrow` (320, a narrow desktop window). `docs.css` draws a device body around phone and tablet frames in plain CSS, with empty space at the top and bottom for the camera and home bar. A design must not use the `::after` of a phone frame's root element, because the side buttons do. Worked examples are in `examples/web-sample/` and `examples/mobile-sample/`. A fixed width makes the picture the same in any window. Never wrap a frame in a scrolling box: part of it would be out of sight. A wide frame makes the page itself wider.
 - Figures in the `.ds-frames` grid show small parts on doc pages, and their frames have no fixed width. A frame with a fixed width sits in a `.design-state` with its rectangle, in `.ds-states`, outside that grid, because it is wider than a grid column [frames]. A doc page keeps its status in `p.ds-meta` [tile], so its states have no rectangle.
 - Documentation styles stop at the frame, and at anything marked `aria-hidden`. Put the product's root class, and `data-theme` for a theme, on the first element inside it. `docs-tokens.css` sets `--frame-surface` and `--frame-text`, which a project may override in its own stylesheet, never in the copy [copies].
 - A frame is a picture, on every kind of page: `aria-hidden="true"` [states], every control carries `tabindex="-1"`, every input and textarea is `readonly` or `disabled`, no link has `href`, no label has `for`, and there is no `<form>`, `<select>`, checkbox, radio, or `<details>` [no-fake-controls]. Draw those with plain elements.
@@ -75,7 +75,29 @@ Cover these states for each screen, and list any that cannot happen, with the re
 | Loading | First load, and what stays on screen during a reload |
 | Error | What failed, what to do next, and what the person keeps |
 | Refused | Why it is not allowed, and how to get access |
-| Smallest size | The narrow frame, or a desktop app's narrowest window: what moves, what folds away, and that nothing scrolls sideways |
+| Smallest size | The smallest target size, or a desktop app's narrowest window: what moves, what folds away, and that nothing scrolls sideways |
+
+## Target sizes [sizes]
+
+A design is judged at every size people use it, so a project names its sizes once, and every page answers for each one.
+
+- `docs/designs/README.md` has one line, `Target sizes: desktop, tablet, tablet-landscape, phone`, with the sizes this product uses, as plain text at the start of the line. The names are `desktop`, `narrow`, `tablet`, `tablet-landscape`, and `phone`. `--phone-small` counts as `phone`.
+- Each screen page has `<meta name="design-sizes" content="desktop tablet phone">`, which matches that line.
+- A drawn state has a frame at each named size. Figures that show one state at different sizes share `data-design-group="<name>"`, and each keeps its own `id`, tile, and label. A figure with no group is its own group. A dark figure in the group counts for its size.
+- A frame with no size class, or with a size this page does not name, fails.
+- An exception is written on the page, normally in `aside.ds-note.design-sizes`, as `.design-size-exception` with `data-design-size`, and `data-design-group` for one state. With no group it drops that size for the whole page, and the meta then leaves the size out. The text gives the reason. An exception that is no longer true fails. Use one only where the size has nothing new to show, such as no hover on a touch screen, or a notice inside a layout drawn elsewhere on the page, and name that state. A reviewer, not the checker, judges whether a reason is true.
+
+Order the frames from the product's main size. Each size uses its space differently: one set of component CSS adapts with `@container` rules at the frame's true width, and a stretched phone screen does not count. Components stay the same, and the page composes them for the size, for example a list and its detail side by side.
+
+| Size | Width | Apple | Material | Show |
+|---|---|---|---|---|
+| `phone` | 320–375 | Compact width | Compact (under 600) | One pane, main actions in easy reach of one hand |
+| `tablet` | 768 | Regular width | Medium (600–839) | Two panes where they help, touch targets |
+| `tablet-landscape` | 1024 | Regular width | Expanded (840–1199) | More panes in a shorter height, touch targets |
+| `desktop` | 1280 | Not iOS | Large (1200–1599) | Most columns, hover and keyboard focus states |
+| `narrow` | 320 | Not iOS | Compact (under 600) | A desktop app's narrowest window |
+
+Sources: [Apple layout](https://developer.apple.com/design/human-interface-guidelines/layout) and [Android window size classes](https://developer.android.com/develop/ui/compose/layouts/adaptive/window-size-classes), which follow the Material breakpoints. Check them when you start a project, because the numbers change.
 
 ## Status [tile] [meta] [date]
 

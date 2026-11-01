@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient cancels in place, with no pop-up, and the safer choice comes first.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Cancel a booking</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Cancel a booking</span></nav>
+<main>
+  <h1>Cancel a booking</h1>
+  <p class="ds-lede" id="decision">Cancel asks in place, with no pop-up, and "Keep booking" comes first. There is no undo, so judge whether the safe choice is under the finger, and whether a patient can misread the result.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: a cancelled session costs nothing. If a late fee exists, the cancel state must say so.</li>
+      <li>Assumed: online changes close 24 hours before a session. The number is a guess. The clinic decides.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. From an upright tablet up, the main pane and the action pane stand side by side. On a phone they stack, with the actions at the bottom.</p>
+    <ul>
+      <li class="design-size-exception" data-design-group="cancel-input" data-design-size="tablet">A tablet held upright is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+      <li class="design-size-exception" data-design-group="cancel-input" data-design-size="tablet-landscape">A tablet on its side is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+      <li class="design-size-exception" data-design-group="cancel-input" data-design-size="phone">A phone is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+      <li class="design-size-exception" data-design-group="cancel-danger-focus" data-design-size="tablet">A tablet held upright is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+      <li class="design-size-exception" data-design-group="cancel-danger-focus" data-design-size="tablet-landscape">A tablet on its side is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+      <li class="design-size-exception" data-design-group="cancel-danger-focus" data-design-size="phone">A phone is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state cancel-ask.</li>
+    </ul>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="cancel-ask-desktop" data-design-group="cancel-ask">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Cancel – asked inline – desktop</strong> – The question replaces Move booking and Cancel booking, with no pop-up. "Keep booking" comes first, and there is no undo. At this height a second tap does not land on the danger button. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. The question stands where "Cancel booking" stood, so a second click lands on words, not on a button.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-tablet" data-design-group="cancel-ask">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Cancel – asked inline – tablet</strong> – The question replaces Move booking and Cancel booking, with no pop-up. "Keep booking" comes first, and there is no undo. At this height a second tap does not land on the danger button. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. Two panes, at touch size. The question stands where "Cancel booking" stood, so a second tap lands on words.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-tablet-landscape" data-design-group="cancel-ask">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Cancel – asked inline – tablet landscape</strong> – The question replaces Move booking and Cancel booking, with no pop-up. "Keep booking" comes first, and there is no undo. At this height a second tap does not land on the danger button. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. Two panes. The question stands where "Cancel booking" stood, so a second tap lands on words.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-phone" data-design-group="cancel-ask">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Cancel – asked inline – phone</strong> – The question replaces Move booking and Cancel booking, with no pop-up. "Keep booking" comes first, and there is no undo. At this height a second tap does not land on the danger button. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. At this height "Keep booking" sits where "Cancel booking" sat, and "Yes, cancel booking" is one place lower. This stack and the Booked stack both pin to the bottom of the screen in responsive.css.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-text-desktop" data-design-group="cancel-ask-text">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not text 07700 900123</p>
+                  <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="ticket ticket--fold ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Cancel – asked after a failed text – desktop</strong> – The same question from "Booked – text failed" or "Booked – sending text again". The failed text stays on screen, because "Text sent" would be false here. The actions keep their places. The question stands where "Cancel booking" stood, so a second click lands on words, not on a button.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-text-tablet" data-design-group="cancel-ask-text">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not text 07700 900123</p>
+                  <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="ticket ticket--fold ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Cancel – asked after a failed text – tablet</strong> – The same question from "Booked – text failed" or "Booked – sending text again". The failed text stays on screen, because "Text sent" would be false here. The actions keep their places. Two panes, at touch size. The question stands where "Cancel booking" stood, so a second tap lands on words.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-text-tablet-landscape" data-design-group="cancel-ask-text">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not text 07700 900123</p>
+                  <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="ticket ticket--fold ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Cancel – asked after a failed text – tablet landscape</strong> – The same question from "Booked – text failed" or "Booked – sending text again". The failed text stays on screen, because "Text sent" would be false here. The actions keep their places. Two panes. The question stands where "Cancel booking" stood, so a second tap lands on words.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-ask-text-phone" data-design-group="cancel-ask-text">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not text 07700 900123</p>
+                  <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="ticket ticket--fold ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Cancel – asked after a failed text – phone</strong> – The same question from "Booked – text failed" or "Booked – sending text again". The failed text stays on screen, because "Text sent" would be false here. The actions keep their places. At this height "Keep booking" sits where "Cancel booking" sat, and "Yes, cancel booking" is one place lower. This stack and the Booked stack both pin to the bottom of the screen in responsive.css.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-input-desktop" data-design-group="cancel-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-focus" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full is-hover" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Cancel – hover and keyboard focus – desktop</strong> – Keyboard focus lands on "Keep booking" when the question opens, and the pointer rests on the danger button. The question stands where "Cancel booking" stood, so a second click lands on words, not on a button.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-danger-focus-desktop" data-design-group="cancel-danger-focus">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-hover" type="button" tabindex="-1">Keep booking</button>
+                <button class="button button--danger button--full is-focus" type="button" tabindex="-1">Yes, cancel booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Cancel – keyboard focus on the red button – desktop</strong> – The focus ring sits on "Yes, cancel booking", and the pointer rests on "Keep booking". The question stands where "Cancel booking" stood, so a second click lands on words, not on a button.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-sending-desktop" data-design-group="cancel-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep booking</button>
+                <button class="button button--danger button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Cancel – cancelling – desktop</strong> – The danger button stays in place and says what is happening. "Keep booking" and "Change number" lock, because the choice is made. The actions stay where the question put them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-sending-tablet" data-design-group="cancel-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep booking</button>
+                <button class="button button--danger button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Cancel – cancelling – tablet</strong> – The danger button stays in place and says what is happening. "Keep booking" and "Change number" lock, because the choice is made. Two panes, at touch size, with the actions where the question put them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-sending-tablet-landscape" data-design-group="cancel-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep booking</button>
+                <button class="button button--danger button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Cancel – cancelling – tablet landscape</strong> – The danger button stays in place and says what is happening. "Keep booking" and "Change number" lock, because the choice is made. Two panes, with the actions where the question put them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-sending-phone" data-design-group="cancel-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <div class="notice">
+                  <div>
+                    <p class="notice__title">Cancel this booking?</p>
+                    <p class="notice__text">Someone else can then take this time.</p>
+                  </div>
+                </div>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep booking</button>
+                <button class="button button--danger button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Cancel – cancelling – phone</strong> – The danger button stays in place and says what is happening. "Keep booking" and "Change number" lock, because the choice is made. One pane: the busy button stays at the bottom, where it was pressed.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="booked.html">Booked</a>: where cancelling starts.</li>
+    <li><a href="cancel-results.html">Cancel a booking: results</a>: cancelled, failed, and refused.</li>
+    <li><a href="move.html">Move a booking</a>: the other change.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: every action.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

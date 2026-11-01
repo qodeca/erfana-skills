@@ -31,14 +31,20 @@
     <tr><td><code>--control-height</code></td><td><span class="ds-mono">3.25rem</span></td><td>Buttons, fields, slots, and day cells</td></tr>
     <tr><td><code>--control-height-compact</code></td><td><span class="ds-mono">2.75rem</span></td><td>Compact buttons and links</td></tr>
     <tr><td><code>--measure-skeleton</code></td><td><span class="ds-mono">1rem</span></td><td>A short loading bar</td></tr>
-    <tr><td><code>--measure-aside</code></td><td><span class="ds-mono">20rem</span></td><td>The summary column on a wide screen</td></tr>
+    <tr><td><code>--measure-aside</code></td><td><span class="ds-mono">20rem</span></td><td>The action pane on a wide screen</td></tr>
+    <tr><td><code>--measure-pane-week</code></td><td><span class="ds-mono">12rem</span></td><td>The week as a list</td></tr>
+    <tr><td><code>--measure-pane-card</code></td><td><span class="ds-mono">16rem</span></td><td>A card pane</td></tr>
+    <tr><td><code>--measure-pane-aside</code></td><td><span class="ds-mono">18rem</span></td><td>The action pane on a tablet</td></tr>
+    <tr><td><code>--measure-reading</code></td><td><span class="ds-mono">40rem</span></td><td>The widest a lone field grows</td></tr>
+    <tr><td><code>--measure-page</code></td><td><span class="ds-mono">80rem</span></td><td>The widest the page grows</td></tr>
+    <tr><td><code>--measure-screen</code></td><td><span class="ds-mono">100dvh</span></td><td>The height of the window, in the product only</td></tr>
     <tr><td><code>--measure-time-column</code></td><td><span class="ds-mono">5.5rem</span></td><td>The fixed time column</td></tr>
     <tr><td><code>--measure-tick</code></td><td><span class="ds-mono">12px</span></td><td>The gap between rail ticks</td></tr>
   </tbody>
 </table>
 
 <h2 id="breakpoints">Breakpoints</h2>
-<p>Breakpoints sit inside <code>@container</code> rules as <code>rem</code> values, because CSS cannot read a variable there: <code>56rem</code> opens the wide layout, and <code>39.99rem</code> folds the day list.</p>
+<p>Breakpoints sit inside <code>@container</code> rules as <code>rem</code> values, because CSS cannot read a variable there. They follow the window size classes: <code>37.5rem</code> (600) opens two panes, <code>52.5rem</code> (840) opens three, and <code>75rem</code> (1200) opens the desktop columns. The day list reads its own pane, not the window: <code>39.99rem</code> stacks its rows, and <code>49.99rem</code> folds the Session column.</p>
 
 <h2 id="related">Related</h2>
 <ul class="ds-muted">

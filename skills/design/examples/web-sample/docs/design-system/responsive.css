@@ -1,11 +1,29 @@
 /* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* Rules that hide things at a width. Product only: review pages never load this
-   file, so the phone drawings simply leave these cells out. */
+/* Rules a review page must not run: what hides at a width, and what fills the
+   real window. Product only: review pages never load this file, so the drawings
+   simply leave these cells out, and a device frame sets its own height. */
 
+/* The bottom of the window is where the actions on a phone sit. */
+.app { min-height: var(--app-min-height); }
+
+/* .app is the container here. A phone has no room for each day's count, and the
+   bottom bars stay in reach while a long list scrolls. A drawing leaves the count
+   out and shows the bar at the end of the screen, so nothing covers its content. */
+@container (max-width: 37.49rem) {
+  .day__free { display: none; }
+  .book__aside--dock,
+  .book__aside--pin,
+  .daylist-nav { position: sticky; inset-block-end: 0; }
+  .daypage__retrybar { position: sticky; inset-block-end: calc(var(--button-height-compact) + var(--space-control) * 2); }
+}
+
+/* The list pane is the container here, so these read the pane, not the window. */
+@container (max-width: 49.99rem) {
+  .daylist__session { display: none; }
+}
 @container (max-width: 39.99rem) {
   .daylist thead,
-  .daylist__session,
   .daylist__contact,
   .daylist td:empty { display: none; }
 }

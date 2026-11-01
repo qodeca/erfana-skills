@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What happens after a patient books: sending, a time just taken, and a failed booking, at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Confirm: sending and failures</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Confirm: sending and failures</span></nav>
+<main>
+  <h1>Confirm: sending and failures</h1>
+  <p class="ds-lede" id="decision">Each failure keeps what was typed. Judge whether the patient can always tell that nothing has been booked.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: a taken time is known only after pressing "Book this time". To confirm with the booking system.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, a form has its fields in a row beside the card on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the card folds and sits with the actions at the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="confirm-sending-desktop" data-design-group="confirm-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Confirm – sending – desktop</strong> – The button stays in place and says what is happening. Fields and "Change time" lock while saving, and the words stay readable. The clinic phone stays on, because it books nothing. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-sending-tablet" data-design-group="confirm-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Confirm – sending – tablet</strong> – The button stays in place and says what is happening. Fields and "Change time" lock while saving, and the words stay readable. The clinic phone stays on, because it books nothing. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-sending-tablet-landscape" data-design-group="confirm-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Confirm – sending – tablet landscape</strong> – The button stays in place and says what is happening. Fields and "Change time" lock while saving, and the words stay readable. The clinic phone stays on, because it books nothing. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-sending-phone" data-design-group="confirm-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Confirm – sending – phone</strong> – The button stays in place and says what is happening. Fields and "Change time" lock while saving, and the words stay readable. The clinic phone stays on, because it books nothing. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-taken-desktop" data-design-group="confirm-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This time has gone</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">09:45 has just been taken</p>
+                  <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--void ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Confirm – time just taken – desktop</strong> – Someone else booked it first. The card stays, struck through, to show which time went. The name and number are kept, so only the time is picked again. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-taken-tablet" data-design-group="confirm-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This time has gone</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">09:45 has just been taken</p>
+                  <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--void ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Confirm – time just taken – tablet</strong> – Someone else booked it first. The card stays, struck through, to show which time went. The name and number are kept, so only the time is picked again. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-taken-tablet-landscape" data-design-group="confirm-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This time has gone</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">09:45 has just been taken</p>
+                  <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--void ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Confirm – time just taken – tablet landscape</strong> – Someone else booked it first. The card stays, struck through, to show which time went. The name and number are kept, so only the time is picked again. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-taken-phone" data-design-group="confirm-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This time has gone</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">09:45 has just been taken</p>
+                  <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--void ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Confirm – time just taken – phone</strong> – Someone else booked it first. The card stays, struck through, to show which time went. The name and number are kept, so only the time is picked again. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-failed-desktop" data-design-group="confirm-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Confirm – not booked – desktop</strong> – "Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" leads to "Confirm – sending again", then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-failed-tablet" data-design-group="confirm-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Confirm – not booked – tablet</strong> – "Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" leads to "Confirm – sending again", then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-failed-tablet-landscape" data-design-group="confirm-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Confirm – not booked – tablet landscape</strong> – "Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" leads to "Confirm – sending again", then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-failed-phone" data-design-group="confirm-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Confirm – not booked – phone</strong> – "Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" leads to "Confirm – sending again", then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-resending-desktop" data-design-group="confirm-resending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Confirm – sending again – desktop</strong> – "Try again" was pressed on "Confirm – not booked". The notice stays until there is a result, so the button does not jump, and everything else locks as in "Confirm – sending". The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-resending-tablet" data-design-group="confirm-resending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Confirm – sending again – tablet</strong> – "Try again" was pressed on "Confirm – not booked". The notice stays until there is a result, so the button does not jump, and everything else locks as in "Confirm – sending". Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-resending-tablet-landscape" data-design-group="confirm-resending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Confirm – sending again – tablet landscape</strong> – "Try again" was pressed on "Confirm – not booked". The notice stays until there is a result, so the button does not jump, and everything else locks as in "Confirm – sending". Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-resending-phone" data-design-group="confirm-resending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Not booked yet</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save your booking</p>
+                  <p class="notice__text">Your details are kept below. Try again, or call the clinic.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-disabled" rows="1" tabindex="-1" readonly disabled>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link is-disabled" type="button" tabindex="-1" disabled>Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Confirm – sending again – phone</strong> – "Try again" was pressed on "Confirm – not booked". The notice stays until there is a result, so the button does not jump, and everything else locks as in "Confirm – sending". One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="confirm.html">Confirm a booking</a>: the default of this screen.</li>
+    <li><a href="booked.html">Booked</a>: where a good booking lands.</li>
+    <li><a href="../../design-system/system/components/field/index.html">Fields</a>: name and mobile number.</li>
+    <li><a href="../../design-system/system/components/ticket/index.html">Appointment card</a>: the summary and the booked card.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

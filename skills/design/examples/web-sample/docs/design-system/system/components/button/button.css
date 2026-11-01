@@ -39,9 +39,34 @@
 
 .button--quiet { border-color: var(--color-edge-strong); background: transparent; color: var(--color-text); }
 .button--quiet:enabled:hover:not(:where(.design-frame *)),
-.button--quiet.is-hover { border-color: var(--color-edge-strong); background: var(--color-sunken); }
+.button--quiet.is-hover { border-color: var(--color-edge-strong); background: var(--color-hover); }
 .button--quiet:enabled:active:not(:where(.design-frame *)),
 .button--quiet.is-active { border-color: var(--color-edge-strong); background: var(--color-sunken); }
+
+/* A large option: a name and what it takes, as one target. */
+.choice {
+  display: grid;
+  gap: var(--space-hair);
+  align-content: center;
+  width: 100%;
+  min-height: var(--choice-height);
+  padding: var(--space-group);
+  border: var(--control-edge) solid var(--color-edge-strong);
+  border-radius: var(--shape-control);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.choice__name { font-size: var(--type-title); font-weight: var(--emphasis-strong); line-height: var(--leading-tight); }
+.choice__time { color: var(--color-muted); font-size: var(--type-body); }
+.choice:hover:not(:where(.design-frame *)),
+.choice.is-hover { background: var(--color-hover); }
+.choice:focus-visible,
+.choice.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.choice:active:not(:where(.design-frame *)),
+.choice.is-active { background: var(--color-hover); }
 
 .button--danger { border-color: var(--color-error); background: var(--color-error); color: var(--color-on-error); }
 .button--danger:hover:not(:where(.design-frame *)),

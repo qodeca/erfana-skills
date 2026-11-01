@@ -1,3 +1,8 @@
-/* Shift swap: rules that hide things at a width.
-   None are needed. The product is phone-only and folds nothing away, so this
-   file stays empty on purpose and developers lose nothing by linking it. */
+/* Shift swap: rules that hide things at a width. Product only: review pages never
+   load this file, so a phone frame simply leaves the other panes out.
+   A phone shows one pane. .panes--detail-open is the state after a nurse opens a
+   shift or a manager opens a request; without it the list is what shows. */
+@container screen (max-width: 37.49rem) {
+  .panes--detail-open > .pane--list { display: none; }
+  .panes:not(.panes--detail-open) > .pane--list ~ * { display: none; }
+}

@@ -1,9 +1,9 @@
 .icon {
   flex: none;
-  inline-size: var(--shape-icon);
-  block-size: var(--shape-icon);
+  inline-size: calc(var(--shape-icon) * var(--type-scale));
+  block-size: calc(var(--shape-icon) * var(--type-scale));
 }
 .icon--small {
-  inline-size: var(--shape-icon-small);
-  block-size: var(--shape-icon-small);
+  inline-size: calc(var(--shape-icon-small) * var(--type-scale));
+  block-size: calc(var(--shape-icon-small) * var(--type-scale));
 }

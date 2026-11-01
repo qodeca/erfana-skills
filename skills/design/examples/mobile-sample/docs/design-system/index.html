@@ -13,14 +13,14 @@
 <main>
 <h1>Shift swap design system</h1>
 <!-- design:generated status start -->
-<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-02"><span class="ds-status">In review</span> updated 2026-11-02 · Design, not a working product</p>
 <!-- design:generated status end -->
-<p class="ds-lede">Version 3.1.0. Built for a tired, hurried moment on a ward: huge times, one marigold action, and every no explained in words. See <a href="README.md">README.md</a>.</p>
+<p class="ds-lede">Version 3.2.0. Built for a tired, hurried moment on a ward: huge times, one marigold action, and every no explained in words. See <a href="README.md">README.md</a>.</p>
 
 <!-- design:generated summary start -->
 <ul class="ix-summary" aria-label="Pages by status">
   <li><span class="ds-status" data-status="draft">Draft</span> 0</li>
-  <li><span class="ds-status" data-status="in-review">In review</span> 19</li>
+  <li><span class="ds-status" data-status="in-review">In review</span> 20</li>
   <li><span class="ds-status" data-status="ready">Ready for development</span> 0</li>
 </ul>
 <!-- design:generated summary end -->
@@ -75,7 +75,7 @@
     </a>
 </div>
 
-<h2 id="components">Components <span class="ix-count">11</span></h2>
+<h2 id="components">Components <span class="ix-count">12</span></h2>
 <div class="ix-grid">
     <a class="ix-card" href="system/components/baton/index.html">
       <span class="ix-card__name">Baton</span>
@@ -107,6 +107,11 @@
       <span class="ix-card__sub">What happened, what to do, and what is kept.</span>
       <span class="ix-card__meta"><span class="ds-status" data-status="in-review">In review</span> updated 2026-11-01</span>
     </a>
+    <a class="ix-card" href="system/components/panes/index.html">
+      <span class="ix-card__name">Panes</span>
+      <span class="ix-card__sub">One grid that places the same parts in one, two, or three panes, by width.</span>
+      <span class="ix-card__meta"><span class="ds-status" data-status="in-review">In review</span> updated 2026-11-01</span>
+    </a>
     <a class="ix-card" href="system/components/row/index.html">
       <span class="ix-card__name">Row</span>
       <span class="ix-card__sub">One person or one request in a list.</span>
@@ -115,7 +120,7 @@
     <a class="ix-card" href="system/components/screen/index.html">
       <span class="ix-card__name">Screen, app bar, action bar, and sheet</span>
       <span class="ix-card__sub">App bar, action bar, and sheet, with iOS and Android differences.</span>
-      <span class="ix-card__meta"><span class="ds-status" data-status="in-review">In review</span> updated 2026-11-01</span>
+      <span class="ix-card__meta"><span class="ds-status" data-status="in-review">In review</span> updated 2026-11-02</span>
     </a>
     <a class="ix-card" href="system/components/tag/index.html">
       <span class="ix-card__name">Tag</span>
@@ -163,12 +168,15 @@
   <tr><td>Choose the main action on a screen</td><td><a href="system/components/button/index.html">Button</a></td></tr>
   <tr><td>Draw a focus ring</td><td><a href="system/foundations/focus.html">Focus</a></td></tr>
   <tr><td>Draw iOS and Android differences</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
+  <tr><td>Give the status its own column</td><td><a href="system/components/panes/index.html">Panes</a></td></tr>
   <tr><td>Keep known data on screen during a reload</td><td><a href="system/patterns/loading/index.html">Loading and keeping data</a></td></tr>
+  <tr><td>Keep one pane readable on a large screen</td><td><a href="system/components/panes/index.html">Panes</a></td></tr>
   <tr><td>Lay out a screen</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
   <tr><td>List a person or a request</td><td><a href="system/components/row/index.html">Row</a></td></tr>
   <tr><td>Mark a day or night shift</td><td><a href="system/components/ticket/index.html">Shift ticket</a></td></tr>
   <tr><td>Open a sheet</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
   <tr><td>Pick a colour</td><td><a href="system/foundations/colour.html">Colour</a></td></tr>
+  <tr><td>Place a list beside its detail</td><td><a href="system/components/panes/index.html">Panes</a></td></tr>
   <tr><td>Refuse an action and name the rule</td><td><a href="system/patterns/saying-no/index.html">Saying no</a></td></tr>
   <tr><td>Respect reduced motion</td><td><a href="system/foundations/motion.html">Motion</a></td></tr>
   <tr><td>Round a corner</td><td><a href="system/foundations/surfaces.html">Surfaces and focus</a></td></tr>
@@ -204,18 +212,20 @@
   <tr><td><code>--edge-*</code></td><td class="ds-num">4</td><td><a href="system/foundations/surfaces.html">Surfaces and focus</a></td></tr>
   <tr><td><code>--field-*</code></td><td class="ds-num">12</td><td><a href="system/components/field/index.html">Field</a></td></tr>
   <tr><td><code>--focus-*</code></td><td class="ds-num">3</td><td><a href="system/foundations/focus.html">Focus</a></td></tr>
+  <tr><td><code>--keyboard-*</code></td><td class="ds-num">3</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
   <tr><td><code>--motion-*</code></td><td class="ds-num">8</td><td><a href="system/foundations/motion.html">Motion</a></td></tr>
   <tr><td><code>--notice-*</code></td><td class="ds-num">13</td><td><a href="system/components/notice/index.html">Notice</a></td></tr>
   <tr><td><code>--opacity-*</code></td><td class="ds-num">1</td><td><a href="system/foundations/colour.html">Colour</a></td></tr>
+  <tr><td><code>--pane-*</code></td><td class="ds-num">5</td><td><a href="system/components/panes/index.html">Panes</a></td></tr>
   <tr><td><code>--row-*</code></td><td class="ds-num">16</td><td><a href="system/components/row/index.html">Row</a></td></tr>
   <tr><td><code>--screen-*</code></td><td class="ds-num">2</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
   <tr><td><code>--shape-*</code></td><td class="ds-num">10</td><td><a href="system/foundations/surfaces.html">Surfaces and focus</a></td></tr>
-  <tr><td><code>--sheet-*</code></td><td class="ds-num">14</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
+  <tr><td><code>--sheet-*</code></td><td class="ds-num">16</td><td><a href="system/components/screen/index.html">Screen, app bar, action bar, and sheet</a></td></tr>
   <tr><td><code>--space-*</code></td><td class="ds-num">6</td><td><a href="system/foundations/space.html">Space and touch</a></td></tr>
   <tr><td><code>--tag-*</code></td><td class="ds-num">14</td><td><a href="system/components/tag/index.html">Tag</a></td></tr>
   <tr><td><code>--target-*</code></td><td class="ds-num">2</td><td><a href="system/foundations/space.html">Space and touch</a></td></tr>
   <tr><td><code>--text-*</code></td><td class="ds-num">30</td><td><a href="system/foundations/type.html">Type</a></td></tr>
-  <tr><td><code>--ticket-*</code></td><td class="ds-num">12</td><td><a href="system/components/ticket/index.html">Shift ticket</a></td></tr>
+  <tr><td><code>--ticket-*</code></td><td class="ds-num">13</td><td><a href="system/components/ticket/index.html">Shift ticket</a></td></tr>
   <tr><td><code>--type-*</code></td><td class="ds-num">13</td><td><a href="system/foundations/type.html">Type</a></td></tr>
   <tr><td><code>--typeface-*</code></td><td class="ds-num">3</td><td><a href="system/foundations/type.html">Type</a></td></tr>
 </tbody>

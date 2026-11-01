@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient moves a booking to a new time, with the old booking kept until the new one is saved.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Move a booking</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Move a booking</span></nav>
+<main>
+  <h1>Move a booking</h1>
+  <p class="ds-lede" id="decision">A move runs the same week and rail as a new booking. Judge whether the old booking stays clear until the new one is saved.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: online changes close 24 hours before a session. The number is a guess. The clinic decides.</li>
+      <li>Assumed: a moved booking keeps its session type.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, the picker has four columns on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the week becomes seven cells and the actions move to the bottom.</p>
+    <ul>
+      <li class="design-size-exception" data-design-group="move-input" data-design-size="tablet">A tablet held upright is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state move-choose.</li>
+      <li class="design-size-exception" data-design-group="move-input" data-design-size="tablet-landscape">A tablet on its side is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state move-choose.</li>
+      <li class="design-size-exception" data-design-group="move-input" data-design-size="phone">A phone is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state move-choose.</li>
+    </ul>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="move-open-desktop" data-design-group="move-open">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="notice">
+                <p class="notice__text">Pick a day to see its free times.</p>
+              </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Move to a new time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Move – first screen – desktop</strong> – Follows "Move – first load", with nothing selected and the move button off. No times show until a day is pressed, so at this height a second tap on "Move booking" lands on nothing. "Booked now" stays a plain line, because no time is picked yet. Three panes: the week, the notice where the times would be, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-open-tablet" data-design-group="move-open">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="notice">
+                <p class="notice__text">Pick a day to see its free times.</p>
+              </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Move to a new time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Move – first screen – tablet</strong> – Follows "Move – first load", with nothing selected and the move button off. No times show until a day is pressed, so at this height a second tap on "Move booking" lands on nothing. "Booked now" stays a plain line, because no time is picked yet. Two panes: the week is the list, and the notice and actions are its detail, with the action low on the pane.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-open-tablet-landscape" data-design-group="move-open">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="notice">
+                <p class="notice__text">Pick a day to see its free times.</p>
+              </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Move to a new time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Move – first screen – tablet landscape</strong> – Follows "Move – first load", with nothing selected and the move button off. No times show until a day is pressed, so at this height a second tap on "Move booking" lands on nothing. "Booked now" stays a plain line, because no time is picked yet. Three panes: the week, the notice, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-open-phone" data-design-group="move-open">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="notice">
+                <p class="notice__text">Pick a day to see its free times.</p>
+              </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Move to a new time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Move – first screen – phone</strong> – Follows "Move – first load", with nothing selected and the move button off. No times show until a day is pressed, so at this height a second tap on "Move booking" lands on nothing. "Booked now" stays a plain line, because no time is picked yet. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-choose-desktop" data-design-group="move-choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Move – choose a new time – desktop</strong> – A time was picked in the same way on Thursday 12, so the move button wakes up and names it. The selected time is the one strip, so the current booking is a plain line. Three panes: the week, this day's afternoon times, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-choose-tablet" data-design-group="move-choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Move – choose a new time – tablet</strong> – A time was picked in the same way on Thursday 12, so the move button wakes up and names it. The selected time is the one strip, so the current booking is a plain line. Two panes: the week is the list, and the times and actions are its detail.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-choose-tablet-landscape" data-design-group="move-choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Move – choose a new time – tablet landscape</strong> – A time was picked in the same way on Thursday 12, so the move button wakes up and names it. The selected time is the one strip, so the current booking is a plain line. Three panes: the week, the times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-choose-phone" data-design-group="move-choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Move – choose a new time – phone</strong> – A time was picked in the same way on Thursday 12, so the move button wakes up and names it. The selected time is the one strip, so the current booking is a plain line. One pane: the week folds into seven cells, and the card and actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-input-desktop" data-design-group="move-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-focus" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full is-hover" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Move – hover and keyboard focus – desktop</strong> – The focus ring sits on the time 16:30, and the pointer rests on "Keep Tuesday at 09:45". Three panes: the week, this day's afternoon times, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-input-desktop-dark" data-design-group="move-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-focus" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">New time</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Move to Thu 12 Nov, 14:00</button>
+                <button class="button button--quiet button--full is-hover" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Move – hover and keyboard focus – desktop, dark theme</strong> – The same two states in dark: the ring turns light and the quiet hover keeps a tone of its own, apart from a disabled button. Three panes: the week, this day's afternoon times, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-sending-desktop" data-design-group="move-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-locked is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-locked" type="button" tabindex="-1" disabled><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">Moving to</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Still booked: Tuesday at 09:45</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Move – saving – desktop</strong> – The same screen, so the button stays in place and says what is happening. The week and times lock. The card is labelled "Moving to", and "Still booked: Tuesday at 09:45" says the old booking holds until the new one is saved. Three panes: the week, this day's afternoon times, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-sending-tablet" data-design-group="move-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-locked is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-locked" type="button" tabindex="-1" disabled><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">Moving to</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Still booked: Tuesday at 09:45</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Move – saving – tablet</strong> – The same screen, so the button stays in place and says what is happening. The week and times lock. The card is labelled "Moving to", and "Still booked: Tuesday at 09:45" says the old booking holds until the new one is saved. Two panes: the week is the list, and the times and actions are its detail.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-sending-tablet-landscape" data-design-group="move-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-locked is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-locked" type="button" tabindex="-1" disabled><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">Moving to</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Still booked: Tuesday at 09:45</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Move – saving – tablet landscape</strong> – The same screen, so the button stays in place and says what is happening. The week and times lock. The card is labelled "Moving to", and "Still booked: Tuesday at 09:45" says the old booking holds until the new one is saved. Three panes: the week, the times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-sending-phone" data-design-group="move-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Move your booking</h1>
+            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot is-locked is-selected" type="button" tabindex="-1" aria-pressed="true" disabled><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot is-locked" type="button" tabindex="-1" disabled><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__label">Moving to</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Still booked: Tuesday at 09:45</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep Tuesday at 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Move – saving – phone</strong> – The same screen, so the button stays in place and says what is happening. The week and times lock. The card is labelled "Moving to", and "Still booked: Tuesday at 09:45" says the old booking holds until the new one is saved. One pane: the week folds into seven cells, and the card and actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="moved-desktop" data-design-group="moved">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking has moved</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--success">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
+                <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
+              </div>
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Moved – desktop</strong> – Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers. The notice and card fill the main pane, and the actions stand beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="moved-tablet" data-design-group="moved">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking has moved</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--success">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
+                <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
+              </div>
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Moved – tablet</strong> – Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers. Two panes: the notice and card on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="moved-tablet-landscape" data-design-group="moved">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking has moved</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--success">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
+                <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
+              </div>
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">17</span><strong class="design-state__label">Moved – tablet landscape</strong> – Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers. Two panes, as a third adds nothing here. The wider card puts the time beside its lines to save height.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="moved-phone" data-design-group="moved">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking has moved</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--success">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
+                <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
+              </div>
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">14:00</p>
+                  <p class="ticket__line">Thursday 12 November</p>
+                  <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">18</span><strong class="design-state__label">Moved – phone</strong> – Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="booked.html">Booked</a>: where a move starts.</li>
+    <li><a href="move-failures.html">Move a booking: failures</a>: when a move does not go through.</li>
+    <li><a href="move-states.html">Move a booking: other states</a>: empty, refused, and a later week.</li>
+    <li><a href="move-loading.html">Move a booking: loading</a>: the waits.</li>
+    <li><a href="../../design-system/system/patterns/time-picker/index.html">Time picker</a>: the composition at each size.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

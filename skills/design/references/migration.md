@@ -4,8 +4,8 @@ How to bring existing pages under the rules. Migrate comes before any new design
 
 ## Size it, then ask
 
-1. Run the checker over the design and system folders. Count pages, problems by rule, states built by scripts, and existing comment blocks.
-2. Show the user the count, the rough size of the job, and the plan, including any prototypes to create and files to delete. Ask for approval. Do only the listed items. A headless run makes no change and says what approval it needs.
+1. Run the checker over the design and system folders. Count pages, problems by rule, states built by scripts, and existing comment blocks. Count the frames each missing target size would add.
+2. Show the user the count, the rough size of the job, and the plan, including any prototypes to create and files to delete. Ask which target sizes the product has, and name the new frames in the plan, because drawing them is design work: `ui-designer` draws them, with the comment-block rules in its prompt, and `ux-reviewer` and `ui-reviewer` review them. Ask for approval. Do only the listed items. A headless run makes no change and says what approval it needs.
 3. After approval and before the first edit, follow "Protect comments" in [review-rounds.md](review-rounds.md).
 4. If the user declines, stop. Explain the cost, make no new design, and leave every file as it was.
 
@@ -35,6 +35,7 @@ Work area by area, so a stopped run leaves a clear line between done and not don
 | `foundations/`, `components/`, or `patterns/` at the top of the system | `system/foundations/<name>.html`, and a folder with `index.html` and its own CSS for each component and pattern |
 | One `components.css` holding every part | Each part's CSS beside its page, and `components.css` importing them |
 | A hand-written index | The index templates, then `build-index.mjs` |
+| No `Target sizes:` line, no `design-sizes` meta, or a missing size | The line in `docs/designs/README.md`, the meta on each screen page, and a frame for each missing size with its own new `id`. An exception is only for a size with nothing new to show, never a way past the checker. See "Target sizes" in [page-rules.md](page-rules.md) |
 | No `<meta name="description">`, `#decision`, or `#exceptions` | Add them: the index reads the first, and the checker needs all three |
 
 - Keep each design page's URL and `id` values, because links and comments rely on them. A system page that moves into `system/` changes its URL: move it with its comment blocks intact, list each move in the plan, and update every link to it. Moving a file is on the approved list only if the plan named it. File-editing tools write text only, so copying the binary `fonts/` folder and removing old files need a shell or a small Node script. List every removed file to the user.

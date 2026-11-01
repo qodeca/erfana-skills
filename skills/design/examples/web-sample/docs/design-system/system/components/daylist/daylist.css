@@ -1,8 +1,14 @@
 /* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
 /* SPDX-License-Identifier: GPL-3.0-only */
-/* Staff day list: dense, read at a glance between sessions. */
+/* Staff day list: dense, read at a glance between sessions. The list sits in
+   its own pane and the pane is the container, so the table reads the room it
+   really has: phone rows at under 40rem of pane, table above it. */
 
-.daylist-head { display: flex; flex-wrap: wrap; gap: var(--space-tight) var(--space-group); align-items: center; justify-content: space-between; margin-block-end: var(--space-group); }
+.daypage { flex: 1; display: flex; flex-direction: column; gap: var(--space-group); }
+.daypage__list { container-type: inline-size; display: grid; flex: 1; gap: var(--space-group); align-content: start; }
+.daypage__retrybar { justify-self: start; }
+.daylist-head { display: flex; flex-wrap: wrap; gap: var(--space-tight) var(--space-group); align-items: center; justify-content: space-between; }
+.daylist-nav { display: flex; flex-wrap: wrap; gap: var(--space-tight); }
 .daylist-head .title { margin: 0; font-size: var(--daylist-title-size); }
 .daylist-count { margin: 0; color: var(--color-muted); font-size: var(--type-small); }
 .daylist { width: 100%; border-collapse: collapse; background: var(--color-raised); font-size: var(--type-small); }
@@ -24,6 +30,11 @@
 }
 .daylist td.daylist__time { font-size: var(--type-body); font-weight: var(--emphasis-strong); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .daylist__name { font-weight: var(--emphasis-strong); }
+/* The status is the last column, and a word in it never breaks. */
+.daylist tr > :last-child { min-inline-size: var(--daylist-time-width); }
+.daylist td:last-child { overflow-wrap: normal; }
+.daylist td.daylist__contact,
+.daylist td.daylist__session { white-space: nowrap; }
 .daylist__free td { background: var(--color-sunken); color: var(--color-muted); }
 .daylist__gone td { color: var(--color-muted); }
 .daylist__gone .daylist__name { text-decoration: line-through; }
@@ -34,7 +45,48 @@
 }
 
 /* Below the base rules: an @container rule does not outrank a later rule of
-   the same weight. */
+   the same weight. On a phone the day buttons drop to the bottom, in reach of a
+   thumb, and the next session stands above the list. Keyboard order stays with
+   the markup: the day buttons come first. */
+@container app (max-width: 37.49rem) {
+  .daylist-head { display: contents; }
+  .daypage__title { order: 1; }
+  .daypage__next { order: 2; }
+  /* The pane steps aside, so the retry can drop near the thumb. It stops being a
+     container too, because a box with display: contents can answer no query, and
+     the rules below would stop for everything inside it. They read .app instead. */
+  .daypage__list { container-type: normal; display: contents; }
+  .daypage__list > * { order: 3; }
+  .daypage__list > .daypage__retrybar {
+    order: 4;
+    margin-inline: calc(var(--space-group) * -1);
+    margin-block: auto calc(var(--space-group) * -1);
+    padding: var(--space-control) var(--space-group) 0;
+    border-block-start: var(--control-edge) solid var(--color-edge-strong);
+    background: var(--color-raised);
+  }
+  .daypage__retrybar .button { width: 100%; }
+  .daypage:has(.daypage__retrybar) .daylist-nav { margin-block-start: 0; border-block-start: 0; }
+  .daylist-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    order: 5;
+    margin-block-start: auto;
+    margin-inline: calc(var(--space-group) * -1);
+    margin-block-end: calc(var(--space-card) * -1);
+    padding: var(--space-control) var(--space-group);
+    border-block-start: var(--control-edge) solid var(--color-edge-strong);
+    background: var(--color-raised);
+  }
+  .daylist-nav .button { padding-inline: var(--space-tight); }
+}
+/* From tablet up the next session is its own pane beside the list. */
+@container app (min-width: 37.5rem) {
+  .daypage { display: grid; grid-template-columns: minmax(0, 1fr) var(--daypage-next); grid-template-rows: auto 1fr; gap: var(--space-card); }
+  .daylist-head { grid-column: 1 / -1; }
+  .daypage__list { grid-column: 1; grid-row: 2; }
+  .daypage__next { grid-column: 2; grid-row: 2; align-self: start; }
+}
 @container (max-width: 39.99rem) {
   .daylist, .daylist tbody { display: block; }
   .daylist tr { display: grid; grid-template-columns: var(--daylist-time-width) minmax(0, 1fr); padding-block: var(--space-tight); border-block-end: var(--control-divider) solid var(--color-edge); }

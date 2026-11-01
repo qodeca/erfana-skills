@@ -27,6 +27,7 @@ import { buildCss } from './build-tokens.mjs'
 import { auditSheets, cssFacts, cssProblems } from './css-rules.mjs'
 import { commentBlocks, hasClass, inside, parseHtml, stripBlocks, stripTags } from './html-lite.mjs'
 import { checkForm, relOf } from './page-form.mjs'
+import { checkSizes, projectSizes } from './page-sizes.mjs'
 import { carriers, compareStatus, metaOf, newestDate, pageKind, statesOf, statusProblems, tileOf } from './page-status.mjs'
 import { INDEX_ROOTS, echo, isMain, isPrototypePath, lf, localDate, locate, oneLine, sameText, urlProblem } from './shared.mjs'
 import { snapshotCommand } from './snapshot.mjs'
@@ -341,6 +342,7 @@ class Run {
     const statuses = this.checkStatus(file, text, nodes, kind)
     this.checkAnatomy(file, nodes, kind)
     if (kind === 'screen') this.checkStates(file, text, nodes)
+    if (kind === 'screen') checkSizes(text, nodes, projectSizes(this.sheetRoot), (line, rule, message) => this.add(file, line, rule, message))
 
     const blocks = commentBlocks(comments, nodes)
     if (blocks.length > MAX_BLOCKS) this.add(file, 1, 'limits', `${blocks.length} comment blocks – Erfana stops at ${MAX_BLOCKS}, so split the file`)

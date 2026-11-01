@@ -50,6 +50,7 @@
 .slot.is-active { background: var(--color-sunken); transform: scale(0.98); }
 .slot:disabled,
 .slot.is-disabled { background: transparent; color: var(--color-muted); cursor: not-allowed; text-decoration: line-through; }
+.slot.is-locked { text-decoration: none; }
 .slot[aria-pressed="true"],
 .slot.is-selected {
   width: calc(100% + var(--slot-overhang));
@@ -67,12 +68,6 @@
 .slot[aria-pressed="true"]:active:not(:where(.design-frame *)),
 .slot.is-selected.is-active { background: var(--color-marker-pressed); }
 @keyframes strip-on { from { transform: scaleX(0.98); } }
-
-/* Below the base rules: an @container rule does not outrank a later rule of
-   the same weight. */
-@container (min-width: 56rem) {
-  .rail--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-card); }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .slot { transition: none; }

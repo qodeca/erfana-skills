@@ -19,7 +19,7 @@
 <main>
 <h1>Week and days</h1>
 <p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
-<p class="ds-lede" id="decision">A patient picks from a visible week and never types a date. The week stays in seven columns at every width, and its label names both months when a week crosses them, because the day numbers alone drop from 30 to 1.</p>
+<p class="ds-lede" id="decision">A patient picks from a visible week and never types a date. On a phone the week stays in seven columns, and from tablet up it stands as a list with each day's count of free times, and its label names both months when a week crosses them, because the day numbers alone drop from 30 to 1.</p>
 
 <h2 id="states">Every state</h2>
 <div class="ds-frames">
@@ -67,6 +67,33 @@
   </figure>
 </div>
 
+<h2 id="list">From tablet up</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="list">
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">The week as a list, 768 wide</strong> – each day gains <code>.day__free</code>, so a patient sees a full day before pressing it. On a phone the count folds away; <code>responsive.css</code> does this in the real product. Drawn here at the width of the whole frame; the time picker gives it its own pane.</figcaption>
+  </figure>
+</div>
+
 <h2 id="keyboard">The keyboard contract</h2>
 <table class="ds-keys">
   <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
@@ -78,14 +105,16 @@
 
 <h2 id="markup">Markup</h2>
 <pre class="ds-code"><code>&lt;ul class="days"&gt;
-  &lt;li&gt;&lt;button class="day" type="button" aria-pressed="true"&gt;&lt;span&gt;Tue&lt;/span&gt;&lt;span class="day__date"&gt;10&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class="day" type="button" aria-pressed="true"&gt;&lt;span&gt;Tue&lt;/span&gt;&lt;span class="day__date"&gt;10&lt;/span&gt;&lt;span class="day__free"&gt;6 free&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
 &lt;/ul&gt;</code></pre>
 
 <h2 id="tokens">Tokens</h2>
 <table class="ds-tokens">
   <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
   <tbody>
-    <tr><td><code>--day-height</code></td><td>Component</td><td>Cell height</td></tr>
+    <tr><td><code>--day-height</code></td><td>Component</td><td>Cell height in the seven-column week</td></tr>
+    <tr><td><code>--day-height-row</code></td><td>Component</td><td>Row height in the list</td></tr>
+    <tr><td><code>--day-name-width</code></td><td>Component</td><td>The day and date columns in the list</td></tr>
     <tr><td><code>--color-raised</code></td><td>Semantic</td><td>Cell fill</td></tr>
     <tr><td><code>--color-edge</code></td><td>Semantic</td><td>Cell edge</td></tr>
     <tr><td><code>--color-sunken</code></td><td>Semantic</td><td>Hover and pressed fill</td></tr>

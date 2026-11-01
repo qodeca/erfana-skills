@@ -68,7 +68,7 @@
 <h2 id="markup">Markup</h2>
 <pre class="ds-code"><code>&lt;div class="app"&gt;
   &lt;div class="appbar"&gt;&lt;span class="appbar__name"&gt;Physiotherapy clinic&lt;/span&gt;&lt;span class="appbar__step"&gt;Step 1 of 2&lt;/span&gt;&lt;/div&gt;
-  &lt;div class="page"&gt;&lt;h1 class="title"&gt;Choose a time&lt;/h1&gt;&lt;/div&gt;
+  &lt;div class="page"&gt;&lt;div class="pagehead"&gt;&lt;h1 class="title"&gt;Choose a time&lt;/h1&gt;&lt;p class="lede"&gt;Follow-up session&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre>
 
 <h2 id="tokens">Tokens</h2>
@@ -80,6 +80,8 @@
     <tr><td><code>--type-title</code></td><td>Semantic</td><td>Screen title</td></tr>
     <tr><td><code>--space-card</code></td><td>Semantic</td><td>Page padding</td></tr>
     <tr><td><code>--space-section</code></td><td>Semantic</td><td>Page padding on a wide screen</td></tr>
+    <tr><td><code>--app-page-max</code></td><td>Component</td><td>The widest the page grows, centred in a wider window</td></tr>
+    <tr><td><code>--app-min-height</code></td><td>Component</td><td>Fills the window, set in <code>responsive.css</code> only</td></tr>
   </tbody>
 </table>
 

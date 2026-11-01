@@ -1,6 +1,8 @@
 # Feature designs
 
-Layout version: 1. Design system: 3.1.0. Start at [index.html](index.html).
+Layout version: 1. Design system: 4.3.0. Start at [index.html](index.html).
+
+Target sizes: desktop, tablet, tablet-landscape, phone
 
 Each area has its own folder, with a `README.md` and one HTML file per screen or task. Sample output of the `design` skill, not a real product.
 

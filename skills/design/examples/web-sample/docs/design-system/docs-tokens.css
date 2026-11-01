@@ -105,7 +105,6 @@
   --device-radius: 58px;
   --device-screen-radius: 46px;
   --device-screen-height: 812px;
-  --device-screen-height-small: 693px;
   --device-safe-top: 54px;
   --device-safe-bottom: 30px;
   --device-camera-top: 11px;
@@ -123,5 +122,26 @@
   --device-button-depth: 3px;
   --device-button-power-drop: 30px;
   --frame-tablet: 768px;
+  --frame-tablet-landscape: 1024px;
   --frame-desktop: 1280px;
 }
+
+/* Each device body reads its own size from these. A tablet has an even edge, a
+   camera dot, and no side buttons. */
+.design-frame--phone { --device-width: var(--frame-phone); }
+.design-frame--phone-small { --device-width: var(--frame-narrow); --device-screen-height: 693px; }
+.design-frame--tablet,
+.design-frame--tablet-landscape {
+  --device-side: 16px;
+  --device-radius: 34px;
+  --device-screen-radius: 20px;
+  --device-safe-top: 28px;
+  --device-safe-bottom: 24px;
+  --device-camera-top: 10px;
+  --device-camera-width: 10px;
+  --device-camera-height: 10px;
+  --device-lens-size: 3px;
+  --device-bar-width: 200px;
+}
+.design-frame--tablet { --device-width: var(--frame-tablet); --device-screen-height: 1024px; }
+.design-frame--tablet-landscape { --device-width: var(--frame-tablet-landscape); --device-screen-height: 768px; }

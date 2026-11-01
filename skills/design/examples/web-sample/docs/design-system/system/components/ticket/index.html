@@ -66,6 +66,44 @@
   </figure>
 </div>
 
+<h2 id="sizes">At each size</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="fold">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="ticket ticket--fold">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Fold, phone</strong> – <code>.ticket--fold</code> puts the time beside its lines on a phone, where the card sits with the actions at the bottom. Under 22rem the card stays stacked, because the lines need the width.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="wide">
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="ticket ticket--wide">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Wide, tablet landscape</strong> – <code>.ticket--wide</code> does the same from a landscape tablet up, where the card has width to spare. The time stays the largest text.</figcaption>
+  </figure>
+</div>
+
 <h2 id="keyboard">The keyboard contract</h2>
 <table class="ds-keys">
   <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>

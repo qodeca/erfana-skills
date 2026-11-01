@@ -1,14 +1,15 @@
 # Shift swap design system
 
-Version 3.1.0. Layout version 1. Open `index.html` for every foundation, component, and pattern.
+Version 3.2.0. Layout version 1. Open `index.html` for every foundation, component, and pattern.
 
 ## Design principles
 
 1. **Time beats everything.** The shift time is the largest thing on a screen, because "which shift?" comes before any other thought.
 2. **One marigold thing per screen.** If it is filled marigold, it is the next tap. A hurried person should not have to choose where to look.
 3. **Every no explains itself.** No disabled control appears without a reason in words and a way forward.
-4. **The night ward is a normal place.** Dark is a full theme, not an afterthought, and no surface is pure white or pure black.
-5. **Words first, colour second.** Red and green only repeat what a word and an icon already say, because hospitals already use those colours for alarms.
+4. **The list stays beside the work.** A bigger screen earns more panes, never bigger phone parts. Nothing a nurse opens should take the list away while there is room for both.
+5. **The night ward is a normal place.** Dark is a full theme, not an afterthought, and no surface is pure white or pure black.
+6. **Words first, colour second.** Red and green only repeat what a word and an icon already say, because hospitals already use those colours for alarms.
 
 ## Directions considered
 
@@ -78,11 +79,25 @@ The two are separate on the web because `data-theme` holds one value. A web view
 | Body text | 17 | iOS default, kept on Android for tired eyes |
 | Title | 22 | Stays below the smallest shift time, 28 |
 | Shift time | 44, or 28 in lists and compact tickets | Always the largest text on a screen |
+| List pane | 320 | Holds a compact ticket on one line in landscape |
+| Side pane | 280 | Holds the baton and the checks, and leaves the main pane room for a full ticket |
+| Sheet | 480 centred, 640 at the bottom | iPadOS centres a sheet. Android keeps it at the bottom, with a width limit |
 
 ## Breakpoints
 
-None. The product is phone-only, so `responsive.css` is deliberately empty and there are no `@container` rules. Tablet layouts are out of scope.
+Two, as `rem` values inside `@container` rules, because CSS cannot read a variable there. 600 is Material's Medium lower bound. Three panes wait for 960, not Expanded's 840: at 840 the main pane would be 240, narrower than the status beside it. Between 840 and 959 a screen stays at two panes.
+
+| Width | Frame | Layout |
+|---|---|---|
+| Under 600 | `phone`, 375 and 320 | One pane, with the main action at the bottom in reach of one thumb |
+| 600 to 959 | `tablet`, 768 | List beside the main pane, with the status under it, and the buttons in a row |
+| 960 and up | `tablet-landscape`, 1024 | List, main pane, and status in three columns, with tickets folded to two lines to suit the shorter height |
+
+- `.screen` and `.sheet-screen` are the `screen` container, and each `.pane` is a `pane` container. A part inside a pane reads the pane, so a ticket sizes itself to its column. A full time needs a pane of 352, or 22rem.
+- At 200% text a tablet has two equal columns, except Pick a shift, which is one pane with tickets across. Native teams read the same rule from the text size setting. Icons grow with the text.
+- Rules that hide things are only in `responsive.css`, which review pages never load: below 600 one pane shows. Layout rules stay beside the part they change.
+- Native teams switch on width, not on device or orientation, so an iPad app in a narrow window takes the phone layout. iOS calls these compact and regular width, and Android calls them window size classes.
 
 ## Status
 
-Contrast is measured on `system/foundations/colour.html`: every text and control pair passes in both themes. Two pairs sit under 3:1, both in the light theme. The day band on a raised surface, 1.78:1, is decoration, because the word Day and the sun icon say the same thing. Marigold on sand, 1.66:1, never stands alone, because the button keeps its dark edge.
+Contrast is measured on `system/foundations/colour.html`: every text and control pair passes in both themes. The pairs under 3:1 are listed there, and none carries meaning alone. Two of them matter most, both in the light theme. The day band on a raised surface, 1.78:1, is decoration, because the word Day and the sun icon say the same thing. Marigold on sand, 1.66:1, never stands alone, because the button keeps its dark edge.

@@ -6,7 +6,7 @@ What to know before drawing. Work through the steps in order, because each one n
 
 Read the brief, any specs, issues, and notes, and the product code if there is one. Write down, in the area README:
 
-- Who uses this, how often, on what device, and in what setting.
+- Who uses this, how often, on what device, and in what setting. This sets the target sizes.
 - The job they are trying to finish, and how they do it today.
 - The business goal, and how success would show.
 - Constraints: platform, deadline, legal rules, data, what already ships.

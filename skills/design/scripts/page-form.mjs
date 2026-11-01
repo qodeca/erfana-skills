@@ -25,7 +25,7 @@ const BODY_ELEMENTS = words(`a abbr address article aside b blockquote br button
   span strong sub sup svg table tbody td textarea tfoot th thead time tr u ul var wbr`)
 const SVG_ELEMENTS = words('svg g path circle ellipse line polygon polyline rect text tspan')
 
-const META_NAMES = words('viewport description design-tasks')
+const META_NAMES = words('viewport description design-tasks design-sizes')
 const GLOBAL_ATTRS = words('id class style lang dir role tabindex')
 const ELEMENT_ATTRS = {
   a: words('href'),

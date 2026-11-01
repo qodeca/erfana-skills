@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.2.0 – 2026-11-01
+
+Minor: tokens and classes are added, and nothing is removed or renamed.
+
+- The product now runs on phone and tablet. Added the Panes component, `.panes` and `.pane`, which puts one set of parts into one, two, or three panes with `@container` rules at 600 and 960. Three panes wait for 960 because at 840 the main pane would be narrower than the status beside it. `.screen` and `.sheet-screen` now set the container, so the rules also work in a web view.
+- `.action-bar` becomes a row from 600: buttons share an equal height, and the longer label takes more width. `.sheet` stops at 480 from 600 and is centred, and on Android it stays at the bottom and stops at 640.
+- `.ticket--compact` takes the full time back in a pane of 352 or wider, and folds to two lines in a list from 960. Added `.ticket--pick.is-selected`.
+- Added `.group--across`, `.pane--list`, `.pane--lead`, `.pane--main`, `.pane--side`, `.panes--two`, `.panes--solo`, `.panes--detail-open`, and `.action-bar--even`, `.button--retry`, `.button--half`, `.sheet-screen__behind`, `.sheet-screen--keyboard`, and `.keyboard`, which marks what the system keyboard covers and is not a design for it.
+- Added `component.pane`, `component.ticket.selected-edge`, `component.keyboard`, `component.sheet.centred-width`, `component.sheet.bottom-width`, `component.sheet.safe-bottom`, `semantic.space.none`, `semantic.color.skeleton-sunken`, and seven `semantic.shape` sizes.
+- `responsive.css` now has rules: below 600 only one pane shows.
+- `.icon` multiplies by `--type-scale`, so icons grow with 200% text.
+- `.sheet` ends with the action bar's padding below 600, so its bottom button sits in the same slot as the bar's, and it runs to the bottom edge of the screen. From 600 the padding is unchanged. `.app-bar__back` has a disabled look. `.sheet-screen--keyboard` keeps the dimmed screen behind the sheet.
+- `.pane > .empty` starts at the top of a pane from 600. `.panes--solo` is now for 200% text only.
+- Phone frames in `swap` changed too: Try again moved to the action bar, Say no again keeps its slot, and request detail states use the Sun 15 Nov request, so the list and the detail agree.
+
+On pages that use the system, name the three target sizes and draw each state at them. The `swap` area is updated.
+
 ## 3.1.0 – 2026-11-01
 
 Minor: no token, class name, or drawn part changed.

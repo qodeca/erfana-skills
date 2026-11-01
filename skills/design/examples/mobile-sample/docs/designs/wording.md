@@ -18,4 +18,10 @@ Shared terms. All are unconfirmed guesses until a nurse and a manager have read 
 | Go back | Back, Return | A verb, like every other button, and easy to translate |
 | Say no | Decline, reject | "Decline" belongs to the manager. A colleague only answers a request |
 | Keep offer, Keep request | Cancel, Dismiss | "Cancel" next to "Cancel offer" would be ambiguous |
+| My shifts | Your shifts, Roster, Schedule | The screen's name. A tablet's list uses it too, so the words match |
+| Done | Back to my shifts, on a tablet | Where My shifts is already beside the work, there is nowhere to go back to |
+| Contact | Call, on a tablet | Where the button is Message, because many tablets cannot call |
+| Say no again | Try again, Retry | On a failed no, it says which answer is being resent, in the same place as Say no |
+| Message | Contact, Reach out | On a tablet, where calling may not work |
+| Who has this shift | Status, progress | The question the baton answers |
 | Shift | Duty, rota slot | From the brief. Check against local use: "rota" in the UK |

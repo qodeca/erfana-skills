@@ -33,6 +33,7 @@
   --harbor-300: #93CFEA;
   --harbor-700: #1F6385;
   --harbor-900: #16384A;
+  --size-0: 0px;
   --size-1: 4px;
   --size-2: 8px;
   --size-3: 12px;
@@ -42,6 +43,11 @@
   --size-7: 48px;
   --size-8: 56px;
   --size-9: 96px;
+  --size-11: 280px;
+  --size-12: 320px;
+  --size-13: 480px;
+  --size-15: 640px;
+  --size-16: 400px;
   --share-45: 45%;
   --share-80: 80%;
   --stroke-1: 1px;
@@ -108,6 +114,8 @@
   --color-on-success: var(--sand-0);
   --color-sheet: var(--sand-0);
   --color-skeleton: var(--sand-200);
+  --color-skeleton-sunken: var(--sand-300);
+  --space-none: var(--size-0);
   --space-tight: var(--size-1);
   --space-small: var(--size-2);
   --space-medium: var(--size-3);
@@ -126,6 +134,13 @@
   --shape-scrim-reach: var(--size-9);
   --shape-grabber-width: var(--size-6);
   --shape-grabber-height: var(--size-1);
+  --shape-pane-list: var(--size-12);
+  --shape-pane-side: var(--size-11);
+  --shape-sheet-centred: var(--size-13);
+  --shape-sheet-bottom: var(--size-15);
+  --shape-keyboard: var(--size-11);
+  --shape-keyboard-regular: var(--size-12);
+  --shape-keyboard-wide: var(--size-16);
   --edge-hairline: var(--stroke-1);
   --edge-control: var(--stroke-2);
   --edge-focus: var(--stroke-3);
@@ -194,6 +209,7 @@
   --ticket-bg-hover: var(--color-surface-sunken);
   --ticket-bg-pressed: var(--color-line);
   --ticket-disabled-bg: var(--color-surface-sunken);
+  --ticket-selected-edge: var(--color-text);
   --row-height: var(--target-main);
   --row-padding: var(--space-medium);
   --row-gap: var(--space-medium);
@@ -308,6 +324,16 @@
   --skeleton-bg: var(--color-skeleton);
   --action-bar-bg: var(--color-surface-raised);
   --action-bar-edge: var(--color-line);
+  --keyboard-height: var(--shape-keyboard);
+  --keyboard-height-regular: var(--shape-keyboard-regular);
+  --keyboard-height-wide: var(--shape-keyboard-wide);
+  --keyboard-bg: var(--color-surface-sunken);
+  --keyboard-text: var(--color-text-muted);
+  --pane-list-width: var(--shape-pane-list);
+  --pane-side-width: var(--shape-pane-side);
+  --pane-bg: var(--color-surface-sunken);
+  --pane-edge: var(--color-line);
+  --pane-skeleton: var(--color-skeleton-sunken);
   --check-edge: var(--color-line);
   --check-mark: var(--color-success);
   --check-warn-mark: var(--color-warning);
@@ -323,10 +349,13 @@
   --sheet-radius: var(--shape-round-card);
   --sheet-padding-block: var(--space-section);
   --sheet-padding-inline: var(--space-gutter);
+  --sheet-safe-bottom: var(--space-none);
   --sheet-gap: var(--space-gutter);
   --sheet-grabber-width: var(--shape-grabber-width);
   --sheet-grabber-height: var(--shape-grabber-height);
   --sheet-grabber-color: var(--color-line-strong);
+  --sheet-centred-width: var(--shape-sheet-centred);
+  --sheet-bottom-width: var(--shape-sheet-bottom);
 }
 
 [data-theme="dark"] {
@@ -356,6 +385,7 @@
   --color-on-success: var(--sand-950);
   --color-sheet: var(--sand-800);
   --color-skeleton: var(--sand-500);
+  --color-skeleton-sunken: var(--sand-500);
   --opacity-scrim: var(--alpha-scrim-dark);
 }
 
