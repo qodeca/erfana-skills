@@ -206,10 +206,15 @@ export async function checkPolicy(csp, fontFile) {
     for (const part of loaded(sandboxed)) failures.push(`opaque origin: the local ${part} did not load`)
     return { failures, results: { onFile, sandboxed } }
   } finally {
-    run?.child.kill()
+    if (run?.child && run.child.exitCode === null) {
+      const gone = new Promise(done => run.child.once('exit', done))
+      run.child.kill()
+      await Promise.race([gone, new Promise(done => setTimeout(done, 3000))])
+    }
     server.close()
     server.closeAllConnections()
     // Chrome can hold its profile for a moment after it is told to stop.
-    rmSync(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+    // Chrome's helpers can outlive it for a moment; a leftover temp folder is no test failure.
+    try { rmSync(root, { recursive: true, force: true, maxRetries: 10, retryDelay: 300 }) } catch (error) { console.log(`  note: temp folder left behind: ${error.code}`) }
   }
 }
