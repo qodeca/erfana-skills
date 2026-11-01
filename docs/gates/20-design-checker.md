@@ -22,7 +22,7 @@ The `design` skill's promises rest on `skills/design/scripts/check-design.mjs`, 
 - An area's `index.html` of kind `index` is listed as the area's overview, not as a screen.
 - Templates carry nothing that must not ship, and each font has its licence sidecar.
 - Token levels and token drift are caught.
-- The shipped sample in `skills/design/examples/web-sample/` still passes.
+- The shipped samples in `skills/design/examples/web-sample/` and `skills/design/examples/mobile-sample/` still pass.
 
 The last check keeps the sample current: a rule change that leaves it behind fails here.
 

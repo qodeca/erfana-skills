@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 //
 // Proves the design skill's checker: the template pages pass, every mutation
-// below is caught by the named rule, and the shipped sample passes. Run by
+// below is caught by the named rule, and the shipped samples pass. Run by
 // Gate 20. A rule without a mutation here is a rule nobody has proved. Status,
 // date, index, and template fixtures are in fixtures-pages.mjs.
 
@@ -19,7 +19,7 @@ import { runPageFixtures } from './fixtures-pages.mjs'
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const templates = path.join(repo, 'skills/design/templates')
-const sample = path.join(repo, 'skills/design/examples/web-sample')
+const samples = ['web-sample', 'mobile-sample'].map(name => path.join(repo, 'skills/design/examples', name))
 const page = readFileSync(path.join(templates, 'screen-page.html'), 'utf8')
 const tokens = JSON.parse(readFileSync(path.join(templates, 'tokens.json'), 'utf8'))
 
@@ -243,8 +243,8 @@ try {
   bypassCount = runBypassFixtures(context)
   await runCliFixtures(context)
 
-  // The shipped sample.
-  const shipped = checkPaths([sample], { noDate: true }).problems
+  // The shipped samples.
+  const shipped = samples.flatMap(sample => checkPaths([sample], { noDate: true }).problems)
   if (shipped.length > 0) fail(`shipped sample should pass:\n  ${shipped.join('\n  ')}`)
   // The comment safety copy stays inside the project, in a folder git ignores.
   const project = path.join(root, 'snapshot-project')
@@ -287,5 +287,5 @@ if (failures.length > 0) {
   for (const f of failures) console.log(`  FAIL: ${f}`)
   process.exitCode = 1
 } else {
-  console.log(`  PASS: template pages, ${MUTATIONS.length} mutations, ${bypassCount} bypass payloads, command runs, git, baselines, token levels, status, dates, indexes, shipped sample`)
+  console.log(`  PASS: template pages, ${MUTATIONS.length} mutations, ${bypassCount} bypass payloads, command runs, git, baselines, token levels, status, dates, indexes, shipped samples`)
 }
