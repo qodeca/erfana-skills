@@ -1,0 +1,13 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* The time picker: the week and the rail beside their summary. */
+
+.book { display: grid; gap: var(--space-section); align-items: start; }
+.book__aside { display: grid; gap: var(--space-group); align-content: start; }
+.rail + .book__aside { margin-top: var(--space-group); }
+
+/* Below the base rules: an @container rule does not outrank a later rule of
+   the same weight. */
+@container (min-width: 56rem) {
+  .book { grid-template-columns: minmax(0, 1fr) var(--measure-aside); }
+}

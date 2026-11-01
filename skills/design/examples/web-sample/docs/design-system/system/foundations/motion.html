@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Quick and plain, with one press-on for the strip.">
+<meta name="design-tasks" content="Animate something; Time a press on the strip">
+<title>Motion – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Motion</span></nav>
+<main>
+<h1>Motion</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Motion stays quick, and only one thing moves with intent: the strip presses on from the left, from 98% width, so choosing feels like smoothing tape down. With reduced motion it appears at once, and the colour change is still the feedback.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--motion-quick</code></td><td><span class="ds-mono">100ms</span></td><td>Hover and press feedback</td></tr>
+    <tr><td><code>--motion-settle</code></td><td><span class="ds-mono">240ms</span></td><td>The strip pressing on</td></tr>
+    <tr><td><code>--motion-spin</code></td><td><span class="ds-mono">900ms</span></td><td>One turn of the spinner</td></tr>
+    <tr><td><code>--motion-curve</code></td><td><span class="ds-mono">cubic-bezier(0.2, 0.8, 0.2, 1)</span></td><td>Every eased change</td></tr>
+    <tr><td><code>--motion-press</code></td><td><span class="ds-mono">0.98</span></td><td>The scale of a pressed control</td></tr>
+  </tbody>
+</table>
+
+<h2 id="reduced">Reduced motion</h2>
+<table>
+  <thead><tr><th>Part</th><th>Normal</th><th>Reduced</th></tr></thead>
+  <tbody>
+    <tr><td>Button and slot</td><td>Colour eases, and a press scales down</td><td>No easing and no scale</td></tr>
+    <tr><td>Day cell</td><td>A press scales down</td><td>No scale</td></tr>
+    <tr><td>Selected slot</td><td>The strip presses on</td><td>It appears at once</td></tr>
+    <tr><td>Spinner</td><td>Turns</td><td>Stops, with a dotted ring</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../components/slot/index.html">Time slot</a>: the press-on.</li>
+  <li><a href="../components/loading/index.html">Loading</a>: the spinner.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

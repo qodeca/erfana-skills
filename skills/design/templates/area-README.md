@@ -1,6 +1,6 @@
 # <Area name>
 
-**Status: Draft.** Design system: <version>. Layout version: 1.
+Design system: <version>. Layout version: 1. Each state's status is on its page, in the rectangle above its frame.
 
 ## Purpose
 
@@ -10,9 +10,17 @@ Who uses this, for what, and what is out of scope. The goals from the interview.
 
 One row per source: link, the idea taken, and why it fits. Links and notes only.
 
+## System pages it builds on
+
+| Page | Status | What this design takes from it |
+|---|---|---|
+| Link to the system page | Its status | The rule or part it uses |
+
 ## Screens
 
-One line per page, with a link. What the person sees first, and why.
+| Screen | Status | What it draws |
+|---|---|---|
+| Link to the page | Its status | What the person sees first, and why |
 
 ## States
 

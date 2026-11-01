@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Reception and therapists read today's sessions at a glance between patients.">
 <title>Booking – Staff day list</title>
 <link rel="stylesheet" href="../../design-system/tokens.css">
 <link rel="stylesheet" href="../../design-system/components.css">
@@ -11,17 +12,13 @@
 <link rel="stylesheet" href="../../design-system/docs.css">
 </head>
 <body data-design-page="screen">
-<header class="design-tile" data-design-status="draft" data-updated="2026-11-01">
-  <span class="design-tile__status">Draft</span>
-  <span>Updated 2026-11-01</span>
-  <span>Design, not a working product</span>
-</header>
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Staff day list</span></nav>
 <main>
   <h1>Staff day list</h1>
-  <p class="doc-lede">Reception and therapists read today's sessions at a glance between patients. Judge whether "who is next" reads from across the desk, and whether free gaps stand out from booked rows.</p>
+  <p class="ds-lede" id="decision">Reception and therapists read today's sessions at a glance between patients. Judge whether "who is next" reads from across the desk, and whether free gaps stand out from booked rows.</p>
 
-  <aside class="design-questions">
-    <h2>Open questions</h2>
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
     <ul>
       <li>Assumed: the list is read-only, because the brief says staff "see" it. Marking a patient as arrived would add a control to every row.</li>
       <li>Assumed: one list for the whole clinic, with a therapist column. A per-therapist view is not drawn.</li>
@@ -31,25 +28,220 @@
     </ul>
   </aside>
 
-  <section class="design-state" id="default-desktop">
-    <h2 class="design-state__label">Day list – default, desktop</h2>
-    <p class="design-state__note">A full day with the longest names, plus a moved and a cancelled session. Times with no row are not offered on this Monday, so they are not free sessions. The coral row is the only colour: next up, with the word "Next" as well. Rows have no hover or focus because nothing in them acts; "Next day" is drawn with its focus ring.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Monday 9 November</h1>
-                <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact is-focus" type="button" tabindex="-1">Next day</button>
-              </div>
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="default-desktop">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+              <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
             </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact is-focus" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <table class="daylist">
+            <thead><tr><th>Time</th><th>Patient</th><th class="daylist__session">Session</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr>
+              <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900124</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr>
+              <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr>
+              <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900127</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
+              <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900128</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900129</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
+              <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900130</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900131</td><td>Booked</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Day list – default, desktop</strong> – A full day with the longest names, plus a moved and a cancelled session. Times with no row are not offered on this Monday, so they are not free sessions. The coral row is the only colour: next up, with the word "Next" as well. Rows have no hover or focus because nothing in them acts; "Next day" is drawn with its focus ring.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+              <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <table class="daylist">
+            <tbody>
+              <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr>
+              <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td>Moved from Fri 09:00</td></tr>
+              <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr>
+              <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
+              <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
+              <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Day list – phone</strong> – Each row stacks under its time. The header row, Session, and Mobile fold away; rules for the real product are in responsive.css. Nothing scrolls sideways.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="narrow">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--narrow" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+              <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <table class="daylist">
+            <tbody>
+              <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr>
+              <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td>Moved from Fri 09:00</td></tr>
+              <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr>
+              <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
+              <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+              <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
+              <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
+              <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Day list – smallest size, 320 wide</strong> – The same fold as the phone: the header row, Session, and Mobile are gone, and the day buttons wrap. Rows stay a time column plus stacked lines, the longest names wrap, and nothing scrolls sideways.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Saturday 14 November</h1>
+              <p class="daylist-count">No sessions</p>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="notice">
+            <div>
+              <p class="notice__title">No sessions on this day</p>
+              <p class="notice__text">The next booked session is Monday 16 November at 08:15.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Day list – empty, desktop</strong> – Nothing is booked, or the clinic is shut. The day buttons stay, so staff can move on. There is no search, so "no match" cannot happen.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="row"><span class="spinner"></span><span>Loading the day</span></div>
+            <span class="skeleton"></span>
+            <span class="skeleton"></span>
+            <span class="skeleton"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Day list – loading, desktop</strong> – First load and day change look the same. The date and the day buttons stay; rows give way to bars. A refresh is drawn next.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="refreshing">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+              <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="row"><span class="spinner"></span><span>Checking for changes</span></div>
             <table class="daylist">
               <thead><tr><th>Time</th><th>Patient</th><th class="daylist__session">Session</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead>
               <tbody>
@@ -70,325 +262,166 @@
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Day list – refreshing, desktop</strong> – A refresh keeps the old rows and adds only the line above them.</figcaption>
+  </figure>
 
-  <section class="design-state" id="phone">
-    <h2 class="design-state__label">Day list – phone</h2>
-    <p class="design-state__note">Each row stacks under its time. The header row, Session, and Mobile fold away; rules for the real product are in responsive.css. Nothing scrolls sideways.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
-          <div class="page">
-            <div class="daylist-head">
+  <figure class="ds-frame design-state" id="error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+              <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
               <div>
-                <h1 class="title">Monday 9 November</h1>
-                <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+                <p class="notice__title">This list may be out of date</p>
+                <p class="notice__text">We last updated it at 10:32. Check your connection, then try again.</p>
               </div>
             </div>
+            <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
             <table class="daylist">
+              <thead><tr><th>Time</th><th>Patient</th><th class="daylist__session">Session</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead>
               <tbody>
-                <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr>
-                <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td>Moved from Fri 09:00</td></tr>
-                <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr>
-                <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
-                <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
-                <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
+                <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr>
+                <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900124</td><td>Booked</td></tr>
+                <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr>
+                <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr>
+                <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900127</td><td>Booked</td></tr>
+                <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
+                <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900128</td><td>Booked</td></tr>
+                <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900129</td><td>Booked</td></tr>
+                <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
+                <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900130</td><td>Booked</td></tr>
+                <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900131</td><td>Booked</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Day list – refresh failed, desktop</strong> – The last list stays on screen with the time it was fetched, because a stale list beats none at reception.</figcaption>
+  </figure>
 
-  <section class="design-state" id="narrow">
-    <h2 class="design-state__label">Day list – smallest size, 320 wide</h2>
-    <p class="design-state__note">The same fold as the phone: the header row, Session, and Mobile are gone, and the day buttons wrap. Rows stay a time column plus stacked lines, the longest names wrap, and nothing scrolls sideways.</p>
-    <div>
-      <div class="design-frame design-frame--narrow" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
-          <div class="page">
-            <div class="daylist-head">
+  <figure class="ds-frame design-state" id="error-first-load">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Monday 9 November</h1>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
               <div>
-                <h1 class="title">Monday 9 November</h1>
-                <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+                <p class="notice__title">We could not load today's list</p>
+                <p class="notice__text">Nothing is showing yet. Check your connection, then try again.</p>
               </div>
             </div>
-            <table class="daylist">
-              <tbody>
-                <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr>
-                <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td>Moved from Fri 09:00</td></tr>
-                <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr>
-                <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
-                <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-                <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td>Tomasz Lindqvist</td></tr>
-                <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Booked</td></tr>
-                <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td>Tomasz Lindqvist</td><td>Booked</td></tr>
-              </tbody>
-            </table>
+            <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Day list – first load failed, desktop</strong> – There is no earlier list to keep, so the notice says so plainly and the date and day buttons stay. The count line is left out, because no count is known. "Try again" returns to loading.</figcaption>
+  </figure>
 
-  <section class="design-state" id="empty">
-    <h2 class="design-state__label">Day list – empty, desktop</h2>
-    <p class="design-state__note">Nothing is booked, or the clinic is shut. The day buttons stay, so staff can move on. There is no search, so "no match" cannot happen.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
+  <figure class="ds-frame design-state" id="error-day-change">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="daylist-head">
+            <div>
+              <h1 class="title">Tuesday 10 November</h1>
+            </div>
+            <div class="row">
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
+              <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
               <div>
-                <h1 class="title">Saturday 14 November</h1>
-                <p class="daylist-count">No sessions</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
+                <p class="notice__title">We could not load Tuesday 10 November</p>
+                <p class="notice__text">Today's list is still available. Check your connection, then try again.</p>
               </div>
             </div>
-            <div class="notice">
-              <div>
-                <p class="notice__title">No sessions on this day</p>
-                <p class="notice__text">The next booked session is Monday 16 November at 08:15.</p>
-              </div>
-            </div>
+            <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Day list – day change failed, desktop</strong> – "Next day" failed. The heading shows the day asked for, and Monday's rows are not kept under it, because the wrong day's patients would be misread as Tuesday's. "Try again" returns to loading, and "Today" returns to the day already loaded.</figcaption>
+  </figure>
 
-  <section class="design-state" id="loading">
-    <h2 class="design-state__label">Day list – loading, desktop</h2>
-    <p class="design-state__note">First load and day change look the same. The date and the day buttons stay; rows give way to bars. A refresh is drawn next.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Monday 9 November</h1>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="row"><span class="spinner"></span><span>Loading the day</span></div>
-              <span class="skeleton"></span>
-              <span class="skeleton"></span>
-              <span class="skeleton"></span>
+  <figure class="ds-frame design-state" id="refused">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <h1 class="title">Staff only</h1>
+          <div class="notice">
+            <div>
+              <p class="notice__title">You need a staff sign-in to see this list</p>
+              <p class="notice__text">If you do not have one, ask the clinic manager for access.</p>
             </div>
           </div>
+          <div class="row"><button class="button" type="button" tabindex="-1">Sign in</button></div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Day list – refused, desktop</strong> – Patient names are private, so nothing from the list shows. Says why, offers the way in, and says who can help. The sign-in screen itself is out of scope here.</figcaption>
+  </figure>
+  </div>
 
-  <section class="design-state" id="refreshing">
-    <h2 class="design-state__label">Day list – refreshing, desktop</h2>
-    <p class="design-state__note">A refresh keeps the old rows and adds only the line above them.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Monday 9 November</h1>
-                <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="row"><span class="spinner"></span><span>Checking for changes</span></div>
-              <table class="daylist">
-                <thead><tr><th>Time</th><th>Patient</th><th class="daylist__session">Session</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr>
-                  <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900124</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr>
-                  <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr>
-                  <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900127</td><td>Booked</td></tr>
-                  <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
-                  <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900128</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900129</td><td>Booked</td></tr>
-                  <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
-                  <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900130</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900131</td><td>Booked</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="../../design-system/system/components/daylist/index.html">Day list</a>: the table and its phone fold.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: the day buttons.</li>
+    <li><a href="flow.html">Choose a time, confirm, manage</a>: where these bookings are made.</li>
+  </ul>
 
-  <section class="design-state" id="error">
-    <h2 class="design-state__label">Day list – refresh failed, desktop</h2>
-    <p class="design-state__note">The last list stays on screen with the time it was fetched, because a stale list beats none at reception.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Monday 9 November</h1>
-                <p class="daylist-count">8 booked, 2 free, 1 cancelled</p>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="notice notice--error">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-                <div>
-                  <p class="notice__title">This list may be out of date</p>
-                  <p class="notice__text">We last updated it at 10:32. Check your connection, then try again.</p>
-                </div>
-              </div>
-              <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
-              <table class="daylist">
-                <thead><tr><th>Time</th><th>Patient</th><th class="daylist__session">Session</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead>
-                <tbody>
-                  <tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr>
-                  <tr><td class="daylist__time">09:00</td><td><span class="daylist__name">Oluwaseun Brzezińska</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900124</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr>
-                  <tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr>
-                  <tr><td class="daylist__time">12:00</td><td><span class="daylist__name">Yusuf Dąbrowski-Hale</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900127</td><td>Booked</td></tr>
-                  <tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
-                  <tr><td class="daylist__time">14:00</td><td><span class="daylist__name">Agnieszka Thorvaldsen</span></td><td class="daylist__session">First visit, 60 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900128</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">15:00</td><td><span class="daylist__name">Dara O'Connell-Nowak</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900129</td><td>Booked</td></tr>
-                  <tr class="daylist__free"><td class="daylist__time">15:45</td><td>Free</td><td class="daylist__session"></td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr>
-                  <tr><td class="daylist__time">16:30</td><td><span class="daylist__name">Bartek Ferreira</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900130</td><td>Booked</td></tr>
-                  <tr><td class="daylist__time">17:15</td><td><span class="daylist__name">Lena Abara</span></td><td class="daylist__session">Follow-up, 45 minutes</td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900131</td><td>Booked</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="error-first-load">
-    <h2 class="design-state__label">Day list – first load failed, desktop</h2>
-    <p class="design-state__note">There is no earlier list to keep, so the notice says so plainly and the date and day buttons stay. The count line is left out, because no count is known. "Try again" returns to loading.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Monday 9 November</h1>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="notice notice--error">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-                <div>
-                  <p class="notice__title">We could not load today's list</p>
-                  <p class="notice__text">Nothing is showing yet. Check your connection, then try again.</p>
-                </div>
-              </div>
-              <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="error-day-change">
-    <h2 class="design-state__label">Day list – day change failed, desktop</h2>
-    <p class="design-state__note">"Next day" failed. The heading shows the day asked for, and Monday's rows are not kept under it, because the wrong day's patients would be misread as Tuesday's. "Try again" returns to loading, and "Today" returns to the day already loaded.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page">
-            <div class="daylist-head">
-              <div>
-                <h1 class="title">Tuesday 10 November</h1>
-              </div>
-              <div class="row">
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Previous day</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Today</button>
-                <button class="button button--quiet button--compact" type="button" tabindex="-1">Next day</button>
-              </div>
-            </div>
-            <div class="stack">
-              <div class="notice notice--error">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-                <div>
-                  <p class="notice__title">We could not load Tuesday 10 November</p>
-                  <p class="notice__text">Today's list is still available. Check your connection, then try again.</p>
-                </div>
-              </div>
-              <div class="row"><button class="button button--compact" type="button" tabindex="-1">Try again</button></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="refused">
-    <h2 class="design-state__label">Day list – refused, desktop</h2>
-    <p class="design-state__note">Patient names are private, so nothing from the list shows. Says why, offers the way in, and says who can help. The sign-in screen itself is out of scope here.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <h1 class="title">Staff only</h1>
-            <div class="notice">
-              <div>
-                <p class="notice__title">You need a staff sign-in to see this list</p>
-                <p class="notice__text">If you do not have one, ask the clinic manager for access.</p>
-              </div>
-            </div>
-            <div class="row"><button class="button" type="button" tabindex="-1">Sign in</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
   </section>
 </main>
 </body>

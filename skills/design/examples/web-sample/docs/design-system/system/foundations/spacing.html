@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Large and plain on patient screens, dense on the staff list.">
+<meta name="design-tasks" content="Choose a padding or gap; Set a control height; Set a column width">
+<title>Spacing – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Spacing</span></nav>
+<main>
+<h1>Spacing</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Patient screens stay large and plain, because many patients book one-handed or in pain (inferred). Controls are 52 px tall, or 44 px for compact buttons and links, against the 24 px web minimum. Day cells measure 45 px wide at a 375 px width and 37 px at 320 px, both above the minimum.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--space-hair</code></td><td><span class="ds-mono">0.25rem</span></td><td>Inside a stacked label</td></tr>
+    <tr><td><code>--space-tight</code></td><td><span class="ds-mono">0.5rem</span></td><td>Between related controls</td></tr>
+    <tr><td><code>--space-control</code></td><td><span class="ds-mono">0.75rem</span></td><td>Inside a control</td></tr>
+    <tr><td><code>--space-group</code></td><td><span class="ds-mono">1rem</span></td><td>Between parts of a group</td></tr>
+    <tr><td><code>--space-card</code></td><td><span class="ds-mono">1.5rem</span></td><td>Between groups</td></tr>
+    <tr><td><code>--space-section</code></td><td><span class="ds-mono">2rem</span></td><td>Between sections on a wide screen</td></tr>
+    <tr><td><code>--control-height</code></td><td><span class="ds-mono">3.25rem</span></td><td>Buttons, fields, slots, and day cells</td></tr>
+    <tr><td><code>--control-height-compact</code></td><td><span class="ds-mono">2.75rem</span></td><td>Compact buttons and links</td></tr>
+    <tr><td><code>--measure-skeleton</code></td><td><span class="ds-mono">1rem</span></td><td>A short loading bar</td></tr>
+    <tr><td><code>--measure-aside</code></td><td><span class="ds-mono">20rem</span></td><td>The summary column on a wide screen</td></tr>
+    <tr><td><code>--measure-time-column</code></td><td><span class="ds-mono">5.5rem</span></td><td>The fixed time column</td></tr>
+    <tr><td><code>--measure-tick</code></td><td><span class="ds-mono">12px</span></td><td>The gap between rail ticks</td></tr>
+  </tbody>
+</table>
+
+<h2 id="breakpoints">Breakpoints</h2>
+<p>Breakpoints sit inside <code>@container</code> rules as <code>rem</code> values, because CSS cannot read a variable there: <code>56rem</code> opens the wide layout, and <code>39.99rem</code> folds the day list.</p>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="type.html">Type</a>: the sizes inside these bands.</li>
+  <li><a href="../components/day/index.html">Week and days</a>: the tightest row of targets.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Summary and appointment card. */
+
+.ticket {
+  border: var(--control-edge) solid var(--color-edge-strong);
+  border-radius: var(--shape-card);
+  background: var(--color-raised);
+}
+.ticket__strip { height: var(--ticket-strip); border-block-end: var(--control-edge) solid var(--color-marker-edge); background: var(--color-marker); }
+.ticket__body { display: grid; gap: var(--space-tight); padding: var(--space-group); }
+.ticket__time {
+  margin: 0;
+  font-size: var(--type-time);
+  font-weight: var(--emphasis-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+}
+.ticket__line { margin: 0; overflow-wrap: anywhere; }
+.ticket__line--muted { color: var(--color-muted); font-size: var(--type-small); }
+.ticket--void { border-color: var(--color-edge); }
+.ticket--void .ticket__strip { border-color: var(--color-edge); background: var(--color-sunken); }
+.ticket--void .ticket__time { color: var(--color-muted); text-decoration: line-through; }

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The product root, the app bar, the page, and its headings.">
+<meta name="design-tasks" content="Lay out a page under the app bar; Set a page heading; Show the booking step">
+<title>App frame – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="./app.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">App frame</span></nav>
+<main>
+<h1>App frame</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Every screen sits in <code>.app</code>, which sets the warm surface, the type, and the container the layout rules read. The bar names the clinic and the step, so a patient always knows how far along they are.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="with-step">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div><div class="page"><h1 class="title">Choose a time</h1><p class="lede">Follow-up session, 45 minutes</p><h2 class="group-title">Morning</h2></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong>App bar with a step</strong> – a booking in progress.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="no-step">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div><div class="page"><h1 class="title">You are booked</h1><p class="lede">Follow-up session, 45 minutes</p></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong>App bar alone</strong> – a finished booking has no step.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div><div class="page"><h1 class="title">Choose a time</h1><p class="lede">Follow-up session, 45 minutes</p></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong>Dark theme</strong> – set <code>data-theme="dark"</code> on <code>.app</code> or any parent.</figcaption>
+  </figure>
+</div>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="narrow">
+    <div class="design-frame design-frame--narrow" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div><div class="page"><h1 class="title">Confirm your booking</h1></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Smallest size, 320 wide</strong> – the step wraps under the name when it must.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Tab</kbd></td><td>Passes through: nothing here takes focus</td><td>The first control on the page</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class="app"&gt;
+  &lt;div class="appbar"&gt;&lt;span class="appbar__name"&gt;Physiotherapy clinic&lt;/span&gt;&lt;span class="appbar__step"&gt;Step 1 of 2&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="page"&gt;&lt;h1 class="title"&gt;Choose a time&lt;/h1&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--color-surface</code></td><td>Semantic</td><td>Behind the app</td></tr>
+    <tr><td><code>--typeface-text</code></td><td>Semantic</td><td>Every product word</td></tr>
+    <tr><td><code>--type-title</code></td><td>Semantic</td><td>Screen title</td></tr>
+    <tr><td><code>--space-card</code></td><td>Semantic</td><td>Page padding</td></tr>
+    <tr><td><code>--space-section</code></td><td>Semantic</td><td>Page padding on a wide screen</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/type.html">Type</a>: the title and lede sizes.</li>
+  <li><a href="../../foundations/spacing.html">Spacing</a>: the page padding.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient books a session, then moves or cancels it from the same booked screen.">
 <title>Booking – Choose a time, confirm, manage</title>
 <link rel="stylesheet" href="../../design-system/tokens.css">
 <link rel="stylesheet" href="../../design-system/components.css">
@@ -11,17 +12,13 @@
 <link rel="stylesheet" href="../../design-system/docs.css">
 </head>
 <body data-design-page="screen">
-<header class="design-tile" data-design-status="draft" data-updated="2026-11-01">
-  <span class="design-tile__status">Draft</span>
-  <span>Updated 2026-11-01</span>
-  <span>Design, not a working product</span>
-</header>
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Choose a time, confirm, manage</span></nav>
 <main>
   <h1>Choose a time, confirm, manage</h1>
-  <p class="doc-lede">A patient books a session, then moves or cancels it from the same booked screen. Judge whether the time is always the first thing read, and whether the one coral strip marks the right thing.</p>
+  <p class="ds-lede" id="decision">A patient books a session, then moves or cancels it from the same booked screen. Judge whether the time is always the first thing read, and whether the one coral strip marks the right thing.</p>
 
-  <aside class="design-questions">
-    <h2>Open questions</h2>
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
     <ul>
       <li>Assumed: no account. A patient gives a name and a mobile number, and a text message carries the link back. To confirm with the clinic.</li>
       <li>Assumed: the patient picks a first visit or a follow-up before choosing a time, with a first visit at 60 minutes and a follow-up at 45. To confirm with the clinic.</li>
@@ -34,1257 +31,1372 @@
     </ul>
   </aside>
 
-  <section class="design-state" id="session-phone">
-    <h2 class="design-state__label">Choose a session – phone</h2>
-    <p class="design-state__note">Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
-          <div class="page">
-            <h1 class="title">What do you need?</h1>
-            <p class="lede">A first visit takes 60 minutes, a follow-up 45.</p>
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="session-phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
+        <div class="page">
+          <h1 class="title">What do you need?</h1>
+          <p class="lede">A first visit takes 60 minutes, a follow-up 45.</p>
+          <div class="book__aside">
+            <button class="button button--full" type="button" tabindex="-1">First visit</button>
+            <button class="button button--quiet button--full" type="button" tabindex="-1">Follow-up session</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Choose a session – phone</strong> – Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+          </ul>
+          <h2 class="group-title">Morning</h2>
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+            <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+          </ul>
+          <h2 class="group-title">Afternoon</h2>
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+          </ul>
+          <div class="book__aside">
+            <p class="group-title">Pick a time to continue</p>
+            <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Choose a time – default, phone</strong> – Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. Nothing scrolls sideways; the week stays in seven columns.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-narrow">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--narrow" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November to December 2026</p>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li>
+          </ul>
+          <h2 class="group-title">Morning</h2>
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+          </ul>
+          <div class="book__aside">
+            <p class="group-title">Monday 30 November</p>
+            <button class="button button--full" type="button" tabindex="-1">Continue with 11:15</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Choose a time – smallest size, 320 wide</strong> – The narrowest supported width, with the same parts as the phone. Day cells shrink but stay in seven columns, long names wrap under the fixed time column, and nothing scrolls sideways or folds away.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+          </ul>
+          <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Choose a time – time selected, phone</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. This frame shows only the part that changes; the rest matches the default. The time stays in line with the others, and Continue wakes up and names it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-desktop">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="book">
+            <div>
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+              <h2 class="group-title">Morning</h2>
+              <ul class="rail rail--wide">
+                <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+              </ul>
+              <h2 class="group-title">Afternoon</h2>
+              <ul class="rail rail--wide">
+                <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+              </ul>
+            </div>
             <div class="book__aside">
-              <button class="button button--full" type="button" tabindex="-1">First visit</button>
-              <button class="button button--quiet button--full" type="button" tabindex="-1">Follow-up session</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-phone">
-    <h2 class="design-state__label">Choose a time – default, phone</h2>
-    <p class="design-state__note">Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. Nothing scrolls sideways; the week stays in seven columns.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November 2026</p>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-            </ul>
-            <h2 class="group-title">Morning</h2>
-            <ul class="rail">
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-              <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-            </ul>
-            <h2 class="group-title">Afternoon</h2>
-            <ul class="rail">
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-            </ul>
-            <div class="book__aside">
-              <p class="group-title">Pick a time to continue</p>
-              <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-narrow">
-    <h2 class="design-state__label">Choose a time – smallest size, 320 wide</h2>
-    <p class="design-state__note">The narrowest supported width, with the same parts as the phone. Day cells shrink but stay in seven columns, long names wrap under the fixed time column, and nothing scrolls sideways or folds away.</p>
-    <div>
-      <div class="design-frame design-frame--narrow" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November to December 2026</p>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li>
-            </ul>
-            <h2 class="group-title">Morning</h2>
-            <ul class="rail">
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-              <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
-            </ul>
-            <div class="book__aside">
-              <p class="group-title">Monday 30 November</p>
-              <button class="button button--full" type="button" tabindex="-1">Continue with 11:15</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-selected-phone">
-    <h2 class="design-state__label">Choose a time – time selected, phone</h2>
-    <p class="design-state__note">The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. The time stays in line with the others, and Continue wakes up and names it.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <ul class="rail">
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-              <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-            </ul>
-            <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-desktop">
-    <h2 class="design-state__label">Choose a time – default with a selection, desktop</h2>
-    <p class="design-state__note">Times fold into two columns, and the summary moves beside them. The week keeps the same seven cells.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="book">
-              <div>
-                <div class="weeknav">
-                  <p class="weeknav__month">November 2026</p>
-                  <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-                  <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-                </div>
-                <ul class="days">
-                  <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-                  <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
-                  <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
-                  <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
-                  <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-                  <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-                  <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-                </ul>
-                <h2 class="group-title">Morning</h2>
-                <ul class="rail rail--wide">
-                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
-                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
-                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-                </ul>
-                <h2 class="group-title">Afternoon</h2>
-                <ul class="rail rail--wide">
-                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-                </ul>
-              </div>
-              <div class="book__aside">
-                <div class="ticket">
-                  <div class="ticket__body">
-                    <p class="ticket__time">09:45</p>
-                    <p class="ticket__line">Tuesday 10 November</p>
-                    <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                  </div>
-                </div>
-                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-later">
-    <h2 class="design-state__label">Choose a time – later week, phone</h2>
-    <p class="design-state__note">"Later week" moved on. The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November to December 2026</p>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li>
-            </ul>
-            <h2 class="group-title">Morning</h2>
-            <ul class="rail">
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-            </ul>
-            <div class="book__aside">
-              <p class="group-title">Pick a time to continue</p>
-              <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-empty">
-    <h2 class="design-state__label">Choose a time – empty, phone</h2>
-    <p class="design-state__note">The picked day has no free time. The way out is the next free day, one tap away. There is no first-use empty state (a patient always arrives with a session type) and no search, so "no match" cannot happen.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November 2026</p>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Wed</span><span class="day__date">11</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-            </ul>
-            <div class="notice">
-              <div>
-                <p class="notice__title">No free times on Wednesday 11 November</p>
-                <p class="notice__text">The next free time is Thursday 12 November at 14:00.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Show Thursday 12 November</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-loading">
-    <h2 class="design-state__label">Choose a time – loading, phone</h2>
-    <p class="design-state__note">First load and day change look the same: title and week stay, and only the times are replaced. A reload never blanks the screen.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November 2026</p>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-            </ul>
-            <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
-            <span class="skeleton skeleton--tall"></span>
-            <span class="skeleton skeleton--tall"></span>
-            <span class="skeleton skeleton--tall"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-error">
-    <h2 class="design-state__label">Choose a time – error, phone</h2>
-    <p class="design-state__note">What failed, what to do, and what the patient keeps: the chosen day stays selected. The phone number is the fallback.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">November 2026</p>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-            </ul>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not load times for Tuesday 10 November</p>
-                <p class="notice__text">Nothing has been booked. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="choose-refused">
-    <h2 class="design-state__label">Choose a time – refused, phone</h2>
-    <p class="design-state__note">"Later week" went past the booking window, so every day is off and so is "Later week". Says why, and how to book anyway.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Choose a time</h1>
-            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
-            <div class="weeknav">
-              <p class="weeknav__month">December 2026</p>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">21</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">22</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">23</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">24</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">25</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">26</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">27</span></button></li>
-            </ul>
-            <div class="notice">
-              <div>
-                <p class="notice__title">Book up to 6 weeks ahead</p>
-                <p class="notice__text">To book further ahead, call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Back to this week</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-phone">
-    <h2 class="design-state__label">Confirm – default, phone</h2>
-    <p class="design-state__note">The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Confirm your booking</h1>
-            <div class="ticket">
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line">Follow-up session, 45 minutes</p>
-                <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
-              <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Book this time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-empty">
-    <h2 class="design-state__label">Confirm – empty form, phone</h2>
-    <p class="design-state__note">First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Confirm your booking</h1>
-            <div class="ticket">
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line">Follow-up session, 45 minutes</p>
-                <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input" type="text" tabindex="-1" value="" readonly>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="" readonly>
-              <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Book this time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-desktop">
-    <h2 class="design-state__label">Confirm – default, desktop</h2>
-    <p class="design-state__note">The fields lead and the card moves beside them, in the slot the summary held on the step before.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
-          <div class="page">
-            <h1 class="title">Confirm your booking</h1>
-            <p class="lede">Follow-up session, 45 minutes</p>
-            <div class="book">
-              <div class="stack">
-                <div class="field">
-                  <label class="field__label">Your full name</label>
-                  <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
-                </div>
-                <div class="field">
-                  <label class="field__label">Mobile number</label>
-                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
-                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
-                </div>
-              </div>
-              <div class="book__aside">
-                <div class="ticket">
-                  <div class="ticket__body">
-                    <p class="ticket__time">09:45</p>
-                    <p class="ticket__line">Tuesday 10 November</p>
-                    <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                    <p class="ticket__line">Follow-up session, 45 minutes</p>
-                <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
-                  </div>
-                </div>
-                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-field-error">
-    <h2 class="design-state__label">Confirm – field error, phone</h2>
-    <p class="design-state__note">Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. This frame shows only the part that changes; the rest matches Confirm.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input is-error" type="text" tabindex="-1" value="" readonly aria-invalid="true">
-              <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
-              <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Book this time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-sending">
-    <h2 class="design-state__label">Confirm – sending, phone</h2>
-    <p class="design-state__note">The button stays in place and says what is happening. Fields lock while saving but stay readable. This frame shows only the part that changes; the rest matches Confirm.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input is-disabled" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly disabled>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
-            </div>
-            <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-taken">
-    <h2 class="design-state__label">Confirm – time just taken, phone</h2>
-    <p class="design-state__note">Someone else booked it first. The name and number are kept, so only the time is picked again. The title and the booking card are gone on purpose, because that time is no longer theirs. The app bar is left out of this frame.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">09:45 has just been taken</p>
-                <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="confirm-failed">
-    <h2 class="design-state__label">Confirm – not booked, phone</h2>
-    <p class="design-state__note">"Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" returns to sending, then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
-          <div class="page stack">
-            <h1 class="title">Not booked yet</h1>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">Not booked, try again</p>
-                <p class="notice__text">We could not save your booking. Your details are kept below.</p>
-              </div>
-            </div>
-            <div class="ticket">
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line">Follow-up session, 45 minutes</p>
-                <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Your full name</label>
-              <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="booked-phone">
-    <h2 class="design-state__label">Booked – default, phone</h2>
-    <p class="design-state__note">The card now carries its strip, which marks a confirmed booking: it stays on that booking's card in later states, and a card for an unsaved time never has it. The same screen opens from the text message, so changing the number, moving, or cancelling starts here, and the clinic phone is always one tap away. The ink-edged buttons are actions; coral only marks.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">You are booked</h1>
-            <p class="lede">Follow-up session, 45 minutes</p>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
-              </div>
-            </div>
-            <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="booked-desktop">
-    <h2 class="design-state__label">Booked – default, desktop</h2>
-    <p class="design-state__note">The same parts in the same order as the phone: title, session, card, text status, then the four actions, with the status and actions moved beside the card.</p>
-    <div>
-      <div class="design-frame design-frame--desktop" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page">
-            <h1 class="title">You are booked</h1>
-            <p class="lede">Follow-up session, 45 minutes</p>
-            <div class="book">
               <div class="ticket">
-                <div class="ticket__strip"></div>
                 <div class="ticket__body">
                   <p class="ticket__time">09:45</p>
                   <p class="ticket__line">Tuesday 10 November</p>
                   <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
                 </div>
               </div>
-              <div class="book__aside">
-                <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
-                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Choose a time – default with a selection, desktop</strong> – Times fold into two columns, and the summary moves beside them. The week keeps the same seven cells.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-later">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November to December 2026</p>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li>
+          </ul>
+          <h2 class="group-title">Morning</h2>
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+          </ul>
+          <div class="book__aside">
+            <p class="group-title">Pick a time to continue</p>
+            <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Choose a time – later week, phone</strong> – "Later week" moved on. The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Wed</span><span class="day__date">11</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+          </ul>
+          <div class="stack">
+          <div class="notice">
+            <div>
+              <p class="notice__title">No free times on Wednesday 11 November</p>
+              <p class="notice__text">The next free time is Thursday 12 November at 14:00.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Show Thursday 12 November</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Choose a time – empty, phone</strong> – The picked day has no free time. The way out is the next free day, one tap away. There is no first-use empty state (a patient always arrives with a session type) and no search, so "no match" cannot happen.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+          </ul>
+          <div class="stack">
+          <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+          <span class="skeleton skeleton--tall"></span>
+          <span class="skeleton skeleton--tall"></span>
+          <span class="skeleton skeleton--tall"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Choose a time – loading, phone</strong> – First load and day change look the same: title and week stay, and only the times are replaced. A reload never blanks the screen.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+          </ul>
+          <div class="stack">
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not load times for Tuesday 10 November</p>
+              <p class="notice__text">Nothing has been booked. Try again, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Choose a time – error, phone</strong> – What failed, what to do, and what the patient keeps: the chosen day stays selected. The phone number is the fallback.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-refused">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Choose a time</h1>
+          <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          <div class="weeknav">
+            <p class="weeknav__month">December 2026</p>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">21</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">22</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">23</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">24</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">25</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">26</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">27</span></button></li>
+          </ul>
+          <div class="stack">
+          <div class="notice">
+            <div>
+              <p class="notice__title">Book up to 6 weeks ahead</p>
+              <p class="notice__text">To book further ahead, call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Back to this week</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Choose a time – refused, phone</strong> – "Later week" went past the booking window, so every day is off and so is "Later week". Says why, and how to book anyway.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page stack">
+          <h1 class="title">Confirm your booking</h1>
+          <div class="ticket">
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line">Follow-up session, 45 minutes</p>
+              <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+            <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Confirm – default, phone</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page stack">
+          <h1 class="title">Confirm your booking</h1>
+          <div class="ticket">
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line">Follow-up session, 45 minutes</p>
+              <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input" type="text" tabindex="-1" value="" readonly>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="" readonly>
+            <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Confirm – empty form, phone</strong> – First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-desktop">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <h1 class="title">Confirm your booking</h1>
+          <p class="lede">Follow-up session, 45 minutes</p>
+          <div class="book">
+            <div class="stack">
+              <div class="field">
+                <label class="field__label">Your full name</label>
+                <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
+              </div>
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="booked-dark">
-    <h2 class="design-state__label">Booked – dark theme, phone</h2>
-    <p class="design-state__note">Coral softens and loses its ink edge, because the fill alone clears 3:1 on the dark surface. Button edges and words turn light, so they still never look like the strip.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app" data-theme="dark">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">You are booked</h1>
-            <p class="lede">Follow-up session, 45 minutes</p>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
-              </div>
-            </div>
-            <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="link-loading">
-    <h2 class="design-state__label">Text link – loading, phone</h2>
-    <p class="design-state__note">The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. Bars stand in for the card and buttons.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Your booking</h1>
-            <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
-            <span class="skeleton skeleton--tall"></span>
-            <span class="skeleton skeleton--tall"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="link-failed">
-    <h2 class="design-state__label">Text link – could not load, phone</h2>
-    <p class="design-state__note">The booking itself is untouched, and the patient is told so. "Try again" returns to loading.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Your booking</h1>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not open your booking</p>
-                <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="link-expired">
-    <h2 class="design-state__label">Text link – expired, phone</h2>
-    <p class="design-state__note">An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">This link has expired</h1>
-            <div class="notice">
-              <div>
-                <p class="notice__title">We cannot show this booking</p>
-                <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="link-past">
-    <h2 class="design-state__label">Text link – session has passed, phone</h2>
-    <p class="design-state__note">The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked or next.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">This session has passed</h1>
-            <div class="ticket">
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Book another session</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="booked-text-failed">
-    <h2 class="design-state__label">Booked – text failed, phone</h2>
-    <p class="design-state__note">The booking stands, so the failure is small and the card stays. "Send text again" shows its progress next, then lands on Booked, or back here if it fails again. A wrong number is fixed under "Change number", and the clinic phone is the fallback. Move and Cancel stay available.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">You are booked</h1>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not text 07700 900123</p>
-                <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Send text again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="booked-text-sending">
-    <h2 class="design-state__label">Booked – sending text again, phone</h2>
-    <p class="design-state__note">The button stays in place and says what is happening. The other actions stay available, because the booking is not what is changing.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">You are booked</h1>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
-                <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
-              </div>
-            </div>
-            <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Sending your text</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="number-edit">
-    <h2 class="design-state__label">Change number – default, phone</h2>
-    <p class="design-state__note">Opens from "Change number". Saving changes the number and sends the text, then lands on Booked with the new number. "Keep 07700 900123" goes back with nothing changed.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Change your mobile number</h1>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
-              <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="number-invalid">
-    <h2 class="design-state__label">Change number – field error, phone</h2>
-    <p class="design-state__note">Same message as on Confirm. What was typed stays.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Change your mobile number</h1>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
-              <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="number-sending">
-    <h2 class="design-state__label">Change number – saving, phone</h2>
-    <p class="design-state__note">The button stays in place and says what is happening. The field locks while saving but stays readable, as on Confirm.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Change your mobile number</h1>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
-            </div>
-            <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="number-failed">
-    <h2 class="design-state__label">Change number – could not save, phone</h2>
-    <p class="design-state__note">The new number stays typed, and the booking is untouched.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Change your mobile number</h1>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not save this number</p>
-                <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Mobile number</label>
-              <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="move-choose">
-    <h2 class="design-state__label">Move – choose a new time, phone</h2>
-    <p class="design-state__note">Opens from "Move booking". The same week and rail as Choose a time. Empty, loading, refused, and desktop use those frames, with the "Booked now" line and "Keep Tuesday at 09:45" added. The error differs, so it is drawn next. The selected time is the one strip, so the current booking is a plain line.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
-          <div class="page">
-            <h1 class="title">Move your booking</h1>
-            <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
-            <div class="weeknav">
-              <p class="weeknav__month">November 2026</p>
-              <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
-              <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
-            </div>
-            <ul class="days">
-              <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
-              <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span></button></li>
-              <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
-              <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
-            </ul>
-            <h2 class="group-title">Afternoon</h2>
-            <ul class="rail">
-              <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
-              <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
-            </ul>
             <div class="book__aside">
-              <button class="button button--full" type="button" tabindex="-1">Move to Thursday at 14:00</button>
-              <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+              <div class="ticket">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+              <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+              <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Confirm – default, desktop</strong> – The fields lead and the card moves beside them, in the slot the summary held on the step before.</figcaption>
+  </figure>
 
-  <section class="design-state" id="move-times-failed">
-    <h2 class="design-state__label">Move – could not load times, phone</h2>
-    <p class="design-state__note">This person already has a booking, so the error says it is safe and offers the way back.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
-          <div class="page stack">
-            <h1 class="title">Move your booking</h1>
+  <figure class="ds-frame design-state" id="confirm-field-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input is-error" type="text" tabindex="-1" value="" readonly aria-invalid="true">
+            <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+            <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Confirm – field error, phone</strong> – Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. This frame shows only the part that changes; the rest matches Confirm.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input is-disabled" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly disabled>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900123" readonly disabled>
+          </div>
+          <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Confirm – sending, phone</strong> – The button stays in place and says what is happening. Fields lock while saving but stay readable. This frame shows only the part that changes; the rest matches Confirm.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">09:45 has just been taken</p>
+              <p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Confirm – time just taken, phone</strong> – Someone else booked it first. The name and number are kept, so only the time is picked again. The title and the booking card are gone on purpose, because that time is no longer theirs. The app bar is left out of this frame.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page stack">
+          <h1 class="title">Not booked yet</h1>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">Not booked, try again</p>
+              <p class="notice__text">We could not save your booking. Your details are kept below.</p>
+            </div>
+          </div>
+          <div class="ticket">
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line">Follow-up session, 45 minutes</p>
+              <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label">Your full name</label>
+            <input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">17</span><strong class="design-state__label">Confirm – not booked, phone</strong> – "Book this time" failed. The title says it did not happen, and the card and both fields stay as they were. "Try again" returns to sending, then lands on Booked, on "time just taken", or back here. The clinic phone is the fallback.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-phone">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">You are booked</h1>
+          <p class="lede">Follow-up session, 45 minutes</p>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+            </div>
+          </div>
+          <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">18</span><strong class="design-state__label">Booked – default, phone</strong> – The card now carries its strip, which marks a confirmed booking: it stays on that booking's card in later states until the session passes, and a card for an unsaved time never has it. The same screen opens from the text message, so changing the number, moving, or cancelling starts here, and the clinic phone is always one tap away. The ink-edged buttons are actions; coral only marks.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-desktop">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <h1 class="title">You are booked</h1>
+          <p class="lede">Follow-up session, 45 minutes</p>
+          <div class="book">
             <div class="ticket">
               <div class="ticket__strip"></div>
               <div class="ticket__body">
                 <p class="ticket__time">09:45</p>
                 <p class="ticket__line">Tuesday 10 November</p>
-              </div>
-            </div>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not load times for Thursday 12 November</p>
-                <p class="notice__text">You are still booked for Tuesday 10 November at 09:45. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="move-sending">
-    <h2 class="design-state__label">Move – saving, phone</h2>
-    <p class="design-state__note">The card shows the time being moved to. The old booking holds until the new one is saved.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Move your booking</h1>
-            <div class="ticket">
-              <div class="ticket__body">
-                <p class="ticket__time">14:00</p>
-                <p class="ticket__line">Thursday 12 November</p>
-              </div>
-            </div>
-            <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="design-state" id="moved">
-    <h2 class="design-state__label">Moved, phone</h2>
-    <p class="design-state__note">Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Your booking has moved</h1>
-            <div class="notice notice--success">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
-              <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
-            </div>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">14:00</p>
-                <p class="ticket__line">Thursday 12 November</p>
-                <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+                <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
                 <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
               </div>
             </div>
-            <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+            <div class="book__aside">
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+              <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+              <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+              <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+              <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">19</span><strong class="design-state__label">Booked – default, desktop</strong> – The same parts in the same order as the phone: title, session, card, text status, then the four actions, with the status and actions moved beside the card.</figcaption>
+  </figure>
 
-  <section class="design-state" id="move-taken">
-    <h2 class="design-state__label">Move – time just taken, phone</h2>
-    <p class="design-state__note">Someone else got there first. The old booking is kept, and "Pick another time" returns to "Move – choose a new time".</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Move your booking</h1>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="booked-dark">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">You are booked</h1>
+          <p class="lede">Follow-up session, 45 minutes</p>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
             </div>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">14:00 has just been taken</p>
-                <p class="notice__text">Your booking has not moved. You are still booked for Tuesday 10 November at 09:45.</p>
-              </div>
+          </div>
+          <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">20</span><strong class="design-state__label">Booked – dark theme, phone</strong> – Coral softens and loses its ink edge, because the fill alone clears 3:1 on the dark surface. Button edges and words turn light, so they still never look like the strip.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Your booking</h1>
+          <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
+          <span class="skeleton skeleton--tall"></span>
+          <span class="skeleton skeleton--tall"></span>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">21</span><strong class="design-state__label">Text link – loading, phone</strong> – The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. Bars stand in for the card and buttons.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Your booking</h1>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not open your booking</p>
+              <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
             </div>
-            <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">22</span><strong class="design-state__label">Text link – could not load, phone</strong> – The booking itself is untouched, and the patient is told so. "Try again" returns to loading.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-expired">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">This link has expired</h1>
+          <div class="notice">
+            <div>
+              <p class="notice__title">We cannot show this booking</p>
+              <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">23</span><strong class="design-state__label">Text link – expired, phone</strong> – An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-past">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">This session has passed</h1>
+          <div class="ticket">
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Book another session</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">24</span><strong class="design-state__label">Text link – session has passed, phone</strong> – The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked, next, or still confirmed.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-text-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">You are booked</h1>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not text 07700 900123</p>
+              <p class="notice__text">Your booking is safe. Check the number, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Send text again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">25</span><strong class="design-state__label">Booked – text failed, phone</strong> – The booking stands, so the failure is small and the card stays. "Send text again" shows its progress next, then lands on Booked, or back here if it fails again. A wrong number is fixed under "Change number", and the clinic phone is the fallback. Move and Cancel stay available.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-text-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">You are booked</h1>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+              <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+              <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+            </div>
+          </div>
+          <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Sending your text</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">26</span><strong class="design-state__label">Booked – sending text again, phone</strong> – The button stays in place and says what is happening. The other actions stay available, because the booking is not what is changing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-edit">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Change your mobile number</h1>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+            <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">27</span><strong class="design-state__label">Change number – default, phone</strong> – Opens from "Change number". Saving changes the number and sends the text, then lands on Booked with the new number. "Keep 07700 900123" goes back with nothing changed.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-invalid">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Change your mobile number</h1>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+            <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">28</span><strong class="design-state__label">Change number – field error, phone</strong> – Same message as on Confirm. What was typed stays.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Change your mobile number</h1>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
+          </div>
+          <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">29</span><strong class="design-state__label">Change number – saving, phone</strong> – The button stays in place and says what is happening. The field locks while saving but stays readable, as on Confirm.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Change your mobile number</h1>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not save this number</p>
+              <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label">Mobile number</label>
+            <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">30</span><strong class="design-state__label">Change number – could not save, phone</strong> – The new number stays typed, and the booking is untouched.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="move-choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page">
+          <h1 class="title">Move your booking</h1>
+          <p class="lede">Booked now: Tuesday 10 November at 09:45</p>
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+          </ul>
+          <h2 class="group-title">Afternoon</h2>
+          <ul class="rail">
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+          </ul>
+          <div class="book__aside">
+            <button class="button button--full" type="button" tabindex="-1">Move to Thursday 12 November at 14:00</button>
             <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">31</span><strong class="design-state__label">Move – choose a new time, phone</strong> – Opens from "Move booking". The same week and rail as Choose a time. Empty, loading, refused, and desktop use those frames, with the "Booked now" line and "Keep Tuesday at 09:45" added. The error differs, so it is drawn next. The selected time is the one strip, so the current booking is a plain line.</figcaption>
+  </figure>
 
-  <section class="design-state" id="move-failed">
-    <h2 class="design-state__label">Move – could not save, phone</h2>
-    <p class="design-state__note">What failed, what to do, and what the patient keeps: the old time and the time they picked.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
-          <div class="page stack">
-            <h1 class="title">Move your booking</h1>
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="move-times-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Moving a booking</span></div>
+        <div class="page stack">
+          <h1 class="title">Move your booking</h1>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
             </div>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">We could not move your booking</p>
-                <p class="notice__text">You are still booked for Tuesday 10 November at 09:45. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--full" type="button" tabindex="-1">Try Thursday at 14:00 again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
           </div>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not load times for Thursday 12 November</p>
+              <p class="notice__text">You are still booked for Tuesday 10 November at 09:45. Try again, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">32</span><strong class="design-state__label">Move – could not load times, phone</strong> – This person already has a booking, so the error says it is safe and offers the way back.</figcaption>
+  </figure>
 
-  <section class="design-state" id="cancel-ask">
-    <h2 class="design-state__label">Cancel – asked inline, phone</h2>
-    <p class="design-state__note">The question replaces Move booking and Cancel booking in place, with no pop-up. "Keep booking" is the first and safer choice. This frame shows only the part that changes; the rest matches Booked.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="move-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Move your booking</h1>
+          <div class="ticket">
+            <div class="ticket__body">
+              <p class="ticket__time">14:00</p>
+              <p class="ticket__line">Thursday 12 November</p>
             </div>
-            <div class="notice">
-              <div>
-                <p class="notice__title">Cancel this booking?</p>
-                <p class="notice__text">Someone else can then take this time.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
-            <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
           </div>
+          <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Moving your booking</button>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">33</span><strong class="design-state__label">Move – saving, phone</strong> – The card shows the time being moved to. The old booking holds until the new one is saved.</figcaption>
+  </figure>
 
-  <section class="design-state" id="cancel-sending">
-    <h2 class="design-state__label">Cancel – cancelling, phone</h2>
-    <p class="design-state__note">The question goes, and the danger button says what is happening. This frame shows only the part that changes; the rest matches Booked.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
-            </div>
-            <button class="button button--full button--danger is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+  <figure class="ds-frame design-state" id="moved">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Your booking has moved</h1>
+          <div class="notice notice--success">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>
+            <p class="notice__text">Moved from Tuesday 10 November at 09:45.</p>
           </div>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">14:00</p>
+              <p class="ticket__line">Thursday 12 November</p>
+              <p class="ticket__line ticket__line--muted">Tomasz Lindqvist, 45 minutes</p>
+              <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+            </div>
+          </div>
+          <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900123</p>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">34</span><strong class="design-state__label">Moved, phone</strong> – Lands here after a move. The old time is named so the patient can check the swap, and the screen offers what Booked offers.</figcaption>
+  </figure>
 
-  <section class="design-state" id="cancelled">
-    <h2 class="design-state__label">Cancelled, phone</h2>
-    <p class="design-state__note">The card stays as a record, struck through and with its strip peeled off. Never colour alone: the heading says it. The text link opens this same state once a booking is cancelled. Move, Cancel, and the text status are gone on purpose: "Book another time" and the clinic phone are what is left. The app bar is left out of this frame.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <h1 class="title">Booking cancelled</h1>
-            <div class="ticket ticket--void">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="move-taken">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Move your booking</h1>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
             </div>
-            <button class="button button--full" type="button" tabindex="-1">Book another time</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
           </div>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">14:00 has just been taken</p>
+              <p class="notice__text">Your booking has not moved. You are still booked for Tuesday 10 November at 09:45.</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Pick another time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">35</span><strong class="design-state__label">Move – time just taken, phone</strong> – Someone else got there first. The old booking is kept, and "Pick another time" returns to "Move – choose a new time".</figcaption>
+  </figure>
 
-  <section class="design-state" id="cancel-failed">
-    <h2 class="design-state__label">Cancel – could not cancel, phone</h2>
-    <p class="design-state__note">The worst misreading here is "I am cancelled" when the booking stands, so the title says it did not happen. This frame shows only the part that changes; the rest matches Booked.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="move-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page stack">
+          <h1 class="title">Move your booking</h1>
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
             </div>
-            <div class="notice notice--error">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
-              <div>
-                <p class="notice__title">Your booking was not cancelled</p>
-                <p class="notice__text">It still stands. Try again, or call 01632 960 123.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
-            <button class="button button--danger button--full" type="button" tabindex="-1">Try cancelling again</button>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
           </div>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">We could not move your booking</p>
+              <p class="notice__text">You are still booked for Tuesday 10 November at 09:45. Try again, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Try Thursday at 14:00 again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep Tuesday at 09:45</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
         </div>
       </div>
     </div>
-  </section>
+    <figcaption><span class="ds-frame__step">36</span><strong class="design-state__label">Move – could not save, phone</strong> – What failed, what to do, and what the patient keeps: the old time and the time they picked.</figcaption>
+  </figure>
 
-  <section class="design-state" id="change-refused">
-    <h2 class="design-state__label">Move or cancel – refused, phone</h2>
-    <p class="design-state__note">Inside the 24-hour window Move booking and Cancel booking give way to the reason and the number to call. This frame shows only the part that changes; the rest matches Booked.</p>
-    <div>
-      <div class="design-frame design-frame--phone" aria-hidden="true">
-        <div class="app">
-          <div class="page stack">
-            <div class="ticket">
-              <div class="ticket__strip"></div>
-              <div class="ticket__body">
-                <p class="ticket__time">09:45</p>
-                <p class="ticket__line">Tomorrow, Tuesday 10 November</p>
-              </div>
+  <figure class="ds-frame design-state" id="cancel-ask">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
             </div>
-            <div class="notice">
-              <div>
-                <p class="notice__title">This booking can no longer be moved or cancelled online</p>
-                <p class="notice__text">It starts in under 24 hours. Call 01632 960 123 and we will help.</p>
-              </div>
-            </div>
-            <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
           </div>
+          <div class="notice">
+            <div>
+              <p class="notice__title">Cancel this booking?</p>
+              <p class="notice__text">Someone else can then take this time.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+          <button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button>
         </div>
       </div>
     </div>
+    <figcaption><span class="ds-frame__step">37</span><strong class="design-state__label">Cancel – asked inline, phone</strong> – The question replaces Move booking and Cancel booking in place, with no pop-up. "Keep booking" is the first and safer choice. This frame shows only the part that changes; the rest matches Booked.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+            </div>
+          </div>
+          <button class="button button--full button--danger is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">38</span><strong class="design-state__label">Cancel – cancelling, phone</strong> – The question goes, and the danger button says what is happening. This frame shows only the part that changes; the rest matches Booked.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancelled">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <h1 class="title">Booking cancelled</h1>
+          <div class="ticket ticket--void">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+            </div>
+          </div>
+          <button class="button button--full" type="button" tabindex="-1">Book another time</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">39</span><strong class="design-state__label">Cancelled, phone</strong> – The card stays as a record, struck through and with its strip peeled off. Never colour alone: the heading says it. The text link opens this same state once a booking is cancelled. Move, Cancel, and the text status are gone on purpose: "Book another time" and the clinic phone are what is left. The app bar is left out of this frame.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="cancel-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tuesday 10 November</p>
+            </div>
+          </div>
+          <div class="notice notice--error">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+            <div>
+              <p class="notice__title">Your booking was not cancelled</p>
+              <p class="notice__text">It still stands. Try again, or call 01632 960 123.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Keep booking</button>
+          <button class="button button--danger button--full" type="button" tabindex="-1">Try cancelling again</button>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">40</span><strong class="design-state__label">Cancel – could not cancel, phone</strong> – The worst misreading here is "I am cancelled" when the booking stands, so the title says it did not happen. This frame shows only the part that changes; the rest matches Booked.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="change-refused">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page stack">
+          <div class="ticket">
+            <div class="ticket__strip"></div>
+            <div class="ticket__body">
+              <p class="ticket__time">09:45</p>
+              <p class="ticket__line">Tomorrow, Tuesday 10 November</p>
+            </div>
+          </div>
+          <div class="notice">
+            <div>
+              <p class="notice__title">This booking can no longer be moved or cancelled online</p>
+              <p class="notice__text">It starts in under 24 hours. Call 01632 960 123 and we will help.</p>
+            </div>
+          </div>
+          <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">41</span><strong class="design-state__label">Move or cancel – refused, phone</strong> – Inside the 24-hour window Move booking and Cancel booking give way to the reason and the number to call. This frame shows only the part that changes; the rest matches Booked.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="../../design-system/system/patterns/time-picker/index.html">Time picker</a>: the week, the rail, and the summary.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+    <li><a href="../../design-system/system/components/slot/index.html">Time slot</a>: the coral strip.</li>
+    <li><a href="../../design-system/system/components/ticket/index.html">Appointment card</a>: the summary and the booked card.</li>
+    <li><a href="../../design-system/system/components/field/index.html">Fields</a>: name and mobile number.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: every action.</li>
+    <li><a href="day-list.html">Staff day list</a>: the same bookings, seen from the desk.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
   </section>
 </main>
 </body>

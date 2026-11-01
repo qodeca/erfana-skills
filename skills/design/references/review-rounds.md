@@ -33,7 +33,7 @@ node <skill>/scripts/check-design.mjs --snapshot docs
 node <skill>/scripts/check-design.mjs --baseline-dir <copy> docs
 ```
 
-3. Read the `baseline:` line. It must show the pages you expected. The checker fails if no page matches, if a block changed, if a block now sits before a different element, and if a page with comments is gone.
+3. Read the `baseline:` line. It must show the pages you expected. The checker fails if no page matches, if a block changed, if a block now sits before a different element, if a page with comments is gone, if a ready state changed and stayed ready, and if a changed state kept an old date.
 4. If it reports a lost or moved block, restore it from the copy byte for byte, and run it again.
 5. Quote any `notice:` line in the closing account.
 
@@ -47,8 +47,9 @@ If the copy cannot be made, make no edit and report it as blocked. Use `--baseli
 4. If a block's data is cut off, disagrees with its text, or holds merge-conflict markers, do not act on it. Ask the user.
 5. Make each change as a small edit around the blocks. Never regenerate a page. If a change removes the element a comment sits on, keep the block and ask the user how to handle it.
 6. If the target already does what a comment asks, leave it, and say so.
-7. Update `data-updated` and the tile date. A ready page goes back to `in-review`.
-8. Run the checker against the baseline.
+7. In the rectangle of each state you changed, update `data-updated` and the date it shows, and set a ready state back to `in-review`. Leave other states alone: a state you did not touch keeps its date and its status. A change outside the states, such as the title or the open questions, moves every ready state on the page back. A documentation page has one `p.ds-meta` line, and the same rule applies to it as a whole.
+8. Run `node <skill>/scripts/build-index.mjs docs`. If it refuses because of a comment block inside a generated region, leave the block alone and ask the user.
+9. Run the checker against the baseline.
 
 ## Resolving
 
@@ -60,4 +61,4 @@ For each open comment, report what was done and where, or why not. Report anythi
 
 ## A change with no comments
 
-The same steps apply: protect comments, edit in place, update the date, and run the checker with the baseline. Comments on other parts of the page stay safe that way.
+The same steps apply: protect comments, edit in place, update the date of each changed state, rebuild the indexes, and run the checker with the baseline. Comments on other parts of the page stay safe that way.

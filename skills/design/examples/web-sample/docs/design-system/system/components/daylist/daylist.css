@@ -1,0 +1,47 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Staff day list: dense, read at a glance between sessions. */
+
+.daylist-head { display: flex; flex-wrap: wrap; gap: var(--space-tight) var(--space-group); align-items: center; justify-content: space-between; margin-block-end: var(--space-group); }
+.daylist-head .title { margin: 0; font-size: var(--daylist-title-size); }
+.daylist-count { margin: 0; color: var(--color-muted); font-size: var(--type-small); }
+.daylist { width: 100%; border-collapse: collapse; background: var(--color-raised); font-size: var(--type-small); }
+.daylist th {
+  padding: var(--space-tight) var(--space-control);
+  border-block-end: var(--control-edge) solid var(--color-edge-strong);
+  color: var(--color-muted);
+  font-size: var(--type-small);
+  font-weight: var(--emphasis-strong);
+  letter-spacing: normal;
+  text-align: start;
+  text-transform: none;
+}
+.daylist td {
+  padding: var(--space-tight) var(--space-control);
+  border-block-end: var(--control-divider) solid var(--color-edge);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+.daylist td.daylist__time { font-size: var(--type-body); font-weight: var(--emphasis-strong); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.daylist__name { font-weight: var(--emphasis-strong); }
+.daylist__free td { background: var(--color-sunken); color: var(--color-muted); }
+.daylist__gone td { color: var(--color-muted); }
+.daylist__gone .daylist__name { text-decoration: line-through; }
+.daylist__next td {
+  border-block: var(--control-edge) solid var(--color-marker-edge);
+  background: var(--color-marker);
+  color: var(--color-on-marker);
+}
+
+/* Below the base rules: an @container rule does not outrank a later rule of
+   the same weight. */
+@container (max-width: 39.99rem) {
+  .daylist, .daylist tbody { display: block; }
+  .daylist tr { display: grid; grid-template-columns: var(--daylist-time-width) minmax(0, 1fr); padding-block: var(--space-tight); border-block-end: var(--control-divider) solid var(--color-edge); }
+  .daylist td { padding: 0 var(--space-control); border: 0; }
+  .daylist td:not(.daylist__time) { grid-column: 2; }
+  .daylist td.daylist__time { grid-row: 1 / span 3; }
+  .daylist tr.daylist__next { border: var(--control-edge) solid var(--color-marker-edge); border-radius: var(--shape-control); background: var(--color-marker); }
+  .daylist tr.daylist__free { background: var(--color-sunken); }
+  .daylist__next td, .daylist__free td { border: 0; background: transparent; }
+}

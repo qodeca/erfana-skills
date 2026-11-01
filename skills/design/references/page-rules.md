@@ -6,7 +6,15 @@ The reason behind all of them: a review page is a drawing for people to judge an
 
 ## Page kinds
 
-Set `data-design-page` on `<body>` [page]: `screen` for designed screens, `doc` for documentation, `index` for lists of pages. Start from `templates/screen-page.html` or `templates/doc-page.html`. All kinds follow every rule here; only `screen` pages need states and open questions.
+Set `data-design-page` on `<body>` [page]: `screen` for designed screens, `doc` for documentation, `index` for lists of pages. Start from the matching file in `templates/`. All kinds follow every rule here; only `screen` pages need states and open questions.
+
+## Page anatomy [anatomy]
+
+Every page has `<main>`. Screen and doc pages also need `nav.ds-crumbs`, an element with `id="decision"`, and `<meta name="description">`, which the index shows. A doc page also needs an element with `id="exceptions"`. The full shape is in [design-system.md](design-system.md).
+
+## Balanced tags [balance]
+
+Every non-void element has its closing tag, in the right order, and every closing tag has an element to close. A browser repairs a dropped tag without a word, so the page looks fine while its states nest inside each other. This is stricter than HTML itself: optional closing tags, such as `</li>` and `</p>`, are written too. `/>` counts only inside `<svg>` and `<math>`.
 
 ## No scripts [no-script]
 
@@ -32,12 +40,13 @@ A menu, a modal, or a tooltip is drawn open, as its own labelled state. Rules th
 
 ## Draw states, do not simulate them
 
-- Each state is a `.design-state` with a `.design-state__label` and a `.design-frame` [states].
-- A frame has a fixed width: `.design-frame--narrow` (320), `--phone` (375), `--tablet`, or `--desktop`. A fixed width makes the picture the same in any window. Never wrap a frame in a scrolling box: part of it would be out of sight. A wide frame makes the page itself wider.
-- Documentation styles stop at the frame. Put the product's root class, and `data-theme` for a theme, on the first element inside it. `docs-tokens.css` sets `--frame-surface` and `--frame-text`, which a project may override.
+- Each state is a `figure.ds-frame.design-state` inside `.ds-states`, with its own `id`, a `.design-frame`, and a `.design-state__label` in its caption [states]. A frame on a screen page always sits in a state.
+- A frame on a screen page has a fixed width: `.design-frame--narrow` (320), `--phone` (375), `--tablet`, or `--desktop`. A fixed width makes the picture the same in any window. Never wrap a frame in a scrolling box: part of it would be out of sight. A wide frame makes the page itself wider.
+- Figures in the `.ds-frames` grid show small parts on doc pages, and their frames have no fixed width. A frame with a fixed width sits in a `.design-state` with its rectangle, in `.ds-states`, outside that grid, because it is wider than a grid column [frames]. A doc page keeps its status in `p.ds-meta` [tile], so its states have no rectangle.
+- Documentation styles stop at the frame, and at anything marked `aria-hidden`. Put the product's root class, and `data-theme` for a theme, on the first element inside it. `docs-tokens.css` sets `--frame-surface` and `--frame-text`, which a project may override in its own stylesheet, never in the copy [copies].
 - A frame is a picture: `aria-hidden="true"` [states], every control carries `tabindex="-1"`, no link has `href`, and there is no `<form>` [no-fake-controls].
 - Hover, focus, active, and disabled use `.is-hover`, `.is-focus`, `.is-active`, and `.is-disabled`. The library writes each one beside the real selector. A touch product skips hover.
-- Light and dark side by side need no `<style>` block: set `data-theme` on the first element in each frame.
+- A rectangle goes above each drawn state, and each theme is drawn as its own state, with an `id` ending `-dark` for the dark one. Themes need no `<style>` block: set `data-theme` on the first element in the frame.
 - Where iOS and Android really differ, draw each as its own labelled state. Do not draw one and describe the other.
 
 A note never promises what is not drawn. If a note says "the week stays on screen", the week is in the frame. Every action a state offers leads to a drawn state, including its failure. `responsive.css` and the small frame must show the same thing.
@@ -53,9 +62,9 @@ Cover these states for each screen, and list any that cannot happen, with the re
 | Refused | Why it is not allowed, and how to get access |
 | Smallest size | The narrow frame, or a desktop app's narrowest window: what moves, what folds away, and that nothing scrolls sideways |
 
-## Status tile [tile]
+## Status [tile] [meta] [date]
 
-The first thing on every page. It carries `data-design-status`, `data-updated`, and these words:
+A page has no status tile at the top. On a `screen` page, each drawn state has its own `.design-tile` rectangle, inside the `.design-state` and directly above its frame [tile]. A `doc` or `index` page has one `p.ds-meta` line under its `h1` [meta]. Both carry `data-design-status`, `data-updated`, and these words:
 
 | `data-design-status` | Words | Set by |
 |---|---|---|
@@ -63,7 +72,21 @@ The first thing on every page. It carries `data-design-status`, `data-updated`, 
 | `in-review` | In review | The agent |
 | `ready` | Ready for development | A person only, with `data-approved-by` [status] |
 
-Every tile also says "Design, not a working product", and shows the date as `YYYY-MM-DD`. The checker fails a date older than the file's last change, so update it with every edit. A date marks the page, not the commit, so `--no-date` is for test fixtures and shipped samples only.
+Each one also says "Design, not a working product", and shows the date as `YYYY-MM-DD`.
+
+The date rule [date]: the newest date on a page must not be older than the file's last change, so update the date of each state you change. Against a baseline, a state that changed must itself carry a date at least as new as the file; a saved comment does not count as a change. A date marks the page, not the commit, so `--no-date` is for test fixtures and shipped samples only.
+
+Ready is per state [status]: a state changed while ready goes back to `in-review`, and a change around the states moves every ready state back. States you did not touch keep their status. Any open comment on the page blocks ready, in whichever state it sits. A state newly set to ready, or a ready state removed, prints a `notice:` line to confirm with the user.
+
+## Indexes [index]
+
+`docs/design-system/index.html` and `docs/designs/index.html` are built by `scripts/build-index.mjs`. The checker fails an index that is missing, stale, or has lost its generated markers, a comment block inside a generated region, and a page the index cannot place. Never edit between the markers.
+
+An area may have a journey page: `docs/designs/<area>/index.html` with `data-design-page="index"`. The designs index lists it as the area's overview, above the screens table, not as a screen. Like any index page it has a `p.ds-meta` line, and the builder also needs its `<meta name="description">`.
+
+## Copied files [copies]
+
+`docs/design-system/docs.css`, `docs-tokens.css`, and `fonts.css` must match the skill's `templates/` byte for byte, so every project's pages read the same. A project made with an older version of the skill fails this rule after an update; the fix is to copy the three files again, unchanged.
 
 ## Open questions [questions]
 
@@ -87,4 +110,4 @@ Erfana stops showing or writing comments on a file over 25 MB, a file that is no
 
 ## Links
 
-A design page links only to its own area's pages. An index page may link across areas.
+A design page links to its own area's pages, the indexes in its crumbs, and the system pages it cites. An index page may link across areas.

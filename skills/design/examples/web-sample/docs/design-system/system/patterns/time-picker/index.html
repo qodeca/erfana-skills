@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A visible week, a rail of times, and a summary that names the choice.">
+<meta name="design-tasks" content="Let someone pick a time; Lay out the week, the times, and the summary">
+<title>Time picker – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/app/app.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="../../components/day/day.css">
+<link rel="stylesheet" href="../../components/slot/slot.css">
+<link rel="stylesheet" href="../../components/ticket/ticket.css">
+<link rel="stylesheet" href="./time-picker.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#patterns">Patterns</a> <span aria-hidden="true">/</span> <span aria-current="page">Time picker</span></nav>
+<main>
+<h1>Time picker</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A patient picks a week, a day, and a time, in that order, and the time comes straight after the session because patients decide by when they can come. On a wide screen the times fold into two columns and the summary moves beside them.</p>
+
+<h2 id="which">When to use it</h2>
+<table>
+  <thead><tr><th>The situation</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td>A new booking</td><td>The time picker, after Choose a session</td></tr>
+    <tr><td>Moving a booking</td><td>The same picker, under Move your booking</td></tr>
+    <tr><td>A typed date</td><td>Never: patients pick from a visible week</td></tr>
+  </tbody>
+</table>
+
+<h2 id="states">Every state</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="phone">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div><div class="page"><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul><h2 class="group-title">Morning</h2><ul class="rail"><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li><li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li><li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li></ul><div class="book__aside"><p class="group-title">Tuesday 10 November</p><button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Phone</strong> – a time picked, and Continue names it.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="not-picked">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="book__aside"><p class="group-title">Pick a time to continue</p><button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Nothing picked yet</strong> – Continue stays off and says why.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="desktop">
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div><div class="page"><div class="book"><div><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul><h2 class="group-title">Morning</h2><ul class="rail rail--wide"><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li><li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li><li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li></ul></div><div class="book__aside"><div class="ticket"><div class="ticket__body"><p class="ticket__time">09:45</p><p class="ticket__line">Tuesday 10 November</p><p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p></div></div><button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button></div></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Desktop</strong> – times in two columns, with the summary beside them.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><ul class="rail"><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li><li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li><li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li><li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Dark theme</strong> – the strip softens.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Tab</kbd></td><td>Walks Earlier week, Later week, the day cells, free slots, then Continue</td><td>The next control</td></tr>
+    <tr><td><kbd>Enter</kbd> or <kbd>Space</kbd></td><td>Selects</td><td>The same control</td></tr>
+    <tr><td><kbd>Enter</kbd> on Continue</td><td>Goes to the next step</td><td>The page heading</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class="book"&gt;
+  &lt;div&gt;&lt;!-- week and rail --&gt;&lt;/div&gt;
+  &lt;div class="book__aside"&gt;&lt;!-- summary and Continue --&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--measure-aside</code></td><td>Semantic</td><td>The summary column</td></tr>
+    <tr><td><code>--space-section</code></td><td>Semantic</td><td>The gap between the columns</td></tr>
+    <tr><td><code>--color-marker</code></td><td>Semantic</td><td>The one strip</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../components/day/index.html">Week and days</a>: the week.</li>
+  <li><a href="../../components/slot/index.html">Time slot</a>: the rail.</li>
+  <li><a href="../../components/ticket/index.html">Appointment card</a>: the summary.</li>
+  <li><a href="../../components/button/index.html">Buttons</a>: Continue.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

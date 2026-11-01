@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What this pattern solves, in one line, for the index tile">
+<meta name="design-tasks" content="Show an empty list; Show that something is loading">
+<title>Empty, loading, and error states – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="./states.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#patterns">Patterns</a> <span aria-hidden="true">/</span> <span aria-current="page">Empty, loading, and error states</span></nav>
+<main>
+<h1>Empty, loading, and error states</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">The rule this page decides, in one or two sentences.</p>
+
+<h2 id="which">When to use it</h2>
+<table>
+  <thead><tr><th>The situation</th><th>Use</th></tr></thead>
+  <tbody><tr><td>Nothing has been added yet</td><td>The empty state</td></tr></tbody>
+</table>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame">
+    <div class="design-frame" aria-hidden="true"><p>No bookings yet.</p><button class="button" type="button" tabindex="-1">Add a booking</button></div>
+    <figcaption><span class="ds-frame__step">01</span><strong>Empty</strong> – first use.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody><tr><td><kbd>Tab</kbd></td><td>Reaches the first action</td><td>The action</td></tr></tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class="state"&gt;…&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody><tr><td><code>--color-surface</code></td><td>Semantic</td><td>Behind the state</td></tr></tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../components/button/index.html">Buttons</a>: the action each state offers.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A spinner with words for a wait, and bars where rows will land.">
+<meta name="design-tasks" content="Show that something is loading; Hold the place of rows that are still loading">
+<title>Loading – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../app/app.css">
+<link rel="stylesheet" href="../../patterns/recovery/recovery.css">
+<link rel="stylesheet" href="./loading.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Loading</span></nav>
+<main>
+<h1>Loading</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A wait always says what is happening. The title and the week stay, and only the part that is changing gives way to bars, so a reload never blanks the screen.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="spinner">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="row"><span class="spinner"></span><span>Finding free times</span></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong>Spinner with words</strong> – a line above the rows.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="bars">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><span class="skeleton"></span><span class="skeleton"></span><span class="skeleton"></span></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong>Short bars</strong> – rows on the staff list.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="tall">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><span class="skeleton skeleton--tall"></span><span class="skeleton skeleton--tall"></span></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong>Tall bars</strong> – slots on the rail.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><div class="stack"><div class="row"><span class="spinner"></span><span>Loading the day</span></div><span class="skeleton"></span></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong>Dark theme</strong> – bars take the sunken surface.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td>None</td><td>Nothing here takes focus</td><td>Focus stays where it was</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class="row"&gt;&lt;span class="spinner"&gt;&lt;/span&gt;&lt;span&gt;Finding free times&lt;/span&gt;&lt;/div&gt;
+&lt;span class="skeleton skeleton--tall"&gt;&lt;/span&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--spinner-size</code></td><td>Component</td><td>Spinner box</td></tr>
+    <tr><td><code>--skeleton-height</code></td><td>Component</td><td>Short bar</td></tr>
+    <tr><td><code>--skeleton-height-tall</code></td><td>Component</td><td>Tall bar</td></tr>
+    <tr><td><code>--motion-spin</code></td><td>Semantic</td><td>One turn</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/motion.html">Motion</a>: what stops under reduced motion.</li>
+  <li><a href="../../patterns/recovery/index.html">Empty, loading, and error states</a>: where these are used.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

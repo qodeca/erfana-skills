@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A free time is one row on the rail, read time first, and only the chosen slot wears the coral strip.">
+<meta name="design-tasks" content="Show a free time; Mark the chosen time">
+<title>Time slot – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../app/app.css">
+<link rel="stylesheet" href="../icon/icon.css">
+<link rel="stylesheet" href="./slot.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Time slot</span></nav>
+<main>
+<h1>Time slot</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A free time is one row on the rail, read time first. Only the chosen slot wears the coral strip, and the strip always comes with the word "Selected" and a tick. The strip crosses the rail but the time stays in line with the times around it. Physiotherapists round the corners of tape so it stays on; the strip's corners do the same.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="every-state-light">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Default</span></button></li>
+            <li><button class="slot is-hover" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Hover</span></button></li>
+            <li><button class="slot is-focus" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Focus</span></button></li>
+            <li><button class="slot is-active" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Active</span></button></li>
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Chosen</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot is-selected is-hover" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Selected, hover</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot is-selected is-focus" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Selected, focus</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot is-selected is-active" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Selected, pressed</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">12:00</span><span class="slot__who">Taken</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong>Every state, light theme</strong> – Each row names its state. A slot has no loading or error state of its own: the list around it carries those.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page">
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Default</span></button></li>
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">11:15</span><span class="slot__who">Chosen</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+            <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">12:00</span><span class="slot__who">Taken</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong>Default, selected, and taken, dark theme</strong> – The strip softens, and its ink edge goes, because the fill alone clears 3:1 on the dark surface.</figcaption>
+  </figure>
+</div>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="narrow">
+    <div class="design-frame design-frame--narrow" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <ul class="rail">
+            <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+            <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Smallest size, 320 wide</strong> – The time column stays fixed, so times still align. The longest name wraps inside its column, and the row grows taller instead of clipping.</figcaption>
+  </figure>
+</div>
+
+<h2 id="motion">Motion</h2>
+<p>The strip presses on from the left over 240 ms, from 98% width, so choosing feels like smoothing tape down. With reduced motion it appears at once, and the colour change is still the feedback.</p>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Tab</kbd></td><td>Moves to the next free slot; taken slots are skipped</td><td>That slot</td></tr>
+    <tr><td><kbd>Enter</kbd> or <kbd>Space</kbd></td><td>Selects the slot and clears any earlier choice</td><td>The same slot</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;ul class="rail"&gt;
+  &lt;li&gt;&lt;button class="slot" type="button"&gt;&lt;span class="slot__time"&gt;08:15&lt;/span&gt;&lt;span class="slot__who"&gt;Aleksandra Nowakowska-Oyelaran&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class="slot" type="button" disabled&gt;&lt;span class="slot__time"&gt;09:00&lt;/span&gt;&lt;span class="slot__who"&gt;Taken&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--slot-height</code></td><td>Component</td><td>Row height, 52 px at the default text size</td></tr>
+    <tr><td><code>--slot-time-size</code></td><td>Component</td><td>Time text, larger than any screen title it sits under</td></tr>
+    <tr><td><code>--slot-time-width</code></td><td>Component</td><td>Fixed column, so times align down the rail</td></tr>
+    <tr><td><code>--slot-overhang</code></td><td>Component</td><td>How far the strip crosses the rail</td></tr>
+    <tr><td><code>--color-marker</code></td><td>Semantic</td><td>Strip fill; <code>-hover</code> and <code>-pressed</code> for its states</td></tr>
+    <tr><td><code>--color-marker-edge</code></td><td>Semantic</td><td>Strip edge: ink in light, the fill itself in dark</td></tr>
+    <tr><td><code>--color-on-marker</code></td><td>Semantic</td><td>Text on the strip</td></tr>
+    <tr><td><code>--motion-settle</code></td><td>Semantic</td><td>Press-on duration</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../icon/index.html">Icons</a>: the tick beside "Selected".</li>
+  <li><a href="../../foundations/colour.html">Colour</a>: the strip colours.</li>
+  <li><a href="../../foundations/motion.html">Motion</a>: the press-on.</li>
+  <li><a href="../../patterns/time-picker/index.html">Time picker</a>: where the rail is used.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

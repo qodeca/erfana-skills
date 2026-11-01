@@ -1,8 +1,6 @@
 # Booking
 
-**Status: Draft.** Design system: 3.0.0. Layout version: 1.
-
-This sample holds one area and skips `docs/designs/README.md`, `index.html`, `open-questions.md`, and `wording.md` to stay small.
+Design system: 3.1.0. Layout version: 1. Each state's status is on its page, in the rectangle above its frame.
 
 ## Purpose
 
@@ -28,10 +26,23 @@ Out of scope: payment, reminders, session notes, staff editing the list, and sig
 
 Product flows were not studied one by one: this was a brief research pass, and the sample names no products.
 
+## System pages it builds on
+
+| Page | Status | What this design takes from it |
+|---|---|---|
+| [Time picker](../../design-system/system/patterns/time-picker/index.html) | Draft | The week, the rail, and the summary |
+| [Empty, loading, and error states](../../design-system/system/patterns/recovery/index.html) | Draft | What every failure keeps |
+| [Time slot](../../design-system/system/components/slot/index.html) | Draft | The coral strip |
+| [Appointment card](../../design-system/system/components/ticket/index.html) | Draft | The summary and the booked card |
+| [Day list](../../design-system/system/components/daylist/index.html) | Draft | The staff table and its phone fold |
+| [Colour](../../design-system/system/foundations/colour.html) | Draft | One strip per screen, and ink for actions |
+
 ## Screens
 
-- [flow.html](flow.html): choose a session, choose a time, confirm, booked, the text link, then change number, move, or cancel. The time comes straight after the session, because patients decide by when they can come.
-- [day-list.html](day-list.html): the staff day list, in time order. The next session is the only coloured row, because that is the question at the desk.
+| Screen | Status | What it draws |
+|---|---|---|
+| [flow.html](flow.html) | Draft | Choose a session, choose a time, confirm, booked, the text link, then change number, move, or cancel. The time comes straight after the session, because patients decide by when they can come. |
+| [day-list.html](day-list.html) | Draft | The staff day list, in time order. The next session is the only coloured row, because that is the question at the desk. |
 
 ## States
 
@@ -62,7 +73,7 @@ The phone day list drops Session and Mobile, in `responsive.css` and in the draw
 ## Developer handoff
 
 - Link `tokens.css`, `components.css`, and `responsive.css`. Parts used: `.app`, `.appbar`, `.page`, `.book`, `.weeknav`, `.days`, `.day`, `.rail`, `.slot`, `.button`, `.ticket`, `.ticket--void`, `.field`, `.notice`, `.link`, `.state-word`, `.skeleton`, `.spinner`, `.daylist`, `.daylist__session`, `.daylist__contact`.
-- Colour jobs: `--color-action` is for buttons, `--color-marker` only for the picked or next item. Never put a button on the marker.
+- Colour jobs: `--color-action` is for buttons, `--color-marker` for what is picked, next, or confirmed. Never put a button on the marker.
 - A busy button sets `aria-busy="true"`. An off button sets `disabled`. "Earlier week" is off on the first bookable week, and "Later week" past the 6-week window.
 - Keyboard: `Tab` walks Earlier week, Later week, the day cells, free slots, then Continue. `Enter` or `Space` selects, and focus stays put. After Continue, focus goes to the page heading. On an error, focus goes to the notice. When Cancel opens its question, focus goes to "Keep booking". On Change number, focus goes to the field.
 - Must not change: the time is the largest text on each patient screen, one strip per screen, the text link shows no booking details once expired, and taken slots stay visible but cannot be focused.

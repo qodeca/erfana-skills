@@ -13,23 +13,27 @@
 //
 // Prints one "file:line [rule] message" per problem. Exit 1 on any problem.
 // It reads files only: it cannot see text clipped on screen, so a browser look
-// is still part of the review.
+// is still part of the review. Status and date rules live in page-status.mjs.
 
 import { execFileSync } from 'node:child_process'
 import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import { INDEX_ROOTS, indexProblem } from './build-index.mjs'
 import { buildCss } from './build-tokens.mjs'
-import { lineAt, parseHtml } from './html-lite.mjs'
+import { cssProblems, varsDefined, varsUsed } from './css-rules.mjs'
+import { hasClass, inside, lineAt, parseHtml, stripTags } from './html-lite.mjs'
+import { carriers, compareStatus, metaOf, newestDate, statesOf, statusProblems, tileOf } from './page-status.mjs'
 
+export { TILE_LINE } from './page-status.mjs'
 export const CSP = "script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'"
-export const TILE_LINE = 'Design, not a working product'
 export const PROTOTYPE_LINE = 'Prototype – not for comments or sign-off'
-const STATUS_TEXT = { draft: 'Draft', 'in-review': 'In review', ready: 'Ready for development' }
 const PAGE_KINDS = new Set(['screen', 'doc', 'index'])
 const MAX_BYTES = 25 * 1024 * 1024
 const MAX_BLOCKS = 500
+const TEMPLATES = fileURLToPath(new URL('../templates/', import.meta.url))
+const COPIED_SHEETS = new Set(['docs.css', 'docs-tokens.css', 'fonts.css'])
 
 const ACTIVE_ELEMENTS = new Set(['script', 'object', 'embed', 'applet', 'frame', 'frameset'])
 const HIDING_ELEMENTS = { template: 'its content never renders', dialog: 'it stays closed and sits above pins', iframe: 'nothing inside a frame can take a comment' }
@@ -37,15 +41,8 @@ const CONTROLS = new Set(['button', 'input', 'select', 'textarea', 'summary'])
 const PAINT_ATTRS = new Set(['fill', 'stroke', 'stop-color', 'flood-color', 'lighting-color'])
 const PAINT_OK = /^(?:none|currentColor|url\(\s*#[^)]*\)|var\(\s*--[\w-]+\s*(?:,[^)]*)?\))$/i
 
-const blank = match => match.replace(/[^\n]/g, ' ')
+const isFixedFrame = node => /(?:^|\s)design-frame--/.test(node.attrs.get('class') ?? '')
 
-const classesOf = node => (node.attrs.get('class') ?? '').split(/\s+/).filter(Boolean)
-const hasClass = (node, name) => classesOf(node).includes(name)
-const inside = (node, test) => {
-  for (let n = node.parent; n; n = n.parent) if (test(n)) return true
-  return false
-}
-const stripTags = html => html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 const decodeUrl = value => value
   .replace(/&#x([0-9a-f]+);?/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
   .replace(/&#(\d+);?/g, (_, n) => String.fromCodePoint(Number(n)))
@@ -61,47 +58,6 @@ export function commentBlocks(comments, nodes = []) {
       return { raw: c.raw, line: c.line, open: /^\s*status: open\s*$/m.test(c.raw), before: next ? `${next.tag}#${next.attrs.get('id') ?? ''}` : '' }
     })
 }
-
-const HIDING_CSS = [
-  [/display\s*:\s*none/gi, 'display: none'],
-  [/visibility\s*:\s*(?:hidden|collapse)/gi, 'visibility: hidden'],
-  [/content-visibility\s*:\s*hidden/gi, 'content-visibility: hidden'],
-  [/(?:^|[;{\s])opacity\s*:\s*0(?:\.0*)?\s*(?:[;}!]|$)/gim, 'opacity: 0'],
-  [/pointer-events\s*:\s*none/gi, 'pointer-events: none, which stops a comment from reaching the element'],
-  [/:target\b/gi, ':target, which shows content only after a click'],
-  [/:checked\s*[+~]/gi, 'a :checked trick'],
-  [/:has\([^)]*:checked/gi, 'a :checked trick']
-]
-const ACTIVE_CSS = [
-  [/expression\s*\(/gi, 'CSS expression()'],
-  [/-moz-binding\s*:/gi, '-moz-binding'],
-  [/(?:^|[;{\s])behavior\s*:/gi, 'behavior:'],
-  [/url\(\s*['"]?\s*(?:javascript|vbscript):/gi, 'a script URL in url()']
-]
-const RAW_COLOUR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color-mix)\s*\(|\b(?:white|black|red|green|blue|gray|grey|orange|yellow|purple|pink)\b/i
-const RAW_SIZE = /(?<![\w.#-])-?(?:\d*\.)?\d+(?:px|rem|em|pt|vh|vw|vmin|vmax|ch|ms|s)\b/i
-
-/** Rule problems in a CSS text, as [{ line, rule, message }]. */
-export function cssProblems(css, { baseLine = 1, allowRaw = false } = {}) {
-  const problems = []
-  const clean = css.replace(/\/\*[\s\S]*?\*\//g, blank)
-  const add = (offset, rule, message) => problems.push({ line: baseLine + lineAt(clean, offset) - 1, rule, message })
-  for (const [re, what] of HIDING_CSS) for (const hit of clean.matchAll(re)) add(hit.index, 'no-hidden', `${what} is banned on review pages`)
-  for (const [re, what] of ACTIVE_CSS) for (const hit of clean.matchAll(re)) add(hit.index, 'no-script', `${what} is banned`)
-  if (!allowRaw) {
-    for (const hit of clean.matchAll(/([^{};]+):([^;{}]+)(?=[;}]|$)/g)) {
-      const prop = hit[1].trim()
-      if (prop.startsWith('@')) continue
-      const value = hit[2].replace(/url\([^)]*\)/gi, '').replace(/var\(\s*--[\w-]+/g, 'var(')
-      const raw = RAW_COLOUR.exec(value) ?? RAW_SIZE.exec(value)
-      if (raw) add(hit.index, 'no-raw-values', `raw value "${raw[0].trim()}" in ${prop} – use a token`)
-    }
-  }
-  return problems
-}
-
-const varsUsed = css => [...css.matchAll(/var\(\s*(--[\w-]+)/g)].map(m => m[1])
-const varsDefined = css => [...css.replace(/\/\*[\s\S]*?\*\//g, blank).matchAll(/(--[\w-]+)\s*:/g)].map(m => m[1])
 
 class Run {
   constructor(options) {
@@ -144,7 +100,21 @@ class Run {
       }
     }
     if (path.basename(file) === 'tokens.css') this.checkDrift(file, css)
+    this.checkCopy(file)
     return info
+  }
+
+  /** The documentation sheets are copied unchanged, so every project reads the same. */
+  checkCopy(file) {
+    const base = path.basename(file)
+    if (!COPIED_SHEETS.has(base) || path.basename(path.dirname(path.resolve(file))) !== 'design-system') return
+    const template = path.join(TEMPLATES, base)
+    if (!existsSync(template)) {
+      this.add(path.resolve(file), 1, 'copies', `cannot compare: the skill's template ${template} is missing`)
+      return
+    }
+    const lines = name => readFileSync(name, 'utf8').replace(/\r\n/g, '\n')
+    if (lines(file) !== lines(template)) this.add(path.resolve(file), 1, 'copies', `differs from the skill's templates/${base} – copy it again, unchanged`)
   }
 
   checkDrift(file, css) {
@@ -183,28 +153,80 @@ class Run {
       if (PAINT_ATTRS.has(name) && !PAINT_OK.test(value.trim())) this.add(file, line, 'no-raw-values', `${name}="${value}" – paint with currentColor or a token`)
     }
     if (tag === 'style') for (const p of cssProblems(node.text ?? '', { baseLine: node.textLine })) this.add(file, p.line, p.rule, p.message)
+    if (isFixedFrame(node) && inside(node, p => hasClass(p, 'ds-frames'))) {
+      this.add(file, line, 'frames', 'a fixed-width frame sits in a .design-state in .ds-states, outside the .ds-frames grid, whose columns are narrower than it')
+    }
     if (kind === 'screen' && inScreen) {
       if (tag === 'a' && attrs.has('href')) this.add(file, line, 'no-fake-controls', 'a link inside a frame works – remove href')
       if (CONTROLS.has(tag) && attrs.get('tabindex') !== '-1') this.add(file, line, 'no-fake-controls', `<${tag}> in a frame needs tabindex="-1", because it is a picture of a control`)
     }
   }
 
-  checkTile(file, text, nodes) {
-    const tile = nodes.find(n => hasClass(n, 'design-tile'))
-    if (!tile) return this.add(file, 1, 'tile', 'no .design-tile')
-    const status = tile.attrs.get('data-design-status') ?? ''
-    const updated = tile.attrs.get('data-updated') ?? ''
-    const words = stripTags(text.slice(tile.start, tile.end))
-    if (!STATUS_TEXT[status]) this.add(file, tile.line, 'tile', `data-design-status must be ${Object.keys(STATUS_TEXT).join(', ')}`)
-    else if (!words.includes(STATUS_TEXT[status])) this.add(file, tile.line, 'tile', `the tile must say "${STATUS_TEXT[status]}"`)
-    if (!words.includes(TILE_LINE)) this.add(file, tile.line, 'tile', `the tile must say "${TILE_LINE}"`)
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(updated) || !words.includes(updated)) this.add(file, tile.line, 'tile', 'data-updated must be YYYY-MM-DD and shown in the tile')
-    if (status === 'ready' && !tile.attrs.get('data-approved-by')) this.add(file, tile.line, 'status', 'ready needs data-approved-by, the person who approved it')
-    if (!this.options.noDate && updated) this.checkDate(file, tile.line, updated)
-    return status
+  /** Each state has its rectangle directly above its frame; a doc or index page has its line. */
+  checkStatus(file, text, nodes, kind) {
+    const inState = n => inside(n, p => hasClass(p, 'design-state'))
+    for (const tile of nodes.filter(n => hasClass(n, 'design-tile'))) {
+      if (kind !== 'screen' || !inState(tile)) this.add(file, tile.line, 'tile', 'a page has no status tile: the rectangle sits inside each .design-state, and a doc or index page uses p.ds-meta')
+    }
+    if (kind === 'screen') {
+      for (const state of statesOf(nodes)) {
+        if (!tileOf(nodes, state)) this.add(file, state.line, 'tile', 'a state needs a .design-tile rectangle directly above its frame')
+      }
+    } else if (PAGE_KINDS.has(kind) && !metaOf(nodes)) {
+      this.add(file, 1, 'meta', 'a doc or index page needs a p.ds-meta status line under its h1')
+    }
+    const list = carriers(nodes, kind)
+    for (const node of list) {
+      for (const p of statusProblems(text, node, kind === 'screen' ? 'tile' : 'meta')) this.add(file, p.line, p.rule, p.message)
+    }
+    const newest = newestDate(list)
+    if (!this.options.noDate && newest) this.checkDate(file, list[0].line, newest)
+    return list.map(n => n.attrs.get('data-design-status') ?? '')
+  }
+
+  /** On a screen, every frame has its own rectangle as the element right before it. */
+  checkStates(file, text, nodes) {
+    const states = statesOf(nodes)
+    if (states.length === 0) this.add(file, 1, 'states', 'a screen page needs at least one .design-state')
+    const ids = new Set()
+    for (const state of states) {
+      const id = state.attrs.get('id') ?? ''
+      if (!id || ids.has(id)) this.add(file, state.line, 'states', 'a state needs its own id, so status and comments can follow it')
+      ids.add(id)
+      const label = nodes.find(n => hasClass(n, 'design-state__label') && inside(n, p => p === state))
+      if (!label || stripTags(text.slice(label.start, label.end)) === '') this.add(file, state.line, 'states', 'a state needs a .design-state__label with text')
+      const frames = nodes.filter(n => hasClass(n, 'design-frame') && inside(n, p => p === state))
+      if (frames.length === 0) this.add(file, state.line, 'states', 'a state needs a .design-frame')
+      for (const frame of frames) {
+        if (frame.attrs.get('aria-hidden') !== 'true') this.add(file, frame.line, 'states', 'a .design-frame is a picture: add aria-hidden="true"')
+        const siblings = nodes.filter(n => n.parent === frame.parent && n.start < frame.start)
+        if (tileOf(nodes, state) && !hasClass(siblings.at(-1) ?? frame, 'design-tile')) this.add(file, frame.line, 'tile', 'the .design-tile rectangle must sit directly above this frame')
+      }
+    }
+    for (const frame of nodes.filter(n => hasClass(n, 'design-frame') && !inside(n, p => hasClass(p, 'design-state')))) {
+      this.add(file, frame.line, 'states', 'a .design-frame on a screen page sits inside a .design-state')
+    }
+    if (!nodes.some(n => hasClass(n, 'design-questions'))) this.add(file, 1, 'questions', 'a screen page needs a .design-questions block, even if it says none are open')
+  }
+
+  /** The fixed parts of a page, so every page reads the same way. */
+  checkAnatomy(file, nodes, kind) {
+    if (!PAGE_KINDS.has(kind)) return
+    const need = (found, what) => { if (!found) this.add(file, 1, 'anatomy', `${kind} page needs ${what}`) }
+    need(nodes.some(n => n.tag === 'main'), '<main>')
+    if (kind === 'index') return
+    need(nodes.some(n => n.tag === 'nav' && hasClass(n, 'ds-crumbs')), 'nav.ds-crumbs')
+    need(nodes.some(n => n.attrs.get('id') === 'decision'), 'an element with id="decision"')
+    need(nodes.some(n => n.tag === 'meta' && n.attrs.get('name') === 'description' && (n.attrs.get('content') ?? '').trim()), '<meta name="description">, which the index shows')
+    if (kind === 'doc') need(nodes.some(n => n.attrs.get('id') === 'exceptions'), 'an element with id="exceptions"')
   }
 
   checkDate(file, line, updated) {
+    const changed = this.lastChange(file)
+    if (updated < changed) this.add(file, line, 'date', `the newest date on this page, ${updated}, is older than its last change ${changed}`)
+  }
+
+  lastChange(file) {
     const dir = path.dirname(file)
     const base = path.basename(file)
     const git = args => execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
@@ -217,7 +239,7 @@ class Run {
       const t = statSync(file).mtime
       changed = [t.getFullYear(), String(t.getMonth() + 1).padStart(2, '0'), String(t.getDate()).padStart(2, '0')].join('-')
     }
-    if (updated < changed) this.add(file, line, 'tile', `date ${updated} is older than the last change ${changed}`)
+    return changed
   }
 
   baselineOf(file) {
@@ -236,7 +258,7 @@ class Run {
     }
   }
 
-  checkBaseline(file, text, blocks, status) {
+  checkBaseline(file, text, nodes, blocks) {
     const old = this.baselineOf(file)
     if (old === null) return
     this.compared += 1
@@ -252,11 +274,19 @@ class Run {
         left.splice(at, 1)
       }
     }
-    const oldTile = parsed.nodes.find(n => hasClass(n, 'design-tile'))
-    if (oldTile?.attrs.get('data-design-status') === 'ready' && status === 'ready' && old !== text) {
-      this.add(file, 1, 'status', 'a ready page changed – set it back to in-review')
+    const { problems, notices, changedStates } = compareStatus(old, parsed.nodes, text, nodes)
+    for (const p of problems) this.add(file, p.line, 'status', p.message)
+    for (const n of notices) this.notices.push(`${file}: ${n}`)
+    if (this.options.noDate) return
+    // A comment saved by Erfana is not a design change, so it asks for no new date.
+    const withoutBlocks = html => html.replace(/<!--\s*erfana:comment[\s\S]*?-->\s*/g, '')
+    const changed = this.lastChange(file)
+    for (const { id, raw, oldRaw, tile } of changedStates) {
+      const date = tile?.attrs.get('data-updated') ?? ''
+      if (date && date < changed && withoutBlocks(raw) !== withoutBlocks(oldRaw)) {
+        this.add(file, tile.line, 'date', `state #${id} changed, so its date ${date} must be updated to ${changed} or later`)
+      }
     }
-    if (oldTile && oldTile.attrs.get('data-design-status') !== 'ready' && status === 'ready') this.notices.push(`${file}: ready newly set – confirm the user asked for it`)
   }
 
   checkPage(file) {
@@ -267,7 +297,7 @@ class Run {
     if (!buffer.equals(Buffer.from(text, 'utf8'))) return this.add(file, 1, 'limits', 'not valid UTF-8 – Erfana will not show comments')
     if (/^<{7} /m.test(text) && /^>{7} /m.test(text)) this.add(file, 1, 'limits', 'merge-conflict markers – Erfana will not write comments')
     const { nodes, comments, errors } = parseHtml(text)
-    for (const e of errors) this.add(file, e.line, 'markup', e.message)
+    for (const e of errors) this.add(file, e.line, e.rule ?? 'markup', e.message)
 
     const body = nodes.find(n => n.tag === 'body')
     const kind = body?.attrs.get('data-design-page') ?? ''
@@ -305,25 +335,34 @@ class Run {
       if (!known.has(name)) this.add(file, 1, 'tokens', `${name} is used but no linked stylesheet defines it`)
     }
 
-    const status = this.checkTile(file, text, nodes)
-    if (kind === 'screen') {
-      const states = nodes.filter(n => hasClass(n, 'design-state'))
-      if (states.length === 0) this.add(file, 1, 'states', 'a screen page needs at least one .design-state')
-      for (const state of states) {
-        const label = nodes.find(n => hasClass(n, 'design-state__label') && inside(n, p => p === state))
-        if (!label || stripTags(text.slice(label.start, label.end)) === '') this.add(file, state.line, 'states', 'a state needs a .design-state__label with text')
-        const frame = nodes.find(n => hasClass(n, 'design-frame') && inside(n, p => p === state))
-        if (!frame) this.add(file, state.line, 'states', 'a state needs a .design-frame')
-        else if (frame.attrs.get('aria-hidden') !== 'true') this.add(file, frame.line, 'states', 'a .design-frame is a picture: add aria-hidden="true"')
-      }
-      if (!nodes.some(n => hasClass(n, 'design-questions'))) this.add(file, 1, 'questions', 'a screen page needs a .design-questions block, even if it says none are open')
-    }
+    const statuses = this.checkStatus(file, text, nodes, kind)
+    this.checkAnatomy(file, nodes, kind)
+    if (kind === 'screen') this.checkStates(file, text, nodes)
 
     const blocks = commentBlocks(comments, nodes)
     if (blocks.length > MAX_BLOCKS) this.add(file, 1, 'limits', `${blocks.length} comment blocks – Erfana stops at ${MAX_BLOCKS}, so split the file`)
-    if (status === 'ready' && blocks.some(b => b.open)) this.add(file, 1, 'status', 'ready with open comments – resolve them in Erfana first')
-    this.checkBaseline(file, text, blocks, status)
+    // Any open comment on the page blocks ready, wherever it sits: the rule is
+    // about the page a person approves, not the state the comment landed on.
+    if (statuses.includes('ready') && blocks.some(b => b.open)) this.add(file, 1, 'status', 'ready with open comments – resolve them in Erfana first')
+    this.checkBaseline(file, text, nodes, blocks)
     return undefined
+  }
+
+  /** A stale or unsafe index, and a page folder with no index at all. */
+  checkIndex(target) {
+    const candidates = [target, path.join(target, 'docs/design-system'), path.join(target, 'docs/designs'), path.join(target, 'design-system'), path.join(target, 'designs')]
+    for (const root of new Set(candidates)) {
+      if (!INDEX_ROOTS.includes(path.basename(root)) || !existsSync(root) || !statSync(root).isDirectory()) continue
+      const file = path.join(root, 'index.html')
+      if (!existsSync(file)) {
+        const found = []
+        walk(root, found)
+        if (found.some(f => /\.html?$/i.test(f))) this.add(file, 1, 'index', 'this folder has pages but no index.html – copy it from the index template and run build-index.mjs')
+        continue
+      }
+      const problem = indexProblem(file)
+      if (problem) this.add(file, 1, 'index', problem)
+    }
   }
 
   checkPrototype(file) {
@@ -380,12 +419,19 @@ export function checkPaths(targets, options = {}) {
       if (/\.html?$/i.test(file)) {
         if (isPrototype) run.checkPrototype(file)
         else run.checkPage(file)
+      } else if (COPIED_SHEETS.has(path.basename(file))) {
+        run.checkCopy(file)
       } else if (path.basename(file) === 'responsive.css') {
         // Real product CSS: it may hide things, but its values are still tokens.
         for (const p of cssProblems(readFileSync(file, 'utf8'))) if (p.rule !== 'no-hidden') run.add(file, p.line, p.rule, p.message)
       } else if (/\.m?js$/i.test(file) && !isPrototype) {
         run.add(file, 1, 'no-script', 'a script file is banned outside prototypes/')
       }
+    }
+    if (statSync(target).isDirectory()) run.checkIndex(target)
+    else if (path.basename(target) === 'index.html' && INDEX_ROOTS.includes(path.basename(path.dirname(target)))) {
+      const problem = indexProblem(target)
+      if (problem) run.add(target, 1, 'index', problem)
     }
   }
   if (options.baselineDir) checkRemoved(run, options, targets[0])

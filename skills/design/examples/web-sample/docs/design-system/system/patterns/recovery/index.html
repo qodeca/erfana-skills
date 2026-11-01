@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Every failure says what failed, what to do next, and what the person keeps.">
+<meta name="design-tasks" content="Show an empty list; Show that something is loading; Recover from a failed booking; Refuse an action and say how to get access">
+<title>Empty, loading, and error states – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/app/app.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="../../components/field/field.css">
+<link rel="stylesheet" href="../../components/notice/notice.css">
+<link rel="stylesheet" href="../../components/loading/loading.css">
+<link rel="stylesheet" href="./recovery.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#patterns">Patterns</a> <span aria-hidden="true">/</span> <span aria-current="page">Empty, loading, and error states</span></nav>
+<main>
+<h1>Empty, loading, and error states</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Every failure keeps the booking as it was. Each state says what failed, what to do next, and what the person keeps, and the clinic phone is always the fallback for a patient.</p>
+
+<h2 id="which">When to use it</h2>
+<table>
+  <thead><tr><th>The situation</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td>Nothing to show on this day</td><td>A neutral notice and the way out</td></tr>
+    <tr><td>Times or rows on their way</td><td>Words with a spinner, and bars in place of the rows</td></tr>
+    <tr><td>A refresh in progress</td><td>The old rows stay, with a line above them</td></tr>
+    <tr><td>A step failed</td><td>An error notice, then Try again, then what is kept</td></tr>
+    <tr><td>Not allowed</td><td>A neutral notice with the reason and the way in</td></tr>
+  </tbody>
+</table>
+
+<h2 id="states">Every state</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="empty">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><div class="notice"><div><p class="notice__title">No free times on Wednesday 11 November</p><p class="notice__text">The next free time is Thursday 12 November at 14:00.</p></div></div><button class="button button--quiet button--full" type="button" tabindex="-1">Show Thursday 12 November</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Empty</strong> – the picked day has no free time.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="loading">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><div class="row"><span class="spinner"></span><span>Finding free times</span></div><span class="skeleton skeleton--tall"></span><span class="skeleton skeleton--tall"></span></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Loading</strong> – only the times are replaced.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="error">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><div class="notice notice--error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg><div><p class="notice__title">We could not load times for Tuesday 10 November</p><p class="notice__text">Nothing has been booked. Try again, or call 01632 960 123.</p></div></div><button class="button button--full" type="button" tabindex="-1">Try again</button><button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Error</strong> – what failed, what to do, and the phone number as the fallback.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="keeps">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><div class="notice notice--error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg><div><p class="notice__title">09:45 has just been taken</p><p class="notice__text">You have not been booked. Your details are saved for the next time you pick.</p></div></div><div class="field"><label class="field__label">Your full name</label><input class="field__input" type="text" tabindex="-1" value="Maria-Konstancja Wiśniewska-Adeyemi" readonly></div><button class="button button--full" type="button" tabindex="-1">Pick another time</button><button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Error that keeps the work</strong> – someone else booked first, and what was typed stays.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="refused">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="stack"><div class="notice"><div><p class="notice__title">You need a staff sign-in to see this list</p><p class="notice__text">If you do not have one, ask the clinic manager for access.</p></div></div><div class="row"><button class="button" type="button" tabindex="-1">Sign in</button></div></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Refused</strong> – why it is not allowed, and how to get access.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><div class="stack"><div class="notice notice--error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg><div><p class="notice__title">Your booking was not cancelled</p><p class="notice__text">It still stands. Try again, or call 01632 960 123.</p></div></div><button class="button button--danger button--full" type="button" tabindex="-1">Try cancelling again</button><button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button></div></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Error, dark theme</strong> – the same stack in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td>None</td><td>On an error, focus moves to the notice</td><td>The notice</td></tr>
+    <tr><td><kbd>Tab</kbd></td><td>Reaches the first action after the notice</td><td>That action</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class="stack"&gt;
+  &lt;div class="notice notice--error"&gt;…&lt;/div&gt;
+  &lt;button class="button button--full" type="button"&gt;Try again&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--space-group</code></td><td>Semantic</td><td>The gap in a stack</td></tr>
+    <tr><td><code>--space-tight</code></td><td>Semantic</td><td>The gap in a row</td></tr>
+    <tr><td><code>--color-error-tint</code></td><td>Semantic</td><td>Behind an error notice</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../components/notice/index.html">Notices</a>: the message.</li>
+  <li><a href="../../components/loading/index.html">Loading</a>: bars and spinner.</li>
+  <li><a href="../../components/field/index.html">Fields</a>: what is kept.</li>
+  <li><a href="../../components/button/index.html">Buttons</a>: the actions.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

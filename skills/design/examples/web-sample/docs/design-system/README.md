@@ -2,7 +2,7 @@
 
 Sample output of the `design` skill, not a real product. Layout version: 1. System version: see `VERSION`.
 
-This sample is trimmed to stay small. A real project also has `CHANGELOG.md`, `index.html`, and one documentation page per foundation, component, and pattern; here `components/slot.html` stands for them all.
+Start at [index.html](index.html). Foundations are in `system/foundations/`, and each component and pattern has its own folder under `system/components/` or `system/patterns/`, with its page and its CSS. `components.css` imports them all. Changes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Direction
 
@@ -12,28 +12,29 @@ Kinesiology tape on plaster: warm flat surfaces, ink edges, and one coral strip 
 |---|---|
 | Time first, everything else second | Patients choose by when they can come |
 | Large and plain over compact | Many patients book one-handed, or in pain (inferred) |
-| One strip per screen | Coral marks only what is picked or next, and actions are ink, so the two never compete |
+| One strip per screen | Coral marks what is picked, next, or confirmed, and actions are ink, so the two never compete |
 | Dense over airy on the staff list | Staff read it at a glance between sessions (inferred) |
 | Flat over shadowed | Plaster and tape have edges, not glows |
 
-The typeface is the device's own system font, because a sample ships no font files and a client should judge the type a device really shows.
+The typeface is the device's own system font, because the product ships no font files and a client should judge the type a device really shows. `fonts/` holds only the documentation pages' mono face.
 
 ## Build
 
+Run these from the project root:
+
 ```bash
-node <skill>/scripts/build-tokens.mjs tokens.json tokens.css
-node <skill>/scripts/build-tokens.mjs tokens.json tokens.css --check
+node <skill>/scripts/build-tokens.mjs docs/design-system/tokens.json docs/design-system/tokens.css
+node <skill>/scripts/build-tokens.mjs docs/design-system/tokens.json docs/design-system/tokens.css --check
+node <skill>/scripts/build-index.mjs docs
 ```
 
 ## Adopt in a product
 
-- Link `tokens.css`, `components.css`, and `responsive.css`, and wrap the screen in `.app`.
+- Link `tokens.css`, `components.css`, and `responsive.css`, and wrap the screen in `.app`. Ship `system/` with them, because `components.css` imports each part from there.
 - Set `data-theme="dark"` on `.app` or any parent.
 - The real selectors exist: `:hover`, `:focus-visible`, `:active`, `:disabled`, `aria-pressed`, `aria-invalid`, and `aria-busy`. A cancelled card is the variant `.ticket--void`. The `.is-*` classes are for drawing, so developers may drop them.
 - Component class names are stable. Renaming one is a major version.
 - Native teams read `tokens.json`.
-- Version 3.0.0 made visible changes: a system font stack, week buttons on one line at wide sizes, a wider gap between `.rail--wide` columns, fields that keep their token height in a tall grid, and a 44 px minimum height on `.link` through the new `--link-height`. Nothing was renamed.
-- Version 2.0.0 renamed the coral colours from `--color-tape*` to `--color-marker*`, `--shape-tape` to `--shape-control`, and `.ticket.is-void` to `.ticket--void`. Buttons moved to `--color-action*`.
 - Breakpoints sit inside `@container` rules as `rem` values, because CSS cannot read a variable there.
 
 ## Measured contrast
