@@ -1,0 +1,22 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* The styling library: the same file serves review pages and the real product.
+   Pattern: write each interactive state twice, once as the real selector for
+   developers and once as an .is-* class, so a static page can draw it.
+   Every value is a token. Replace this sample with the project's components. */
+
+.button {
+  padding: var(--button-padding);
+  border: 0;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-family: var(--typeface-body);
+}
+.button:hover,
+.button.is-hover { background: var(--color-text); }
+.button:focus-visible,
+.button.is-focus { outline: var(--button-padding) solid var(--color-action); }
+.button:active,
+.button.is-active { background: var(--color-text); }
+.button:disabled,
+.button.is-disabled { background: var(--color-surface); color: var(--color-text); }

@@ -1,0 +1,51 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Values for the documentation frame only: the tile, labels, and doc pages.
+   These never style the designed screens, so a project's own look stays its own.
+   Copy to docs/design-system/ unchanged. */
+:root {
+  --doc-bg: #141414;
+  --doc-panel: #1e1e1e;
+  --doc-sunken: #181818;
+  --doc-text: #cccccc;
+  --doc-muted: #b0b0b0;
+  --doc-bright: #e0e0e0;
+  --doc-emphasis: #ffffff;
+  --doc-line: #333333;
+  --doc-line-strong: #4a4a4a;
+  --doc-accent: #a0a8ff;
+  --doc-accent-hover: #c0c5ff;
+  --doc-draft: #e3e829;
+  --doc-review: #a0a8ff;
+  --doc-ready: #7fd88f;
+  --doc-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --doc-font-mono: 'Cascadia Mono', 'SF Mono', Monaco, Consolas, monospace;
+  --doc-text-small: 13px;
+  --doc-text-body: 14px;
+  --doc-text-lede: 15px;
+  --doc-text-h3: 16px;
+  --doc-text-h2: 18px;
+  --doc-text-title: 24px;
+  --doc-leading: 1.5;
+  --doc-weight-normal: 400;
+  --doc-weight-medium: 500;
+  --doc-weight-strong: 600;
+  --doc-space-1: 2px;
+  --doc-space-2: 4px;
+  --doc-space-3: 8px;
+  --doc-space-4: 12px;
+  --doc-space-5: 16px;
+  --doc-space-6: 32px;
+  --doc-space-7: 40px;
+  --doc-border: 1px;
+  --doc-border-thick: 2px;
+  --doc-measure: 76ch;
+  --doc-table-max: 1100px;
+  --doc-tracking: 0.06em;
+  --frame-surface: #ffffff;
+  --frame-text: #1a1a1a;
+  --frame-narrow: 320px;
+  --frame-phone: 375px;
+  --frame-tablet: 768px;
+  --frame-desktop: 1280px;
+}

@@ -1,0 +1,11 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Rules that hide things at a width. Product only: review pages never load this
+   file, so the phone drawings simply leave these cells out. */
+
+@container (max-width: 39.99rem) {
+  .daylist thead,
+  .daylist__session,
+  .daylist__contact,
+  .daylist td:empty { display: none; }
+}

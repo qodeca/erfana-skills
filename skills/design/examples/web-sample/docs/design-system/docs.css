@@ -1,0 +1,155 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* The frame around every page: documentation text, the status tile, state
+   labels, and fixed-width frames. Every value comes from docs-tokens.css.
+   Copy to docs/design-system/ unchanged. */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: var(--doc-space-6);
+  background: var(--doc-bg);
+  color: var(--doc-text);
+  font-family: var(--doc-font-sans);
+  font-size: var(--doc-text-body);
+  line-height: var(--doc-leading);
+}
+
+/* Documentation headings, tables, and links stop at a frame, so a design keeps
+   its own look. :where keeps these selectors easy to override. */
+h1:not(:where(.design-frame *)) {
+  margin: 0 0 var(--doc-space-2);
+  color: var(--doc-emphasis);
+  font-size: var(--doc-text-title);
+  font-weight: var(--doc-weight-strong);
+}
+
+h2:not(:where(.design-frame *)) {
+  margin: var(--doc-space-7) 0 var(--doc-space-3);
+  padding-bottom: var(--doc-space-3);
+  border-bottom: var(--doc-border) solid var(--doc-line);
+  color: var(--doc-bright);
+  font-size: var(--doc-text-h2);
+  font-weight: var(--doc-weight-strong);
+}
+
+h3:not(:where(.design-frame *)) {
+  margin: var(--doc-space-5) 0 var(--doc-space-3);
+  color: var(--doc-bright);
+  font-size: var(--doc-text-h3);
+  font-weight: var(--doc-weight-medium);
+}
+
+p:not(:where(.design-frame *)), ul:not(:where(.design-frame *)), ol:not(:where(.design-frame *)) { max-width: var(--doc-measure); }
+
+a:not(:where(.design-frame *)) { color: var(--doc-accent); text-underline-offset: var(--doc-space-1); }
+a:not(:where(.design-frame *)):hover { color: var(--doc-accent-hover); }
+a:not(:where(.design-frame *)):focus-visible { outline: var(--doc-border-thick) solid var(--doc-accent); outline-offset: var(--doc-space-1); }
+
+code:not(:where(.design-frame *)) {
+  font-family: var(--doc-font-mono);
+  font-size: var(--doc-text-small);
+}
+
+table:not(:where(.design-frame *)) { width: 100%; max-width: var(--doc-table-max); border-collapse: collapse; }
+
+th:not(:where(.design-frame *)) {
+  padding: var(--doc-space-2) var(--doc-space-3) var(--doc-space-2) 0;
+  border-bottom: var(--doc-border) solid var(--doc-line-strong);
+  color: var(--doc-muted);
+  font-size: var(--doc-text-small);
+  font-weight: var(--doc-weight-medium);
+  letter-spacing: var(--doc-tracking);
+  text-align: left;
+  text-transform: uppercase;
+}
+
+td:not(:where(.design-frame *)) {
+  padding: var(--doc-space-2) var(--doc-space-3) var(--doc-space-2) 0;
+  border-bottom: var(--doc-border) solid var(--doc-line);
+}
+
+.doc-crumbs {
+  margin: 0 0 var(--doc-space-3);
+  color: var(--doc-muted);
+  font-family: var(--doc-font-mono);
+  font-size: var(--doc-text-small);
+}
+
+.doc-lede {
+  max-width: var(--doc-measure);
+  margin: 0 0 var(--doc-space-6);
+  color: var(--doc-muted);
+  font-size: var(--doc-text-lede);
+}
+
+.doc-note {
+  max-width: var(--doc-measure);
+  margin: 0 0 var(--doc-space-3);
+  padding: var(--doc-space-4) var(--doc-space-5);
+  border-left: var(--doc-border-thick) solid var(--doc-accent);
+  background: var(--doc-panel);
+}
+
+/* The status tile: the word carries the meaning, and colour repeats it. */
+.design-tile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--doc-space-2) var(--doc-space-5);
+  align-items: baseline;
+  margin: 0 0 var(--doc-space-5);
+  padding: var(--doc-space-3) var(--doc-space-4);
+  border: var(--doc-border) solid var(--doc-line-strong);
+  background: var(--doc-panel);
+  font-family: var(--doc-font-mono);
+  font-size: var(--doc-text-small);
+}
+.design-tile__status {
+  padding: 0 var(--doc-space-2);
+  border: var(--doc-border) solid currentColor;
+  font-weight: var(--doc-weight-medium);
+}
+[data-design-status="draft"] .design-tile__status { color: var(--doc-draft); }
+[data-design-status="in-review"] .design-tile__status { color: var(--doc-review); }
+[data-design-status="ready"] .design-tile__status { color: var(--doc-ready); }
+
+/* Open questions stay in view, above the states they affect. */
+.design-questions {
+  margin: 0 0 var(--doc-space-6);
+  padding: var(--doc-space-4) var(--doc-space-5);
+  border: var(--doc-border) dashed var(--doc-line-strong);
+}
+.design-questions h2:not(:where(.design-frame *)) {
+  margin: 0 0 var(--doc-space-3);
+  padding: 0;
+  border: 0;
+  font-size: var(--doc-text-h3);
+}
+
+/* One state: a label, then a picture of the screen at a fixed width. */
+.design-state { margin: 0 0 var(--doc-space-7); }
+.design-state__label {
+  margin: 0 0 var(--doc-space-2);
+  padding: 0;
+  border: 0;
+  color: var(--doc-bright);
+  font-size: var(--doc-text-h3);
+  font-weight: var(--doc-weight-medium);
+}
+.design-state__note {
+  max-width: var(--doc-measure);
+  margin: 0 0 var(--doc-space-3);
+  color: var(--doc-muted);
+  font-size: var(--doc-text-small);
+}
+.design-frame {
+  container-type: inline-size;
+  background: var(--frame-surface);
+  color: var(--frame-text);
+  border: var(--doc-border) solid var(--doc-line-strong);
+}
+.design-frame--narrow { width: var(--frame-narrow); }
+.design-frame--phone { width: var(--frame-phone); }
+.design-frame--tablet { width: var(--frame-tablet); }
+.design-frame--desktop { width: var(--frame-desktop); }
