@@ -9,24 +9,26 @@
 //     --baseline-dir <folder>    compare one folder with a copy of it
 //     --no-date                  skip the date test (fixtures, shipped samples)
 //     --audit                    also list unused tokens and missing state classes
-//   node check-design.mjs --snapshot <folder>    copy it to a temp folder, print the path
+//   node check-design.mjs --snapshot-clean <copy>  delete a copy that --snapshot made
+//   node check-design.mjs --snapshot <folder>    copy it under .local/design-snapshots, print the path
 //
 // Prints one "file:line [rule] message" per problem. Exit 1 on any problem.
 // It reads files only: it cannot see text clipped on screen, so a browser look
 // is still part of the review. Status and date rules live in page-status.mjs.
 
 import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, statSync } from 'node:fs'
-import { tmpdir } from 'node:os'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { INDEX_ROOTS, indexProblem } from './build-index.mjs'
 import { buildCss } from './build-tokens.mjs'
 import { cssProblems, varsDefined, varsUsed } from './css-rules.mjs'
 import { hasClass, inside, lineAt, parseHtml, stripTags } from './html-lite.mjs'
+import { snapshotCommand } from './snapshot.mjs'
 import { carriers, compareStatus, metaOf, newestDate, statesOf, statusProblems, tileOf } from './page-status.mjs'
 
 export { TILE_LINE } from './page-status.mjs'
+export { snapshot, snapshotClean } from './snapshot.mjs'
 export const CSP = "script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'"
 export const PROTOTYPE_LINE = 'Prototype – not for comments or sign-off'
 const PAGE_KINDS = new Set(['screen', 'doc', 'index'])
@@ -452,16 +454,8 @@ function gitRefExists(ref, target) {
 }
 
 function main(argv) {
-  if (argv[0] === '--snapshot') {
-    if (!argv[1] || !existsSync(argv[1])) {
-      console.error('usage: node check-design.mjs --snapshot <folder>')
-      return 2
-    }
-    const copy = mkdtempSync(path.join(tmpdir(), 'design-baseline-'))
-    cpSync(argv[1], copy, { recursive: true })
-    console.log(copy)
-    return 0
-  }
+  const snapshotCode = snapshotCommand(argv)
+  if (snapshotCode !== null) return snapshotCode
   const options = {}
   const targets = []
   for (let i = 0; i < argv.length; i += 1) {

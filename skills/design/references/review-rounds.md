@@ -21,7 +21,7 @@ Several threads on one element are consecutive blocks. Erfana finds a comment's 
 
 Erfana saves comments to the working tree, so a new comment may not be in git yet.
 
-1. Before the first edit, copy the whole `docs/` folder, which holds both the designs and the system. The command prints the path of a copy in the system's temporary folder, which the system clears:
+1. Before the first edit, from the project root, copy the whole `docs/` folder, which holds both the designs and the system. The command prints the path of a copy under `.local/design-snapshots/` in the project. That folder ignores itself in git, and client comments stay inside the project:
 
 ```bash
 node <skill>/scripts/check-design.mjs --snapshot docs
@@ -36,6 +36,7 @@ node <skill>/scripts/check-design.mjs --baseline-dir <copy> docs
 3. Read the `baseline:` line. It must show the pages you expected. The checker fails if no page matches, if a block changed, if a block now sits before a different element, if a page with comments is gone, if a ready state changed and stayed ready, and if a changed state kept an old date.
 4. If it reports a lost or moved block, restore it from the copy byte for byte, and run it again.
 5. Quote any `notice:` line in the closing account.
+6. After a clean run, remove that copy with `node <skill>/scripts/check-design.mjs --snapshot-clean <copy>`, which deletes only copies under `.local/design-snapshots/`. If the run is blocked, keep the copy, report its path, and remove it the same way once the block is resolved, because it holds client comments.
 
 If the copy cannot be made, make no edit and report it as blocked. Use `--baseline-ref HEAD` only for a small edit when `git status` showed the folder was clean: that mode cannot see a removed page.
 

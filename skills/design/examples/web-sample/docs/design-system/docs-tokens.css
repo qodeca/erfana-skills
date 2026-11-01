@@ -29,6 +29,9 @@
   --ds-color-link-hover: #8b94ff;
   --ds-color-lime: #E3E829;
   --ds-color-violet: #A0A8FF;
+  --ds-color-amber: #F5B544;
+  --ds-color-green: #5FD38D;
+  --ds-caption-max: calc(100vw - 98px);
   --ds-color-error: #f48771;
 
   /* Spacing: the number is a step, not a pixel count */

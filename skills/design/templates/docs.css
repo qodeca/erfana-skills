@@ -139,22 +139,37 @@ main { display: block; max-width: calc(var(--ds-table-max) + var(--ds-space-24))
 }
 .ds-crumbs [aria-current="page"] { color: var(--ds-color-text-bright); }
 
-/* The status badge. Text first, colour second: the word is the information. */
+/* The status badge. The word is the information; the fill makes it quick to spot.
+   Amber is not finished, violet waits for review, green is go. */
 .ds-status {
   display: inline-block;
   padding: 0 var(--ds-space-3);
-  border: var(--ds-border-width) solid currentColor;
   font-family: var(--ds-font-mono);
   font-size: var(--ds-text-small);
   font-weight: var(--ds-font-normal);
   line-height: var(--ds-leading-normal);
   vertical-align: middle;
-  color: var(--ds-color-text-tertiary);
+  white-space: nowrap;
+  color: var(--ds-color-bg-primary);
+  background: var(--ds-color-amber);
 }
 .ds-status[data-status="ready"],
-[data-design-status="ready"] .ds-status { color: var(--ds-color-lime); }
+[data-design-status="ready"] .ds-status { background: var(--ds-color-green); }
 .ds-status[data-status="in-review"],
-[data-design-status="in-review"] .ds-status { color: var(--ds-color-violet); }
+[data-design-status="in-review"] .ds-status { background: var(--ds-color-violet); }
+
+/* A drawing can stay wider than a narrow screen; its words must not. */
+.ds-frame > figcaption,
+.design-tile { max-width: var(--ds-caption-max); }
+
+/* A drawing is a still picture. A spinner that never stops is also an access failure. */
+.design-frame,
+.design-frame *,
+.design-frame *::before,
+.design-frame *::after,
+[aria-hidden='true'] *,
+[aria-hidden='true'] *::before,
+[aria-hidden='true'] *::after { animation: none !important; }
 
 .ds-muted { color: var(--ds-color-text-tertiary); max-width: var(--ds-measure); }
 
