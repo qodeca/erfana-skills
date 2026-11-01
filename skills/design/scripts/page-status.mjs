@@ -17,7 +17,12 @@ const TOKEN_NAME = /--[a-z][a-z\d-]*\*?/gi
 // A ; that ends an HTML entity, as in &amp;, does not end a task.
 const TASK_END = /(?<!&#?\w+);/
 
-export const isDate = value => DATE.test(value)
+/** A real calendar date in YYYY-MM-DD: 2026-02-30 does not survive the round trip. */
+export function isDate(value) {
+  if (!DATE.test(value)) return false
+  const parsed = new Date(`${value}T00:00:00Z`)
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(value)
+}
 export const statesOf = nodes => nodes.filter(n => hasClass(n, 'design-state'))
 export const pageKind = nodes => nodes.find(n => n.tag === 'body')?.attrs.get('data-design-page') ?? ''
 
@@ -128,7 +133,8 @@ export function compareStatus(oldText, oldNodes, text, nodes) {
 
   const oldStates = new Map()
   for (const state of statesOf(oldNodes)) {
-    oldStates.set(state.attrs.get('id') ?? '', { raw: oldText.slice(state.start, state.end), status: tileOf(oldNodes, state)?.attrs.get('data-design-status') })
+    const oldTile = tileOf(oldNodes, state)
+    oldStates.set(state.attrs.get('id') ?? '', { raw: oldText.slice(state.start, state.end), status: oldTile?.attrs.get('data-design-status'), date: oldTile?.attrs.get('data-updated') })
   }
   const newStates = statesOf(nodes)
   const aroundChanged = outsideStates(oldText, statesOf(oldNodes)) !== outsideStates(text, newStates)
@@ -137,7 +143,7 @@ export function compareStatus(oldText, oldNodes, text, nodes) {
     const old = oldStates.get(id)
     const raw = text.slice(state.start, state.end)
     const tile = tileOf(nodes, state)
-    if (old && old.raw !== raw) changedStates.push({ id, raw, oldRaw: old.raw, tile })
+    if (old && old.raw !== raw) changedStates.push({ id, raw, oldRaw: old.raw, oldDate: old.date, tile })
     if (tile?.attrs.get('data-design-status') !== 'ready') continue
     if (oldPageStatus === 'ready') {
       if (oldText !== text) problems.push({ line: tile.line, message: `state #${id}: a ready page changed – set it back to in-review` })

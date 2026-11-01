@@ -162,14 +162,21 @@ main { display: block; max-width: calc(var(--ds-table-max) + var(--ds-space-24))
 .ds-frame > figcaption,
 .design-tile { max-width: var(--ds-caption-max); }
 
-/* A drawing is a still picture. A spinner that never stops is also an access failure. */
+/* A drawing is a still picture. A spinner that never stops is also an access
+   failure, and a pointer or a fade on hover would say the picture is a product.
+   pointer-events stays as it is, because a comment must land on the element under
+   the pointer. The checker makes every :hover and :active rule stop at a frame. */
 .design-frame,
 .design-frame *,
 .design-frame *::before,
 .design-frame *::after,
 [aria-hidden='true'] *,
 [aria-hidden='true'] *::before,
-[aria-hidden='true'] *::after { animation: none !important; }
+[aria-hidden='true'] *::after {
+  animation: none !important;
+  cursor: default !important;
+  transition: none !important;
+}
 
 .ds-muted { color: var(--ds-color-text-tertiary); max-width: var(--ds-measure); }
 
@@ -308,6 +315,20 @@ h3:not(:where(.design-frame *, [aria-hidden='true'] *)) {
 }
 .ds-tokens { margin-bottom: var(--ds-space-8); }
 
+/* A prototype's line stays on screen, because a prototype fools people more easily
+   than a drawing does. */
+.design-prototype {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0 0 var(--ds-space-8);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  background: var(--ds-color-amber);
+  color: var(--ds-color-bg-primary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+}
+
 /* ---------- shared documentation labels ---------- */
 
 /* A code sample shown as text. It wraps rather than scrolls, so none of it is
@@ -367,8 +388,7 @@ h3:not(:where(.design-frame *, [aria-hidden='true'] *)) {
 }
 .ds-foreign-page__body { margin: 0 0 var(--ds-space-5); font-size: var(--ds-text-md); }
 .ds-foreign-page__link,
-.ds-foreign-page__link:visited,
-.ds-foreign-page__link:hover { color: var(--ds-page-link); text-decoration: underline; }
+.ds-foreign-page__link:visited { color: var(--ds-page-link); text-decoration: underline; }
 .ds-foreign-page__missing {
   display: flex;
   align-items: center;
@@ -403,7 +423,7 @@ h3:not(:where(.design-frame *, [aria-hidden='true'] *)) {
   border: var(--ds-border-width) solid var(--ds-color-border-default);
   text-decoration: none;
 }
-.ix-card:hover { background: var(--ds-color-bg-hover-solid); border-color: var(--ds-color-border-subtle); }
+.ix-card:hover:not(:where(.design-frame *)) { background: var(--ds-color-bg-hover-solid); border-color: var(--ds-color-border-subtle); }
 /* The grid does not scroll, so the ring goes outside the card. */
 .ix-card:focus-visible {
   outline: var(--ds-border-width-thick) solid var(--ds-color-border-focus);

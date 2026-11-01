@@ -17,11 +17,10 @@
 
 import { existsSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { pathToFileURL } from 'node:url'
-import { lineAt, parseHtml } from './html-lite.mjs'
+import { isCommentBlock, lineAt, parseHtml } from './html-lite.mjs'
 import { STATUS_ORDER, STATUS_TEXT, TILE_LINE, isDate, pageFacts } from './page-status.mjs'
+import { INDEX_ROOTS, isMain, lf, localDate } from './shared.mjs'
 
-export const INDEX_ROOTS = ['design-system', 'designs']
 const REGIONS = { 'design-system': ['status', 'summary', 'list'], designs: ['status', 'list'] }
 const SYSTEM_GROUPS = [
   { folder: 'foundations', title: 'Foundations', empty: 'No foundation pages yet.' },
@@ -29,7 +28,6 @@ const SYSTEM_GROUPS = [
   { folder: 'patterns', title: 'Patterns', empty: 'No pattern pages yet. A pattern combines components into a recurring flow.' }
 ]
 const MARKER = /^<!-- design:generated (\S+) (start|end) -->$/
-const COMMENT_BLOCK = /^<!--\s*erfana:comment/
 
 const byPath = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
 /** Text from a page is already HTML, so an existing entity stays as it is. */
@@ -37,10 +35,6 @@ const safe = value => value
   .replace(/&(?!(?:#\d+|#x[\da-f]+|[a-z][a-z\d]*);)/gi, '&amp;')
   .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const href = rel => rel.split('/').map(encodeURIComponent).join('/')
-const today = () => {
-  const t = new Date()
-  return [t.getFullYear(), String(t.getMonth() + 1).padStart(2, '0'), String(t.getDate()).padStart(2, '0')].join('-')
-}
 
 function listFiles(root, folder, out = []) {
   const entries = readdirSync(path.join(root, folder), { withFileTypes: true })
@@ -197,7 +191,7 @@ function locateRegions(file, text, names) {
   }
   const spans = [...regions.values()].sort((a, b) => a.from - b.from)
   if (spans.some((span, i) => i > 0 && span.from < spans[i - 1].to)) throw new Error(`${file}: generated regions overlap`)
-  for (const c of comments.filter(comment => COMMENT_BLOCK.test(comment.raw))) {
+  for (const c of comments.filter(comment => isCommentBlock(comment.raw))) {
     const at = c.end - c.raw.length
     for (const [name, region] of regions) {
       if (at >= region.from && at < region.to) {
@@ -218,19 +212,21 @@ export function plan(file) {
   const { pages, errors, list, summary } = name === 'design-system' ? renderSystem(root) : renderDesigns(root)
   if (errors.length > 0) throw new Error(`cannot build ${file}: ${errors.join('; ')}`)
 
-  const piece = n => text.slice(regions.get(n).from, regions.get(n).to)
+  // A checkout may have CRLF: compare as LF, and write what the file already uses.
+  const piece = n => lf(text.slice(regions.get(n).from, regions.get(n).to))
+  const eol = text.includes('\r\n') ? '\r\n' : '\n'
   const current = /data-updated="([^"]*)"/.exec(piece('status'))?.[1] ?? ''
   const newest = pages.map(p => p.updated).sort().at(-1) ?? ''
   const generated = { list: `\n${list}\n`, summary: `\n${summary}\n` }
   const same = n => n === 'status' || piece(n) === generated[n]
   const known = [current, newest].filter(isDate).sort().at(-1) ?? ''
   const unchanged = date => REGIONS[name].every(same) && dateless(piece('status')) === dateless(`\n${renderStatus(pages, date)}\n`)
-  const stale = !unchanged(known || today()) || (isDate(newest) && current < newest) || !isDate(current)
-  const date = stale ? [known, today()].filter(isDate).sort().at(-1) : current
+  const stale = !unchanged(known || localDate()) || (isDate(newest) && current < newest) || !isDate(current)
+  const date = stale ? [known, localDate()].filter(isDate).sort().at(-1) : current
   generated.status = stale ? `\n${renderStatus(pages, date)}\n` : piece('status')
   const ordered = [...regions.entries()].sort((a, b) => b[1].from - a[1].from)
   let output = text
-  for (const [regionName, region] of ordered) output = output.slice(0, region.from) + generated[regionName] + output.slice(region.to)
+  for (const [regionName, region] of ordered) output = output.slice(0, region.from) + generated[regionName].replace(/\n/g, eol) + output.slice(region.to)
   return { stale, output }
 }
 
@@ -277,6 +273,6 @@ function main(argv) {
   return failed > 0 ? 1 : 0
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMain(import.meta.url)) {
   process.exitCode = main(process.argv.slice(2))
 }

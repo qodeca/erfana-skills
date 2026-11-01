@@ -14,11 +14,11 @@
   color: var(--button-text);
   font-family: var(--typeface-body);
 }
-.button:hover,
+.button:hover:not(:where(.design-frame *)),
 .button.is-hover { background: var(--color-text); }
 .button:focus-visible,
 .button.is-focus { outline: var(--button-padding) solid var(--color-action); }
-.button:active,
+.button:active:not(:where(.design-frame *)),
 .button.is-active { background: var(--color-text); }
 .button:disabled,
 .button.is-disabled { background: var(--color-surface); color: var(--color-text); }

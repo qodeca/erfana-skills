@@ -42,12 +42,12 @@
 .slot__who { color: inherit; font-size: var(--type-small); line-height: var(--leading-tight); overflow-wrap: anywhere; }
 .slot__who:last-child { grid-row: 1 / span 2; }
 .slot__mark { display: inline-flex; grid-column: 2; gap: var(--space-hair); align-items: center; font-size: var(--type-small); font-weight: var(--emphasis-strong); }
-.slot:hover,
+.slot:hover:not(:where(.design-frame *)),
 .slot.is-hover { background: var(--color-sunken); }
 .slot:focus-visible,
 .slot.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
-.slot:active,
-.slot.is-active { background: var(--color-sunken); transform: scale(var(--motion-press)); }
+.slot:active:not(:where(.design-frame *)),
+.slot.is-active { background: var(--color-sunken); transform: scale(0.98); }
 .slot:disabled,
 .slot.is-disabled { background: transparent; color: var(--color-muted); cursor: not-allowed; text-decoration: line-through; }
 .slot[aria-pressed="true"],
@@ -62,11 +62,11 @@
   transform-origin: left;
   animation: strip-on var(--motion-settle) var(--motion-curve);
 }
-.slot[aria-pressed="true"]:hover,
+.slot[aria-pressed="true"]:hover:not(:where(.design-frame *)),
 .slot.is-selected.is-hover { background: var(--color-marker-hover); }
-.slot[aria-pressed="true"]:active,
+.slot[aria-pressed="true"]:active:not(:where(.design-frame *)),
 .slot.is-selected.is-active { background: var(--color-marker-pressed); }
-@keyframes strip-on { from { transform: scaleX(var(--motion-press)); } }
+@keyframes strip-on { from { transform: scaleX(0.98); } }
 
 /* Below the base rules: an @container rule does not outrank a later rule of
    the same weight. */
@@ -77,5 +77,5 @@
 @media (prefers-reduced-motion: reduce) {
   .slot { transition: none; }
   .slot[aria-pressed="true"], .slot.is-selected { animation: none; }
-  .slot:active, .slot.is-active { transform: none; }
+  .slot:active:not(:where(.design-frame *)), .slot.is-active { transform: none; }
 }

@@ -3,8 +3,29 @@
 //
 // The copy of docs/ a review round compares against. Node standard library only.
 
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
+import { closeSync, constants, existsSync, lstatSync, mkdirSync, mkdtempSync, openSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
+
+const isLink = target => lstatSync(target, { throwIfNoEntry: false })?.isSymbolicLink() ?? false
+
+/** The folder the copy goes in. A planted link here would send client comments elsewhere. */
+function safeBase(project) {
+  const local = path.join(project, '.local')
+  const base = path.join(local, 'design-snapshots')
+  const ignore = path.join(base, '.gitignore')
+  if ([local, base, ignore].some(isLink)) return null
+  mkdirSync(base, { recursive: true })
+  if (!realpathSync(base).startsWith(realpathSync(project) + path.sep)) return null
+  // Windows has no O_NOFOLLOW, so the check above is what holds there.
+  const flags = constants.O_WRONLY | constants.O_CREAT | constants.O_TRUNC | (constants.O_NOFOLLOW ?? 0)
+  const handle = openSync(ignore, flags, 0o644)
+  try {
+    writeFileSync(handle, '*\n')
+  } finally {
+    closeSync(handle)
+  }
+  return base
+}
 
 // The copy holds client comments, so it stays in the project, in a folder git ignores.
 // Returns null when the folder is not inside the project or holds a link, so the run stops and leaves no copy.
@@ -12,9 +33,13 @@ export function snapshot(folder, project = process.cwd()) {
   const source = path.resolve(project, folder)
   if (!existsSync(source)) return null
   if (!realpathSync(source).startsWith(realpathSync(project) + path.sep)) return null
-  const base = path.join(project, '.local', 'design-snapshots')
-  mkdirSync(base, { recursive: true })
-  writeFileSync(path.join(base, '.gitignore'), '*\n')
+  let base
+  try {
+    base = safeBase(project)
+  } catch {
+    return null
+  }
+  if (!base) return null
   const copy = mkdtempSync(path.join(base, 'baseline-'))
   try {
     copyFiles(source, copy)

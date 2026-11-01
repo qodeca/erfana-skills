@@ -17,7 +17,7 @@
   font-family: inherit;
   font-size: var(--type-body);
 }
-.field__input:hover,
+.field__input:hover:not(:where(.design-frame *)),
 .field__input.is-hover { border-color: var(--color-edge-strong); }
 .field__input:focus-visible,
 .field__input.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }

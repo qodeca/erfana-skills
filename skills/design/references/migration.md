@@ -22,6 +22,11 @@ Work area by area, so a stopped run leaves a clear line between done and not don
 | Raw values | Tokens: add missing ones through Change system |
 | One-off styles in a page | The library, or a system change |
 | A clickable flow someone still needs | A separate file in `prototypes/` |
+| Any other start of file, or the older CSP meta | The fixed start of file in page-rules, with the current CSP meta |
+| A `:hover` or `:active` rule | The same rule with `:not(:where(.design-frame *))` |
+| `var()` on `opacity`, `display`, or the scale in `transform` | The literal value. For a value that differs by theme, a rule under `[data-theme]` |
+| An input or textarea in a frame that accepts typing | The same control with `readonly` |
+| A `<select>`, checkbox, radio, or `<details>` in a frame | Plain elements drawn to look the same |
 | One status tile at the top of a page | A `.design-tile` rectangle directly above each frame, with the page's status and date. Doc and index pages use `p.ds-meta` |
 | `.doc-crumbs`, `.doc-lede`, `.doc-note` | `.ds-crumbs`, `.ds-lede`, `.ds-note` |
 | A `section.design-state` with its label above the frame | A `figure.ds-frame.design-state` in `.ds-states`, with the label in its `figcaption` |

@@ -14,9 +14,9 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.link:hover,
+.link:hover:not(:where(.design-frame *)),
 .link.is-hover { color: var(--color-muted); }
 .link:focus-visible,
 .link.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
-.link:active,
+.link:active:not(:where(.design-frame *)),
 .link.is-active { color: var(--color-muted); }

@@ -21,12 +21,12 @@
 }
 .button--full { width: 100%; }
 .button--compact { min-height: var(--button-height-compact); font-size: var(--type-small); }
-.button:hover,
+.button:hover:not(:where(.design-frame *)),
 .button.is-hover { border-color: var(--color-action-hover); background: var(--color-action-hover); }
 .button:focus-visible,
 .button.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
-.button:active,
-.button.is-active { border-color: var(--color-action-pressed); background: var(--color-action-pressed); transform: scale(var(--motion-press)); }
+.button:active:not(:where(.design-frame *)),
+.button.is-active { border-color: var(--color-action-pressed); background: var(--color-action-pressed); transform: scale(0.98); }
 .button:disabled,
 .button.is-disabled {
   border-color: var(--color-edge);
@@ -38,18 +38,18 @@
 .button.is-loading { cursor: progress; }
 
 .button--quiet { border-color: var(--color-edge-strong); background: transparent; color: var(--color-text); }
-.button--quiet:enabled:hover,
+.button--quiet:enabled:hover:not(:where(.design-frame *)),
 .button--quiet.is-hover { border-color: var(--color-edge-strong); background: var(--color-sunken); }
-.button--quiet:enabled:active,
+.button--quiet:enabled:active:not(:where(.design-frame *)),
 .button--quiet.is-active { border-color: var(--color-edge-strong); background: var(--color-sunken); }
 
 .button--danger { border-color: var(--color-error); background: var(--color-error); color: var(--color-on-error); }
-.button--danger:hover,
+.button--danger:hover:not(:where(.design-frame *)),
 .button--danger.is-hover { border-color: var(--color-error-hover); background: var(--color-error-hover); }
-.button--danger:active,
+.button--danger:active:not(:where(.design-frame *)),
 .button--danger.is-active { border-color: var(--color-error-pressed); background: var(--color-error-pressed); }
 
 @media (prefers-reduced-motion: reduce) {
   .button { transition: none; }
-  .button:active, .button.is-active { transform: none; }
+  .button:active:not(:where(.design-frame *)), .button.is-active { transform: none; }
 }

@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 //
 // Builds tokens.css from a DTCG tokens.json with three levels: base, semantic,
-// component. Node standard library only, so one file works on every system.
+// component. Node standard library only.
 //
 //   node build-tokens.mjs <tokens.json> <tokens.css>           write the CSS
 //   node build-tokens.mjs <tokens.json> <tokens.css> --check   fail on drift
@@ -14,7 +14,7 @@
 // A semantic token may add theme values under $extensions.design.modes.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { pathToFileURL } from 'node:url'
+import { isMain, sameText } from './shared.mjs'
 
 const LEVELS = ['base', 'semantic', 'component']
 const ALIAS = /^\{([^{}]+)\}$/
@@ -127,7 +127,7 @@ function main(argv) {
     return 1
   }
   if (check) {
-    if (!existsSync(output) || readFileSync(output, 'utf8') !== css) {
+    if (!existsSync(output) || !sameText(readFileSync(output, 'utf8'), css)) {
       console.error(`${output} differs from ${input} – run build-tokens.mjs`)
       return 1
     }
@@ -139,6 +139,6 @@ function main(argv) {
   return 0
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (isMain(import.meta.url)) {
   process.exitCode = main(process.argv.slice(2))
 }

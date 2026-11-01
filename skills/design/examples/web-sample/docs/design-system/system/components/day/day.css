@@ -21,12 +21,12 @@
   cursor: pointer;
 }
 .day__date { font-size: var(--type-body); font-weight: var(--emphasis-strong); font-variant-numeric: tabular-nums; }
-.day:hover,
+.day:hover:not(:where(.design-frame *)),
 .day.is-hover { background: var(--color-sunken); }
 .day:focus-visible,
 .day.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
-.day:active,
-.day.is-active { background: var(--color-sunken); transform: scale(var(--motion-press)); }
+.day:active:not(:where(.design-frame *)),
+.day.is-active { background: var(--color-sunken); transform: scale(0.98); }
 .day[aria-pressed="true"],
 .day.is-selected { border-color: var(--color-edge-strong); background: var(--color-text); color: var(--color-surface); }
 .day:disabled,
@@ -40,6 +40,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .day:active, .day.is-active { transform: none; }
+  .day:active:not(:where(.design-frame *)), .day.is-active { transform: none; }
 }
 .days + .stack { margin-block-start: var(--space-card); }
