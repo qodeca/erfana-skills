@@ -6,15 +6,16 @@ Maintainer-facing entry point for Claude Code (or any maintainer agent) working 
 
 The **erfana** plugin for Claude Code – an open-source (GPL-3.0-only) orchestration toolkit, distributed via a single-plugin GitHub marketplace at `github.com/qodeca/erfana-skills`. Since v7.1.0 the same package also installs on **Qwen Code** (0.22.3+), which converts Claude Code plugins at install time – one package, no second manifest, no build step, no second release train. Everything the two hosts do differently lives in [`docs/hosts.md`](../docs/hosts.md), generated from `scripts/_lib/host_matrix.py`; read that before changing a hook matcher, a skill frontmatter key, or agent frontmatter. Maintained by Qodeca sp. z o.o. End-user docs: `README.md`. Full catalog, per-command detail, and version history: [`docs/architecture.md`](../docs/architecture.md).
 
-Current version: **v9.3.1**. The plugin ships 18 auto-discovered skills + 38 shared agents + 6 safety hooks + 7 slash commands. Load-bearing summary below.
+Current version: **v9.3.1**. The plugin ships 19 auto-discovered skills + 38 shared agents + 6 safety hooks + 7 slash commands. Load-bearing summary below.
 
-**Skills (18)** – all invoke as `/erfana:<name>`:
+**Skills (19)** – all invoke as `/erfana:<name>`:
 
 - Orchestration (6): `agent`, `issue`, `skill`, `spec`, `report`, `article` (per-skill agent notes below).
 - `article` researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation.
 - `report` (named `managing-reports` until its brief rebuild) reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
 - `skill` opens every operation with a coverage-map requirements interview: Create always interviews in the main conversation per `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Reviews run through the blinded `skill-reviewer` against `references/skill-standard.md`. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
-- Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (3): `prompt`, `draft-goal`, and `raise-the-bar`. Work session (4): `autopilot`, `next-batch`, `coordinate`, and `expert-panel`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Router (1): `using-erfana` (an ordinary skill, loaded when its trigger phrases match – no hook pre-loads it).
+- `design` is the only skill that ships runnable scripts: `skills/design/scripts/` holds a checker and a token builder, Node standard library only. Gate 20 proves them with `tests/design/run-fixtures.mjs`.
+- Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (3): `prompt`, `draft-goal`, and `raise-the-bar`. Work session (4): `autopilot`, `next-batch`, `coordinate`, and `expert-panel`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Design (1): `design`. Router (1): `using-erfana` (an ordinary skill, loaded when its trigger phrases match – no hook pre-loads it).
 - `handoff` is adapted from `mattpocock/skills` (MIT): its upstream files stay verbatim under `skills/handoff/references/`, and `REUSE.toml` marks them MIT (the adapted `SKILL.md` carries both licenses). Keep that annotation in step when the files change.
 
 **Safety hooks (6)** – project-agnostic safety net only (personal style preferences belong in user settings): `bash-safety`, `secret-detector`, `post-compact-reminder`, `verify-completion`, and the interview guards `grill-guard` / `ms-grill-guard` (Stop hooks that block one stop while their open-marker sentinel is present; they evaluate every stop, so the sentinel alone scopes them). All are registered in `hooks/hooks.json` and launched by `hooks/dispatch.sh`, each with a `.sh` and a `.ps1` sibling. Registration rules are under Hard constraints (Gate 14); behaviour and fixtures: [`docs/architecture.md`](../docs/architecture.md) + [`docs/gates/16-hook-fixtures.md`](../docs/gates/16-hook-fixtures.md).
@@ -29,7 +30,7 @@ Rules below are enforced by gates (`scripts/run-all-gates.sh`); per-gate detail 
 
 - **Zero CJK characters anywhere** in `*.md`, `*.json`, `*.html`, `*.js`, `*.mjs`, `*.jsx`, `*.py`, `*.sh`, `*.svg`, `*.yml`, `*.yaml`, `.gitignore`. UTF-8 only. (Gate 1)
 - **Plugin package id is `erfana`**; the copyright holder / maintainer is `Qodeca sp. z o.o.` (`github.com/qodeca`). Legacy brand `qodesign` is forbidden across the paths Gate 11 scans – `skills/`, `.claude-plugin/`, `README.md`, `LICENSE`, `CHANGELOG.md`, `SECURITY.md`, `.github/`. One whitelisted exception: `CHANGELOG.md` (history). (Gate 11)
-- **SKILL.md `name:` = folder name** for all eighteen skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:issue`) and bare (`/issue`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Convention: Gate 2 checks only that `name:` exists, not that it equals the folder.)
+- **SKILL.md `name:` = folder name** for all nineteen skills. The `/erfana:` invocation prefix derives from `plugin.json` `name: erfana`, **not** from `SKILL.md name:` (per [skills frontmatter spec](https://code.claude.com/docs/en/skills#frontmatter-reference): lowercase, hyphens, max 64 chars, no `:`). Folder-name equivalence keeps autocomplete consistent. Both namespaced (`/erfana:issue`) and bare (`/issue`) register today – tracked upstream at [anthropics/claude-code#43695](https://github.com/anthropics/claude-code/issues/43695); document the namespaced form everywhere. (Convention: Gate 2 checks only that `name:` exists, not that it equals the folder.)
 - **Agent `name:` = filename basename** (no `.md`) for every `agents/*.md`. (Gate 2)
 - **Agent descriptions are calm and short.** `agents/*.md` `description:` says what the agent does and when to use it in plain prose – ≤300 chars for user-facing agents, one ≤160-char `Used by <skill> to …` sentence for skill-internal ones. No "MUST BE USED", "Use PROACTIVELY", ALL-CAPS emphasis, or `<example>` blocks: Claude Code lists every agent description in every session. Guidance: `skills/agent/references/agent-standard.md`. (Convention, not gate-enforced.)
 - **Skill frontmatter routes, it does not summarise the workflow.** `description:` says what the skill does, in the third person; `when_to_use:` holds the trigger phrases; the workflow goes in the body (`skills/skill/references/skill-standard.md`). Soft-warn when `description:` is over 500 chars. (Gate 2)
@@ -49,13 +50,13 @@ Detailed architecture, full per-path layout, cross-skill flow, adding-new-skills
 
 ## Critical commands
 
-Pre-commit + CI verification – single command for all 13 gates (all hard):
+Pre-commit + CI verification – single command for all 14 gates (all hard):
 
 ```bash
 bash scripts/run-all-gates.sh
 ```
 
-Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are historical and non-contiguous – gates 5, 6, 8, 9, 12 and 13 retired with the design skills in v7.0.0 and the survivors kept their numbers. Gate 15 (doc-claim sync) is hard – nine checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem, a Qwen Code version that disagrees with `host_matrix.py`, or a total count in words or in the manifests.
+Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are historical and non-contiguous – gates 5, 6, 8, 9, 12 and 13 retired with the old design skills in v7.0.0 and the survivors kept their numbers. Gate 15 (doc-claim sync) is hard – nine checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem, a Qwen Code version that disagrees with `host_matrix.py`, or a total count in words or in the manifests.
 
 Cross-host verification is a separate command, deliberately outside `run-all-gates.sh`:
 
@@ -69,7 +70,7 @@ The user-facing reference ([`docs/reference.md`](../docs/reference.md)) is also 
 
 REUSE/SPDX licensing is **not** part of `run-all-gates.sh`: `reuse lint` runs as a separate blocking step in `.github/workflows/verify.yml` (pinned `reuse==5.1.1`). To reproduce the licensing check locally, `pip install reuse && reuse lint` (expect exit 0).
 
-Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) plus the 13 per-gate detail files under [`docs/gates/`](../docs/gates/). Architectural conventions: [`docs/architecture.md`](../docs/architecture.md).
+Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates.md) plus the 14 per-gate detail files under [`docs/gates/`](../docs/gates/). Architectural conventions: [`docs/architecture.md`](../docs/architecture.md).
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](../docs/verification-gates.md) `## Quick spot-checks`.
 

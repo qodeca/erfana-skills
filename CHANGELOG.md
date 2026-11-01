@@ -3,6 +3,17 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **`erfana:design`, a skill for design systems and client-reviewable designs.** It covers desktop, web, and mobile through seven operations: Create system, Change system, Audit system, New design, Revise, Migrate, and Set status. Review pages use HTML and CSS only, and show every state, so a comment in Erfana always has a visible place. A status tile on each page says "Design, not a working product". Tokens are DTCG JSON with three levels, built into CSS. The skill ships a checker and a token builder as Node scripts, and one sample.
+- **Gate 20 proves the design checker.** It replays rule-breaking pages through `check-design.mjs`, and checks the shipped sample.
+
+### Changed
+
+- **`BACKLOG.md` narrows the design exclusion to brand systems.** The rule that kept design work out of this repo no longer covers the new skill, which ships no brand.
+
 ## [9.3.1] - 2026-10-31
 
 ### Fixed

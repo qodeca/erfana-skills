@@ -12,7 +12,7 @@ CI (`.github/workflows/verify.yml`) invokes the same runner on every push and pu
 
 **Layout reference**:
 
-- Skills: `skills/<name>/SKILL.md` (18 skills – 6 orchestration + 1 process + 1 verification + 3 prompting + 4 work session + 2 session closeout + 1 bootstrap).
+- Skills: `skills/<name>/SKILL.md` (19 skills – 6 orchestration + 1 process + 1 verification + 3 prompting + 4 work session + 2 session closeout + 1 design + 1 bootstrap).
 - Shared agents: `agents/*.md` (38 shared agents at plugin root, scanned by Gate 2 + Gate 7 from v4.0.0).
 - Per-skill nested agents: none. `article` (v4.3.0) and `report` (then `managing-reports`) hoisted theirs to plugin-root `article-*` and `report-*`.
 - Hooks: `hooks/hooks.json` + 6 safety hooks, each a `.sh` (macOS/Linux) + `.ps1` (Windows) pair routed through the `dispatch.sh` launcher, which also enforces the shared timeout (cross-platform, v4.2.20+; plugin-root interview guards and cross-host wiring, v7.1.0+; validated by Gate 14, v4.1+).
@@ -38,6 +38,7 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
 | 18 | Skill registry sync (`docs/skill-registry.md` vs `ls skills/` + `git log`; shallow clone, list drift, duplicate rows and values git contradicts are hard, lagging dates warn; v6.6.1+) | hard | [`gates/18-skill-registry.md`](gates/18-skill-registry.md) |
 | 19 | Reference sync (`docs/reference.md` regenerated from skills, agents, commands, and hooks; whole-file diff; v9.3.0+) | hard | [`gates/19-reference.md`](gates/19-reference.md) |
+| 20 | Design checker (`tests/design/run-fixtures.mjs` proves the `design` skill's checker, token builder, and shipped sample) | hard | [`gates/20-design-checker.md`](gates/20-design-checker.md) |
 
 Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 7, 10, 11, 14, 16, 15, 17, 18, 19 (hook-related gates 14 and 16 run consecutively).
 
@@ -66,7 +67,7 @@ No gate checks agent description length, not even as a warning: the Qwen bundle 
 bash scripts/run-all-gates.sh
 ```
 
-The runner executes all 13 gates in sequence and exits non-zero on the first failure. It then runs `claude plugin validate .` when the `claude` CLI is on `PATH`. Without the CLI it prints `SKIP: claude CLI not available in this environment` and still ends with a pass, so a local run without Claude Code has not validated the manifests.
+The runner executes all 14 gates in sequence and exits non-zero on the first failure. It then runs `claude plugin validate .` when the `claude` CLI is on `PATH`. Without the CLI it prints `SKIP: claude CLI not available in this environment` and still ends with a pass, so a local run without Claude Code has not validated the manifests.
 
 CI runs the same script, but a local pass is not a CI pass. These checks run only in `verify.yml`:
 

@@ -550,6 +550,11 @@ echo "=== Gate 19 — reference sync ==="
 # bash scripts/gen-reference.sh. Standalone runner: scripts/gate-19-reference.sh.
 bash scripts/gate-19-reference.sh
 
+echo "=== Gate 20 — design checker ==="
+# Replays rule-breaking pages through the design skill's checker and checks the
+# shipped sample. Standalone runner: scripts/gate-20-design-checker.sh.
+bash scripts/gate-20-design-checker.sh
+
 echo "=== claude plugin validate ==="
 if command -v claude > /dev/null; then
     cv_log=$(mktemp)
