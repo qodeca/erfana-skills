@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What happened, what to do, and what is kept.">
+<meta name="design-tasks" content="Say what happened and what to do; Show what is kept">
+<title>Notice – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="./notice.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Notice</span></nav>
+<main>
+<h1>Notice</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Says what happened, what to do, and what is kept. A notice never disappears on its own, because a tired person may look away.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="notice notice--info"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg><div class="notice__text"><span class="notice__title">You stay on this shift for now</span><span>It moves only when your manager approves.</span></div></div><div class="notice notice--ok"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><div class="notice__text"><span class="notice__title">Shift swapped</span><span>Aisha Bello now works this shift.</span></div></div><div class="notice notice--warn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg><div class="notice__text"><span class="notice__title">Your offer ends soon</span><span>It ends Fri 13 Nov at 19:00.</span></div></div><div class="notice notice--stop"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M5 12.5a10 10 0 0 1 4-2.4M12 18.5v.2M8.5 15.5a5 5 0 0 1 5-1.2M1.5 9a15 15 0 0 1 5-3.2M11 5a15 15 0 0 1 11.5 4"/></svg><div class="notice__text"><span class="notice__title">Offer not sent</span><span>Your note is saved. Try again.</span><button class="button button--secondary button--small" type="button" tabindex="-1">Try again</button></div></div></div></div>
+    <figcaption><strong>All kinds</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="notice notice--info"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg><div class="notice__text"><span class="notice__title">You stay on this shift for now</span><span>It moves only when your manager approves.</span></div></div><div class="notice notice--ok"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><div class="notice__text"><span class="notice__title">Shift swapped</span><span>Aisha Bello now works this shift.</span></div></div><div class="notice notice--warn"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg><div class="notice__text"><span class="notice__title">Your offer ends soon</span><span>It ends Fri 13 Nov at 19:00.</span></div></div><div class="notice notice--stop"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M5 12.5a10 10 0 0 1 4-2.4M12 18.5v.2M8.5 15.5a5 5 0 0 1 5-1.2M1.5 9a15 15 0 0 1 5-3.2M11 5a15 15 0 0 1 11.5 4"/></svg><div class="notice__text"><span class="notice__title">Offer not sent</span><span>Your note is saved. Try again.</span><button class="button button--secondary button--small" type="button" tabindex="-1">Try again</button></div></div></div></div>
+    <figcaption><strong>All kinds – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Swipe (screen reader)</kbd></td><td>Announced when it appears, then read in order</td><td>Stays where it was</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;notice notice--info&quot;&gt;
+  &lt;svg class=&quot;icon&quot; …&gt;&lt;/svg&gt;
+  &lt;div class=&quot;notice__text&quot;&gt;
+    &lt;span class=&quot;notice__title&quot;&gt;You stay on this shift for now&lt;/span&gt;
+    &lt;span&gt;It moves only when your manager approves.&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--notice-padding</code></td><td>Component</td><td><code>semantic.space.gutter</code></td></tr><tr><td><code>--notice-gap</code></td><td>Component</td><td><code>semantic.space.medium</code></td></tr><tr><td><code>--notice-radius</code></td><td>Component</td><td><code>semantic.shape.round-control</code></td></tr><tr><td><code>--notice-bg</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--notice-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--notice-info-bg</code></td><td>Component</td><td><code>semantic.color.info-bg</code></td></tr><tr><td><code>--notice-info-text</code></td><td>Component</td><td><code>semantic.color.info</code></td></tr><tr><td><code>--notice-ok-bg</code></td><td>Component</td><td><code>semantic.color.success-bg</code></td></tr><tr><td><code>--notice-ok-text</code></td><td>Component</td><td><code>semantic.color.success</code></td></tr><tr><td><code>--notice-warn-bg</code></td><td>Component</td><td><code>semantic.color.warning-bg</code></td></tr><tr><td><code>--notice-warn-text</code></td><td>Component</td><td><code>semantic.color.warning</code></td></tr><tr><td><code>--notice-stop-bg</code></td><td>Component</td><td><code>semantic.color.danger-bg</code></td></tr><tr><td><code>--notice-stop-text</code></td><td>Component</td><td><code>semantic.color.danger</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/colour.html">Colour</a>: palette and measured contrast.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+  <li><a href="../../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

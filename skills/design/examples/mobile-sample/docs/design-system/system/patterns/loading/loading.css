@@ -1,0 +1,27 @@
+/* Refresh: a thin line of status above a list that stays on screen. */
+.refresh {
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+  color: var(--refresh-text);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+}
+
+/* Skeleton: stands in for a shape that is coming. */
+.skeleton {
+  display: block;
+  block-size: var(--space-gutter);
+  border-radius: var(--shape-round-control);
+  background: var(--skeleton-bg);
+  animation: pulse var(--motion-pulse) var(--motion-ease) infinite alternate;
+}
+.skeleton--time { block-size: var(--space-wide); inline-size: var(--shape-skeleton-long); }
+.skeleton--short { inline-size: var(--shape-skeleton-short); }
+@keyframes pulse {
+  to { opacity: 0.55; }
+}
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}

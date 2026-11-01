@@ -1,0 +1,80 @@
+/* Shift ticket: the signature part. The time is always the largest thing. */
+.ticket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  inline-size: 100%;
+  padding: var(--ticket-padding);
+  border: var(--edge-hairline) solid var(--ticket-edge-color);
+  border-inline-start: var(--ticket-band) solid var(--ticket-band-day);
+  border-radius: var(--ticket-radius);
+  background: var(--ticket-bg);
+  color: var(--ticket-text);
+  font-family: inherit;
+  text-align: start;
+}
+.ticket--night { border-inline-start-color: var(--ticket-band-night); }
+.ticket__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-small);
+}
+.ticket__date {
+  font-size: calc(var(--text-style-body-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-body-strong-weight);
+  line-height: var(--text-style-body-strong-leading);
+}
+/* A time breaks only after its dash, never inside the numbers. */
+.ticket__time {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: calc(var(--text-style-time-size) * var(--type-scale));
+  font-weight: var(--text-style-time-weight);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--text-style-time-leading);
+  white-space: nowrap;
+}
+.ticket__ward {
+  color: var(--ticket-ward);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+  line-height: var(--text-style-label-leading);
+}
+.ticket__reason {
+  display: flex;
+  gap: var(--space-tight);
+  align-items: flex-start;
+  color: var(--ticket-text);
+  font-size: calc(var(--text-style-label-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-label-strong-weight);
+  line-height: var(--text-style-label-strong-leading);
+}
+.ticket__go { margin-inline-start: auto; }
+.ticket--compact .ticket__time { font-size: calc(var(--text-style-time-compact-size) * var(--type-scale)); }
+
+.ticket--pick:hover:not(:where(.design-frame *)),
+.ticket--pick.is-hover { background: var(--ticket-bg-hover); }
+.ticket--pick:focus-visible,
+.ticket--pick.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.ticket--pick:active:not(:where(.design-frame *)),
+.ticket--pick.is-active {
+  background: var(--ticket-bg-pressed);
+  transform: scale(0.98);
+}
+.ticket--pick:disabled,
+.ticket--pick.is-disabled {
+  border-style: dashed;
+  border-inline-start-style: solid;
+  background: var(--ticket-disabled-bg);
+}
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .ticket--pick { transition: none; }
+  .ticket--pick:active:not(:where(.design-frame *)),
+  .ticket--pick.is-active { transform: none; }
+}

@@ -1,0 +1,146 @@
+/* Screen: the surface every drawn screen sits on. */
+.screen,
+.sheet-screen {
+  display: flex;
+  flex-direction: column;
+  background: var(--screen-bg);
+  color: var(--screen-text);
+  font-family: var(--typeface-body);
+  font-size: calc(var(--text-style-body-size) * var(--type-scale));
+  font-weight: var(--text-style-body-weight);
+  line-height: var(--text-style-body-leading);
+  text-align: start;
+}
+.screen *,
+.sheet-screen * { box-sizing: border-box; }
+.screen--part {
+  gap: var(--space-medium);
+  padding: var(--space-gutter);
+}
+.screen__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-section);
+  padding: var(--space-gutter);
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+}
+.group > .tag { align-self: flex-start; }
+
+/* App bar. */
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+  min-height: var(--appbar-height);
+  padding-inline: var(--appbar-padding);
+  border-block-end: var(--edge-hairline) solid var(--appbar-edge);
+  color: var(--appbar-text);
+}
+.app-bar__title {
+  flex: 1;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-size: calc(var(--text-style-body-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-body-strong-weight);
+  line-height: var(--text-style-body-strong-leading);
+}
+.app-bar__back {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--target-minimum);
+  block-size: var(--target-minimum);
+  padding: 0;
+  border: 0;
+  border-radius: var(--shape-round-control);
+  background: transparent;
+  color: inherit;
+}
+.app-bar__back:hover:not(:where(.design-frame *)),
+.app-bar__back.is-hover { background: var(--appbar-back-hover); }
+.app-bar__back:focus-visible,
+.app-bar__back.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.app-bar__back:active:not(:where(.design-frame *)),
+.app-bar__back.is-active { background: var(--appbar-back-pressed); }
+
+/* Platform differences, drawn as their own states. iOS centres the title and
+   balances the back button; Android starts it beside the arrow. */
+.screen--ios,
+.sheet-screen--ios { font-family: var(--typeface-ios); }
+.screen--android,
+.sheet-screen--android { font-family: var(--typeface-android); }
+.screen--ios .app-bar__title {
+  margin-inline-end: var(--target-minimum);
+  text-align: center;
+}
+
+/* Action bar: pinned to the bottom of the screen, in thumb reach. */
+.action-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  margin-block-start: auto;
+  padding: var(--space-medium) var(--space-gutter);
+  border-block-start: var(--edge-hairline) solid var(--action-bar-edge);
+  background: var(--action-bar-bg);
+}
+
+/* Sheet: drawn open on review pages. Rises from the bottom in the product. */
+.sheet-screen {
+  position: relative;
+  isolation: isolate;
+  justify-content: flex-end;
+  padding-block-start: var(--sheet-reach);
+}
+.sheet-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sheet-scrim);
+  opacity: 0.7;
+}
+[data-theme="dark"] .sheet-screen::before,
+.sheet-screen[data-theme="dark"]::before { opacity: 0.5; }
+.sheet {
+  position: relative;
+  animation: sheet-rise var(--motion-slow) var(--motion-ease);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sheet-gap);
+  padding-block: var(--sheet-padding-block);
+  padding-inline: var(--sheet-padding-inline);
+  border-block-start: var(--sheet-edge) solid var(--sheet-edge-color);
+  border-start-start-radius: var(--sheet-radius);
+  border-start-end-radius: var(--sheet-radius);
+  background: var(--sheet-bg);
+  color: var(--sheet-text);
+}
+/* iOS only: Android's modal bottom sheet has no grabber here. */
+.sheet__grabber {
+  align-self: center;
+  inline-size: var(--sheet-grabber-width);
+  block-size: var(--sheet-grabber-height);
+  border-radius: var(--shape-round-pill);
+  background: var(--sheet-grabber-color);
+}
+
+@keyframes sheet-rise {
+  from { transform: translateY(100%); }
+}
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .sheet { animation: none; }
+}

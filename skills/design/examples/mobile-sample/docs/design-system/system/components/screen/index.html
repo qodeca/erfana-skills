@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="App bar, action bar, and sheet, with iOS and Android differences.">
+<meta name="design-tasks" content="Lay out a screen; Add an app bar or an action bar; Open a sheet; Draw iOS and Android differences">
+<title>Screen, app bar, action bar, and sheet – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="./screen.css">
+<link rel="stylesheet" href="../../components/text/text.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="../../components/ticket/ticket.css">
+<link rel="stylesheet" href="../../components/tag/tag.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Screen</span></nav>
+<main>
+<h1>Screen, app bar, action bar, and sheet</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">The frame of every screen. The main action lives in a pinned bar at the bottom, in thumb reach. Sheets rise from the bottom and are drawn open on review pages. On every sheet the safe action sits at the bottom, in thumb reach.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="back">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="app-bar"><button class="app-bar__back is-hover" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="app-bar__back is-focus" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="app-bar__back is-active" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div>
+    <figcaption><strong>Back button – hover, focus, and pressed</strong> – Touch has no hover. It appears only with a mouse or trackpad, as on a tablet or an Android phone with a pointer.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="back-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="app-bar"><button class="app-bar__back is-hover" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="app-bar__back is-focus" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="app-bar__back is-active" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div>
+    <figcaption><strong>Back button – hover, focus, and pressed – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="bar-ios">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part screen--ios"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="app-bar__title">Check and send</h1></div></div></div>
+    <figcaption><strong>iOS – chevron and centred title</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="bar-ios-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part screen--ios"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="app-bar__title">Check and send</h1></div></div></div>
+    <figcaption><strong>iOS – chevron and centred title – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="bar-android">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part screen--android"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><h1 class="app-bar__title">Check and send</h1></div></div></div>
+    <figcaption><strong>Android – arrow and starting title</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="bar-android-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part screen--android"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><h1 class="app-bar__title">Check and send</h1></div></div></div>
+    <figcaption><strong>Android – arrow and starting title – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="default">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="app-bar__title">Check and send</h1></div><div class="screen__body"><div class="ticket ticket--night ticket--compact "><span class="ticket__top"><span class="ticket__date">Sat 14 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div></div><div class="action-bar"><button class="button " type="button" tabindex="-1">Send offer</button><button class="button button--secondary" type="button" tabindex="-1">Go back</button></div></div></div>
+    <figcaption><strong class="design-state__label">Screen with app bar and action bar</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="default-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen"><div class="app-bar"><button class="app-bar__back" type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="app-bar__title">Check and send</h1></div><div class="screen__body"><div class="ticket ticket--night ticket--compact "><span class="ticket__top"><span class="ticket__date">Sat 14 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div></div><div class="action-bar"><button class="button " type="button" tabindex="-1">Send offer</button><button class="button button--secondary" type="button" tabindex="-1">Go back</button></div></div></div>
+    <figcaption><strong class="design-state__label">Screen with app bar and action bar – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="sheet-screen"><div class="sheet"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">Sheet</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="sheet-screen"><div class="sheet"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">Sheet – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet-ios">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="sheet-screen sheet-screen--ios"><div class="sheet"><span class="sheet__grabber"></span><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">iOS – sheet with a grabber</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet-ios-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="sheet-screen sheet-screen--ios"><div class="sheet"><span class="sheet__grabber"></span><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">iOS – sheet with a grabber – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet-android">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="sheet-screen sheet-screen--android"><div class="sheet"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">Android – modal bottom sheet</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="sheet-android-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="sheet-screen sheet-screen--android"><div class="sheet"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><button class="button button--danger" type="button" tabindex="-1">Cancel offer</button><button class="button button--secondary" type="button" tabindex="-1">Keep offer</button></div></div></div>
+    <figcaption><strong class="design-state__label">Android – modal bottom sheet – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Escape</kbd></td><td>Closes the sheet and keeps everything</td><td>The control that opened it</td></tr><tr><td><kbd>Two-finger scrub</kbd> or <kbd>back gesture</kbd></td><td>Goes back one screen</td><td>The previous screen’s control</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;screen&quot;&gt;
+  &lt;div class=&quot;app-bar&quot;&gt;
+    &lt;button class=&quot;app-bar__back&quot; type=&quot;button&quot;&gt;&lt;svg class=&quot;icon&quot; …&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;h1 class=&quot;app-bar__title&quot;&gt;Check and send&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;screen__body&quot;&gt;…&lt;/div&gt;
+  &lt;div class=&quot;action-bar&quot;&gt;&lt;button class=&quot;button&quot; type=&quot;button&quot;&gt;Send offer&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--screen-bg</code></td><td>Component</td><td><code>semantic.color.surface</code></td></tr><tr><td><code>--screen-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--appbar-height</code></td><td>Component</td><td><code>semantic.target.main</code></td></tr><tr><td><code>--appbar-padding</code></td><td>Component</td><td><code>semantic.space.small</code></td></tr><tr><td><code>--appbar-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--appbar-edge</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--appbar-back-hover</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--appbar-back-pressed</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--action-bar-bg</code></td><td>Component</td><td><code>semantic.color.surface-raised</code></td></tr><tr><td><code>--action-bar-edge</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--sheet-bg</code></td><td>Component</td><td><code>semantic.color.sheet</code></td></tr><tr><td><code>--sheet-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--sheet-edge-color</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--sheet-scrim</code></td><td>Component</td><td><code>semantic.color.scrim</code></td></tr><tr><td><code>--sheet-scrim-opacity</code></td><td>Component</td><td><code>semantic.opacity.scrim</code></td></tr><tr><td><code>--sheet-edge</code></td><td>Component</td><td><code>semantic.edge.hairline</code></td></tr><tr><td><code>--sheet-reach</code></td><td>Component</td><td><code>semantic.shape.scrim-reach</code></td></tr><tr><td><code>--sheet-radius</code></td><td>Component</td><td><code>semantic.shape.round-card</code></td></tr><tr><td><code>--sheet-padding-block</code></td><td>Component</td><td><code>semantic.space.section</code></td></tr><tr><td><code>--sheet-padding-inline</code></td><td>Component</td><td><code>semantic.space.gutter</code></td></tr><tr><td><code>--sheet-gap</code></td><td>Component</td><td><code>semantic.space.gutter</code></td></tr><tr><td><code>--sheet-grabber-width</code></td><td>Component</td><td><code>semantic.shape.grabber-width</code></td></tr><tr><td><code>--sheet-grabber-height</code></td><td>Component</td><td><code>semantic.shape.grabber-height</code></td></tr><tr><td><code>--sheet-grabber-color</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/space.html">Space and touch</a>: rhythm and target sizes.</li>
+  <li><a href="../../foundations/motion.html">Motion</a>: timing and reduced motion.</li>
+  <li><a href="../../components/text/index.html">Text</a>: title, heading, lede, and caption.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+  <li><a href="../../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+  <li><a href="../../components/ticket/index.html">Shift ticket</a>: the signature part.</li>
+  <li><a href="../../components/tag/index.html">Tag</a>: a short status.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

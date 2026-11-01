@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="One rule for the manager, pass or not.">
+<meta name="design-tasks" content="Show whether a swap passes a rule">
+<title>Check – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="./check.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Check</span></nav>
+<main>
+<h1>Check</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">One rule a manager needs to see. Every check always shows, passed or not, so a short list never means a check was skipped.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="check"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="check__text"><span class="check__title">Skills match</span><span class="check__detail">Both have telemetry training</span></span></div><div class="check check--warn"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg></span><span class="check__text"><span class="check__title">Soft rule, none yet</span><span class="check__detail">No swap rule warns today</span></span></div><div class="check check--stop"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="check__text"><span class="check__title">Too little rest</span><span class="check__detail">8 hours since the last shift. The rule is 11.</span></span></div></div></div>
+    <figcaption><strong>Pass, warning, and stop</strong> – The warning look is kept for a soft rule, but no swap rule uses it: over weekly hours and too little rest both stop.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="check"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="check__text"><span class="check__title">Skills match</span><span class="check__detail">Both have telemetry training</span></span></div><div class="check check--warn"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg></span><span class="check__text"><span class="check__title">Soft rule, none yet</span><span class="check__detail">No swap rule warns today</span></span></div><div class="check check--stop"><span class="check__mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="check__text"><span class="check__title">Too little rest</span><span class="check__detail">8 hours since the last shift. The rule is 11.</span></span></div></div></div>
+    <figcaption><strong>Pass, warning, and stop – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Swipe (screen reader)</kbd></td><td>Reads the result and the detail</td><td>The check</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;check&quot;&gt;
+  &lt;span class=&quot;check__mark&quot;&gt;&lt;svg class=&quot;icon&quot; …&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;span class=&quot;check__text&quot;&gt;
+    &lt;span class=&quot;check__title&quot;&gt;Enough rest&lt;/span&gt;
+    &lt;span class=&quot;check__detail&quot;&gt;26 hours since the taker’s last shift&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<p>Uses <code>--color-success</code>, <code>--color-warning</code>, <code>--color-danger</code>, <code>--color-line</code>, and the semantic space tokens. It has no component tokens.</p>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/colour.html">Colour</a>: palette and measured contrast.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">The warning look is kept for a soft rule, but no swap rule uses it.</p>
+</section>
+</main>
+</body>
+</html>

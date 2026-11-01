@@ -1,0 +1,499 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+@import url('./fonts.css');
+
+/* Page chrome for documentation and review pages. Every value comes from
+   docs-tokens.css. Copy to docs/design-system/ unchanged.
+
+   Static by rule: no page runs a script, and nothing is hidden. Interaction is
+   a gallery of separate static frames, one per state.
+
+   Every element rule below stops at a drawing: a .design-frame, or anything
+   marked aria-hidden, keeps the project's own look. */
+
+:root { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: var(--ds-space-16);
+  background: var(--ds-color-bg-primary);
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-sans);
+  /* Stays at the base size: a drawing that inherits its size must not grow.
+     Prose takes --ds-text-body through the selector below. */
+  font-size: var(--ds-text-base);
+  line-height: var(--ds-leading-normal);
+}
+
+main :where(p, li, dd):not(:where(figure *, .design-frame *, [aria-hidden='true'] *)) {
+  font-size: var(--ds-text-body);
+}
+
+h1:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  margin: 0 0 var(--ds-space-2);
+  font-size: var(--ds-text-title);
+  font-weight: var(--ds-font-semibold);
+  color: var(--ds-color-text-emphasis);
+}
+
+.ds-lede {
+  margin: 0 0 var(--ds-space-16);
+  max-width: var(--ds-measure);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-text-prose);
+}
+/* A lede built from paragraphs keeps the lede size. */
+.ds-lede :where(p, li) { font-size: inherit; }
+
+h2:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  margin: var(--ds-space-20) 0 var(--ds-space-8);
+  padding-bottom: var(--ds-space-4);
+  border-bottom: var(--ds-border-width) solid var(--ds-color-border-default);
+  font-size: var(--ds-text-xl);
+  font-weight: var(--ds-font-semibold);
+  color: var(--ds-color-text-bright);
+}
+
+/* The first heading of the main content sits close to the lede above it. */
+main > h2:first-child,
+.ds-lede + h2 { margin-top: var(--ds-space-16); }
+
+.ds-note {
+  margin: 0 0 var(--ds-space-8);
+  padding: var(--ds-space-6) var(--ds-space-8);
+  border-left: var(--ds-border-width-thick) solid var(--ds-color-accent-primary);
+  background: var(--ds-color-bg-secondary);
+  max-width: var(--ds-measure-wide);
+  color: var(--ds-color-text-tertiary);
+  font-size: var(--ds-text-body);
+}
+
+.ds-note strong { color: var(--ds-color-text-emphasis); }
+
+code:not(:where(.design-frame *, [aria-hidden='true'] *)), .ds-mono {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+}
+
+table:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: var(--ds-table-max);
+}
+
+th:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  text-align: left;
+  padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-4) 0;
+  border-bottom: var(--ds-border-width) solid var(--ds-color-border-subtle);
+  font-size: var(--ds-text-small);
+  font-weight: var(--ds-font-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-caps-tracking);
+  color: var(--ds-color-text-secondary);
+}
+
+td:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  padding: var(--ds-space-4) var(--ds-space-8) var(--ds-space-4) 0;
+  border-bottom: var(--ds-border-width) solid var(--ds-color-border-default);
+  vertical-align: middle;
+  font-size: var(--ds-text-body);
+}
+
+/* A header on a panel surface takes tertiary text: secondary fails contrast there. */
+:where(.ds-note, .ds-frame) th { color: var(--ds-color-text-tertiary); }
+
+/* A token name in a table's first column stays on one line. */
+.ds-tokens td:first-child code,
+td:first-child > code:only-child { white-space: nowrap; }
+
+/* A short command or attribute name in prose stays whole on one line. */
+.ds-nowrap { white-space: nowrap; }
+.ds-lede code { white-space: nowrap; }
+
+.ds-swatch {
+  width: var(--ds-swatch-width);
+  height: var(--ds-swatch-height);
+  border: var(--ds-border-width) solid var(--ds-color-border-subtle);
+}
+.ds-swatch--wide { width: calc(var(--ds-swatch-width) * 2); }
+
+.ds-pass { color: var(--ds-color-lime); }
+.ds-fail { color: var(--ds-color-error); }
+.ds-na { color: var(--ds-color-text-tertiary); }
+
+.ds-ratio { font-family: var(--ds-font-mono); font-size: var(--ds-text-small); }
+
+/* ---------- page chrome ---------- */
+
+/* Every page: nav.ds-crumbs first, then main holding the h1, the status, #decision,
+   the content, and #exceptions. */
+main { display: block; max-width: calc(var(--ds-table-max) + var(--ds-space-24)); }
+
+.ds-crumbs {
+  margin: 0 0 var(--ds-space-8);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}
+.ds-crumbs [aria-current="page"] { color: var(--ds-color-text-bright); }
+
+/* The status badge. The word is the information; the fill makes it quick to spot.
+   Amber is not finished, violet waits for review, green is go. */
+.ds-status {
+  display: inline-block;
+  padding: 0 var(--ds-space-3);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  font-weight: var(--ds-font-normal);
+  line-height: var(--ds-leading-normal);
+  vertical-align: middle;
+  white-space: nowrap;
+  color: var(--ds-color-bg-primary);
+  background: var(--ds-color-amber);
+}
+.ds-status[data-status="ready"],
+[data-design-status="ready"] .ds-status { background: var(--ds-color-green); }
+.ds-status[data-status="in-review"],
+[data-design-status="in-review"] .ds-status { background: var(--ds-color-violet); }
+
+/* A drawing can stay wider than a narrow screen; its words must not. */
+.ds-frame > figcaption,
+.design-tile { max-width: var(--ds-caption-max); }
+
+/* A drawing is a still picture. A spinner that never stops is also an access
+   failure, and a pointer or a fade on hover would say the picture is a product.
+   pointer-events stays as it is, because a comment must land on the element under
+   the pointer. The checker makes every :hover and :active rule stop at a frame. */
+.design-frame,
+.design-frame *,
+.design-frame *::before,
+.design-frame *::after,
+[aria-hidden='true'] *,
+[aria-hidden='true'] *::before,
+[aria-hidden='true'] *::after {
+  animation: none !important;
+  cursor: default !important;
+  transition: none !important;
+}
+
+.ds-muted { color: var(--ds-color-text-tertiary); max-width: var(--ds-measure); }
+
+/* Links. Visited keeps the link colour: these pages are read many times. */
+a:not(:where(.design-frame *, [aria-hidden='true'] *)) { color: var(--ds-color-link); text-underline-offset: var(--ds-space-1); }
+a:not(:where(.design-frame *, [aria-hidden='true'] *)):visited { color: var(--ds-color-link); }
+a:not(:where(.design-frame *, [aria-hidden='true'] *)):hover { color: var(--ds-color-link-hover); }
+a:not(:where(.design-frame *, [aria-hidden='true'] *)):focus-visible {
+  outline: var(--ds-border-width-thick) solid var(--ds-color-border-focus);
+  outline-offset: var(--ds-space-1);
+  text-decoration: none;
+}
+
+kbd:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  display: inline-block;
+  padding: 0 var(--ds-space-2);
+  border: var(--ds-border-width) solid var(--ds-color-border-subtle);
+  border-bottom-width: var(--ds-border-width-thick);
+  background: var(--ds-color-bg-tertiary);
+  color: var(--ds-color-text-bright);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  line-height: var(--ds-leading-normal);
+}
+
+/* A baked verdict: the text says pass or fail, the colour repeats it. */
+[data-result="pass"] { color: var(--ds-color-lime); }
+[data-result="fail"] { color: var(--ds-color-error); }
+td[data-contrast], span[data-contrast] { font-family: var(--ds-font-mono); font-size: var(--ds-text-small); white-space: nowrap; }
+
+.ds-num { font-family: var(--ds-font-mono); font-size: var(--ds-text-small); text-align: right; }
+
+/* ---------- static state frames ---------- */
+
+/* One state per frame: a figure holding the drawing as it looks in that state,
+   and a caption naming the state and how it is reached. Frames are pictures.
+   This grid shows small parts, whose frames have no fixed width. */
+.ds-frames {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ds-frame-min), 1fr));
+  gap: var(--ds-space-8);
+  margin: 0 0 var(--ds-space-16);
+}
+.ds-frame {
+  margin: 0;
+  padding: var(--ds-space-8);
+  border: var(--ds-border-width) solid var(--ds-color-border-default);
+  background: var(--ds-color-bg-tertiary);
+}
+.ds-frame > figcaption {
+  margin-top: var(--ds-space-6);
+  font-size: var(--ds-text-small);
+  line-height: var(--ds-leading-snug);
+  color: var(--ds-color-text-tertiary);
+}
+.ds-frame > figcaption strong { color: var(--ds-color-text-bright); font-weight: var(--ds-font-medium); }
+.ds-frame__step {
+  display: inline-block;
+  min-width: var(--ds-space-12);
+  margin-right: var(--ds-space-2);
+  font-family: var(--ds-font-mono);
+  color: var(--ds-color-accent-primary);
+}
+
+/* A frame with a fixed width is wider than a .ds-frames column, so it sits in a
+   .design-state in this row instead. Each figure fits its frame and the row
+   wraps. A wide frame makes the page wider: it never scrolls inside a box. */
+.ds-states {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ds-space-8);
+  margin: 0 0 var(--ds-space-16);
+}
+.ds-states > .design-state { width: min-content; }
+
+/* The status rectangle, directly above its frame. */
+.design-tile {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2) var(--ds-space-6);
+  align-items: center;
+  margin: 0 0 var(--ds-space-4);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: var(--ds-border-width) solid var(--ds-color-border-default);
+  background: var(--ds-color-bg-secondary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}
+
+/* The drawing. The project's own CSS takes over inside it. */
+.design-frame {
+  container-type: inline-size;
+  border: var(--ds-border-width) solid var(--ds-color-border-default);
+  background: var(--frame-surface);
+  color: var(--frame-text);
+  color-scheme: normal;
+}
+.design-frame--narrow { width: var(--frame-narrow); }
+.design-frame--phone { width: var(--frame-phone); }
+.design-frame--phone-small { width: var(--frame-narrow); }
+
+/* A phone body around the screen. The screen keeps its true width inside it,
+   and nothing is drawn over the screen, so every part can still take a comment. */
+.design-frame--phone,
+.design-frame--phone-small {
+  position: relative;
+  box-sizing: content-box;
+  border-color: var(--device-body);
+  border-style: solid;
+  border-width: var(--device-top) var(--device-side) var(--device-bottom);
+  border-radius: var(--device-radius);
+  background: var(--device-body);
+  outline: var(--ds-border-width) solid var(--device-rim);
+}
+.design-frame--phone > *,
+.design-frame--phone-small > * {
+  overflow: clip;
+  min-height: var(--device-screen-height);
+  border-radius: var(--device-screen-radius);
+}
+.design-frame--phone-small > * { min-height: var(--device-screen-height-small); }
+.design-frame--phone::before,
+.design-frame--phone-small::before,
+.design-frame--phone::after,
+.design-frame--phone-small::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  border-radius: var(--device-bar-height);
+}
+.design-frame--phone::before,
+.design-frame--phone-small::before {
+  inset-block-start: calc((var(--device-top) + var(--device-camera-height)) / -2);
+  width: var(--device-camera-width);
+  height: var(--device-camera-height);
+  background: var(--device-rim);
+}
+.design-frame--phone::after,
+.design-frame--phone-small::after {
+  inset-block-end: calc((var(--device-bottom) + var(--device-bar-height)) / -2);
+  width: var(--device-bar-width);
+  height: var(--device-bar-height);
+  background: var(--device-bar);
+}
+.design-frame--tablet { width: var(--frame-tablet); }
+.design-frame--desktop { width: var(--frame-desktop); }
+
+/* The key, result, and focus table every interaction page carries. */
+.ds-keys td:first-child { white-space: nowrap; }
+
+/* Retired tokens: shown once, struck through, never as a swatch to copy. */
+.ds-retired {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-4) var(--ds-space-12);
+  margin: 0 0 var(--ds-space-12);
+  padding: var(--ds-space-6) var(--ds-space-8);
+  border: var(--ds-border-width) dashed var(--ds-color-border-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}
+.ds-retired > strong { flex-basis: 100%; color: var(--ds-color-text-bright); font-family: var(--ds-font-sans); font-weight: var(--ds-font-medium); }
+.ds-retired s { color: var(--ds-color-text-tertiary); }
+
+/* Under the h1: the status badge and the date. */
+.ds-meta {
+  margin: 0 0 var(--ds-space-12);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}
+
+h3:not(:where(.design-frame *, [aria-hidden='true'] *)) {
+  margin: var(--ds-space-12) 0 var(--ds-space-4);
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-font-semibold);
+  color: var(--ds-color-text-bright);
+}
+.ds-tokens { margin-bottom: var(--ds-space-8); }
+
+/* A prototype's line stays on screen, because a prototype fools people more easily
+   than a drawing does. */
+.design-prototype {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0 0 var(--ds-space-8);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  background: var(--ds-color-amber);
+  color: var(--ds-color-bg-primary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+}
+
+/* ---------- shared documentation labels ---------- */
+
+/* A code sample shown as text. It wraps rather than scrolls, so none of it is
+   out of sight. */
+.ds-code {
+  max-width: var(--ds-table-max);
+  padding: var(--ds-space-8);
+  border: var(--ds-border-width) solid var(--ds-color-border-default);
+  background: var(--ds-color-bg-tertiary);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* A caption or note under a sample, a swatch, or a figure. */
+.ds-caption {
+  font-size: var(--ds-text-small);
+  line-height: var(--ds-leading-snug);
+  color: var(--ds-color-text-tertiary);
+}
+
+/* A short name above or beside a sample: a token, a state, a surface. */
+.ds-label {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}
+
+/* A pass or fail verdict in words; pair it with .ds-pass or .ds-fail. */
+.ds-verdict {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+}
+
+/* ---------- a third-party page inside a drawing ----------
+   Someone else's content, on its own paper and in its own face. When a product
+   withholds such a page, draw that as a labelled state:
+     <div class="ds-foreign-page ds-foreign-page--withheld">
+       <p class="ds-foreign-page__body">Page withheld</p>
+     </div> */
+.ds-foreign-page {
+  display: block;
+  padding: var(--ds-space-10);
+  background: var(--ds-page-bg);
+  color: var(--ds-page-text);
+  font-family: var(--ds-page-font);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-page-leading);
+}
+.ds-foreign-page__heading {
+  margin: 0 0 var(--ds-space-6);
+  color: var(--ds-page-heading);
+  font-size: var(--ds-text-xl);
+  font-weight: var(--ds-font-semibold);
+  line-height: var(--ds-page-heading-leading);
+}
+.ds-foreign-page__body { margin: 0 0 var(--ds-space-5); font-size: var(--ds-text-md); }
+.ds-foreign-page__link,
+.ds-foreign-page__link:visited { color: var(--ds-page-link); text-decoration: underline; }
+.ds-foreign-page__missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--ds-space-24) * 2);
+  padding: var(--ds-space-4);
+  border: var(--ds-border-width) dashed var(--ds-page-missing-line);
+  background: var(--ds-page-missing-bg);
+  color: var(--ds-page-missing-text);
+  font-size: var(--ds-text-base);
+}
+.ds-foreign-page--withheld {
+  border: var(--ds-border-width) dashed var(--ds-page-missing-line);
+  background: var(--ds-page-missing-bg);
+  color: var(--ds-page-missing-text);
+}
+
+/* ---------- index pages ---------- */
+
+.ix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--ds-tile-min), 1fr));
+  gap: var(--ds-space-4);
+  margin-bottom: var(--ds-space-16);
+}
+.ix-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-8) var(--ds-space-10);
+  background: var(--ds-color-bg-secondary);
+  border: var(--ds-border-width) solid var(--ds-color-border-default);
+  text-decoration: none;
+}
+.ix-card:hover:not(:where(.design-frame *)) { background: var(--ds-color-bg-hover-solid); border-color: var(--ds-color-border-subtle); }
+/* The grid does not scroll, so the ring goes outside the card. */
+.ix-card:focus-visible {
+  outline: var(--ds-border-width-thick) solid var(--ds-color-border-focus);
+  outline-offset: var(--ds-space-1);
+}
+.ix-card__name { font-family: var(--ds-font-mono); font-size: var(--ds-text-md); color: var(--ds-color-text-emphasis); }
+.ix-card__sub { font-size: var(--ds-text-small); line-height: var(--ds-leading-snug); color: var(--ds-color-text-tertiary); }
+.ix-card__meta { font-family: var(--ds-font-mono); font-size: var(--ds-text-small); color: var(--ds-color-text-tertiary); }
+.ix-count {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+  font-weight: var(--ds-font-normal);
+}
+.ix-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-8);
+  margin: 0 0 var(--ds-space-12);
+  padding: 0;
+  list-style: none;
+}
+.ix-summary li:not(:where(.design-frame *)) {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-small);
+  color: var(--ds-color-text-tertiary);
+}

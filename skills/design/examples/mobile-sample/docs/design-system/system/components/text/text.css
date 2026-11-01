@@ -1,0 +1,28 @@
+/* Text. Each class resets its own box, so it works on any element. */
+.title,
+.heading,
+.lede,
+.caption {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-family: inherit;
+}
+.title {
+  font-size: calc(var(--text-style-title-size) * var(--type-scale));
+  font-weight: var(--text-style-title-weight);
+  line-height: var(--text-style-title-leading);
+}
+.heading {
+  font-size: calc(var(--text-style-label-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-label-strong-weight);
+  line-height: var(--text-style-label-strong-leading);
+}
+.lede { font-size: calc(var(--text-style-body-size) * var(--type-scale)); }
+.caption {
+  color: var(--caption-text);
+  font-size: calc(var(--text-style-label-long-size) * var(--type-scale));
+  line-height: var(--text-style-label-long-leading);
+}

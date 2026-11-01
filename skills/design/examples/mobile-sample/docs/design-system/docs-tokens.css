@@ -1,0 +1,117 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Values for the documentation frame only: crumbs, tiles, tables, and status
+   rectangles. Every name starts with --ds-, so a project's own tokens keep their
+   values and the designed screens keep their look. Copy to docs/design-system/
+   unchanged. --frame-* may be overridden by a project. */
+:root {
+  /* Surfaces */
+  --ds-color-bg-primary: #161312;
+  --ds-color-bg-secondary: #2d2d30;
+  --ds-color-bg-tertiary: #252526;
+  --ds-color-bg-hover-solid: #2a2d2e;
+
+  /* Text */
+  --ds-color-text-primary: #cccccc;
+  --ds-color-text-secondary: #858585;
+  --ds-color-text-tertiary: #b0b0b0;
+  --ds-color-text-bright: #e0e0e0;
+  --ds-color-text-emphasis: #ffffff;
+
+  /* Borders */
+  --ds-color-border-default: #3c3c3c;
+  --ds-color-border-subtle: #454545;
+  --ds-color-border-focus: #A0A8FF;
+
+  /* Accents and verdicts */
+  --ds-color-accent-primary: #A0A8FF;
+  --ds-color-link: #A0A8FF;
+  --ds-color-link-hover: #8b94ff;
+  --ds-color-lime: #E3E829;
+  --ds-color-violet: #A0A8FF;
+  --ds-color-amber: #F5B544;
+  --ds-color-green: #5FD38D;
+  --ds-caption-max: calc(100vw - 98px);
+  --ds-color-error: #f48771;
+
+  /* Spacing: the number is a step, not a pixel count */
+  --ds-space-1: 2px;
+  --ds-space-2: 4px;
+  --ds-space-3: 6px;
+  --ds-space-4: 8px;
+  --ds-space-5: 10px;
+  --ds-space-6: 12px;
+  --ds-space-8: 16px;
+  --ds-space-10: 20px;
+  --ds-space-12: 24px;
+  --ds-space-16: 32px;
+  --ds-space-20: 40px;
+  --ds-space-24: 48px;
+
+  /* Type */
+  --ds-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+                  'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+                  'Helvetica Neue', sans-serif;
+  --ds-font-mono: 'Cascadia Mono', 'SF Mono', Monaco, 'Cascadia Code',
+                  'Roboto Mono', Consolas, 'Courier New', monospace;
+  --ds-text-base: 13px;
+  --ds-text-md: 14px;
+  --ds-text-prose: 15px;
+  --ds-text-lg: 16px;
+  --ds-text-xl: 18px;
+  --ds-text-2xl: 20px;
+  --ds-text-small: var(--ds-text-base);
+  --ds-text-body: var(--ds-text-md);
+  --ds-text-title: calc(var(--ds-text-2xl) * 1.2);
+  --ds-font-normal: 400;
+  --ds-font-medium: 500;
+  --ds-font-semibold: 600;
+  --ds-leading-snug: 1.375;
+  --ds-leading-normal: 1.5;
+
+  /* Measures */
+  --ds-border-width: 1px;
+  --ds-border-width-thick: 2px;
+  --ds-caps-tracking: 0.06em;
+  --ds-measure: 76ch;
+  --ds-measure-wide: 82ch;
+  --ds-table-max: 1100px;
+  --ds-swatch-width: calc(var(--ds-space-24) + var(--ds-space-4));
+  --ds-swatch-height: 32px;
+  --ds-frame-min: 280px;
+  --ds-tile-min: 260px;
+
+  /* A stand-in for someone else's page, on its own paper and in its own face */
+  --ds-page-bg: #ffffff;
+  --ds-page-text: #3c3c3c;
+  --ds-page-heading: #1a1a1a;
+  --ds-page-link: #1a0dab;
+  --ds-page-missing-line: #8a8a8a;
+  --ds-page-missing-bg: #f4f4f4;
+  --ds-page-missing-text: #595959;
+  --ds-page-font: Georgia, 'Times New Roman', serif;
+  --ds-page-leading: 1.6;
+  --ds-page-heading-leading: 1.3;
+
+  /* Drawn frames: the project's canvas, at fixed widths */
+  --frame-surface: #ffffff;
+  --frame-text: #1a1a1a;
+  --frame-narrow: 320px;
+  --frame-phone: 375px;
+  --device-body: #0b0b0c;
+  --device-rim: #5a5a60;
+  --device-side: 10px;
+  --device-top: 34px;
+  --device-bottom: 26px;
+  --device-radius: 46px;
+  --device-screen-radius: 14px;
+  --device-screen-height: 667px;
+  --device-screen-height-small: 568px;
+  --device-camera-width: 84px;
+  --device-camera-height: 12px;
+  --device-bar-width: 120px;
+  --device-bar-height: 4px;
+  --device-bar: #8a8a90;
+  --frame-tablet: 768px;
+  --frame-desktop: 1280px;
+}

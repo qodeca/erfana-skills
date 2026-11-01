@@ -98,6 +98,20 @@
   --frame-text: #1a1a1a;
   --frame-narrow: 320px;
   --frame-phone: 375px;
+  --device-body: #0b0b0c;
+  --device-rim: #5a5a60;
+  --device-side: 10px;
+  --device-top: 34px;
+  --device-bottom: 26px;
+  --device-radius: 46px;
+  --device-screen-radius: 14px;
+  --device-screen-height: 667px;
+  --device-screen-height-small: 568px;
+  --device-camera-width: 84px;
+  --device-camera-height: 12px;
+  --device-bar-width: 120px;
+  --device-bar-height: 4px;
+  --device-bar: #8a8a90;
   --frame-tablet: 768px;
   --frame-desktop: 1280px;
 }

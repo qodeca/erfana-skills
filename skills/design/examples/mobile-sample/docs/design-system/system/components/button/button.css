@@ -1,0 +1,86 @@
+/* Button. Marigold is the only filled colour on a normal screen. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+  inline-size: 100%;
+  min-height: var(--button-height);
+  padding-block: var(--button-padding-block);
+  padding-inline: var(--button-padding-inline);
+  border: var(--button-edge) solid var(--button-edge-color);
+  border-radius: var(--button-radius);
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-family: inherit;
+  font-size: calc(var(--text-style-body-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-body-strong-weight);
+  line-height: var(--text-style-body-strong-leading);
+  text-align: center;
+  transition: background-color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
+}
+.button:hover:not(:where(.design-frame *)),
+.button.is-hover { background: var(--button-bg-hover); }
+.button:focus-visible,
+.button.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.button:active:not(:where(.design-frame *)),
+.button.is-active {
+  background: var(--button-bg-pressed);
+  transform: scale(0.98);
+}
+.button:disabled,
+.button.is-disabled {
+  border-color: var(--button-disabled-edge);
+  border-style: dashed;
+  background: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+}
+
+.button--secondary {
+  border-color: var(--button-secondary-edge);
+  background: transparent;
+  color: var(--button-secondary-text);
+}
+.button--secondary:hover:not(:where(.design-frame *)),
+.button--secondary.is-hover { background: var(--button-secondary-bg-hover); }
+.button--secondary:active:not(:where(.design-frame *)),
+.button--secondary.is-active { background: var(--button-secondary-bg-pressed); }
+
+.button--danger {
+  border-color: var(--button-danger-bg);
+  background: var(--button-danger-bg);
+  color: var(--button-danger-text);
+}
+.button--danger:hover:not(:where(.design-frame *)),
+.button--danger.is-hover,
+.button--danger:active:not(:where(.design-frame *)),
+.button--danger.is-active {
+  border-color: var(--button-danger-bg-hover);
+  background: var(--button-danger-bg-hover);
+}
+
+.button--small { min-height: var(--button-height-small); }
+
+.spinner {
+  flex: none;
+  inline-size: var(--shape-icon-small);
+  block-size: var(--shape-icon-small);
+  border: var(--edge-control) solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: var(--shape-round-pill);
+  animation: spin var(--motion-spin) linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+  .button { transition: none; }
+  .button:active:not(:where(.design-frame *)),
+  .button.is-active { transform: none; }
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Timing, and what stays under reduced motion.">
+<meta name="design-tasks" content="Animate something; Respect reduced motion">
+<title>Motion – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+<link rel="stylesheet" href="../components/screen/screen.css">
+<link rel="stylesheet" href="../components/button/button.css">
+<link rel="stylesheet" href="../patterns/loading/loading.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Motion</span></nav>
+<main>
+<h1>Motion</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Motion only confirms that a tap landed. Press feedback takes 100 ms, sheets 300 ms in and 200 ms out, and nothing plays for show. With reduced motion on, movement goes and every state change stays.</p>
+
+<h2 id="states">Loops</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="loops">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><div class="refresh"><span class="spinner"></span>Updating your roster</div><span class="skeleton"></span><span class="skeleton skeleton--short"></span></div></div>
+    <figcaption><strong class="design-state__label">Spinner and skeleton</strong> – These two are the only loops. Both stop under reduced motion, and the words beside them stay.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="loops-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="refresh"><span class="spinner"></span>Updating your roster</div><span class="skeleton"></span><span class="skeleton skeleton--short"></span></div></div>
+    <figcaption><strong class="design-state__label">Spinner and skeleton – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+<h2 id="uses">Where each runs</h2>
+<table><thead><tr><th>Moment</th><th>Token</th><th>Reduced motion</th></tr></thead><tbody><tr><td>Press colour and scale</td><td><code>--motion-fast</code></td><td>Colour only</td></tr><tr><td>State cross-fade</td><td><code>--motion-normal</code></td><td>Instant</td></tr><tr><td>Sheet enters</td><td><code>--motion-slow</code></td><td>Fade with no rise</td></tr><tr><td>Sheet leaves</td><td><code>--motion-normal</code></td><td>Fade with no fall</td></tr><tr><td>Spinner</td><td><code>--motion-spin</code></td><td>Still, with the word kept</td></tr><tr><td>Skeleton</td><td><code>--motion-pulse</code></td><td>Still</td></tr></tbody></table>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>None. A foundation has no behaviour of its own; each component page lists its keys.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--motion-fast</code></td><td>Semantic</td><td><code>base.time.100</code></td></tr><tr><td><code>--motion-normal</code></td><td>Semantic</td><td><code>base.time.200</code></td></tr><tr><td><code>--motion-slow</code></td><td>Semantic</td><td><code>base.time.300</code></td></tr><tr><td><code>--motion-spin</code></td><td>Semantic</td><td><code>base.time.800</code></td></tr><tr><td><code>--motion-pulse</code></td><td>Semantic</td><td><code>base.time.1600</code></td></tr><tr><td><code>--motion-ease</code></td><td>Semantic</td><td><code>base.curve.settle</code></td></tr><tr><td><code>--motion-press-scale</code></td><td>Semantic</td><td><code>base.ratio.press</code></td></tr><tr><td><code>--motion-pulse-low</code></td><td>Semantic</td><td><code>base.ratio.pulse</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../patterns/loading/index.html">Loading and keeping data</a>: first load and reload.</li>
+  <li><a href="../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* Baton: the same three steps on every status, so nobody has to read a sentence
+   to know who holds the shift. Filled, ringed, and empty marks carry the meaning
+   with the words; colour only repeats it. The current step is a ring, never
+   filled marigold, because filled marigold means the next tap. */
+.baton {
+  display: flex;
+  flex-direction: column;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.baton__step {
+  position: relative;
+  display: flex;
+  gap: var(--baton-gap);
+  padding-block-end: var(--space-gutter);
+}
+.baton__step:last-child { padding-block-end: 0; }
+.baton__step::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--baton-mark) / 2 - var(--baton-line) / 2);
+  border-inline-start: var(--baton-line) solid var(--baton-line-color);
+}
+.baton__step:last-child::before { content: none; }
+.baton__mark {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--baton-mark);
+  block-size: var(--baton-mark);
+  border: var(--baton-line) solid var(--baton-line-color);
+  border-radius: var(--shape-round-pill);
+  background: var(--baton-mark-bg);
+  color: var(--baton-mark-text);
+}
+.baton__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: var(--text-style-body-strong-leading);
+}
+.baton__label { font-weight: var(--text-style-body-strong-weight); overflow-wrap: anywhere; }
+.baton__who {
+  color: var(--baton-who);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+  overflow-wrap: anywhere;
+}
+.baton__step.is-done .baton__mark {
+  border-color: var(--baton-done-bg);
+  background: var(--baton-done-bg);
+  color: var(--baton-done-text);
+}
+.baton__step.is-current .baton__mark {
+  border-width: var(--baton-ring);
+  border-color: var(--baton-current-edge);
+}
+.baton__step.is-stopped .baton__mark {
+  border-color: var(--baton-stopped-bg);
+  background: var(--baton-stopped-bg);
+  color: var(--baton-stopped-text);
+}

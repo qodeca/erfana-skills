@@ -1,0 +1,87 @@
+/* Row: one person or one request in a list. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--row-gap);
+  inline-size: 100%;
+  min-height: var(--row-height);
+  padding: var(--row-padding);
+  border: var(--edge-hairline) solid var(--row-edge-color);
+  border-radius: var(--row-radius);
+  background: var(--row-bg);
+  color: var(--row-text);
+  font-family: inherit;
+  font-size: calc(var(--text-style-body-tight-size) * var(--type-scale));
+  line-height: var(--text-style-body-tight-leading);
+  text-align: start;
+  transition: background-color var(--motion-normal) var(--motion-ease);
+}
+.row__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-tight);
+  min-width: 0;
+}
+.row__title,
+.row__date {
+  font-weight: var(--text-style-body-strong-weight);
+  overflow-wrap: anywhere;
+}
+.row__meta {
+  color: var(--row-meta);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+  overflow-wrap: anywhere;
+}
+.row__mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--shape-icon);
+  block-size: var(--shape-icon);
+  border: var(--edge-control) solid var(--row-mark-edge);
+  border-radius: var(--shape-round-pill);
+}
+.row:hover:not(:where(.design-frame *)),
+.row.is-hover { background: var(--row-bg-hover); }
+.row:focus-visible,
+.row.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.row:active:not(:where(.design-frame *)),
+.row.is-active { background: var(--row-bg-pressed); }
+.row:disabled,
+.row.is-disabled {
+  border-style: dashed;
+  background: var(--row-disabled-bg);
+}
+/* The edge doubles inward, so a selected row keeps its size. */
+.row[aria-checked="true"],
+.row.is-selected {
+  border-color: var(--row-selected-edge);
+  box-shadow: inset 0 0 0 var(--edge-hairline) var(--row-selected-edge);
+}
+.row[aria-checked="true"] .row__mark,
+.row.is-selected .row__mark {
+  border-color: var(--row-mark-on-edge);
+  background: var(--row-mark-on-bg);
+  color: var(--row-mark-on-text);
+}
+
+/* A time breaks only after its dash, never inside the numbers. */
+.row__time {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: calc(var(--text-style-time-compact-size) * var(--type-scale));
+  font-weight: var(--text-style-time-weight);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--text-style-time-leading);
+  white-space: nowrap;
+}
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .row { transition: none; }
+}

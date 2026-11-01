@@ -1,0 +1,3 @@
+/* Shift swap: rules that hide things at a width.
+   None are needed. The product is phone-only and folds nothing away, so this
+   file stays empty on purpose and developers lose nothing by linking it. */

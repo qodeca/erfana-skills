@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The signature part: one shift, led by its time.">
+<meta name="design-tasks" content="Show a shift; Mark a day or night shift">
+<title>Shift ticket – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="./ticket.css">
+<link rel="stylesheet" href="../../components/tag/tag.css">
+<link rel="stylesheet" href="../../patterns/loading/loading.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Shift ticket</span></nav>
+<main>
+<h1>Shift ticket</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">The system’s signature: the shift time set as large as the screen allows, with a colour band, a word, and an icon for day or night. A nurse should know which shift this is from arm’s length.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="ticket ticket--night "><span class="ticket__top"><span class="ticket__date">Sat 14 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div><div class="ticket ticket--compact "><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div></div></div>
+    <figcaption><strong>Default</strong> – Full size for the moment of commitment, compact in lists.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="ticket ticket--night "><span class="ticket__top"><span class="ticket__date">Sat 14 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div><div class="ticket ticket--compact "><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></div></div></div>
+    <figcaption><strong>Default – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-hover" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Hover</strong> – Touch has no hover. It appears only with a mouse or trackpad, as on a tablet or an Android phone with a pointer.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-hover" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Hover – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-focus" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Focus</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-focus" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Focus – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="active">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-active" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Pressed</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="active-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-active" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span></button></div></div>
+    <figcaption><strong>Pressed – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-disabled" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span><span class="ticket__reason"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg>Sending your offer</span></button></div></div>
+    <figcaption><strong>Disabled</strong> – Always says why, and only for a ticket that leads nowhere. A shift too close to offer opens its reason, so it stays open, with an arrow.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="ticket ticket--compact ticket--pick is-disabled" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Wed 4 Nov</span><span class="tag"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Day</span></span><span class="ticket__time"><span>07:00–</span><span>19:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span><span class="ticket__reason"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg>Sending your offer</span></button></div></div>
+    <figcaption><strong>Disabled – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="ticket"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--time"></span><span class="skeleton"></span></div></div></div>
+    <figcaption><strong>Loading</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="ticket"><span class="skeleton skeleton--short"></span><span class="skeleton skeleton--time"></span><span class="skeleton"></span></div></div></div>
+    <figcaption><strong>Loading – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="offered">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="ticket ticket--night ticket--compact ticket--pick" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Sat 7 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span><span class="ticket__reason"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg>Offered. Waiting for a colleague<svg class="icon icon--small ticket__go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button></div></div>
+    <figcaption><strong>Already offered</strong> – Still open: it leads to Your offer, so it does not use the disabled look.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="offered-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="ticket ticket--night ticket--compact ticket--pick" type="button" tabindex="-1"><span class="ticket__top"><span class="ticket__date">Sat 7 Nov</span><span class="tag tag--night"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Night</span></span><span class="ticket__time"><span>19:00–</span><span>07:00</span></span><span class="ticket__ward">Ward 4B – Cardiology</span><span class="ticket__reason"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg>Offered. Waiting for a colleague<svg class="icon icon--small ticket__go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></span></button></div></div>
+    <figcaption><strong>Already offered – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Tab</kbd></td><td>Moves to the next ticket</td><td>The next ticket</td></tr><tr><td><kbd>Enter</kbd> or <kbd>double-tap</kbd></td><td>Opens the shift</td><td>The next screen’s title</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;ticket ticket--night&quot;&gt;
+  &lt;span class=&quot;ticket__top&quot;&gt;
+    &lt;span class=&quot;ticket__date&quot;&gt;Sat 14 Nov&lt;/span&gt;
+    &lt;span class=&quot;tag tag--night&quot;&gt;&lt;svg class=&quot;icon icon--small&quot; …&gt;&lt;/svg&gt;Night&lt;/span&gt;
+  &lt;/span&gt;
+  &lt;span class=&quot;ticket__time&quot;&gt;&lt;span&gt;19:00–&lt;/span&gt;&lt;span&gt;07:00&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;ticket__ward&quot;&gt;Ward 4B – Cardiology&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--ticket-padding</code></td><td>Component</td><td><code>semantic.space.gutter</code></td></tr><tr><td><code>--ticket-radius</code></td><td>Component</td><td><code>semantic.shape.round-card</code></td></tr><tr><td><code>--ticket-band</code></td><td>Component</td><td><code>semantic.edge.band</code></td></tr><tr><td><code>--ticket-bg</code></td><td>Component</td><td><code>semantic.color.surface-raised</code></td></tr><tr><td><code>--ticket-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--ticket-edge-color</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--ticket-band-day</code></td><td>Component</td><td><code>semantic.color.shift-day</code></td></tr><tr><td><code>--ticket-band-night</code></td><td>Component</td><td><code>semantic.color.shift-night</code></td></tr><tr><td><code>--ticket-ward</code></td><td>Component</td><td><code>semantic.color.text-muted</code></td></tr><tr><td><code>--ticket-bg-hover</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--ticket-bg-pressed</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--ticket-disabled-bg</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/focus.html">Focus</a>: one ring on every control.</li>
+  <li><a href="../../foundations/type.html">Type</a>: scale and the shift time.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+  <li><a href="../../components/tag/index.html">Tag</a>: a short status.</li>
+  <li><a href="../../patterns/loading/index.html">Loading and keeping data</a>: first load and reload.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

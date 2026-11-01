@@ -1,0 +1,9 @@
+.icon {
+  flex: none;
+  inline-size: var(--shape-icon);
+  block-size: var(--shape-icon);
+}
+.icon--small {
+  inline-size: var(--shape-icon-small);
+  block-size: var(--shape-icon-small);
+}
