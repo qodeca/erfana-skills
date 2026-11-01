@@ -20,7 +20,7 @@ const today = () => {
 const setReady = html => html.replace('data-design-status="draft"', 'data-design-status="ready" data-approved-by="A"').replace('>Draft<', '>Ready for development<')
 const dateStates = (html, first, second) => html
   .replace('data-updated="2026-11-01"', `data-updated="${first}"`).replace('updated 2026-11-01', `updated ${first}`)
-  .replace('data-updated="2026-11-01"', `data-updated="${second}"`).replace('updated 2026-11-01', `updated ${second}`)
+  .replaceAll('data-updated="2026-11-01"', `data-updated="${second}"`).replaceAll('updated 2026-11-01', `updated ${second}`)
 
 function placeTemplates({ system, templates, write }) {
   const docs = path.dirname(system)
@@ -50,13 +50,13 @@ function statusFixtures({ area, file, page, fail, write, checkPaths, open, befor
   write(file, ready.replace('hover</strong>', 'pressed</strong>'))
   if (check().problems.length > 0) fail(`a change to another state must not touch a ready state: ${check().problems.join(' | ')}`)
   write(file, ready.replace('how a user gets here', 'how people get here'))
-  if (!has(check().problems, 'status', 'state #default was ready and changed')) fail('a changed ready state was not caught')
+  if (!has(check().problems, 'status', 'state #default-desktop was ready and changed')) fail('a changed ready state was not caught')
   write(file, ready.replace('how a user gets here', 'how people get here').replace('data-design-status="ready" data-approved-by="A"', 'data-design-status="in-review"').replace('>Ready for development<', '>In review<'))
   if (check().problems.length > 0) fail(`a changed state set back to in-review must pass: ${check().problems.join(' | ')}`)
 
   write(path.join(baseline, 'payment.html'), page)
   write(file, ready)
-  if (!check().notices.some(n => n.includes('state #default: ready newly set'))) fail('a newly ready state raised no notice')
+  if (!check().notices.some(n => n.includes('state #default-desktop: ready newly set'))) fail('a newly ready state raised no notice')
 
   // An older page kept its status in one tile: a ready page still drops as a whole.
   const legacy = page.replace('<main>', '<header class="design-tile" data-design-status="ready" data-approved-by="A" data-updated="2026-11-01">Ready for development 2026-11-01 Design, not a working product</header>\n<main>')
@@ -84,7 +84,7 @@ function dateFixtures({ area, file, page, fail, write, checkPaths, root }) {
   write(path.join(baseline, 'payment.html'), dateStates(page, '2020-01-01', now))
   const withBaseline = { baselineDir: baseline }
   write(file, dateStates(page, '2020-01-01', now).replace('how a user gets here', 'how people get here'))
-  if (!has(check(withBaseline), 'date', 'state #default changed')) fail('a changed state that kept its old date was not caught')
+  if (!has(check(withBaseline), 'date', 'state #default-desktop changed')) fail('a changed state that kept its old date was not caught')
   write(file, dateStates(page, now, now).replace('how a user gets here', 'how people get here'))
   if (has(check(withBaseline), 'date')) fail('a changed state with a new date must pass')
 

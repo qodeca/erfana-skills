@@ -23,6 +23,8 @@ const samples = ['web-sample', 'mobile-sample'].map(name => path.join(repo, 'ski
 const page = readFileSync(path.join(templates, 'screen-page.html'), 'utf8')
 const tokens = JSON.parse(readFileSync(path.join(templates, 'tokens.json'), 'utf8'))
 
+export const TARGET_LINE = 'Target sizes: desktop, tablet, phone\n'
+
 const failures = []
 const fail = message => failures.push(message)
 let bypassCount = 0
@@ -34,6 +36,11 @@ const insert = snippet => html => addBody(html).replace('X</main>', `${snippet}\
 const replace = (a, b) => html => {
   if (!html.includes(a)) throw new Error(`mutation target not found: ${a}`)
   return html.replace(a, b)
+}
+const dropFigure = id => html => {
+  const out = html.replace(new RegExp(`  <figure class="ds-frame design-state" id="${id}"[\\s\\S]*?</figure>\n`), '')
+  if (out === html) throw new Error(`mutation target not found: ${id}`)
+  return out
 }
 const swapTileAndFrame = html => {
   const out = html.replace(/( *<div class="design-tile"[\s\S]*?<\/div>\n)( *<div class="design-frame[\s\S]*?<\/div>\n)/, '$2$1')
@@ -64,7 +71,7 @@ const MUTATIONS = [
   ['srcdoc frame', insert('<iframe srcdoc="x"></iframe>'), 'no-hidden'],
   ['remote frame', insert('<iframe src="https://example.com"></iframe>'), 'no-hidden'],
   ['hidden attribute', insert('<p hidden>x</p>'), 'no-hidden'],
-  ['inert attribute', replace('design-frame--phone" aria-hidden="true"', 'design-frame--phone" aria-hidden="true" inert'), 'no-hidden'],
+  ['inert attribute', replace('design-frame--desktop" aria-hidden="true"', 'design-frame--desktop" aria-hidden="true" inert'), 'no-hidden'],
   ['popover', insert('<div popover>x</div>'), 'no-hidden'],
   ['closed details', insert('<details><summary>x</summary>y</details>'), 'no-hidden'],
   ['display none', style('.a { display: none; }'), 'no-hidden'],
@@ -87,8 +94,25 @@ const MUTATIONS = [
   ['status text differs', replace('>Draft<', '>In review<'), 'tile'],
   ['no fixed line', replace('Design, not a working product', 'Prototype'), 'tile'],
   ['bad date', replace('data-updated="2026-11-01"', 'data-updated="soon"'), 'tile'],
-  ['no state label', replace('<strong class="design-state__label">Default</strong>', '<strong>Default</strong>'), 'states'],
-  ['frame not a picture', replace('design-frame--phone" aria-hidden="true"', 'design-frame--phone"'), 'states'],
+  ['no state label', replace('<strong class="design-state__label">Default – desktop</strong>', '<strong>Default</strong>'), 'states'],
+  ['no size list', replace('<meta name="design-sizes" content="desktop tablet phone">\n', ''), 'sizes', 'needs one <meta name="design-sizes">'],
+  ['unknown size', replace('content="desktop tablet phone"', 'content="desktop tablet phone watch"'), 'sizes', 'unknown size'],
+  ['page drops a project size', replace('content="desktop tablet phone"', 'content="desktop phone"'), 'sizes', 'project target tablet is missing'],
+  ['size named and excepted', insert('<p class="design-size-exception" data-design-size="tablet">This page has a long enough written reason.</p>'), 'sizes', 'named and excepted'],
+  ['state misses a size', dropFigure('default-phone'), 'sizes', 'state default has no phone frame'],
+  ['frame size is no target', replace('design-frame--desktop" aria-hidden="true">\n      <button class="button is-hover"', 'design-frame--tablet-landscape" aria-hidden="true">\n      <button class="button is-hover"'), 'sizes', 'not a target of this page'],
+  ['frame has no size', replace('design-frame design-frame--desktop" aria-hidden="true">\n      <button class="button is-hover"', 'design-frame" aria-hidden="true">\n      <button class="button is-hover"'), 'sizes', 'needs a size class'],
+  ['exception has no reason', replace('Tablets have no pointer, so there is no hover to draw.', 'Touch only'), 'sizes', 'written reason'],
+  ['exception names no target', replace('data-design-group="hover" data-design-size="tablet"', 'data-design-group="hover" data-design-size="watch"'), 'sizes', 'one of: desktop, tablet, phone'],
+  ['exception out of date', replace('data-design-group="hover" data-design-size="phone"', 'data-design-group="hover" data-design-size="desktop"'), 'sizes', 'out of date'],
+  ['exception names no state', replace('data-design-group="hover" data-design-size="phone"', 'data-design-group="gone" data-design-size="phone"'), 'sizes', 'not on this page'],
+  ['exception names a group twice', replace('data-design-group="hover" data-design-size="phone"', 'data-design-group="hover" data-design-size="tablet"'), 'sizes', 'two exceptions'],
+  ['group of two words', replace('data-design-group="default"', 'data-design-group="default state"'), 'sizes', 'one word'],
+  ['exception group of two words', replace('data-design-group="hover" data-design-size="phone"', 'data-design-group="ho ver" data-design-size="phone"'), 'sizes', 'data-design-group is one word'],
+  ['page size is no project target', replace('content="desktop tablet phone"', 'content="desktop tablet phone narrow"'), 'sizes', 'size narrow is not a project target'],
+  ['exception for a size the page dropped', html => insert('<p class="design-size-exception" data-design-size="tablet">This screen is not offered on tablets, by the brief.</p>')(dropFigure('default-tablet')(html).replace('content="desktop tablet phone"', 'content="desktop phone"')), 'sizes', 'does not target'],
+  ['exception inside a frame', replace('<button class="button is-hover" type="button" tabindex="-1">Pay 49 EUR</button>', '<p class="design-size-exception" data-design-size="desktop" data-design-group="gone">A reason drawn inside a frame is no reason.</p>'), 'sizes', 'outside every frame'],
+  ['frame not a picture', replace('design-frame--desktop" aria-hidden="true"', 'design-frame--desktop"'), 'states'],
   ['no questions', replace('class="ds-note design-questions"', 'class="ds-note"'), 'questions'],
   ['working link', inFrame('<a class="button" href="next.html">Pay</a>'), 'no-fake-controls'],
   ['live control', inFrame('<button class="button" type="button">Pay</button>'), 'no-fake-controls'],
@@ -105,7 +129,7 @@ const MUTATIONS = [
   ['page-level tile', insert('<div class="design-tile" data-design-status="draft" data-updated="2026-11-01">Draft 2026-11-01 Design, not a working product</div>'), 'tile', 'a page has no status tile'],
   ['frame outside a state', insert('<div class="design-frame" aria-hidden="true"></div>'), 'states', 'sits inside a .design-state'],
   ['state without an id', replace(' id="hover"', ''), 'states', 'needs its own id'],
-  ['state id used twice', replace(' id="hover"', ' id="default"'), 'states', 'needs its own id'],
+  ['state id used twice', replace(' id="hover"', ' id="default-desktop"'), 'states', 'needs its own id'],
   ['no crumbs', replace('class="ds-crumbs"', 'class="other"'), 'anatomy', 'nav.ds-crumbs'],
   ['no decision', replace(' id="decision"', ''), 'anatomy', 'id="decision"'],
   ['no description', replace('<meta name="description" content="What this screen shows, in one line, for the designs index">\n', ''), 'anatomy', 'meta name="description"'],
@@ -139,9 +163,24 @@ try {
   write(path.join(system, 'tokens.css'), built.css)
   write(path.join(system, 'responsive.css'), '.a { display: none; }\n')
 
+  write(path.join(root, 'docs/designs/README.md'), TARGET_LINE)
   write(file, page)
   const clean = run()
   if (clean.length > 0) fail(`template page should pass:\n  ${clean.join('\n  ')}`)
+
+  // A narrower page is allowed only with its reason, and the project line is the anchor.
+  const narrowed = dropFigure('default-tablet')(page).replace('content="desktop tablet phone"', 'content="desktop phone"')
+    .replace(/ *<li class="design-size-exception" data-design-group="hover" data-design-size="tablet">.*\n/, '  <li class="design-size-exception" data-design-size="tablet">This screen is not offered on tablets, by the brief.</li>\n')
+  write(file, narrowed)
+  if (run().length > 0) fail(`a page narrowed with a reason must pass: ${run().join(' | ')}`)
+  write(file, narrowed.replace(/ *<li class="design-size-exception" data-design-size="tablet">.*\n/, ''))
+  if (!run().some(p => p.includes('project target tablet is missing'))) fail('a page narrowed with no reason was not caught')
+  write(file, page)
+  write(path.join(root, 'docs/designs/README.md'), 'Target sizes: desktop, tablet, phone, watch\n')
+  if (!run().some(p => p.includes('unknown size in docs/designs/README.md'))) fail('an unknown project size was not caught')
+  write(path.join(root, 'docs/designs/README.md'), 'No sizes here.\n')
+  if (!run().some(p => p.includes('needs a plain line starting "Target sizes'))) fail('a project with no target sizes was not caught')
+  write(path.join(root, 'docs/designs/README.md'), TARGET_LINE)
 
   // A trap: a token named after a colour is a token, not a raw colour.
   write(file, style('.a { color: var(--gray-50); }')(page))
