@@ -277,52 +277,50 @@ td[data-contrast], span[data-contrast] { font-family: var(--ds-font-mono); font-
   color-scheme: normal;
 }
 .design-frame--narrow { width: var(--frame-narrow); }
-.design-frame--phone { width: var(--frame-phone); }
-.design-frame--phone-small { width: var(--frame-narrow); }
+.design-frame--phone { --device-width: var(--frame-phone); width: var(--device-width); }
+.design-frame--phone-small { --device-width: var(--frame-narrow); width: var(--device-width); }
 
-/* A phone body around the screen. The screen keeps its true width inside it,
-   and nothing is drawn over the screen, so every part can still take a comment. */
-.design-frame--phone,
-.design-frame--phone-small {
+/* A phone body around the screen. Nothing covers the design, so all of it can
+   take a comment. A design must not use its root element's ::after. */
+:is(.design-frame--phone, .design-frame--phone-small) {
   position: relative;
   box-sizing: content-box;
-  border-color: var(--device-body);
-  border-style: solid;
-  border-width: var(--device-top) var(--device-side) var(--device-bottom);
+  border: var(--device-side) solid var(--device-body);
   border-radius: var(--device-radius);
   background: var(--device-body);
-  outline: var(--ds-border-width) solid var(--device-rim);
+  outline: var(--device-rim-width) solid var(--device-rim);
 }
-.design-frame--phone > *,
-.design-frame--phone-small > * {
+:is(.design-frame--phone, .design-frame--phone-small) > * {
+  box-sizing: border-box;
   overflow: clip;
   min-height: var(--device-screen-height);
+  padding-block: var(--device-safe-top) var(--device-safe-bottom);
   border-radius: var(--device-screen-radius);
 }
 .design-frame--phone-small > * { min-height: var(--device-screen-height-small); }
-.design-frame--phone::before,
-.design-frame--phone-small::before,
-.design-frame--phone::after,
-.design-frame--phone-small::after {
+:is(.design-frame--phone, .design-frame--phone-small)::before {
+  content: ''; position: absolute; inset-inline-start: 50%; translate: -50% 0;
+  inset-block-start: var(--device-camera-top);
+  width: var(--device-camera-width); height: var(--device-camera-height);
+  border-radius: var(--device-camera-height);
+  background: radial-gradient(circle at calc(100% - var(--device-camera-height) / 2) 50%, var(--device-lens) 0 var(--device-lens-size), transparent var(--device-lens-size)), var(--device-body);
+}
+:is(.design-frame--phone, .design-frame--phone-small)::after {
+  content: ''; position: absolute; inset-inline-start: 50%; translate: -50% 0;
+  inset-block-end: var(--device-bar-bottom);
+  width: var(--device-bar-width); height: var(--device-bar-height);
+  border-radius: var(--device-bar-height);
+  background: var(--device-bar);
+}
+/* A left button. Its shadows draw the second left button and the right one. */
+:is(.design-frame--phone, .design-frame--phone-small) > *::after {
   content: '';
   position: absolute;
-  inset-inline-start: 50%;
-  translate: -50% 0;
-  border-radius: var(--device-bar-height);
-}
-.design-frame--phone::before,
-.design-frame--phone-small::before {
-  inset-block-start: calc((var(--device-top) + var(--device-camera-height)) / -2);
-  width: var(--device-camera-width);
-  height: var(--device-camera-height);
+  inset-block-start: var(--device-button-top);
+  inset-inline-start: calc(var(--device-side) * -1 - var(--device-rim-width) - var(--device-button-depth));
+  width: var(--device-button-depth); height: var(--device-button-height);
   background: var(--device-rim);
-}
-.design-frame--phone::after,
-.design-frame--phone-small::after {
-  inset-block-end: calc((var(--device-bottom) + var(--device-bar-height)) / -2);
-  width: var(--device-bar-width);
-  height: var(--device-bar-height);
-  background: var(--device-bar);
+  box-shadow: 0 var(--device-button-gap) var(--device-rim), calc(var(--device-width) + 2 * var(--device-side) + 2 * var(--device-rim-width) + var(--device-button-depth)) var(--device-button-power-drop) var(--device-rim);
 }
 .design-frame--tablet { width: var(--frame-tablet); }
 .design-frame--desktop { width: var(--frame-desktop); }
