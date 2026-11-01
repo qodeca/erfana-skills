@@ -6,12 +6,15 @@
 // Gate 20. A rule without a mutation here is a rule nobody has proved. Status,
 // date, index, and template fixtures are in fixtures-pages.mjs.
 
-import { copyFileSync, cpSync, existsSync, mkdirSync, symlinkSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildCss } from '../../skills/design/scripts/build-tokens.mjs'
-import { checkPaths, snapshot, snapshotClean } from '../../skills/design/scripts/check-design.mjs'
+import { CSP, checkPaths, snapshot, snapshotClean } from '../../skills/design/scripts/check-design.mjs'
+import { checkPolicy } from './csp-browser.mjs'
+import { runBypassFixtures } from './fixtures-bypass.mjs'
+import { runCliFixtures, tryLink } from './fixtures-cli.mjs'
 import { runPageFixtures } from './fixtures-pages.mjs'
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
@@ -22,6 +25,7 @@ const tokens = JSON.parse(readFileSync(path.join(templates, 'tokens.json'), 'utf
 
 const failures = []
 const fail = message => failures.push(message)
+let bypassCount = 0
 
 const open = '<!-- erfana:comment v1 id=c-aaaaaaaaaaaaaaaa\nstatus: open\ncomment by A at 2026-10-25T14:03:00Z:\n  Change this.\n-->'
 const before = (html, tag, block) => html.replace(tag, `${block}\n${tag}`)
@@ -165,8 +169,8 @@ try {
   write(path.join(area, 'prototypes/flow.js'), 'x()\n')
   if (!run().some(p => p.includes('[prototype]'))) fail('an unmarked prototype was not caught')
   if (run().some(p => p.includes('[no-script]'))) fail('a marked folder of prototypes must not fail no-script')
-  write(path.join(area, 'prototypes/flow.html'), '<p>Prototype – not for comments or sign-off</p><script>x()</script>')
-  if (run().length > 0) fail('a marked prototype must pass')
+  write(path.join(area, 'prototypes/flow.html'), '<p class="design-prototype">Prototype – not for comments or sign-off</p><script>x()</script>')
+  if (run().length > 0) fail(`a marked prototype must pass: ${run().join(' | ')}`)
   rmSync(path.join(area, 'prototypes'), { recursive: true })
 
   // Token drift, and a linked sheet that hides content.
@@ -234,7 +238,10 @@ try {
   write(file, page)
 
   write(file, page)
-  runPageFixtures({ root, system, area, file, page, templates, fail, write, checkPaths, open, before })
+  const context = { root, system, area, file, page, templates, fail, write, checkPaths, open, before }
+  runPageFixtures(context)
+  bypassCount = runBypassFixtures(context)
+  await runCliFixtures(context)
 
   // The shipped sample.
   const shipped = checkPaths([sample], { noDate: true }).problems
@@ -253,10 +260,23 @@ try {
   if (!snapshotClean(copy, project) || existsSync(copy)) fail('snapshot-clean did not remove the copy')
   if (snapshotClean(copy, project)) fail('snapshot-clean reported success for a missing copy')
   write(path.join(root, 'outside.html'), 'live')
-  symlinkSync(path.join(root, 'outside.html'), path.join(project, 'docs', 'linked.html'))
-  const copies = readdirSync(base).length
-  if (snapshot(path.join(project, 'docs'), project) !== null) fail('snapshot accepted a folder with a link')
-  if (readdirSync(base).length !== copies) fail('snapshot left a partial copy')
+  if (tryLink(path.join(root, 'outside.html'), path.join(project, 'docs', 'linked.html'), 'the snapshot link check')) {
+    const copies = readdirSync(base).length
+    if (snapshot(path.join(project, 'docs'), project) !== null) fail('snapshot accepted a folder with a link')
+    if (readdirSync(base).length !== copies) fail('snapshot left a partial copy')
+  }
+
+  // The policy in a real browser, and a control: the old policy must fail the same test.
+  const font = path.join(templates, 'fonts/CascadiaMono-Regular.woff2')
+  const policy = await checkPolicy(CSP, font)
+  if (policy.skipped) {
+    console.log(`  SKIP: the browser test of the page policy: ${policy.skipped}`)
+  } else {
+    for (const problem of policy.failures) fail(`page policy: ${problem}`)
+    const weak = await checkPolicy(CSP.replace(/^default-src 'none'; style-src [^;]*; font-src [^;]*; img-src [^;]*; /, ''), font)
+    if (weak.failures?.length === 0) fail('the browser test passed a policy with no default-src, so it proves nothing')
+    console.log(`  PASS: page policy in a real browser: local stylesheet, import, font, and images load on file://, and a remote image does not; the weaker policy fails, ${weak.failures?.length} problem(s)`)
+  }
 } catch (error) {
   fail(error.stack)
 } finally {
@@ -267,5 +287,5 @@ if (failures.length > 0) {
   for (const f of failures) console.log(`  FAIL: ${f}`)
   process.exitCode = 1
 } else {
-  console.log(`  PASS: template pages, ${MUTATIONS.length} mutations, baselines, token levels, status, dates, indexes, shipped sample`)
+  console.log(`  PASS: template pages, ${MUTATIONS.length} mutations, ${bypassCount} bypass payloads, command runs, git, baselines, token levels, status, dates, indexes, shipped sample`)
 }
