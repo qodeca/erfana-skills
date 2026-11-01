@@ -57,7 +57,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | `erfana:next-batch` | Rank free open issues by delivery impact, group the top N by theme, save `.local/next-batch.md`. Read-only on GitHub. |
 | `erfana:coordinate` | Claims on GitHub (`claimed` label + `<!-- erfana:claim -->` comment) so parallel sessions and clones do not collide; board, release, and sibling-session status exchange. The claim rules (`references/claims.md`) are shared with `next-batch` and `autopilot`. |
 | `erfana:expert-panel` | Fan out read-only top-practitioner reviewers over a plan, design, or documents; merge, ask the owner's decisions, write an improved version to a new file. |
-| `erfana:design` | Design systems and HTML and CSS designs for desktop, web, and mobile, through seven operations (Create system, Change system, Audit system, New design, Revise, Migrate, Set status). Review pages run no JavaScript and hide nothing, so every comment stays visible. Ships a checker and a token builder in `skills/design/scripts/`, proved by Gate 20; `ux-designer`, `ui-designer`, `ux-reviewer`, and `ui-reviewer` do the design and review work. |
+| `erfana:design` | Design systems and HTML and CSS designs for desktop, web, and mobile, through seven operations (Create system, Change system, Audit system, New design, Revise, Migrate, Set status). Review pages run no JavaScript and hide nothing, so every comment stays visible. Ships a checker, a token builder, and an index builder in `skills/design/scripts/`, proved by Gate 20, and the Cascadia Mono files its documentation pages use; `ux-designer`, `ui-designer`, `ux-reviewer`, and `ui-reviewer` do the design and review work. |
 
 ### Session closeout skills (2)
 

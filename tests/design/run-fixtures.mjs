@@ -1,16 +1,18 @@
 // SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o.
 // SPDX-License-Identifier: GPL-3.0-only
 //
-// Proves the design skill's checker: the template page passes, every mutation
+// Proves the design skill's checker: the template pages pass, every mutation
 // below is caught by the named rule, and the shipped sample passes. Run by
-// Gate 20. A rule without a mutation here is a rule nobody has proved.
+// Gate 20. A rule without a mutation here is a rule nobody has proved. Status,
+// date, index, and template fixtures are in fixtures-pages.mjs.
 
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildCss } from '../../skills/design/scripts/build-tokens.mjs'
 import { checkPaths } from '../../skills/design/scripts/check-design.mjs'
+import { runPageFixtures } from './fixtures-pages.mjs'
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const templates = path.join(repo, 'skills/design/templates')
@@ -28,6 +30,16 @@ const insert = snippet => html => addBody(html).replace('X</main>', `${snippet}\
 const replace = (a, b) => html => {
   if (!html.includes(a)) throw new Error(`mutation target not found: ${a}`)
   return html.replace(a, b)
+}
+const swapTileAndFrame = html => {
+  const out = html.replace(/( *<div class="design-tile"[\s\S]*?<\/div>\n)( *<div class="design-frame[\s\S]*?<\/div>\n)/, '$2$1')
+  if (out === html) throw new Error('mutation target not found: tile and frame')
+  return out
+}
+const dropSecondTile = html => {
+  const out = html.replace(/(id="hover">\n) *<div class="design-tile"[\s\S]*?<\/div>\n/, '$1')
+  if (out === html) throw new Error('mutation target not found: second tile')
+  return out
 }
 const inFrame = snippet => replace('<button class="button" type="button" tabindex="-1">Pay 49 EUR</button>', snippet)
 const onBody = attr => replace('data-design-page="screen"', `data-design-page="screen" ${attr}`)
@@ -71,9 +83,9 @@ const MUTATIONS = [
   ['status text differs', replace('>Draft<', '>In review<'), 'tile'],
   ['no fixed line', replace('Design, not a working product', 'Prototype'), 'tile'],
   ['bad date', replace('data-updated="2026-11-01"', 'data-updated="soon"'), 'tile'],
-  ['no state label', replace('<h2 class="design-state__label">Default</h2>', ''), 'states'],
+  ['no state label', replace('<strong class="design-state__label">Default</strong>', '<strong>Default</strong>'), 'states'],
   ['frame not a picture', replace('design-frame--phone" aria-hidden="true"', 'design-frame--phone"'), 'states'],
-  ['no questions', replace('class="design-questions"', 'class="other"'), 'questions'],
+  ['no questions', replace('class="ds-note design-questions"', 'class="ds-note"'), 'questions'],
   ['working link', inFrame('<a class="button" href="next.html">Pay</a>'), 'no-fake-controls'],
   ['live control', inFrame('<button class="button" type="button">Pay</button>'), 'no-fake-controls'],
   ['form', insert('<form><p>x</p></form>'), 'no-fake-controls'],
@@ -83,14 +95,30 @@ const MUTATIONS = [
   ['broken quote', insert('<p class="a>x</p>'), 'markup'],
   ['too many comments', html => before(html, '<h1>', `<!-- erfana:comment v1 id=c-b\nstatus: resolved by A at 2026-10-27T08:00:00Z\n-->\n`.repeat(501)), 'limits'],
   ['ready without approver', replace('data-design-status="draft"', 'data-design-status="ready"'), 'status'],
-  ['ready with open comment', html => before(html.replace('data-design-status="draft"', 'data-design-status="ready" data-approved-by="A"').replace('>Draft<', '>Ready for development<'), '<h1>', open), 'status']
+  ['ready with open comment', html => before(html.replace('data-design-status="draft"', 'data-design-status="ready" data-approved-by="A"').replace('>Draft<', '>Ready for development<'), '<h1>', open), 'status'],
+  ['rectangle missing in a state', dropSecondTile, 'tile', 'a state needs a .design-tile rectangle directly above its frame'],
+  ['rectangle after the frame', swapTileAndFrame, 'tile', 'must sit directly above this frame'],
+  ['page-level tile', insert('<div class="design-tile" data-design-status="draft" data-updated="2026-11-01">Draft 2026-11-01 Design, not a working product</div>'), 'tile', 'a page has no status tile'],
+  ['frame outside a state', insert('<div class="design-frame" aria-hidden="true"></div>'), 'states', 'sits inside a .design-state'],
+  ['state without an id', replace(' id="hover"', ''), 'states', 'needs its own id'],
+  ['state id used twice', replace(' id="hover"', ' id="default"'), 'states', 'needs its own id'],
+  ['no crumbs', replace('class="ds-crumbs"', 'class="other"'), 'anatomy', 'nav.ds-crumbs'],
+  ['no decision', replace(' id="decision"', ''), 'anatomy', 'id="decision"'],
+  ['no description', replace('<meta name="description" content="What this screen shows, in one line, for the designs index">\n', ''), 'anatomy', 'meta name="description"'],
+  ['unclosed div', insert('<div><p>x</p>'), 'balance', '<div> is never closed'],
+  ['tag dropped mid-page', replace('</figure>', ''), 'balance', '<figure> is never closed'],
+  ['stray closing tag', insert('</div>'), 'balance', 'stray </div>'],
+  ['div closed with a slash', insert('<div />'), 'balance', '<div> is never closed'],
+  ['unclosed style', replace('</head>', '<style>.a { color: var(--gray-50); }\n</head>'), 'balance', '<style> is never closed'],
+  ['fixed frame in the grid', replace('<div class="ds-states">', '<div class="ds-frames">'), 'frames', 'outside the .ds-frames grid']
 ]
 
 const root = mkdtempSync(path.join(tmpdir(), 'design-fixtures-'))
 const system = path.join(root, 'docs/design-system')
 const area = path.join(root, 'docs/designs/checkout')
 const file = path.join(area, 'payment.html')
-const run = (options = {}) => checkPaths([path.join(root, 'docs/designs')], { noDate: true, ...options }).problems
+// Mutations run on the area folder: index fixtures run on docs/ in fixtures-pages.mjs.
+const run = (options = {}) => checkPaths([area], { noDate: true, ...options }).problems
 const write = (target, text) => {
   mkdirSync(path.dirname(target), { recursive: true })
   writeFileSync(target, text)
@@ -99,7 +127,9 @@ const write = (target, text) => {
 try {
   mkdirSync(area, { recursive: true })
   mkdirSync(system, { recursive: true })
-  for (const name of ['docs-tokens.css', 'docs.css', 'components.css', 'tokens.json']) copyFileSync(path.join(templates, name), path.join(system, name))
+  for (const name of ['docs-tokens.css', 'docs.css', 'fonts.css', 'components.css', 'tokens.json']) copyFileSync(path.join(templates, name), path.join(system, name))
+  cpSync(path.join(templates, 'fonts'), path.join(system, 'fonts'), { recursive: true })
+  write(path.join(system, 'system/components/button/button.css'), readFileSync(path.join(templates, 'component.css'), 'utf8'))
   const built = buildCss(tokens)
   if (built.errors.length > 0) fail(`template tokens: ${built.errors.join('; ')}`)
   write(path.join(system, 'tokens.css'), built.css)
@@ -113,13 +143,17 @@ try {
   write(file, style('.a { color: var(--gray-50); }')(page))
   if (run().length > 0) fail(`a colour-named token must pass: ${run().join(' | ')}`)
 
+  // A trap: "/>" is a real close inside SVG, and a void element needs no close.
+  write(file, insert('<svg><path d="M0 0" /></svg>\n<hr>')(page))
+  if (run().length > 0) fail(`self-closed SVG and void elements must pass: ${run().join(' | ')}`)
+
   // Dark themes: a component token must re-resolve inside a theme root.
   if (!/\[data-theme\] \{[^}]*--button-bg/.test(built.css)) fail('component tokens are not declared on theme roots')
 
-  for (const [name, mutate, rule] of MUTATIONS) {
+  for (const [name, mutate, rule, reason = ''] of MUTATIONS) {
     write(file, mutate(page))
     const found = run()
-    if (!found.some(p => p.includes(`[${rule}]`))) fail(`"${name}" was not caught by [${rule}]; got: ${found.slice(0, 3).join(' | ') || 'nothing'}`)
+    if (!found.some(p => p.includes(`[${rule}]`) && p.includes(reason))) fail(`"${name}" was not caught by [${rule}] ${reason}; got: ${found.slice(0, 3).join(' | ') || 'nothing'}`)
   }
 
   // A .js file beside a page, and a prototype that is allowed one.
@@ -164,7 +198,7 @@ try {
   // Baselines: comments stay byte-identical, and a changed ready page drops.
   const baseline = path.join(root, 'baseline')
   const withComment = before(page, '<h1>', open)
-  write(path.join(baseline, 'checkout/payment.html'), withComment)
+  write(path.join(baseline, 'payment.html'), withComment)
   const options = { baselineDir: baseline }
   write(file, withComment.replace('Payment</h1>', 'Pay</h1>'))
   if (run(options).length > 0) fail(`an edit that keeps the block must pass: ${run(options).join(' | ')}`)
@@ -173,7 +207,7 @@ try {
   write(file, page)
   if (!run(options).some(p => p.includes('[comments]'))) fail('a removed comment block was not caught')
   const ready = page.replace('data-design-status="draft"', 'data-design-status="ready" data-approved-by="A"').replace('>Draft<', '>Ready for development<')
-  write(path.join(baseline, 'checkout/payment.html'), ready)
+  write(path.join(baseline, 'payment.html'), ready)
   write(file, ready.replace('Payment</h1>', 'Pay</h1>'))
   if (!run(options).some(p => p.includes('[status]'))) fail('a changed ready page was not caught')
   write(file, ready)
@@ -181,24 +215,26 @@ try {
 
   // A block moved to another element keeps its bytes but loses its target.
   const moved = before(page, '<h1>', open)
-  write(path.join(baseline, 'checkout/payment.html'), moved)
+  write(path.join(baseline, 'payment.html'), moved)
   write(file, before(page, '<main>', open))
   if (!run(options).some(p => p.includes('now sits before'))) fail('a moved comment block was not caught')
 
   // The baseline fails closed: nothing compared, or a page gone, is a failure.
-  const designs = path.join(root, 'docs/designs')
-  write(path.join(baseline, 'checkout/payment.html'), withComment)
+  write(path.join(baseline, 'payment.html'), withComment)
   write(file, withComment)
-  const matched = checkPaths([designs], { noDate: true, baselineDir: baseline })
+  const matched = checkPaths([area], { noDate: true, baselineDir: baseline })
   if (matched.compared !== 1 || matched.problems.length > 0) fail(`a matching baseline must compare one page: ${matched.problems.join(' | ')}`)
   const emptyCopy = path.join(root, 'empty')
   write(path.join(emptyCopy, 'other/page.html'), page)
-  if (!checkPaths([designs], { noDate: true, baselineDir: emptyCopy }).problems.some(p => p.includes('[comments]'))) fail('a baseline with no matching page passed')
+  if (!checkPaths([area], { noDate: true, baselineDir: emptyCopy }).problems.some(p => p.includes('[comments]'))) fail('a baseline with no matching page passed')
   rmSync(file)
   write(path.join(area, 'renamed.html'), page)
-  if (!checkPaths([designs], { noDate: true, baselineDir: baseline }).problems.some(p => p.includes('is gone'))) fail('a removed page with comments was not caught')
+  if (!checkPaths([area], { noDate: true, baselineDir: baseline }).problems.some(p => p.includes('is gone'))) fail('a removed page with comments was not caught')
   rmSync(path.join(area, 'renamed.html'))
   write(file, page)
+
+  write(file, page)
+  runPageFixtures({ root, system, area, file, page, templates, fail, write, checkPaths, open, before })
 
   // The shipped sample.
   const shipped = checkPaths([sample], { noDate: true }).problems
@@ -213,5 +249,5 @@ if (failures.length > 0) {
   for (const f of failures) console.log(`  FAIL: ${f}`)
   process.exitCode = 1
 } else {
-  console.log(`  PASS: template page, ${MUTATIONS.length} mutations, baselines, token levels, shipped sample`)
+  console.log(`  PASS: template pages, ${MUTATIONS.length} mutations, baselines, token levels, status, dates, indexes, shipped sample`)
 }

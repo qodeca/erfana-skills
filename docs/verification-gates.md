@@ -38,7 +38,7 @@ Each gate is documented in its own file under `docs/gates/`. The verbatim implem
 | 17 | Publication readiness (GPL license; no proprietary / internal-only framing or internal contact email) (v6.0.0+) | hard | [`gates/17-publication-readiness.md`](gates/17-publication-readiness.md) |
 | 18 | Skill registry sync (`docs/skill-registry.md` vs `ls skills/` + `git log`; shallow clone, list drift, duplicate rows and values git contradicts are hard, lagging dates warn; v6.6.1+) | hard | [`gates/18-skill-registry.md`](gates/18-skill-registry.md) |
 | 19 | Reference sync (`docs/reference.md` regenerated from skills, agents, commands, and hooks; whole-file diff; v9.3.0+) | hard | [`gates/19-reference.md`](gates/19-reference.md) |
-| 20 | Design checker (`tests/design/run-fixtures.mjs` proves the `design` skill's checker, token builder, and shipped sample) | hard | [`gates/20-design-checker.md`](gates/20-design-checker.md) |
+| 20 | Design checker (`tests/design/run-fixtures.mjs` proves the `design` skill's checker, token builder, index builder, and shipped sample) | hard | [`gates/20-design-checker.md`](gates/20-design-checker.md) |
 
 Runner order in `scripts/run-all-gates.sh`: 1, 2, 3, 4, 7, 10, 11, 14, 16, 15, 17, 18, 19 (hook-related gates 14 and 16 run consecutively).
 
