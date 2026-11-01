@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| design | 2026-11-01 | feat(design): generate pages in Erfana's documentation look |
+| design | 2026-11-01 | feat(design): make status boxes quick to spot and keep drawings still |
 | using-erfana | 2026-11-01 | feat(design): add design skill for HTML and CSS review pages |
 | article | 2026-10-29 | docs: restructure the docs, generate the reference, and check docs in... |
 | autopilot | 2026-10-29 | fix: harden autopilot against replacing or losing a running goal (#73) |
