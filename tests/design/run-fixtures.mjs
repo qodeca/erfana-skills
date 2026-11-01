@@ -6,12 +6,12 @@
 // Gate 20. A rule without a mutation here is a rule nobody has proved. Status,
 // date, index, and template fixtures are in fixtures-pages.mjs.
 
-import { copyFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, cpSync, existsSync, mkdirSync, symlinkSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildCss } from '../../skills/design/scripts/build-tokens.mjs'
-import { checkPaths } from '../../skills/design/scripts/check-design.mjs'
+import { checkPaths, snapshot, snapshotClean } from '../../skills/design/scripts/check-design.mjs'
 import { runPageFixtures } from './fixtures-pages.mjs'
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
@@ -239,6 +239,24 @@ try {
   // The shipped sample.
   const shipped = checkPaths([sample], { noDate: true }).problems
   if (shipped.length > 0) fail(`shipped sample should pass:\n  ${shipped.join('\n  ')}`)
+  // The comment safety copy stays inside the project, in a folder git ignores.
+  const project = path.join(root, 'snapshot-project')
+  write(path.join(project, 'docs', 'page.html'), 'x')
+  const copy = snapshot(path.join(project, 'docs'), project)
+  const base = path.join(project, '.local', 'design-snapshots')
+  if (!copy.startsWith(base + path.sep)) fail(`snapshot left the project: ${copy}`)
+  if (readFileSync(path.join(base, '.gitignore'), 'utf-8') !== '*\n') fail('snapshot folder does not ignore itself')
+  if (readFileSync(path.join(copy, 'page.html'), 'utf-8') !== 'x') fail('snapshot did not copy the folder')
+  if (snapshot(root, project) !== null) fail('snapshot accepted a folder outside the project')
+  if (snapshot('missing', project) !== null) fail('snapshot accepted a folder that does not exist')
+  if (snapshotClean(path.join(project, 'docs'), project)) fail('snapshot-clean accepted a folder that is not a copy')
+  if (!snapshotClean(copy, project) || existsSync(copy)) fail('snapshot-clean did not remove the copy')
+  if (snapshotClean(copy, project)) fail('snapshot-clean reported success for a missing copy')
+  write(path.join(root, 'outside.html'), 'live')
+  symlinkSync(path.join(root, 'outside.html'), path.join(project, 'docs', 'linked.html'))
+  const copies = readdirSync(base).length
+  if (snapshot(path.join(project, 'docs'), project) !== null) fail('snapshot accepted a folder with a link')
+  if (readdirSync(base).length !== copies) fail('snapshot left a partial copy')
 } catch (error) {
   fail(error.stack)
 } finally {
