@@ -18,8 +18,8 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| design | 2026-11-02 | docs(design): correct the dark frame note |
-| using-erfana | 2026-11-01 | feat(design): add design skill for HTML and CSS review pages |
+| design | 2026-11-02 | fix(design): drop a dead link from the web sample (#90) |
+| using-erfana | 2026-11-02 | feat(design): add design skill for HTML and CSS review pages (#86) |
 | article | 2026-10-29 | docs: restructure the docs, generate the reference, and check docs in... |
 | autopilot | 2026-10-29 | fix: harden autopilot against replacing or losing a running goal (#73) |
 | draft-goal | 2026-10-29 | fix: harden autopilot against replacing or losing a running goal (#73) |
