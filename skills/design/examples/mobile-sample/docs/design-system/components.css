@@ -1,0 +1,23 @@
+/* Shift swap styling library. Every value is a token.
+   Each part reads its own component tokens, colours and text styles included,
+   so native teams get the same names from tokens.json. Sizes are px, so every
+   font-size multiplies by --type-scale: 1 by default, 2 in the large-text mode.
+   Layout adapts with @container rules at 600 and 960, in the part they change:
+   .screen and .pane are the containers. Native teams read these as size classes.
+   This is the library's one entry point: a screen, or a web view, links this
+   file and gets every part. Each part's CSS sits beside its page. Add one line
+   per part, and keep this order. */
+@import url('./system/components/screen/screen.css');
+@import url('./system/components/panes/panes.css');
+@import url('./system/components/text/text.css');
+@import url('./system/components/icon/icon.css');
+@import url('./system/components/button/button.css');
+@import url('./system/components/ticket/ticket.css');
+@import url('./system/components/row/row.css');
+@import url('./system/components/baton/baton.css');
+@import url('./system/components/tag/tag.css');
+@import url('./system/components/notice/notice.css');
+@import url('./system/components/check/check.css');
+@import url('./system/components/field/field.css');
+@import url('./system/patterns/saying-no/saying-no.css');
+@import url('./system/patterns/loading/loading.css');

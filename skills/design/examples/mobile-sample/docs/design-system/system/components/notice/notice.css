@@ -1,0 +1,33 @@
+/* Notice: what happened, what to do, what is kept. */
+.notice {
+  display: flex;
+  gap: var(--notice-gap);
+  padding: var(--notice-padding);
+  border-radius: var(--notice-radius);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  line-height: var(--text-style-body-strong-leading);
+}
+.notice__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-tight);
+  min-width: 0;
+  color: var(--notice-text);
+  font-size: calc(var(--text-style-label-long-size) * var(--type-scale));
+  line-height: var(--text-style-label-long-leading);
+}
+.notice__title {
+  font-size: calc(var(--text-style-body-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-body-strong-weight);
+  line-height: var(--text-style-body-strong-leading);
+}
+.notice--info { background: var(--notice-info-bg); color: var(--notice-info-text); }
+.notice--ok { background: var(--notice-ok-bg); color: var(--notice-ok-text); }
+.notice--warn { background: var(--notice-warn-bg); color: var(--notice-warn-text); }
+.notice--stop { background: var(--notice-stop-bg); color: var(--notice-stop-text); }
+.notice--info .notice__text,
+.notice--ok .notice__text,
+.notice--warn .notice__text,
+.notice--stop .notice__text { color: inherit; }

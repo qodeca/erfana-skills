@@ -1,6 +1,6 @@
 # How-to guides
 
-*This page describes erfana v9.3.1. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.4.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Each section below is a recipe for one goal. It assumes you know what you want to do and need the steps. If you are new to erfana, start with the [tutorial](tutorial.md). For every skill, agent, command, and hook in one list, see the [reference](reference.md). For why erfana works the way it does, see the [explanation](explanation.md).
 
@@ -37,7 +37,7 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
 
    ```text
      ❯ erfana@erfana-skills
-       Version: 9.3.1
+       Version: 9.4.0
        Scope: user
        Status: ✔ enabled
    ```
@@ -94,11 +94,11 @@ Then start a new `qwen` session, because skills, agents, and hooks load at sessi
 Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the output starts like this, followed by the lists of commands and skills:
 
 ```text
-✓ erfana (9.3.1)
+✓ erfana (9.4.0)
  Path: /Users/you/.qwen/extensions/erfana
  Source: https://github.com/qodeca/erfana-skills (Type: github-release)
  Origin: Claude
- Release tag: v9.3.1
+ Release tag: v9.4.0
 ```
 
 The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
@@ -564,7 +564,7 @@ Check the spelling of the source: `qodeca/erfana-skills:erfana` – the reposito
 
 ### A request does not start the skill you expected
 
-Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-18), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
+Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-19), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
 
 `erfana:fact-checking`, `erfana:ship`, and `erfana:handoff` never start from a phrase – type their slash command. On Qwen Code, skill choice from a request may be less reliable; name the skill.
 

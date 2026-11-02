@@ -6,7 +6,7 @@
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-555)
 ![Qwen Code compatible](https://img.shields.io/badge/Qwen_Code-compatible-555)
 
-*This page describes erfana v9.3.1. See the [changelog](CHANGELOG.md) for what changed since.*
+*This page describes erfana v9.4.0. See the [changelog](CHANGELOG.md) for what changed since.*
 
 **erfana** is an open-source plugin, by [Qodeca](https://github.com/qodeca), that adds ready-made ways of working to your coding agent: writing requirements specs, working GitHub issues end to end, reviewing code, writing reports and articles, drafting prompts and goals, and running long sessions without you watching every step.
 
@@ -55,7 +55,7 @@ Updating, removing, proxies, and other install problems are covered in the [how-
 
 ## What is inside
 
-erfana ships 18 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. A skill is a packaged way of doing one kind of task; Claude loads it when your words match its trigger phrases, or you start it with `/erfana:<name>`. Not sure which one fits? Ask Claude "which erfana skill should I use for this?" and the [`erfana:using-erfana`](docs/reference.md#erfanausing-erfana) router points you to one.
+erfana ships 19 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. A skill is a packaged way of doing one kind of task; Claude loads it when your words match its trigger phrases, or you start it with `/erfana:<name>`. Not sure which one fits? Ask Claude "which erfana skill should I use for this?" and the [`erfana:using-erfana`](docs/reference.md#erfanausing-erfana) router points you to one.
 
 **Build and plan:**
 
@@ -63,6 +63,7 @@ erfana ships 18 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. 
 - [`erfana:issue`](docs/reference.md#erfanaissue) – drafts GitHub issues, implements an issue end to end with built-in reviews, reviews code or a pull request, and shows issues.
 - [`erfana:grill-me`](docs/reference.md#erfanagrill-me) – questions you about a plan one question at a time, sized to the stakes; it recommends answers on facts and routine choices and asks about your judgment calls without leaning.
 - [`erfana:expert-panel`](docs/reference.md#erfanaexpert-panel) – has a panel of specialist reviewers critique a plan or design, then writes an improved version.
+- [`erfana:design`](docs/reference.md#erfanadesign) – creates design systems and HTML and CSS designs that clients can review, with every state visible and no JavaScript.
 
 **Write:**
 

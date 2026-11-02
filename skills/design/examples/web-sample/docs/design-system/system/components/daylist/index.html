@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The staff list in time order, where the next session is the only coloured row.">
+<meta name="design-tasks" content="Show the staff day list; Mark the next session">
+<title>Day list – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../app/app.css">
+<link rel="stylesheet" href="./daylist.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Day list</span></nav>
+<main>
+<h1>Day list</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Staff read it at a glance between sessions, so it is dense. The next session is the only coloured row, with the word "Next" as well, because that is the question at the desk. Rows have no hover or focus, because nothing in them acts.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="rows">
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="daylist-head"><div><h1 class="title">Monday 9 November</h1><p class="daylist-count">2 booked, 1 free, 1 cancelled</p></div></div><table class="daylist"><thead><tr><th>Time</th><th>Patient</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead><tbody><tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr><tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr><tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr><tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr></tbody></table></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Every row type, 768 wide</strong> – cancelled, moved, next, and free. The Session column folds away under 50rem of pane; <code>responsive.css</code> does this in the real product.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="phone">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><table class="daylist"><tbody><tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr><tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr><tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr></tbody></table></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Phone</strong> – each row stacks under its time. The header row, Session, and Mobile fold away; <code>responsive.css</code> does this in the real product.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="narrow">
+    <div class="design-frame design-frame--phone-small" aria-hidden="true">
+      <div class="app">
+        <div class="page"><table class="daylist"><tbody><tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Cancelled</td></tr><tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td>Next</td></tr><tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td></tr></tbody></table></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Smallest size, 320 wide</strong> – the longest names wrap, and nothing scrolls sideways.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="dark">
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><div class="daylist-head"><div><h1 class="title">Monday 9 November</h1><p class="daylist-count">2 booked, 1 free, 1 cancelled</p></div></div><table class="daylist"><thead><tr><th>Time</th><th>Patient</th><th>Therapist</th><th class="daylist__contact">Mobile</th><th>Status</th></tr></thead><tbody><tr class="daylist__gone"><td class="daylist__time">08:15</td><td><span class="daylist__name">Maria-Konstancja Wiśniewska-Adeyemi</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900123</td><td>Cancelled</td></tr><tr><td class="daylist__time">09:45</td><td><span class="daylist__name">Henrik Sato-Marchetti</span></td><td>Tomasz Lindqvist</td><td class="daylist__contact">07700 900125</td><td>Moved from Fri 09:00</td></tr><tr class="daylist__next"><td class="daylist__time">11:15</td><td><span class="daylist__name">Inés Kowalczyk</span></td><td>Aleksandra Nowakowska-Oyelaran</td><td class="daylist__contact">07700 900126</td><td>Next</td></tr><tr class="daylist__free"><td class="daylist__time">13:00</td><td>Free</td><td>Tomasz Lindqvist</td><td class="daylist__contact"></td><td></td></tr></tbody></table></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Dark theme</strong> – the row softens with the marker colour.</figcaption>
+  </figure>
+</div>
+
+<h2 id="sizes">At each size</h2>
+<p>The list sits in <code>.daypage__list</code>, and that pane is the container, so the table reads the room it really has. <code>.daypage</code> sets the next session beside it from 37.5rem of window. On a phone the next session comes first, and <code>.daylist-nav</code> drops to the bottom, in reach of a thumb. Keyboard order stays with the markup, so the day buttons come first there too. A retry is <code>.daypage__retrybar</code> inside the list pane, so it never shifts the day buttons, and on a phone it joins the bar at the bottom. Rules for the whole page read the named container <code>app</code>, because the pane is a container too. The full screens are on <a href="../../../../designs/booking/day-list.html">Staff day list</a>.</p>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td>None</td><td>The rows are read-only</td><td>The day buttons above the list</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;table class="daylist"&gt;
+  &lt;tr class="daylist__next"&gt;&lt;td class="daylist__time"&gt;11:15&lt;/td&gt;&lt;td&gt;&lt;span class="daylist__name"&gt;Inés Kowalczyk&lt;/span&gt;&lt;/td&gt;&lt;td class="daylist__session"&gt;Follow-up, 45 minutes&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--daylist-time-width</code></td><td>Component</td><td>Time column on a phone</td></tr>
+    <tr><td><code>--daylist-title-size</code></td><td>Component</td><td>The date</td></tr>
+    <tr><td><code>--color-marker</code></td><td>Semantic</td><td>The next row</td></tr>
+    <tr><td><code>--color-sunken</code></td><td>Semantic</td><td>A free row</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/colour.html">Colour</a>: one coloured row.</li>
+  <li><a href="../button/index.html">Buttons</a>: the day buttons.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

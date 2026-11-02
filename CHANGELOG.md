@@ -3,6 +3,27 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [9.4.0] - 2026-11-02
+
+### Added
+
+- **`erfana:design`, a skill for design systems and client-reviewable designs.** It covers desktop, web, and mobile through seven operations: Create system, Change system, Audit system, New design, Revise, Migrate, and Set status. Review pages use HTML and CSS only, and show every state, so a comment in Erfana always has a visible place. A status rectangle above each drawn state shows its date, its status, and "Design, not a working product". Tokens are DTCG JSON with three levels, built into CSS. The skill ships a checker, a token builder, and an index builder as Node scripts, and one sample.
+- **Gate 20 proves the design checker.** It replays rule-breaking pages through `check-design.mjs`, tests the index builder, and checks the shipped sample.
+- **Design documentation pages share one look and one folder division.** Pages have crumbs, index tiles, status pills, and drawn frames. Foundations, components, and patterns sit under `system/`, and the design system and designs indexes are generated, so they cannot drift from the pages.
+- **Phone screens show in a phone body, and a mobile sample ships.** Frames `--phone` and `--phone-small` draw a current phone shape around the screen in plain CSS. `skills/design/examples/mobile-sample/` joins the web sample.
+- **Designs answer for every target size.** A project names its sizes in `docs/designs/README.md`, each screen page names them too, and the checker fails a state with a size missing unless the page gives a written reason. Tablet frames gain a device body and a landscape width, and both samples now show each product across its sizes.
+- **Cascadia Mono ships with the design skill**, so documentation pages render the same offline. The font is under the SIL Open Font License 1.1, in `LICENSES/OFL-1.1.txt`.
+- **The design checker fails broken page structure.** Rule `balance` fails an unclosed tag or a stray closing tag. Rule `frames` fails a fixed-width frame inside the `.ds-frames` grid: such a frame now sits in a `.design-state` in the new `.ds-states` row.
+- **An area can have a journey page.** The designs index lists an area's `index.html` of kind `index` as its overview, not as a screen.
+- **The design checker fails a stale copied stylesheet.** Rule `copies` fails a `docs.css`, `docs-tokens.css`, or `fonts.css` in `design-system/` that differs from the skill's template. A project made with an older skill version sees this rule fail; the fix is to copy the three files again.
+- **The design system index says where to start.** It now has "Start here by task", from a `<meta name="design-tasks">` line on each page, and "Which card owns this token", from each page's `#tokens` table.
+
+### Changed
+
+- **`BACKLOG.md` narrows the design exclusion to brand systems.** The rule that kept design work out of this repo no longer covers the new skill, which ships no brand.
+- **A design system card links to the designs that use it**, from its `#related` section.
+- **The design rules say each theme is its own state**, with a rectangle above it and a dark `id` ending `-dark`, and they say that copying fonts and removing files need a shell or a small Node script, with removed files listed to the user.
+
 ## [9.3.1] - 2026-10-31
 
 ### Fixed

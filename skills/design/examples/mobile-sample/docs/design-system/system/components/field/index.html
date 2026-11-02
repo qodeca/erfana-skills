@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Search and notes, with the label always above the box.">
+<meta name="design-tasks" content="Add a search or notes field; Show a field error">
+<title>Field – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="./field.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Field</span></nav>
+<main>
+<h1>Field</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A label always above the box, never inside it, so it stays readable while typing.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input " type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Default</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input " type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Default – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-hover" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Hover</strong> – Touch has no hover. It appears only with a mouse or trackpad, as on a tablet or an Android phone with a pointer.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-hover" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Hover – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-focus" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Focus</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-focus" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Focus – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-disabled" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Disabled</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Search by name</span><input class="field__input is-disabled" type="text" tabindex="-1" readonly value="" placeholder="Colleague’s name"></div></div></div>
+    <figcaption><strong>Disabled – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="filled">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Note for your colleague (optional)</span><textarea class="field__input " tabindex="-1" readonly rows="3">Could you take this one?</textarea></div></div></div>
+    <figcaption><strong>Filled</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="filled-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Note for your colleague (optional)</span><textarea class="field__input " tabindex="-1" readonly rows="3">Could you take this one?</textarea></div></div></div>
+    <figcaption><strong>Filled – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="error">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="field"><span class="field__label">Reason for the nurse</span><textarea class="field__input is-error" tabindex="-1" readonly rows="3"></textarea><span class="field__error"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg>Add a reason. The nurse needs to know why.</span></div></div></div>
+    <figcaption><strong>Error</strong> – The edge, an icon, and the words all change.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="error-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="field"><span class="field__label">Reason for the nurse</span><textarea class="field__input is-error" tabindex="-1" readonly rows="3"></textarea><span class="field__error"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.5v.2"/></svg>Add a reason. The nurse needs to know why.</span></div></div></div>
+    <figcaption><strong>Error – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Tab</kbd></td><td>Moves into the field</td><td>The field</td></tr><tr><td><kbd>Double-tap</kbd></td><td>Opens the phone’s keyboard</td><td>The field</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;field&quot;&gt;
+  &lt;span class=&quot;field__label&quot;&gt;Note (optional). All 6 see this&lt;/span&gt;
+  &lt;textarea class=&quot;field__input&quot; rows=&quot;3&quot;&gt;&lt;/textarea&gt;
+  &lt;span class=&quot;field__hint&quot;&gt;The nurse sees this. They stay on the shift.&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--field-height</code></td><td>Component</td><td><code>semantic.target.main</code></td></tr><tr><td><code>--field-padding</code></td><td>Component</td><td><code>semantic.space.medium</code></td></tr><tr><td><code>--field-radius</code></td><td>Component</td><td><code>semantic.shape.round-control</code></td></tr><tr><td><code>--field-bg</code></td><td>Component</td><td><code>semantic.color.surface-raised</code></td></tr><tr><td><code>--field-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--field-label</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--field-edge-color</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--field-bg-hover</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--field-hint</code></td><td>Component</td><td><code>semantic.color.text-muted</code></td></tr><tr><td><code>--field-disabled-bg</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--field-disabled-text</code></td><td>Component</td><td><code>semantic.color.text-muted</code></td></tr><tr><td><code>--field-error</code></td><td>Component</td><td><code>semantic.color.danger</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/focus.html">Focus</a>: one ring on every control.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

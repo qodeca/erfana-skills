@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Choose a time on first load and on a day change, at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Choose a time: loading</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Choose a time: loading</span></nav>
+<main>
+  <h1>Choose a time: loading</h1>
+  <p class="ds-lede" id="decision">Two waits that look alike but know different things. Judge whether a count is ever shown before it is known.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: the dates of a week are known at once, and its counts arrive with its times.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, the picker has four columns on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the week becomes seven cells and the actions move to the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="choose-loading-desktop" data-design-group="choose-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free skeleton"></span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Choose a time – first load – desktop</strong> – Title and week dates show at once. No count is known yet, and the times are bars. The days and the week buttons stay off until the first load ends. Three panes: the week with a bar for each count, the bars where the times will land, and Continue, still off.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-loading-tablet" data-design-group="choose-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free skeleton"></span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Choose a time – first load – tablet</strong> – Title and week dates show at once. No count is known yet, and the times are bars. The days and the week buttons stay off until the first load ends. Two panes: the week with a bar for each count, then the time bars and Continue as its detail.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-loading-tablet-landscape" data-design-group="choose-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">12</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free skeleton"></span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free skeleton"></span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Choose a time – first load – tablet landscape</strong> – Title and week dates show at once. No count is known yet, and the times are bars. The days and the week buttons stay off until the first load ends. Three panes, with a bar for each day's count and the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-loading-phone" data-design-group="choose-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Choose a time – first load – phone</strong> – Title and week dates show at once. No count is known yet, and the times are bars. The days and the week buttons stay off until the first load ends. One pane: the week folds into seven cells, and Continue sits in a bar at the bottom, still off.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="day-loading-desktop" data-design-group="day-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Choose a time – day change – desktop</strong> – Another day was pressed. The counts are already known, so they stay, and only the times are replaced. Three panes: the week, the bars where the times will land, and Continue, still off.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="day-loading-tablet" data-design-group="day-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Choose a time – day change – tablet</strong> – Another day was pressed. The counts are already known, so they stay, and only the times are replaced. Two panes: the week is the list, and the bars and Continue are its detail.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="day-loading-tablet-landscape" data-design-group="day-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Choose a time – day change – tablet landscape</strong> – Another day was pressed. The counts are already known, so they stay, and only the times are replaced. Three panes: the week, the bars, and Continue, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="day-loading-phone" data-design-group="day-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+              <div class="row"><span class="spinner"></span><span>Finding free times</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Choose a time – day change – phone</strong> – Another day was pressed. The week stays, and only the times are replaced. One pane: the week folds into seven cells, and Continue sits in a bar at the bottom, still off.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="time-states.html">Choose a time: other states</a>: moving between weeks.</li>
+    <li><a href="flow.html">Choose a session and a time</a>: where the times land.</li>
+    <li><a href="../../design-system/system/patterns/time-picker/index.html">Time picker</a>: the composition at each size.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

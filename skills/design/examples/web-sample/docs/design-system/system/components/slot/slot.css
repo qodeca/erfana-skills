@@ -1,0 +1,76 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* The rail and its slots: a ruled edge, like a tape measure held to the day. */
+
+.rail {
+  display: grid;
+  gap: var(--space-hair);
+  margin: 0;
+  padding: 0;
+  padding-inline-start: var(--rail-inset);
+  list-style: none;
+  background-image: repeating-linear-gradient(to bottom, var(--color-edge) 0 var(--rail-tick-length), transparent var(--rail-tick-length) var(--rail-tick-gap));
+  background-repeat: no-repeat;
+  background-size: var(--space-tight) 100%;
+}
+
+.slot {
+  display: grid;
+  grid-template-columns: var(--slot-time-width) minmax(0, 1fr);
+  gap: 0 var(--space-tight);
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: var(--slot-height);
+  padding: var(--space-hair) var(--space-control);
+  border: var(--control-edge) solid transparent;
+  border-block-end-color: var(--color-edge);
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--type-body);
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-quick) var(--motion-curve);
+}
+.slot__time {
+  grid-row: 1 / span 2;
+  font-size: var(--slot-time-size);
+  font-weight: var(--emphasis-strong);
+  font-variant-numeric: tabular-nums;
+}
+.slot__who { color: inherit; font-size: var(--type-small); line-height: var(--leading-tight); overflow-wrap: anywhere; }
+.slot__who:last-child { grid-row: 1 / span 2; }
+.slot__mark { display: inline-flex; grid-column: 2; gap: var(--space-hair); align-items: center; font-size: var(--type-small); font-weight: var(--emphasis-strong); }
+.slot:hover:not(:where(.design-frame *)),
+.slot.is-hover { background: var(--color-sunken); }
+.slot:focus-visible,
+.slot.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.slot:active:not(:where(.design-frame *)),
+.slot.is-active { background: var(--color-sunken); transform: scale(0.98); }
+.slot:disabled,
+.slot.is-disabled { background: transparent; color: var(--color-muted); cursor: not-allowed; text-decoration: line-through; }
+.slot.is-locked { text-decoration: none; }
+.slot[aria-pressed="true"],
+.slot.is-selected {
+  width: calc(100% + var(--slot-overhang));
+  margin-inline-start: calc(var(--slot-overhang) * -1);
+  padding-inline-start: calc(var(--space-control) + var(--slot-overhang));
+  border-color: var(--color-marker-edge);
+  border-radius: var(--shape-control);
+  background: var(--color-marker);
+  color: var(--color-on-marker);
+  transform-origin: left;
+  animation: strip-on var(--motion-settle) var(--motion-curve);
+}
+.slot[aria-pressed="true"]:hover:not(:where(.design-frame *)),
+.slot.is-selected.is-hover { background: var(--color-marker-hover); }
+.slot[aria-pressed="true"]:active:not(:where(.design-frame *)),
+.slot.is-selected.is-active { background: var(--color-marker-pressed); }
+@keyframes strip-on { from { transform: scaleX(0.98); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .slot { transition: none; }
+  .slot[aria-pressed="true"], .slot.is-selected { animation: none; }
+  .slot:active:not(:where(.design-frame *)), .slot.is-active { transform: none; }
+}

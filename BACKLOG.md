@@ -29,7 +29,7 @@ Three independent reviewers (strategic / engineering / risk) audited the origina
 ## Out of domain – separate plugin or roadmap
 
 - **Email / proposal skills.** Independent text-output skills. If they ship, they belong in a separate plugin or as their own first-class skill set.
-- **Anything design-related.** The design skills and the whole brand-system layer were removed in v7.0.0. Brand manifests, token schemas, photo libraries and asset bundles are out of this repo entirely; re-adding one is a new plugin, not a backlog item here. Entries above and below that discuss brands are historical.
+- **Brand systems.** The old design skills and the whole brand-system layer were removed in v7.0.0. Brand manifests, brand schemas, photo libraries and asset bundles stay out of this repo; re-adding one is a new plugin, not a backlog item here. The `design` skill builds each project its own system inside that project, and ships no brand. Entries above and below that discuss brands are historical.
 
 ## Deferred – conditional schema bumps
 

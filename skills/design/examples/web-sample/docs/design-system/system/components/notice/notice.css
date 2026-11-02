@@ -1,0 +1,20 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Notices and state words: the words carry the meaning, and colour repeats it. */
+
+.notice {
+  display: flex;
+  gap: var(--space-tight);
+  align-items: flex-start;
+  padding: var(--space-control);
+  border-inline-start: var(--notice-edge) solid var(--color-edge);
+  background: var(--color-sunken);
+  color: var(--color-text);
+}
+.notice__title { margin: 0; font-weight: var(--emphasis-strong); }
+.notice__text { margin: 0; overflow-wrap: anywhere; }
+.notice--error { border-color: var(--color-error); background: var(--color-error-tint); }
+.notice--success { border-color: var(--color-success); background: var(--color-success-tint); }
+
+.state-word { display: inline-flex; margin: 0; gap: var(--space-hair); align-items: center; font-weight: var(--emphasis-strong); }
+.state-word--success { color: var(--color-success); }

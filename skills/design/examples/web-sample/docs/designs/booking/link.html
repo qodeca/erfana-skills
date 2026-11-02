@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient opens the link from the text message: loading, failed, expired, and passed, at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – The text link</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">The text link</span></nav>
+<main>
+  <h1>The text link</h1>
+  <p class="ds-lede" id="decision">The link opens the booked screen, and may be old. Judge whether an expired link gives away nothing, and whether a failed load frightens no one.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: a text link stops working a set time after the session, and shows no details once expired. The period is open.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. From an upright tablet up, the main pane and the action pane stand side by side. On a phone they stack, with the actions at the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="link-loading-desktop" data-design-group="link-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <span class="skeleton skeleton--tall"></span>
+                <span class="skeleton skeleton--tall"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Text link – loading – desktop</strong> – The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. Bars fill the main pane and the action pane.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-loading-tablet" data-design-group="link-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <span class="skeleton skeleton--tall"></span>
+                <span class="skeleton skeleton--tall"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Text link – loading – tablet</strong> – The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. Two panes of bars, where the card and actions will land.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-loading-tablet-landscape" data-design-group="link-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <span class="skeleton skeleton--tall"></span>
+                <span class="skeleton skeleton--tall"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Text link – loading – tablet landscape</strong> – The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. Two panes of bars, as on a tablet held upright.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-loading-phone" data-design-group="link-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="row"><span class="spinner"></span><span>Opening your booking</span></div>
+              <span class="skeleton skeleton--tall"></span>
+              <span class="skeleton skeleton--tall"></span>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <span class="skeleton skeleton--tall"></span>
+                <span class="skeleton skeleton--tall"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Text link – loading – phone</strong> – The link opens the booked screen, so the booking has to load first. The bar and a plain "Your booking" heading show at once, because the link may turn out to be expired or passed. One pane: bars stand in for the card, with the actions' bars at the bottom.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-failed-desktop" data-design-group="link-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not open your booking</p>
+                  <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Text link – could not load – desktop</strong> – The booking itself is untouched, and the patient is told so. "Try again" returns to loading. The notice fills the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-failed-tablet" data-design-group="link-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not open your booking</p>
+                  <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Text link – could not load – tablet</strong> – The booking itself is untouched, and the patient is told so. "Try again" returns to loading. Two panes: the notice on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-failed-tablet-landscape" data-design-group="link-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not open your booking</p>
+                  <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Text link – could not load – tablet landscape</strong> – The booking itself is untouched, and the patient is told so. "Try again" returns to loading. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-failed-phone" data-design-group="link-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Your booking</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not open your booking</p>
+                  <p class="notice__text">It has not changed. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Text link – could not load – phone</strong> – The booking itself is untouched, and the patient is told so. "Try again" returns to loading. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-expired-desktop" data-design-group="link-expired">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This link has expired</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">We cannot show this booking</p>
+                  <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Text link – expired – desktop</strong> – An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session. The notice fills the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-expired-tablet" data-design-group="link-expired">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This link has expired</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">We cannot show this booking</p>
+                  <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Text link – expired – tablet</strong> – An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session. Two panes: the notice on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-expired-tablet-landscape" data-design-group="link-expired">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This link has expired</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">We cannot show this booking</p>
+                  <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Text link – expired – tablet landscape</strong> – An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-expired-phone" data-design-group="link-expired">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This link has expired</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">We cannot show this booking</p>
+                  <p class="notice__text">The session this link was for has passed. To ask about it, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Book a session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Text link – expired – phone</strong> – An old link shows no booking details, because a forwarded text should not reveal them. "Book a session" opens Choose a session. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-past-desktop" data-design-group="link-past">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This session has passed</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book another session</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Text link – session has passed – desktop</strong> – The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked, next, or still confirmed. The card fills the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-past-tablet" data-design-group="link-past">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This session has passed</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book another session</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Text link – session has passed – tablet</strong> – The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked, next, or still confirmed. Two panes: the card on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-past-tablet-landscape" data-design-group="link-past">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This session has passed</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book another session</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Text link – session has passed – tablet landscape</strong> – The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked, next, or still confirmed. Two panes, as a third adds nothing here. The wider card puts the time beside its lines to save height.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="link-past-phone" data-design-group="link-past">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">This session has passed</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book another session</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Text link – session has passed – phone</strong> – The date has gone, so nothing can change. The card stays as a record with no strip, because nothing here is picked, next, or still confirmed. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="booked.html">Booked</a>: where a working link lands.</li>
+    <li><a href="flow.html">Choose a session and a time</a>: where "Book a session" leads.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

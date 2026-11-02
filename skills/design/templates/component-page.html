@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What this component is for, in one line, for the index tile">
+<meta name="design-tasks" content="Add a button; Label a destructive action">
+<title>Buttons – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="./button.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Buttons</span></nav>
+<main>
+<h1>Buttons</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">The rule this page decides, in one or two sentences.</p>
+
+<h2 id="states">Every state</h2>
+<!-- This grid shows small parts: a frame here has no fixed width. A frame with one, such as design-frame--phone, goes in a figure.ds-frame.design-state inside .ds-states. -->
+<div class="ds-frames">
+  <figure class="ds-frame">
+    <div class="design-frame" aria-hidden="true"><button class="button" type="button" tabindex="-1">Save</button></div>
+    <figcaption><strong>Resting</strong> – how it is reached.</figcaption>
+  </figure>
+  <figure class="ds-frame">
+    <div class="design-frame" aria-hidden="true"><button class="button is-hover" type="button" tabindex="-1">Save</button></div>
+    <figcaption><strong>Hover</strong> – pointer over the button.</figcaption>
+  </figure>
+  <figure class="ds-frame">
+    <div class="design-frame" aria-hidden="true"><button class="button is-focus" type="button" tabindex="-1">Save</button></div>
+    <figcaption><strong>Focus</strong> – reached with <kbd>Tab</kbd>.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody><tr><td><kbd>Enter</kbd></td><td>Runs the action</td><td>The button</td></tr></tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;button class="button" type="button"&gt;Save&lt;/button&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody><tr><td><code>--button-bg</code></td><td>Component</td><td>Button fill</td></tr></tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/spacing.html">Spacing</a>: the padding inside a button.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

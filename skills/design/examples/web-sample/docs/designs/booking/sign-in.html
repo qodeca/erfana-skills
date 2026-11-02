@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Staff sign in to see the day list, and what a failed sign-in looks like, at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Staff sign-in</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Staff sign-in</span></nav>
+<main>
+  <h1>Staff sign-in</h1>
+  <p class="ds-lede" id="decision">Kept small, because it only opens the day list. Judge whether a failed sign-in says who can help.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: staff sign in with a work email and a password. Single sign-on and password reset are not drawn.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. From an upright tablet up, the main pane and the action pane stand side by side. On a phone they stack, with the actions at the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="sign-in-desktop" data-design-group="sign-in">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Staff sign-in – desktop</strong> – Opens from "Sign in". Kept small: two fields and one action. With both fields filled it leads to "Staff sign-in – signing in", then to "Day list – default" or "Staff sign-in – failed". A blank field leads to "Staff sign-in – blank fields". The fields fill the main pane, and the button stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-tablet" data-design-group="sign-in">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Staff sign-in – tablet</strong> – Opens from "Sign in". Kept small: two fields and one action. With both fields filled it leads to "Staff sign-in – signing in", then to "Day list – default" or "Staff sign-in – failed". A blank field leads to "Staff sign-in – blank fields". Two panes: the fields on the left, the button on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-tablet-landscape" data-design-group="sign-in">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Staff sign-in – tablet landscape</strong> – Opens from "Sign in". Kept small: two fields and one action. With both fields filled it leads to "Staff sign-in – signing in", then to "Day list – default" or "Staff sign-in – failed". A blank field leads to "Staff sign-in – blank fields". Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-phone" data-design-group="sign-in">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Staff sign-in – phone</strong> – Opens from "Sign in". Kept small: two fields and one action. With both fields filled it leads to "Staff sign-in – signing in", then to "Day list – default" or "Staff sign-in – failed". A blank field leads to "Staff sign-in – blank fields". One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-input-desktop" data-design-group="sign-in-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-focus" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Staff sign-in – typing and focus – desktop</strong> – The focus ring sits on the work email, where focus lands when this screen opens. Touch sizes draw the keyboard. The fields fill the main pane, and the button stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-input-tablet" data-design-group="sign-in-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-focus" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Staff sign-in – typing and focus – tablet</strong> – The focus ring sits on the work email, where focus lands when this screen opens. Touch sizes draw the keyboard. Two panes: the fields on the left, the button on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-input-tablet-landscape" data-design-group="sign-in-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-focus" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Staff sign-in – typing and focus – tablet landscape</strong> – The focus ring sits on the work email, where focus lands when this screen opens. Touch sizes draw the keyboard. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-input-phone" data-design-group="sign-in-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-focus" type="email" tabindex="-1" value="" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Staff sign-in – typing and focus – phone</strong> – The focus ring sits on the work email, where focus lands when this screen opens. Touch sizes draw the keyboard. One pane: the button rises and sits just above the keyboard.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-blank-desktop" data-design-group="sign-in-blank">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-error" type="email" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your work email</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-error" type="password" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your password</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Staff sign-in – blank fields – desktop</strong> – "Sign in" was pressed with a blank field. Each message sits under its field and says what to type. Nothing is sent, so nothing waits. The fields fill the main pane, and the button stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-blank-tablet" data-design-group="sign-in-blank">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-error" type="email" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your work email</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-error" type="password" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your password</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Staff sign-in – blank fields – tablet</strong> – "Sign in" was pressed with a blank field. Each message sits under its field and says what to type. Nothing is sent, so nothing waits. Two panes: the fields on the left, the button on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-blank-tablet-landscape" data-design-group="sign-in-blank">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-error" type="email" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your work email</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-error" type="password" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your password</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Staff sign-in – blank fields – tablet landscape</strong> – "Sign in" was pressed with a blank field. Each message sits under its field and says what to type. Nothing is sent, so nothing waits. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-blank-phone" data-design-group="sign-in-blank">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-error" type="email" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your work email</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-error" type="password" tabindex="-1" value="" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your password</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Staff sign-in – blank fields – phone</strong> – "Sign in" was pressed with a blank field. Each message sits under its field and says what to type. Nothing is sent, so nothing waits. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-sending-desktop" data-design-group="sign-in-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-disabled" type="email" tabindex="-1" value="reception@example.com" readonly disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-disabled" type="password" tabindex="-1" value="password" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Signing you in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Staff sign-in – signing in – desktop</strong> – The button stays in place and says what is happening. The fields lock while it checks. The fields fill the main pane, and the button stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-sending-tablet" data-design-group="sign-in-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-disabled" type="email" tabindex="-1" value="reception@example.com" readonly disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-disabled" type="password" tabindex="-1" value="password" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Signing you in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Staff sign-in – signing in – tablet</strong> – The button stays in place and says what is happening. The fields lock while it checks. Two panes: the fields on the left, the button on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-sending-tablet-landscape" data-design-group="sign-in-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-disabled" type="email" tabindex="-1" value="reception@example.com" readonly disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-disabled" type="password" tabindex="-1" value="password" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Signing you in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Staff sign-in – signing in – tablet landscape</strong> – The button stays in place and says what is happening. The fields lock while it checks. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-sending-phone" data-design-group="sign-in-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input is-disabled" type="email" tabindex="-1" value="reception@example.com" readonly disabled>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input is-disabled" type="password" tabindex="-1" value="password" readonly disabled>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Signing you in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Staff sign-in – signing in – phone</strong> – The keyboard closes, so the button drops to its place in the stack and says what is happening. The fields lock while it checks. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-failed-desktop" data-design-group="sign-in-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not sign you in</p>
+                  <p class="notice__text">Check your email and password. If it still fails, ask the clinic manager.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="reception@example.com" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">17</span><strong class="design-state__label">Staff sign-in – failed – desktop</strong> – Says what failed and who can help. The email stays and the password clears, and the word "Sign in" stays where it was pressed. The fields fill the main pane, and the button stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-failed-tablet" data-design-group="sign-in-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not sign you in</p>
+                  <p class="notice__text">Check your email and password. If it still fails, ask the clinic manager.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="reception@example.com" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">18</span><strong class="design-state__label">Staff sign-in – failed – tablet</strong> – Says what failed and who can help. The email stays and the password clears, and the word "Sign in" stays where it was pressed. Two panes: the fields on the left, the button on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-failed-tablet-landscape" data-design-group="sign-in-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not sign you in</p>
+                  <p class="notice__text">Check your email and password. If it still fails, ask the clinic manager.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="reception@example.com" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">19</span><strong class="design-state__label">Staff sign-in – failed – tablet landscape</strong> – Says what failed and who can help. The email stays and the password clears, and the word "Sign in" stays where it was pressed. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="sign-in-failed-phone" data-design-group="sign-in-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Staff</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Staff sign-in</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not sign you in</p>
+                  <p class="notice__text">Check your email and password. If it still fails, ask the clinic manager.</p>
+                </div>
+              </div>
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Work email</label>
+                  <input class="field__input" type="email" tabindex="-1" value="reception@example.com" readonly>
+                </div>
+                <div class="field">
+                  <label class="field__label">Password</label>
+                  <input class="field__input" type="password" tabindex="-1" value="" readonly>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Sign in</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">20</span><strong class="design-state__label">Staff sign-in – failed – phone</strong> – Says what failed and who can help. The email stays and the password clears, and the word "Sign in" stays where it was pressed. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="day-list-failures.html">Staff day list: failures</a>: the refused state.</li>
+    <li><a href="day-list.html">Staff day list</a>: where a good sign-in lands.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="One week, always visible, with its month and a way to the next.">
+<meta name="design-tasks" content="Show a week of days; Move to the next week; Show a day with no free times">
+<title>Week and days – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../app/app.css">
+<link rel="stylesheet" href="../button/button.css">
+<link rel="stylesheet" href="./day.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Week and days</span></nav>
+<main>
+<h1>Week and days</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A patient picks from a visible week and never types a date. On a phone the week stays in seven columns, and from tablet up it stands as a list with each day's count of free times, and its label names both months when a week crosses them, because the day numbers alone drop from 30 to 1.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong>Default, a day picked</strong> – the first bookable week, so "Earlier week" is off.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="cells">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day is-hover" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day is-focus" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day is-active" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong>Cell states</strong> – Monday hover, Tuesday selected, Wednesday focus, Thursday pressed; weekends off.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="crossing">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="weeknav"><p class="weeknav__month">November to December 2026</p><button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong>A week crossing two months</strong> – "Later week" moved on.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong>Dark theme</strong> – the selected cell inverts.</figcaption>
+  </figure>
+</div>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="narrow">
+    <div class="design-frame design-frame--phone-small" aria-hidden="true">
+      <div class="app">
+        <div class="page"><div class="weeknav"><p class="weeknav__month">November 2026</p><button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div><ul class="days"><li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li><li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li><li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li><li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li></ul></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Smallest size, 320 wide</strong> – cells shrink to 37 px and stay in seven columns.</figcaption>
+  </figure>
+</div>
+
+<h2 id="list">From tablet up</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="list">
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="page">
+          <div class="weeknav">
+            <p class="weeknav__month">November 2026</p>
+            <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+            <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+          </div>
+          <ul class="days">
+            <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+            <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+            <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+            <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">The week as a list, 768 wide</strong> – each day gains <code>.day__free</code>, so a patient sees a full day before pressing it. On a phone the count folds away; <code>responsive.css</code> does this in the real product. Drawn here at the width of the whole frame; the time picker gives it its own pane.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Tab</kbd></td><td>Walks Earlier week, Later week, then the day cells</td><td>The next control</td></tr>
+    <tr><td><kbd>Enter</kbd> or <kbd>Space</kbd></td><td>Selects the day</td><td>The same cell</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;ul class="days"&gt;
+  &lt;li&gt;&lt;button class="day" type="button" aria-pressed="true"&gt;&lt;span&gt;Tue&lt;/span&gt;&lt;span class="day__date"&gt;10&lt;/span&gt;&lt;span class="day__free"&gt;6 free&lt;/span&gt;&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--day-height</code></td><td>Component</td><td>Cell height in the seven-column week</td></tr>
+    <tr><td><code>--day-height-row</code></td><td>Component</td><td>Row height in the list</td></tr>
+    <tr><td><code>--day-name-width</code></td><td>Component</td><td>The day and date columns in the list</td></tr>
+    <tr><td><code>--color-raised</code></td><td>Semantic</td><td>Cell fill</td></tr>
+    <tr><td><code>--color-edge</code></td><td>Semantic</td><td>Cell edge</td></tr>
+    <tr><td><code>--color-sunken</code></td><td>Semantic</td><td>Hover and pressed fill</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../button/index.html">Buttons</a>: the week buttons.</li>
+  <li><a href="../../foundations/spacing.html">Spacing</a>: the cell widths.</li>
+  <li><a href="../../patterns/time-picker/index.html">Time picker</a>: where the week is used.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

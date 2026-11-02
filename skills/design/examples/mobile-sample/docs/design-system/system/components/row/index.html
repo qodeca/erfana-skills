@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="One person or one request in a list.">
+<meta name="design-tasks" content="List a person or a request; Select a colleague">
+<title>Row – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="./row.css">
+<link rel="stylesheet" href="../../components/tag/tag.css">
+<link rel="stylesheet" href="../../patterns/loading/loading.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Row</span></nav>
+<main>
+<h1>Row</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">One person or request, with the name at full length. A row that cannot be chosen stays visible with its reason.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Default</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Default – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row is-hover" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Hover</strong> – Touch has no hover. It appears only with a mouse or trackpad, as on a tablet or an Android phone with a pointer.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row is-hover" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Hover – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row is-focus" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Focus</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row is-focus" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Focus – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="active">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row is-active" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Pressed</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="active-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row is-active" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"></span></button></div></div>
+    <figcaption><strong>Pressed – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="selected">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row is-selected" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span></button></div></div>
+    <figcaption><strong>Selected</strong> – A doubled edge and a check, not colour alone. The edge doubles inward, so the row does not move.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="selected-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row is-selected" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Maria Fernanda Rodríguez-Castellanos</span><span class="row__meta">Registered nurse, Ward 4B</span></span><span class="row__mark"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span></button></div></div>
+    <figcaption><strong>Selected – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row is-disabled" type="button" tabindex="-1" disabled><span class="row__main"><span class="row__title">Hannah Lindqvist</span><span class="row__meta"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg> Needs more rest</span></span></button></div></div>
+    <figcaption><strong>Disabled</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row is-disabled" type="button" tabindex="-1" disabled><span class="row__main"><span class="row__title">Hannah Lindqvist</span><span class="row__meta"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.2"/></svg> Needs more rest</span></span></button></div></div>
+    <figcaption><strong>Disabled – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><div class="row"><span class="row__main"><span class="skeleton"></span><span class="skeleton skeleton--short"></span></span></div></div></div>
+    <figcaption><strong>Loading</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="row"><span class="row__main"><span class="skeleton"></span><span class="skeleton skeleton--short"></span></span></div></div></div>
+    <figcaption><strong>Loading – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="request">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__date">Sat 14 Nov</span><span class="row__time"><span>19:00–</span><span>07:00</span></span><span class="row__meta">Aleksandra Wiśniewska-Kowalczyk to Maria Fernanda Rodríguez-Castellanos</span><span><span class="tag tag--stop"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>1 check stops this swap</span></span></span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div></div>
+    <figcaption><strong>Request row</strong> – The time leads here too, at the compact ticket size.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="request-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__date">Sat 14 Nov</span><span class="row__time"><span>19:00–</span><span>07:00</span></span><span class="row__meta">Aleksandra Wiśniewska-Kowalczyk to Maria Fernanda Rodríguez-Castellanos</span><span><span class="tag tag--stop"><svg class="icon icon--small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>1 check stops this swap</span></span></span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div></div>
+    <figcaption><strong>Request row – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Tab</kbd></td><td>Moves to the next row</td><td>The next row</td></tr><tr><td><kbd>Enter</kbd> or <kbd>double-tap</kbd></td><td>Selects it, or opens it</td><td>The same row, or the next screen’s title</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;button class=&quot;row&quot; type=&quot;button&quot;&gt;
+  &lt;span class=&quot;row__main&quot;&gt;
+    &lt;span class=&quot;row__title&quot;&gt;Anyone who can take it&lt;/span&gt;
+    &lt;span class=&quot;row__meta&quot;&gt;6 colleagues. First to accept goes to your manager.&lt;/span&gt;
+  &lt;/span&gt;
+  &lt;span class=&quot;row__mark&quot;&gt;&lt;/span&gt;
+&lt;/button&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--row-height</code></td><td>Component</td><td><code>semantic.target.main</code></td></tr><tr><td><code>--row-padding</code></td><td>Component</td><td><code>semantic.space.medium</code></td></tr><tr><td><code>--row-gap</code></td><td>Component</td><td><code>semantic.space.medium</code></td></tr><tr><td><code>--row-radius</code></td><td>Component</td><td><code>semantic.shape.round-control</code></td></tr><tr><td><code>--row-bg</code></td><td>Component</td><td><code>semantic.color.surface-raised</code></td></tr><tr><td><code>--row-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--row-meta</code></td><td>Component</td><td><code>semantic.color.text-muted</code></td></tr><tr><td><code>--row-edge-color</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--row-bg-hover</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--row-bg-pressed</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--row-disabled-bg</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--row-selected-edge</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--row-mark-edge</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--row-mark-on-bg</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--row-mark-on-edge</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--row-mark-on-text</code></td><td>Component</td><td><code>semantic.color.surface</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/focus.html">Focus</a>: one ring on every control.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+  <li><a href="../../components/tag/index.html">Tag</a>: a short status.</li>
+  <li><a href="../../patterns/loading/index.html">Loading and keeping data</a>: first load and reload.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Refused and empty: every no names its rule and a way forward.">
+<meta name="design-tasks" content="Refuse an action and name the rule; Show an empty list">
+<title>Saying no – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="../../components/text/text.css">
+<link rel="stylesheet" href="../../components/icon/icon.css">
+<link rel="stylesheet" href="../../components/button/button.css">
+<link rel="stylesheet" href="../../components/notice/notice.css">
+<link rel="stylesheet" href="./saying-no.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#patterns">Patterns</a> <span aria-hidden="true">/</span> <span aria-current="page">Saying no</span></nav>
+<main>
+<h1>Saying no</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Every "no" names the rule, says what is kept, and gives one way forward, usually a person to call. A disabled control never appears without its reason.</p>
+
+<h2 id="which">When to use it</h2>
+<table>
+  <thead><tr><th>The situation</th><th>Use</th></tr></thead>
+  <tbody><tr><td>A rule stops the action</td><td>Refused: name the rule, say what is kept, and give one way forward</td></tr><tr><td>There is nothing to list</td><td>Nothing to show: one icon, one line of why, one way on</td></tr></tbody>
+</table>
+<h2 id="states">Every state</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="refused">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><div class="notice notice--stop"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div class="notice__text"><span class="notice__title">Too close to the start</span><span>Offers close 24 hours before a shift. Your ward manager can still arrange cover.</span></div></div><button class="button " type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a3 3 0 0 1-3 3A15 15 0 0 1 3 6a3 3 0 0 1 3-3z"/></svg>Call Priya Raman</button></div></div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Refused</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="refused-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="notice notice--stop"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div class="notice__text"><span class="notice__title">Too close to the start</span><span>Offers close 24 hours before a shift. Your ward manager can still arrange cover.</span></div></div><button class="button " type="button" tabindex="-1"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a3 3 0 0 1-3 3A15 15 0 0 1 3 6a3 3 0 0 1 3-3z"/></svg>Call Priya Raman</button></div></div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Refused – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="nothing">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><div class="empty"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><h2 class="title">Nothing to approve</h2><p class="lede">New requests arrive here once a colleague has accepted.</p></div><button class="button button--secondary" type="button" tabindex="-1">Back to my shifts</button></div></div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Nothing to show</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="nothing-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="empty"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><h2 class="title">Nothing to approve</h2><p class="lede">New requests arrive here once a colleague has accepted.</p></div><button class="button button--secondary" type="button" tabindex="-1">Back to my shifts</button></div></div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Nothing to show – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Double-tap</kbd></td><td>Runs the way forward</td><td>The next screen’s title</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;div class=&quot;empty&quot;&gt;
+  &lt;svg class=&quot;icon&quot; …&gt;&lt;/svg&gt;
+  &lt;h2 class=&quot;title&quot;&gt;No shifts to offer&lt;/h2&gt;
+  …
+&lt;/div&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--color-danger-bg</code></td><td>Semantic</td><td>Notice fill</td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../components/notice/index.html">Notice</a>: what happened and what next.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../../components/text/index.html">Text</a>: title, heading, lede, and caption.</li>
+  <li><a href="../../components/icon/index.html">Icon</a>: two sizes, always beside a word.</li>
+  <li><a href="../../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

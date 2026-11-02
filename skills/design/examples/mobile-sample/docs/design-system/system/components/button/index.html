@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Main, secondary, and danger actions.">
+<meta name="design-tasks" content="Add a button; Choose the main action on a screen">
+<title>Button – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../../components/screen/screen.css">
+<link rel="stylesheet" href="./button.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Button</span></nav>
+<main>
+<h1>Button</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">One filled marigold button per screen, always at the bottom. Its dark edge keeps it clear of the light surface, because marigold alone reaches only 1.7:1 against sand.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="default">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button " type="button" tabindex="-1">Send offer</button><button class="button button--secondary " type="button" tabindex="-1">Back</button><button class="button button--danger " type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Default</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="default-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button " type="button" tabindex="-1">Send offer</button><button class="button button--secondary " type="button" tabindex="-1">Back</button><button class="button button--danger " type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Default – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button is-hover" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-hover" type="button" tabindex="-1">Back</button><button class="button button--danger is-hover" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Hover</strong> – Touch has no hover. It appears only with a mouse or trackpad, as on a tablet or an Android phone with a pointer.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button is-hover" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-hover" type="button" tabindex="-1">Back</button><button class="button button--danger is-hover" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Hover – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button is-focus" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-focus" type="button" tabindex="-1">Back</button><button class="button button--danger is-focus" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Focus</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button is-focus" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-focus" type="button" tabindex="-1">Back</button><button class="button button--danger is-focus" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Focus – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="active">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button is-active" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-active" type="button" tabindex="-1">Back</button><button class="button button--danger is-active" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Pressed</strong></figcaption>
+  </figure>
+  <figure class="ds-frame" id="active-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button is-active" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-active" type="button" tabindex="-1">Back</button><button class="button button--danger is-active" type="button" tabindex="-1">Cancel offer</button></div></div>
+    <figcaption><strong>Pressed – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button is-disabled" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-disabled" type="button" tabindex="-1">Back</button></div></div>
+    <figcaption><strong>Disabled</strong> – Dashed edge as well as a colour change, so the difference survives any colour vision.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="disabled-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button is-disabled" type="button" tabindex="-1">Send offer</button><button class="button button--secondary is-disabled" type="button" tabindex="-1">Back</button></div></div>
+    <figcaption><strong>Disabled – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button is-disabled " type="button" tabindex="-1" disabled><span class="spinner"></span>Sending</button></div></div>
+    <figcaption><strong>Loading</strong> – Keeps its width and holds a word, so nothing shifts.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="loading-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button is-disabled " type="button" tabindex="-1" disabled><span class="spinner"></span>Sending</button></div></div>
+    <figcaption><strong>Loading – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="small">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><button class="button button--small button--secondary" type="button" tabindex="-1">Try again</button></div></div>
+    <figcaption><strong>Small</strong> – For a retry inside a notice. Never the main action.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="small-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button button--small button--secondary" type="button" tabindex="-1">Try again</button></div></div>
+    <figcaption><strong>Small – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>A phone has no keyboard of its own, so this covers a paired keyboard and the double-tap of VoiceOver and TalkBack.</p>
+<table class="ds-keys">
+    <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+    <tbody><tr><td><kbd>Enter</kbd> or <kbd>Space</kbd></td><td>Runs the action</td><td>The button, or the next screen’s title</td></tr><tr><td><kbd>Double-tap</kbd></td><td>Runs the action</td><td>The same</td></tr></tbody>
+  </table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;button class=&quot;button&quot; type=&quot;button&quot;&gt;Send offer&lt;/button&gt;
+&lt;button class=&quot;button button--secondary&quot; type=&quot;button&quot;&gt;Back&lt;/button&gt;
+&lt;button class=&quot;button button--danger&quot; type=&quot;button&quot;&gt;Cancel offer&lt;/button&gt;
+&lt;button class=&quot;button is-disabled&quot; type=&quot;button&quot; disabled&gt;&lt;span class=&quot;spinner&quot;&gt;&lt;/span&gt;Sending&lt;/button&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--button-height</code></td><td>Component</td><td><code>semantic.target.main</code></td></tr><tr><td><code>--button-height-small</code></td><td>Component</td><td><code>semantic.target.minimum</code></td></tr><tr><td><code>--button-padding-inline</code></td><td>Component</td><td><code>semantic.space.section</code></td></tr><tr><td><code>--button-padding-block</code></td><td>Component</td><td><code>semantic.space.medium</code></td></tr><tr><td><code>--button-gap</code></td><td>Component</td><td><code>semantic.space.small</code></td></tr><tr><td><code>--button-radius</code></td><td>Component</td><td><code>semantic.shape.round-control</code></td></tr><tr><td><code>--button-edge</code></td><td>Component</td><td><code>semantic.edge.control</code></td></tr><tr><td><code>--button-bg</code></td><td>Component</td><td><code>semantic.color.action</code></td></tr><tr><td><code>--button-bg-hover</code></td><td>Component</td><td><code>semantic.color.action-hover</code></td></tr><tr><td><code>--button-bg-pressed</code></td><td>Component</td><td><code>semantic.color.action-pressed</code></td></tr><tr><td><code>--button-text</code></td><td>Component</td><td><code>semantic.color.on-action</code></td></tr><tr><td><code>--button-edge-color</code></td><td>Component</td><td><code>semantic.color.action-edge</code></td></tr><tr><td><code>--button-disabled-bg</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--button-disabled-text</code></td><td>Component</td><td><code>semantic.color.text-muted</code></td></tr><tr><td><code>--button-disabled-edge</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--button-secondary-text</code></td><td>Component</td><td><code>semantic.color.text</code></td></tr><tr><td><code>--button-secondary-edge</code></td><td>Component</td><td><code>semantic.color.line-strong</code></td></tr><tr><td><code>--button-secondary-bg-hover</code></td><td>Component</td><td><code>semantic.color.surface-sunken</code></td></tr><tr><td><code>--button-secondary-bg-pressed</code></td><td>Component</td><td><code>semantic.color.line</code></td></tr><tr><td><code>--button-danger-bg</code></td><td>Component</td><td><code>semantic.color.danger</code></td></tr><tr><td><code>--button-danger-bg-hover</code></td><td>Component</td><td><code>semantic.color.danger-hover</code></td></tr><tr><td><code>--button-danger-text</code></td><td>Component</td><td><code>semantic.color.on-danger</code></td></tr><tr><td><code>--focus-ring</code></td><td>Component</td><td><code>semantic.color.focus</code></td></tr><tr><td><code>--focus-width</code></td><td>Component</td><td><code>semantic.edge.focus</code></td></tr><tr><td><code>--focus-offset</code></td><td>Component</td><td><code>semantic.edge.control</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/focus.html">Focus</a>: one ring on every control.</li>
+  <li><a href="../../foundations/motion.html">Motion</a>: timing and reduced motion.</li>
+  <li><a href="../../foundations/space.html">Space and touch</a>: rhythm and target sizes.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

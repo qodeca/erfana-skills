@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Layers without shadows, and the ring that marks focus on them.">
+<meta name="design-tasks" content="Separate layers without a shadow; Round a corner">
+<title>Surfaces and focus – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+<link rel="stylesheet" href="../components/screen/screen.css">
+<link rel="stylesheet" href="../components/button/button.css">
+<link rel="stylesheet" href="../components/row/row.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Surfaces and focus</span></nav>
+<main>
+<h1>Surfaces and focus</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">No shadows. Edges and three surface steps separate layers, because shadows vanish on a dark ward screen. Focus is a 3 px ring in the text colour, offset 2 px, the same on every control.</p>
+
+<h2 id="states">Layers and focus</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="layers">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__title">Raised row</span><span class="row__meta">Hairline edge</span></span><span class="row__mark"></span></button><button class="row is-focus" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Focused row</span><span class="row__meta">Ring in the text colour</span></span><span class="row__mark"></span></button><button class="button is-focus" type="button" tabindex="-1">Focused button</button></div></div>
+    <figcaption><strong class="design-state__label">Raised, sunken, and focus ring</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="layers-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="row " type="button" tabindex="-1"><span class="row__main"><span class="row__title">Raised row</span><span class="row__meta">Hairline edge</span></span><span class="row__mark"></span></button><button class="row is-focus" type="button" tabindex="-1"><span class="row__main"><span class="row__title">Focused row</span><span class="row__meta">Ring in the text colour</span></span><span class="row__mark"></span></button><button class="button is-focus" type="button" tabindex="-1">Focused button</button></div></div>
+    <figcaption><strong class="design-state__label">Raised, sunken, and focus ring – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>None. A foundation has no behaviour of its own; each component page lists its keys.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--shape-icon</code></td><td>Semantic</td><td><code>base.size.5</code></td></tr><tr><td><code>--shape-icon-small</code></td><td>Semantic</td><td><code>base.size.4</code></td></tr><tr><td><code>--shape-skeleton-long</code></td><td>Semantic</td><td><code>base.share.80</code></td></tr><tr><td><code>--shape-skeleton-short</code></td><td>Semantic</td><td><code>base.share.45</code></td></tr><tr><td><code>--shape-round-control</code></td><td>Semantic</td><td><code>base.round.8</code></td></tr><tr><td><code>--shape-round-card</code></td><td>Semantic</td><td><code>base.round.12</code></td></tr><tr><td><code>--shape-round-pill</code></td><td>Semantic</td><td><code>base.round.full</code></td></tr><tr><td><code>--shape-scrim-reach</code></td><td>Semantic</td><td><code>base.size.9</code></td></tr><tr><td><code>--shape-grabber-width</code></td><td>Semantic</td><td><code>base.size.6</code></td></tr><tr><td><code>--shape-grabber-height</code></td><td>Semantic</td><td><code>base.size.1</code></td></tr><tr><td><code>--edge-hairline</code></td><td>Semantic</td><td><code>base.stroke.1</code></td></tr><tr><td><code>--edge-control</code></td><td>Semantic</td><td><code>base.stroke.2</code></td></tr><tr><td><code>--edge-focus</code></td><td>Semantic</td><td><code>base.stroke.3</code></td></tr><tr><td><code>--edge-band</code></td><td>Semantic</td><td><code>base.stroke.6</code></td></tr><tr><td><code>--focus-ring</code></td><td>Component</td><td><code>semantic.color.focus</code></td></tr><tr><td><code>--focus-width</code></td><td>Component</td><td><code>semantic.edge.focus</code></td></tr><tr><td><code>--focus-offset</code></td><td>Component</td><td><code>semantic.edge.control</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="focus.html">Focus</a>: one ring on every control.</li>
+  <li><a href="../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+  <li><a href="../components/row/index.html">Row</a>: a person or a request.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

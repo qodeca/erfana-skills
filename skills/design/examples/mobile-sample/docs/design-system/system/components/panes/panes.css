@@ -1,0 +1,98 @@
+/* Panes: one grid for every size. A phone frame has no .panes at all, because a
+   phone shows one pane. From 600 the list sits beside the main pane, with the
+   status under it. From 960 the status gets its own column. The markup does not
+   change between tablet portrait and landscape: only this grid does.
+
+   600 is Material's Medium lower bound. Three panes wait for 960, not Expanded's
+   840: at 840 the main pane would be 240, narrower than the status beside it.
+   Both sit here as rem values, because CSS cannot read a variable in @container.
+
+   .pane is a container too, so a part inside one sizes itself to the pane it is
+   in, not to the screen. A ticket in a 320 list stays compact, and the same
+   ticket in the main pane gets the full time. */
+.panes {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+}
+.pane {
+  container-name: pane;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-section);
+  min-inline-size: 0;
+  padding: var(--space-gutter);
+}
+.pane__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-section);
+}
+
+/* A list is tighter, so more of it fits in a shorter height. */
+.pane--list { gap: var(--space-medium); }
+.pane--list .ticket {
+  gap: var(--space-tight);
+  padding: var(--space-medium);
+}
+
+@container screen (min-width: 37.5rem) {
+  .panes {
+    grid-template-areas: "list main" "list side" "list action";
+    grid-template-columns: var(--pane-list-width) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .pane--list,
+  .pane--lead {
+    grid-area: list;
+    border-inline-end: var(--edge-hairline) solid var(--pane-edge);
+    background: var(--pane-bg);
+  }
+  .pane--main { grid-area: main; }
+  .pane--side {
+    grid-area: side;
+    border-block-start: var(--edge-hairline) solid var(--pane-edge);
+  }
+  .panes > .action-bar { grid-area: action; }
+
+  /* 200% text: a 320 list cannot hold it, so columns are equal, or one pane
+     has the whole width with tickets across. At normal size a tablet always
+     keeps a second pane. */
+  [data-theme="large-text"] .panes--two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .panes--solo {
+    grid-template-areas: "main" "action";
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  /* A placeholder starts where the eye does, not halfway down a tall pane. */
+  .pane > .empty {
+    flex: none;
+    justify-content: flex-start;
+  }
+
+  /* Tickets across, when one pane has the whole width. */
+  .group--across {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--pane-list-width), 1fr));
+  }
+}
+
+@container screen (min-width: 60rem) {
+  .pane--list { padding-inline: var(--space-medium); }
+
+  /* The side pane is sunken only here, so its shapes darken only here. */
+  .pane--side .skeleton { background: var(--pane-skeleton); }
+
+  .panes:not(.panes--two, .panes--solo) {
+    grid-template-areas: "list main side" "list action side";
+    grid-template-columns: var(--pane-list-width) minmax(0, 1fr) var(--pane-side-width);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .panes:not(.panes--two, .panes--solo) > .pane--side {
+    border-block-start: 0;
+    border-inline-start: var(--edge-hairline) solid var(--pane-edge);
+    background: var(--pane-bg);
+  }
+}

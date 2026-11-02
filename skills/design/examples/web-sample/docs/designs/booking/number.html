@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient fixes a wrong number from the booked screen, and the text goes out again.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Change the mobile number</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Change the mobile number</span></nav>
+<main>
+  <h1>Change the mobile number</h1>
+  <p class="ds-lede" id="decision">A wrong number means the text never arrives, so changing it saves and resends in one step. Judge whether a patient can tell that the booking itself is not at risk.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: a new number replaces the old one for this booking only. To confirm with the clinic.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. From an upright tablet up, the main pane and the action pane stand side by side. On a phone they stack, with the actions at the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="number-edit-desktop" data-design-group="number-edit">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Change number – default – desktop</strong> – Opens from "Change number" with the current number in the field. "Save and send text" stays off until the number changes, so a repeat tap cannot resend the text at any height. "Keep 07700 900123" goes back with nothing changed. The field keeps a readable width in the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-edit-tablet" data-design-group="number-edit">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Change number – default – tablet</strong> – Opens from "Change number" with the current number in the field. "Save and send text" stays off until the number changes, so a repeat tap cannot resend the text at any height. "Keep 07700 900123" goes back with nothing changed. Two panes: the field on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-edit-tablet-landscape" data-design-group="number-edit">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Change number – default – tablet landscape</strong> – Opens from "Change number" with the current number in the field. "Save and send text" stays off until the number changes, so a repeat tap cannot resend the text at any height. "Keep 07700 900123" goes back with nothing changed. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-edit-phone" data-design-group="number-edit">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Change number – default – phone</strong> – Opens from "Change number" with the current number in the field. "Save and send text" stays off until the number changes, so a repeat tap cannot resend the text at any height. "Keep 07700 900123" goes back with nothing changed. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-input-desktop" data-design-group="number-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-hover" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Change number – typing and focus – desktop</strong> – The focus ring sits on the field, where focus lands when this screen opens. On a desktop the pointer also rests on the quiet button; touch sizes have no hover, so the keyboard is drawn instead. The field keeps a readable width in the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-input-tablet" data-design-group="number-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Change number – typing and focus – tablet</strong> – The focus ring sits on the field, where focus lands when this screen opens. On a desktop the pointer also rests on the quiet button; touch sizes have no hover, so the keyboard is drawn instead. Two panes stay, and "Save and send text" stays in view above the keyboard.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-input-tablet-landscape" data-design-group="number-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Change number – typing and focus – tablet landscape</strong> – The focus ring sits on the field, where focus lands when this screen opens. On a desktop the pointer also rests on the quiet button; touch sizes have no hover, so the keyboard is drawn instead. Two panes stay, and "Save and send text" stays in view above the keyboard.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-input-phone" data-design-group="number-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Change number – typing and focus – phone</strong> – The focus ring sits on the field, where focus lands when this screen opens. On a desktop the pointer also rests on the quiet button; touch sizes have no hover, so the keyboard is drawn instead. One pane: the actions rise and sit just above the keyboard, so the save button is in reach of one thumb, and off until the number changes.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-changed-desktop" data-design-group="number-changed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Change number – number changed – desktop</strong> – A new number is typed, so "Save and send text" wakes up. Saving changes the number and sends the text, then lands on "Booked – new number". A short number shows the field error. The field keeps a readable width in the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-changed-tablet" data-design-group="number-changed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Change number – number changed – tablet</strong> – A new number is typed, so "Save and send text" wakes up. Saving changes the number and sends the text, then lands on "Booked – new number". A short number shows the field error. Two panes: the field on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-changed-tablet-landscape" data-design-group="number-changed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Change number – number changed – tablet landscape</strong> – A new number is typed, so "Save and send text" wakes up. Saving changes the number and sends the text, then lands on "Booked – new number". A short number shows the field error. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-changed-phone" data-design-group="number-changed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Change number – number changed – phone</strong> – A new number is typed, so "Save and send text" wakes up. Saving changes the number and sends the text, then lands on "Booked – new number". A short number shows the field error. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-invalid-desktop" data-design-group="number-invalid">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Change number – field error – desktop</strong> – Same message as on Confirm. What was typed stays. The field keeps a readable width in the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-invalid-tablet" data-design-group="number-invalid">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Change number – field error – tablet</strong> – Same message as on Confirm. What was typed stays. Two panes: the field on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-invalid-tablet-landscape" data-design-group="number-invalid">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Change number – field error – tablet landscape</strong> – Same message as on Confirm. What was typed stays. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-invalid-phone" data-design-group="number-invalid">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Save and send text</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Change number – field error – phone</strong> – Same message as on Confirm. What was typed stays. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-sending-desktop" data-design-group="number-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">17</span><strong class="design-state__label">Change number – saving – desktop</strong> – The button stays in place and says what is happening. The field and "Keep 07700 900123" lock while saving, and the field stays readable, as on Confirm. The field keeps a readable width in the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-sending-tablet" data-design-group="number-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">18</span><strong class="design-state__label">Change number – saving – tablet</strong> – The button stays in place and says what is happening. The field and "Keep 07700 900123" lock while saving, and the field stays readable, as on Confirm. Two panes: the field on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-sending-tablet-landscape" data-design-group="number-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">19</span><strong class="design-state__label">Change number – saving – tablet landscape</strong> – The button stays in place and says what is happening. The field and "Keep 07700 900123" lock while saving, and the field stays readable, as on Confirm. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-sending-phone" data-design-group="number-sending">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input is-disabled" type="tel" tabindex="-1" value="07700 900456" readonly disabled>
+                <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full is-disabled" type="button" tabindex="-1" disabled>Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Saving your number</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">20</span><strong class="design-state__label">Change number – saving – phone</strong> – The button stays in place and says what is happening. The field and "Keep 07700 900123" lock while saving, and the field stays readable, as on Confirm. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-failed-desktop" data-design-group="number-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save this number</p>
+                  <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">21</span><strong class="design-state__label">Change number – could not save – desktop</strong> – The new number stays typed, and the booking is untouched. The notice and field fill the main pane, and the actions stand beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-failed-tablet" data-design-group="number-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save this number</p>
+                  <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">22</span><strong class="design-state__label">Change number – could not save – tablet</strong> – The new number stays typed, and the booking is untouched. Two panes: the notice and field on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-failed-tablet-landscape" data-design-group="number-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save this number</p>
+                  <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">23</span><strong class="design-state__label">Change number – could not save – tablet landscape</strong> – The new number stays typed, and the booking is untouched. Two panes, as a third adds nothing here.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="number-failed-phone" data-design-group="number-failed">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Change your mobile number</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="notice notice--error">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+                <div>
+                  <p class="notice__title">We could not save this number</p>
+                  <p class="notice__text">Your booking is safe. Try again, or call 01632 960 123.</p>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label">Mobile number</label>
+                <input class="field__input" type="tel" tabindex="-1" value="07700 900456" readonly>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Keep 07700 900123</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">24</span><strong class="design-state__label">Change number – could not save – phone</strong> – The new number stays typed, and the booking is untouched. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-new-number-desktop" data-design-group="booked-new-number">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Follow-up session, Aleksandra Nowakowska-Oyelaran</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900456</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">25</span><strong class="design-state__label">Booked – new number – desktop</strong> – Lands here after saving. The status names the new number, so the patient can check it, and the screen offers what Booked offers. The card fills the main pane, and the actions stand beside it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-new-number-tablet" data-design-group="booked-new-number">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Follow-up session, Aleksandra Nowakowska-Oyelaran</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900456</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">26</span><strong class="design-state__label">Booked – new number – tablet</strong> – Lands here after saving. The status names the new number, so the patient can check it, and the screen offers what Booked offers. Two panes: the card on the left, the actions on the right, at touch size.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-new-number-tablet-landscape" data-design-group="booked-new-number">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Follow-up session, Aleksandra Nowakowska-Oyelaran</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900456</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">27</span><strong class="design-state__label">Booked – new number – tablet landscape</strong> – Lands here after saving. The status names the new number, so the patient can check it, and the screen offers what Booked offers. Two panes, as a third adds nothing here. The wider card puts the time beside its lines to save height.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="booked-new-number-phone" data-design-group="booked-new-number">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">You are booked</h1>
+          </div>
+          <div class="book">
+            <div class="book__main">
+              <div class="ticket ticket--wide">
+                <div class="ticket__strip"></div>
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Follow-up session, Aleksandra Nowakowska-Oyelaran</p>
+                  <p class="ticket__line ticket__line--muted">12 Example Street, entrance on the left</p>
+                </div>
+              </div>
+              <p class="state-word state-word--success"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Text sent to 07700 900456</p>
+            </div>
+            <div class="book__aside book__aside--pin">
+              <div class="book__actions">
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Change number</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Cancel booking</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">28</span><strong class="design-state__label">Booked – new number – phone</strong> – Lands here after saving. The status names the new number, so the patient can check it, and the screen offers what Booked offers. One pane: the actions sit at the bottom of the screen, in reach of one thumb.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="booked.html">Booked</a>: where this starts and ends.</li>
+    <li><a href="../../design-system/system/components/field/index.html">Fields</a>: name and mobile number.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,18 @@
+/* Tag: a short status, always a word and an icon. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tag-gap);
+  padding-block: var(--tag-padding-block);
+  padding-inline: var(--tag-padding-inline);
+  border-radius: var(--tag-radius);
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: calc(var(--text-style-tag-size) * var(--type-scale));
+  font-weight: var(--text-style-tag-weight);
+  line-height: var(--text-style-tag-leading);
+}
+.tag--wait { background: var(--tag-wait-bg); color: var(--tag-wait-text); }
+.tag--ok { background: var(--tag-ok-bg); color: var(--tag-ok-text); }
+.tag--stop { background: var(--tag-stop-bg); color: var(--tag-stop-text); }
+.tag--night { background: var(--tag-night-bg); color: var(--tag-night-text); }

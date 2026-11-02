@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Title, heading, lede, and caption, on any element.">
+<meta name="design-tasks" content="Set a title, heading, lede, or caption">
+<title>Text – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../screen/screen.css">
+<link rel="stylesheet" href="./text.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Text</span></nav>
+<main>
+<h1>Text</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Four text classes, each resetting its own box, so they work on any element. No title goes above 22, so the shift time stays the largest thing on a screen.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="styles">
+    <div class="design-frame" aria-hidden="true"><div class="screen screen--part"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><h2 class="heading">Goes to</h2><p class="caption">Step 3 of 3 – check and send</p></div></div>
+    <figcaption><strong>Title, lede, heading, and caption</strong> – text has no hover, focus, or pressed state.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="styles-dark">
+    <div class="design-frame" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><h2 class="title">Cancel this offer?</h2><p class="lede">You stay on the shift.</p><h2 class="heading">Goes to</h2><p class="caption">Step 3 of 3 – check and send</p></div></div>
+    <figcaption><strong>Title, lede, heading, and caption – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>None. Text has no behaviour of its own. <code>.title</code> and <code>.heading</code> sit on real heading elements, so a screen reader can move between them.</p>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;h2 class=&quot;title&quot;&gt;Cancel this offer?&lt;/h2&gt;
+&lt;p class=&quot;lede&quot;&gt;You stay on the shift.&lt;/p&gt;
+&lt;h2 class=&quot;heading&quot;&gt;Goes to&lt;/h2&gt;
+&lt;p class=&quot;caption&quot;&gt;Step 3 of 3 – check and send&lt;/p&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+  <tbody><tr><td><code>--text-style-title-size</code></td><td>Component</td><td><code>.title</code> size</td></tr><tr><td><code>--text-style-title-weight</code></td><td>Component</td><td><code>.title</code> weight</td></tr><tr><td><code>--text-style-title-leading</code></td><td>Component</td><td><code>.title</code> leading</td></tr><tr><td><code>--text-style-label-strong-size</code></td><td>Component</td><td><code>.heading</code> size</td></tr><tr><td><code>--text-style-label-strong-weight</code></td><td>Component</td><td><code>.heading</code> weight</td></tr><tr><td><code>--text-style-label-strong-leading</code></td><td>Component</td><td><code>.heading</code> leading</td></tr><tr><td><code>--text-style-body-size</code></td><td>Component</td><td><code>.lede</code> size</td></tr><tr><td><code>--text-style-label-long-size</code></td><td>Component</td><td><code>.caption</code> size</td></tr><tr><td><code>--text-style-label-long-leading</code></td><td>Component</td><td><code>.caption</code> leading</td></tr><tr><td><code>--caption-text</code></td><td>Component</td><td><code>.caption</code> colour</td></tr><tr><td><code>--type-scale</code></td><td>Semantic</td><td>Multiplies every size</td></tr></tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../../foundations/type.html">Type</a>: scale and the shift time.</li>
+  <li><a href="../../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

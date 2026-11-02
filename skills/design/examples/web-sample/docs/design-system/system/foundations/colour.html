@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Warm plaster surfaces, ink edges, and one coral strip per screen.">
+<meta name="design-tasks" content="Pick a surface or text colour; Colour an action; Decide where the coral strip goes">
+<title>Colour – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Colour</span></nav>
+<main>
+<h1>Colour</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Surfaces are warm and flat, edges are ink, and each screen carries one coral strip. Coral marks what is picked, next, or confirmed, and actions are ink, so the two never compete.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--color-surface</code></td><td><div class="ds-swatch" style="background: var(--color-surface)"></div><span class="ds-mono">#f4eee3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-surface)"></div><span class="ds-mono">#1e191c</span></td><td>The page behind everything</td></tr>
+    <tr><td><code>--color-raised</code></td><td><div class="ds-swatch" style="background: var(--color-raised)"></div><span class="ds-mono">#fcf9f3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-raised)"></div><span class="ds-mono">#2a2428</span></td><td>Cards, fields, and day cells</td></tr>
+    <tr><td><code>--color-sunken</code></td><td><div class="ds-swatch" style="background: var(--color-sunken)"></div><span class="ds-mono">#e7decf</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-sunken)"></div><span class="ds-mono">#3a3237</span></td><td>Hover, skeletons, and neutral notices</td></tr>
+    <tr><td><code>--color-text</code></td><td><div class="ds-swatch" style="background: var(--color-text)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-text)"></div><span class="ds-mono">#f4eee3</span></td><td>Body text</td></tr>
+    <tr><td><code>--color-muted</code></td><td><div class="ds-swatch" style="background: var(--color-muted)"></div><span class="ds-mono">#544850</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-muted)"></div><span class="ds-mono">#cdc2b8</span></td><td>Supporting text</td></tr>
+    <tr><td><code>--color-edge</code></td><td><div class="ds-swatch" style="background: var(--color-edge)"></div><span class="ds-mono">#75686f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-edge)"></div><span class="ds-mono">#9a8d93</span></td><td>Control edges</td></tr>
+    <tr><td><code>--color-edge-strong</code></td><td><div class="ds-swatch" style="background: var(--color-edge-strong)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-edge-strong)"></div><span class="ds-mono">#f4eee3</span></td><td>Ticket edge and quiet button edge</td></tr>
+    <tr><td><code>--color-focus</code></td><td><div class="ds-swatch" style="background: var(--color-focus)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-focus)"></div><span class="ds-mono">#fcf9f3</span></td><td>The focus ring</td></tr>
+    <tr><td><code>--color-action</code></td><td><div class="ds-swatch" style="background: var(--color-action)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-action)"></div><span class="ds-mono">#f4eee3</span></td><td>Buttons</td></tr>
+    <tr><td><code>--color-action-hover</code></td><td><div class="ds-swatch" style="background: var(--color-action-hover)"></div><span class="ds-mono">#544850</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-action-hover)"></div><span class="ds-mono">#fcf9f3</span></td><td>Button, hover</td></tr>
+    <tr><td><code>--color-action-pressed</code></td><td><div class="ds-swatch" style="background: var(--color-action-pressed)"></div><span class="ds-mono">#3a2f35</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-action-pressed)"></div><span class="ds-mono">#e7decf</span></td><td>Button, pressed</td></tr>
+    <tr><td><code>--color-on-action</code></td><td><div class="ds-swatch" style="background: var(--color-on-action)"></div><span class="ds-mono">#fcf9f3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-on-action)"></div><span class="ds-mono">#1e191c</span></td><td>Text on a button</td></tr>
+    <tr><td><code>--color-marker</code></td><td><div class="ds-swatch" style="background: var(--color-marker)"></div><span class="ds-mono">#ff8062</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-marker)"></div><span class="ds-mono">#ee8a72</span></td><td>The coral strip: what is picked, next, or confirmed</td></tr>
+    <tr><td><code>--color-marker-hover</code></td><td><div class="ds-swatch" style="background: var(--color-marker-hover)"></div><span class="ds-mono">#ff9f88</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-marker-hover)"></div><span class="ds-mono">#f4a592</span></td><td>Strip, hover</td></tr>
+    <tr><td><code>--color-marker-pressed</code></td><td><div class="ds-swatch" style="background: var(--color-marker-pressed)"></div><span class="ds-mono">#f56a48</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-marker-pressed)"></div><span class="ds-mono">#e27a61</span></td><td>Strip, pressed</td></tr>
+    <tr><td><code>--color-marker-edge</code></td><td><div class="ds-swatch" style="background: var(--color-marker-edge)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-marker-edge)"></div><span class="ds-mono">#ee8a72</span></td><td>Strip edge: ink in light, the fill itself in dark</td></tr>
+    <tr><td><code>--color-on-marker</code></td><td><div class="ds-swatch" style="background: var(--color-on-marker)"></div><span class="ds-mono">#241b1f</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-on-marker)"></div><span class="ds-mono">#241b1f</span></td><td>Text on the strip</td></tr>
+    <tr><td><code>--color-success</code></td><td><div class="ds-swatch" style="background: var(--color-success)"></div><span class="ds-mono">#1d6647</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-success)"></div><span class="ds-mono">#86d3ac</span></td><td>Success words</td></tr>
+    <tr><td><code>--color-success-tint</code></td><td><div class="ds-swatch" style="background: var(--color-success-tint)"></div><span class="ds-mono">#dceee3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-success-tint)"></div><span class="ds-mono">#1c3a2c</span></td><td>Behind a success notice</td></tr>
+    <tr><td><code>--color-error</code></td><td><div class="ds-swatch" style="background: var(--color-error)"></div><span class="ds-mono">#a01239</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-error)"></div><span class="ds-mono">#ffa9b8</span></td><td>Error words and the danger button</td></tr>
+    <tr><td><code>--color-error-hover</code></td><td><div class="ds-swatch" style="background: var(--color-error-hover)"></div><span class="ds-mono">#b92c52</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-error-hover)"></div><span class="ds-mono">#ffc6d0</span></td><td>Danger button, hover</td></tr>
+    <tr><td><code>--color-error-pressed</code></td><td><div class="ds-swatch" style="background: var(--color-error-pressed)"></div><span class="ds-mono">#7d0d2c</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-error-pressed)"></div><span class="ds-mono">#f78da0</span></td><td>Danger button, pressed</td></tr>
+    <tr><td><code>--color-on-error</code></td><td><div class="ds-swatch" style="background: var(--color-on-error)"></div><span class="ds-mono">#fcf9f3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-on-error)"></div><span class="ds-mono">#1e191c</span></td><td>Text on the danger button</td></tr>
+    <tr><td><code>--color-error-tint</code></td><td><div class="ds-swatch" style="background: var(--color-error-tint)"></div><span class="ds-mono">#f9dfe3</span></td><td><div class="ds-swatch" data-theme="dark" style="background: var(--color-error-tint)"></div><span class="ds-mono">#4a1a27</span></td><td>Behind an error notice</td></tr>
+  </tbody>
+</table>
+
+<h2 id="contrast">Measured contrast</h2>
+<p>Ratios are computed from <code>tokens.json</code> with the WCAG 2.2 formula. Coral on plaster alone measures 2.14, so in the light theme coral never stands without its ink edge.</p>
+<table>
+  <thead><tr><th>Pair</th><th>Light</th><th>Dark</th><th>Needs</th></tr></thead>
+  <tbody>
+    <tr><td>Text on surface</td><td><span class="ds-ratio">14.53</span></td><td><span class="ds-ratio">15.02</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on raised</td><td><span class="ds-ratio">15.97</span></td><td><span class="ds-ratio">13.16</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Muted on surface</td><td><span class="ds-ratio">7.52</span></td><td><span class="ds-ratio">9.91</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Muted on sunken</td><td><span class="ds-ratio">6.51</span></td><td><span class="ds-ratio">7.10</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on action button</td><td><span class="ds-ratio">15.97</span></td><td><span class="ds-ratio">15.02</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on action button, hover</td><td><span class="ds-ratio">8.26</span></td><td><span class="ds-ratio">16.50</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on action button, pressed</td><td><span class="ds-ratio">12.20</span></td><td><span class="ds-ratio">13.00</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Ink on coral</td><td><span class="ds-ratio">6.80</span></td><td><span class="ds-ratio">6.80</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Ink on coral, hover</td><td><span class="ds-ratio">8.44</span></td><td><span class="ds-ratio">8.50</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Ink on coral, pressed</td><td><span class="ds-ratio">5.62</span></td><td><span class="ds-ratio">5.74</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Control edge on surface</td><td><span class="ds-ratio">4.59</span></td><td><span class="ds-ratio">5.45</span></td><td><span class="ds-ratio">3</span></td></tr>
+    <tr><td>Marker edge on surface</td><td><span class="ds-ratio">14.53</span></td><td><span class="ds-ratio">7.03</span></td><td><span class="ds-ratio">3</span></td></tr>
+    <tr><td>Focus on surface</td><td><span class="ds-ratio">14.53</span></td><td><span class="ds-ratio">16.50</span></td><td><span class="ds-ratio">3</span></td></tr>
+    <tr><td>Error on tint</td><td><span class="ds-ratio">6.32</span></td><td><span class="ds-ratio">7.91</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Success on tint</td><td><span class="ds-ratio">5.71</span></td><td><span class="ds-ratio">7.05</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on danger button</td><td><span class="ds-ratio">7.57</span></td><td><span class="ds-ratio">9.59</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on danger button, hover</td><td><span class="ds-ratio">5.64</span></td><td><span class="ds-ratio">11.76</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+    <tr><td>Text on danger button, pressed</td><td><span class="ds-ratio">10.16</span></td><td><span class="ds-ratio">7.66</span></td><td><span class="ds-ratio">4.5</span></td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="spacing.html">Spacing</a>: the bands colour sits in.</li>
+  <li><a href="focus.html">Focus</a>: the ring built on these colours.</li>
+  <li><a href="../components/slot/index.html">Time slot</a>: where the strip shows first.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

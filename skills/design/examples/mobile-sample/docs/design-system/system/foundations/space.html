@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Spacing rhythm and touch target sizes.">
+<meta name="design-tasks" content="Choose a padding or gap; Size a touch target">
+<title>Space and touch – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+<link rel="stylesheet" href="../components/screen/screen.css">
+<link rel="stylesheet" href="../components/button/button.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Space and touch</span></nav>
+<main>
+<h1>Space and touch</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">A 4 px rhythm, with touch sizes set by the stricter platform: 48 is the minimum everywhere, and 56 for the main action. A hurried thumb should never need a second try.</p>
+
+<h2 id="states">Touch sizes</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="targets">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><button class="button button--small button--secondary" type="button" tabindex="-1">Small – 48</button><button class="button " type="button" tabindex="-1">Main – 56</button></div></div>
+    <figcaption><strong class="design-state__label">Minimum and main targets</strong> – Small button at 48, main button at 56.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="targets-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><button class="button button--small button--secondary" type="button" tabindex="-1">Small – 48</button><button class="button " type="button" tabindex="-1">Main – 56</button></div></div>
+    <figcaption><strong class="design-state__label">Minimum and main targets – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>None. A foundation has no behaviour of its own; each component page lists its keys.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--space-tight</code></td><td>Semantic</td><td><code>base.size.1</code></td></tr><tr><td><code>--space-small</code></td><td>Semantic</td><td><code>base.size.2</code></td></tr><tr><td><code>--space-medium</code></td><td>Semantic</td><td><code>base.size.3</code></td></tr><tr><td><code>--space-gutter</code></td><td>Semantic</td><td><code>base.size.4</code></td></tr><tr><td><code>--space-section</code></td><td>Semantic</td><td><code>base.size.5</code></td></tr><tr><td><code>--space-wide</code></td><td>Semantic</td><td><code>base.size.6</code></td></tr><tr><td><code>--target-minimum</code></td><td>Semantic</td><td><code>base.size.7</code></td></tr><tr><td><code>--target-main</code></td><td>Semantic</td><td><code>base.size.8</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../components/button/index.html">Button</a>: main, secondary, and danger.</li>
+  <li><a href="../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

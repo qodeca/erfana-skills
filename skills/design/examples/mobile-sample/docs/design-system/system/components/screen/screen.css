@@ -1,0 +1,257 @@
+/* Screen: the surface every drawn screen sits on. It is the container the
+   @container rules read, so a frame and a real web view lay out alike. */
+.screen,
+.sheet-screen {
+  container-name: screen;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  background: var(--screen-bg);
+  color: var(--screen-text);
+  font-family: var(--typeface-body);
+  font-size: calc(var(--text-style-body-size) * var(--type-scale));
+  font-weight: var(--text-style-body-weight);
+  line-height: var(--text-style-body-leading);
+  text-align: start;
+}
+.screen *,
+.sheet-screen * { box-sizing: border-box; }
+.screen--part {
+  gap: var(--space-medium);
+  padding: var(--space-gutter);
+}
+.screen__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-section);
+  padding: var(--space-gutter);
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+}
+.group > .tag { align-self: flex-start; }
+
+/* App bar. */
+.app-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-small);
+  min-height: var(--appbar-height);
+  padding-inline: var(--appbar-padding);
+  border-block-end: var(--edge-hairline) solid var(--appbar-edge);
+  color: var(--appbar-text);
+}
+.app-bar__title {
+  flex: 1;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-size: calc(var(--text-style-body-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-body-strong-weight);
+  line-height: var(--text-style-body-strong-leading);
+}
+.app-bar__back {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--target-minimum);
+  block-size: var(--target-minimum);
+  padding: 0;
+  border: 0;
+  border-radius: var(--shape-round-control);
+  background: transparent;
+  color: inherit;
+}
+.app-bar__back:hover:not(:where(.design-frame *)),
+.app-bar__back.is-hover { background: var(--appbar-back-hover); }
+.app-bar__back:focus-visible,
+.app-bar__back.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.app-bar__back:active:not(:where(.design-frame *)),
+.app-bar__back.is-active { background: var(--appbar-back-pressed); }
+.app-bar__back:disabled,
+.app-bar__back.is-disabled { color: var(--button-disabled-text); }
+
+/* Platform differences, drawn as their own states. iOS centres the title and
+   balances the back button; Android starts it beside the arrow. */
+.screen--ios,
+.sheet-screen--ios { font-family: var(--typeface-ios); }
+.screen--android,
+.sheet-screen--android { font-family: var(--typeface-android); }
+.screen--ios .app-bar__title {
+  margin-inline-end: var(--target-minimum);
+  text-align: center;
+}
+
+/* Action bar: pinned to the bottom of the screen, in thumb reach. */
+.action-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-small);
+  margin-block-start: auto;
+  padding: var(--space-medium) var(--space-gutter);
+  border-block-start: var(--edge-hairline) solid var(--action-bar-edge);
+  background: var(--action-bar-bg);
+}
+
+/* Sheet: drawn open on review pages. Rises from the bottom in the product. */
+.sheet-screen {
+  position: relative;
+  isolation: isolate;
+  justify-content: flex-end;
+  padding-block-start: var(--sheet-reach);
+}
+.sheet-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--sheet-scrim);
+  opacity: 0.7;
+}
+[data-theme="dark"] .sheet-screen::before,
+.sheet-screen[data-theme="dark"]::before { opacity: 0.5; }
+.sheet {
+  position: relative;
+  z-index: 2;
+  animation: sheet-rise var(--motion-slow) var(--motion-ease);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sheet-gap);
+  /* The end padding matches the action bar, so on a phone the sheet's bottom
+     button sits exactly in Decline's slot, and a repeat tap cannot reach Approve. */
+  padding-block: var(--sheet-padding-block) var(--space-medium);
+  padding-inline: var(--sheet-padding-inline);
+  border-block-start: var(--sheet-edge) solid var(--sheet-edge-color);
+  border-start-start-radius: var(--sheet-radius);
+  border-start-end-radius: var(--sheet-radius);
+  background: var(--sheet-bg);
+  color: var(--sheet-text);
+}
+/* iOS only: Android's modal bottom sheet has no grabber here. */
+.sheet__grabber {
+  align-self: center;
+  inline-size: var(--sheet-grabber-width);
+  block-size: var(--sheet-grabber-height);
+  border-radius: var(--shape-round-pill);
+  background: var(--sheet-grabber-color);
+}
+
+/* A phone sheet runs to the bottom edge of the screen, past the device's safe
+   area, and its padding brings the bottom button back to Decline's slot. A frame
+   sets the safe area on a review page; in the product the system gives it. */
+@container screen (max-width: 37.49rem) {
+  .sheet-screen > :last-child { margin-block-end: calc(var(--device-safe-bottom, var(--sheet-safe-bottom)) * -1); }
+  .sheet:last-child { padding-block-end: calc(var(--space-medium) + var(--device-safe-bottom, var(--sheet-safe-bottom))); }
+}
+
+@keyframes sheet-rise {
+  from { transform: translateY(100%); }
+}
+
+/* Below the base rules: an @container rule does not outrank a later rule of the
+   same weight. From 600 a thumb no longer spans the screen, so buttons share a
+   row. The main button is first in the markup and sits at the inline end, and
+   row-reverse keeps both true. A sheet stops being full width: iPad centres it,
+   and Android keeps it at the bottom, wider. */
+@container screen (min-width: 37.5rem) {
+  .action-bar {
+    flex-flow: row-reverse wrap;
+    align-items: stretch;
+  }
+  .action-bar .button {
+    flex: 1 1 auto;
+    inline-size: auto;
+    padding-inline: var(--space-medium);
+  }
+  .action-bar .caption { flex-basis: 100%; }
+
+  /* A row with a commit splits evenly, so each slot is known from the state
+     before it. Other rows give the longer label more width. */
+  .action-bar--even .button { flex: 1 1 0; }
+
+  /* A repeat tap must never land on a commit. A retry takes its own row above
+     the action row, and that row goes when the retry works. A step that leads
+     to a commit takes the half its safe action will use, not the commit's. */
+  .action-bar .button--retry { flex-basis: 100%; }
+  .action-bar .button--half {
+    flex: 0 1 calc(50% - var(--space-small) / 2);
+    margin-inline-end: auto;
+  }
+
+  .sheet {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: fit-content;
+    max-inline-size: var(--sheet-centred-width);
+    margin: auto;
+    padding-block-end: var(--sheet-padding-block);
+    border: var(--sheet-edge) solid var(--sheet-edge-color);
+    border-radius: var(--sheet-radius);
+  }
+  [data-theme="large-text"] .sheet { max-inline-size: var(--sheet-bottom-width); }
+  .sheet-screen--android .sheet {
+    max-inline-size: var(--sheet-bottom-width);
+    margin-block-end: 0;
+    padding-block-end: var(--space-wide);
+    border-block-end: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  /* With the keyboard up there is no room to centre, so the sheet sits on it. */
+  .sheet-screen--keyboard .sheet {
+    position: relative;
+    inset: auto;
+    margin-block: auto var(--space-gutter);
+  }
+  /* The dimmed screen stays behind: it does not take part in the column. */
+  .sheet-screen--keyboard .sheet-screen__behind {
+    position: absolute;
+    inset: 0 0 var(--keyboard-height-regular);
+    overflow: hidden;
+  }
+  .sheet-screen--keyboard .keyboard { block-size: var(--keyboard-height-regular); }
+}
+
+/* A landscape keyboard takes half the height, so the buttons share a row. */
+@container screen (min-width: 60rem) {
+  .sheet-screen--keyboard .sheet { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .sheet-screen--keyboard .sheet > .title,
+  .sheet-screen--keyboard .sheet > .field { grid-column: 1 / -1; }
+  .sheet-screen--keyboard .sheet-screen__behind { inset-block-end: var(--keyboard-height-wide); }
+  .sheet-screen--keyboard .keyboard { block-size: var(--keyboard-height-wide); }
+}
+
+/* The system keyboard, drawn only to show what it covers. It is not designed
+   here, and its heights are stand-ins. */
+.keyboard {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--keyboard-height);
+  background: var(--keyboard-bg);
+  color: var(--keyboard-text);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+}
+
+/* What the sheet came from, dimmed by the scrim. Tablet frames only: a phone
+   sheet covers the width, so its frame shows the scrim alone. */
+.sheet-screen__behind { flex: 1; }
+
+/* Reduced motion: remove movement and loops, keep every state change. */
+@media (prefers-reduced-motion: reduce) {
+  .sheet { animation: none; }
+}

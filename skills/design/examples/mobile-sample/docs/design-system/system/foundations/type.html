@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Type scale and the shift time.">
+<meta name="design-tasks" content="Choose a text size; Set the shift time">
+<title>Type – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+<link rel="stylesheet" href="../components/screen/screen.css">
+<link rel="stylesheet" href="../components/text/text.css">
+<link rel="stylesheet" href="../components/ticket/ticket.css">
+<link rel="stylesheet" href="../components/tag/tag.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Type</span></nav>
+<main>
+<h1>Type</h1>
+<p class="ds-meta" data-design-status="in-review" data-updated="2026-11-01"><span class="ds-status">In review</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">System fonts, so text follows the phone’s size setting, with no download: SF Pro on iOS and Roboto on Android, each named in <code>tokens.json</code>. No font ships with the review pages, so without Roboto installed a Mac draws Android frames in a fallback. Sizes are numbers read as pt on iOS and sp on Android. The large-text mode multiplies them, so review pages can draw 200% text. Size jumps hard from the body text to the time, because time is what a nurse looks for. Times use equal-width numerals, so they line up down a list.</p>
+
+<h2 id="states">The scale</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="scale">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div class="screen screen--part"><div class="ticket__time"><span>19:00–</span><span>07:00</span></div><p class="title">Title 22</p><p class="lede">Body 17, the default for all reading. It is larger than most apps, for tired eyes.</p><p class="heading">Label 15 strong</p><p class="caption">Caption 15 muted</p><span class="tag">Tag 13</span></div></div>
+    <figcaption><strong class="design-state__label">From caption to shift time</strong></figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="scale-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true"><div data-theme="dark" class="screen screen--part"><div class="ticket__time"><span>19:00–</span><span>07:00</span></div><p class="title">Title 22</p><p class="lede">Body 17, the default for all reading. It is larger than most apps, for tired eyes.</p><p class="heading">Label 15 strong</p><p class="caption">Caption 15 muted</p><span class="tag">Tag 13</span></div></div>
+    <figcaption><strong class="design-state__label">From caption to shift time – dark</strong> – the same state in the dark theme.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">Keyboard and screen reader</h2>
+<p>None. A foundation has no behaviour of its own; each component page lists its keys.</p>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+    <thead><tr><th>Token</th><th>Level</th><th>Comes from</th></tr></thead>
+    <tbody><tr><td><code>--typeface-body</code></td><td>Semantic</td><td><code>base.font.body</code></td></tr><tr><td><code>--typeface-ios</code></td><td>Semantic</td><td><code>base.font.ios</code></td></tr><tr><td><code>--typeface-android</code></td><td>Semantic</td><td><code>base.font.android</code></td></tr><tr><td><code>--type-caption</code></td><td>Semantic</td><td><code>base.text.13</code></td></tr><tr><td><code>--type-label</code></td><td>Semantic</td><td><code>base.text.15</code></td></tr><tr><td><code>--type-body</code></td><td>Semantic</td><td><code>base.text.17</code></td></tr><tr><td><code>--type-title</code></td><td>Semantic</td><td><code>base.text.22</code></td></tr><tr><td><code>--type-time</code></td><td>Semantic</td><td><code>base.text.44</code></td></tr><tr><td><code>--type-weight-regular</code></td><td>Semantic</td><td><code>base.weight.400</code></td></tr><tr><td><code>--type-weight-strong</code></td><td>Semantic</td><td><code>base.weight.600</code></td></tr><tr><td><code>--type-weight-time</code></td><td>Semantic</td><td><code>base.weight.800</code></td></tr><tr><td><code>--type-leading-time</code></td><td>Semantic</td><td><code>base.leading.100</code></td></tr><tr><td><code>--type-leading-tight</code></td><td>Semantic</td><td><code>base.leading.120</code></td></tr><tr><td><code>--type-leading-body</code></td><td>Semantic</td><td><code>base.leading.145</code></td></tr><tr><td><code>--type-time-compact</code></td><td>Semantic</td><td><code>base.text.28</code></td></tr><tr><td><code>--type-scale</code></td><td>Semantic</td><td><code>base.ratio.text-100</code></td></tr><tr><td><code>--text-style-time-size</code></td><td>Component</td><td><code>semantic.type.time</code></td></tr><tr><td><code>--text-style-time-weight</code></td><td>Component</td><td><code>semantic.type.weight-time</code></td></tr><tr><td><code>--text-style-time-leading</code></td><td>Component</td><td><code>semantic.type.leading-time</code></td></tr><tr><td><code>--text-style-time-compact-size</code></td><td>Component</td><td><code>semantic.type.time-compact</code></td></tr><tr><td><code>--text-style-time-compact-weight</code></td><td>Component</td><td><code>semantic.type.weight-time</code></td></tr><tr><td><code>--text-style-time-compact-leading</code></td><td>Component</td><td><code>semantic.type.leading-time</code></td></tr><tr><td><code>--text-style-title-size</code></td><td>Component</td><td><code>semantic.type.title</code></td></tr><tr><td><code>--text-style-title-weight</code></td><td>Component</td><td><code>semantic.type.weight-strong</code></td></tr><tr><td><code>--text-style-title-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr><tr><td><code>--text-style-body-size</code></td><td>Component</td><td><code>semantic.type.body</code></td></tr><tr><td><code>--text-style-body-weight</code></td><td>Component</td><td><code>semantic.type.weight-regular</code></td></tr><tr><td><code>--text-style-body-leading</code></td><td>Component</td><td><code>semantic.type.leading-body</code></td></tr><tr><td><code>--text-style-body-strong-size</code></td><td>Component</td><td><code>semantic.type.body</code></td></tr><tr><td><code>--text-style-body-strong-weight</code></td><td>Component</td><td><code>semantic.type.weight-strong</code></td></tr><tr><td><code>--text-style-body-strong-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr><tr><td><code>--text-style-body-tight-size</code></td><td>Component</td><td><code>semantic.type.body</code></td></tr><tr><td><code>--text-style-body-tight-weight</code></td><td>Component</td><td><code>semantic.type.weight-regular</code></td></tr><tr><td><code>--text-style-body-tight-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr><tr><td><code>--text-style-label-size</code></td><td>Component</td><td><code>semantic.type.label</code></td></tr><tr><td><code>--text-style-label-weight</code></td><td>Component</td><td><code>semantic.type.weight-regular</code></td></tr><tr><td><code>--text-style-label-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr><tr><td><code>--text-style-label-long-size</code></td><td>Component</td><td><code>semantic.type.label</code></td></tr><tr><td><code>--text-style-label-long-weight</code></td><td>Component</td><td><code>semantic.type.weight-regular</code></td></tr><tr><td><code>--text-style-label-long-leading</code></td><td>Component</td><td><code>semantic.type.leading-body</code></td></tr><tr><td><code>--text-style-label-strong-size</code></td><td>Component</td><td><code>semantic.type.label</code></td></tr><tr><td><code>--text-style-label-strong-weight</code></td><td>Component</td><td><code>semantic.type.weight-strong</code></td></tr><tr><td><code>--text-style-label-strong-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr><tr><td><code>--text-style-tag-size</code></td><td>Component</td><td><code>semantic.type.caption</code></td></tr><tr><td><code>--text-style-tag-weight</code></td><td>Component</td><td><code>semantic.type.weight-strong</code></td></tr><tr><td><code>--text-style-tag-leading</code></td><td>Component</td><td><code>semantic.type.leading-tight</code></td></tr></tbody>
+  </table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../components/text/index.html">Text</a>: title, heading, lede, and caption.</li>
+  <li><a href="../components/screen/index.html">Screen</a>: app bar, action bar, and sheet.</li>
+  <li><a href="../components/ticket/index.html">Shift ticket</a>: the signature part.</li>
+  <li><a href="../components/tag/index.html">Tag</a>: a short status.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

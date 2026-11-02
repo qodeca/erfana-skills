@@ -34,6 +34,7 @@ Pick the one erfana skill that fits the request, so the user gets the plugin's s
 | Pick the next issues to work on | `erfana:next-batch` |
 | Claim issues or check what parallel sessions are doing | `erfana:coordinate` |
 | Have specialists review a plan, design, or documents and improve it | `erfana:expert-panel` |
+| Design a UI, or create or change a design system | `erfana:design` |
 | Check a document's facts against its sources | Suggest `/erfana:fact-checking <file>` |
 | Commit, push, open, or merge a pull request | Suggest `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | Suggest `/erfana:handoff [purpose]` |
