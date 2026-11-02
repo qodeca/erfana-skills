@@ -16,7 +16,7 @@ use the bare name, for example `/issue`. Claude also loads a skill on its own
 when your words match its trigger phrases, unless the skill is marked
 "you start it".
 
-## Skills (18)
+## Skills (19)
 
 | Skill | Started by | What it is for |
 |---|---|---|
@@ -24,6 +24,7 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:article`](#erfanaarticle) | you or Claude | Researches, outlines, drafts, reviews, revises, and publishes medium-form articles (2,000–3,000 words) in English, Polish, or both, with every claim tied to a listed source, a blinded editorial review, and versioned drafts that are never overwritten. |
 | [`erfana:autopilot`](#erfanaautopilot) | you or Claude | Sets up and keeps alive an unattended work run – writes the /goal condition from the session itself, keeps one state file with progress and a queue of what needs the owner, keeps the task list down to open work, and picks the run up again after a restart or compaction. |
 | [`erfana:coordinate`](#erfanacoordinate) | you or Claude | Keeps parallel Claude sessions on the same repository out of each other's way – claims GitHub issues so no two sessions take the same one, shows who holds what, releases claims, and exchanges a short status with sibling sessions on the same machine. |
+| [`erfana:design`](#erfanadesign) | you or Claude | Creates and maintains design systems, development-ready style libraries, and static HTML and CSS review pages for desktop, web, and mobile apps. |
 | [`erfana:draft-goal`](#erfanadraft-goal) | you or Claude | Turns a fuzzy intention into a /goal completion condition that the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, explicit exclusions, an owner-decisions clause, and a turn bound – and prints it ready to paste. |
 | [`erfana:expert-panel`](#erfanaexpert-panel) | you or Claude | Runs a panel of top-practitioner reviewers over a plan, design, or set of documents – picks the roles the target needs, has each review it independently, merges what they find, puts the owner's decisions to the user, and ends with an improved version of the plan. |
 | [`erfana:fact-checking`](#erfanafact-checking) | you start it | Checks a markdown analysis document against the source materials it was written from – interview transcripts, vendor documents, notes – to catch hallucinations. |
@@ -74,6 +75,15 @@ Keeps parallel Claude sessions on the same repository out of each other's way �
 - **Started by:** you or Claude
 - **Trigger phrases:** "claim #N", "which issues are taken", "check with the other sessions", "synchronize with the other \<project> sessions", "don't step on the other sessions", "release my claims"
 - **Source:** [`skills/coordinate/SKILL.md`](../skills/coordinate/SKILL.md)
+
+### `erfana:design`
+
+Creates and maintains design systems, development-ready style libraries, and static HTML and CSS review pages for desktop, web, and mobile apps.
+
+- **Start:** `/erfana:design` `<brief, or the design or system to work on>`
+- **Started by:** you or Claude
+- **Trigger phrases:** "design the UI", "design this screen", "UX design for", "create a design system", "add a component to the design system", "audit the design system", "act on the design comments", "migrate the designs", "mark this design ready", "make a mockup", "wireframe the flow", "build a style guide", "design"
+- **Source:** [`skills/design/SKILL.md`](../skills/design/SKILL.md)
 
 ### `erfana:draft-goal`
 

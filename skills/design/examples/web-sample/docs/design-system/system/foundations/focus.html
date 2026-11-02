@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="One ink ring on every control, drawn outside it.">
+<meta name="design-tasks" content="Draw a focus ring">
+<title>Focus – Design system</title>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../docs-tokens.css">
+<link rel="stylesheet" href="../../docs.css">
+<link rel="stylesheet" href="../components/app/app.css">
+<link rel="stylesheet" href="../components/button/button.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../index.html#foundations">Foundations</a> <span aria-hidden="true">/</span> <span aria-current="page">Focus</span></nav>
+<main>
+<h1>Focus</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Every control shows the same ring: an outline in the focus colour, one edge wide and one edge clear of the control. It measures 14.53:1 on the light surface and 16.50:1 on the dark one, against the 3:1 it needs.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-states">
+  <figure class="ds-frame design-state" id="ring-light">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-focus" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Ring, light theme</strong> – reached with <kbd>Tab</kbd>.</figcaption>
+  </figure>
+  <figure class="ds-frame design-state" id="ring-dark">
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><button class="button button--full is-focus" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Ring, dark theme</strong> – the same ring in the dark focus colour.</figcaption>
+  </figure>
+</div>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--color-focus</code></td><td><span class="ds-mono">#241b1f / #fcf9f3</span></td><td>Ring colour, light / dark</td></tr>
+    <tr><td><code>--control-edge</code></td><td><span class="ds-mono">2px</span></td><td>Ring width and offset</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="colour.html">Colour</a>: the measured pairs.</li>
+  <li><a href="../components/button/index.html">Buttons</a>: the ring on a control.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

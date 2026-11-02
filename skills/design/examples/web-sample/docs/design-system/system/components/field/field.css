@@ -1,0 +1,37 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Fields. */
+
+.fields { display: grid; gap: var(--space-group); align-content: start; }
+
+.field { display: grid; gap: var(--space-hair); align-content: start; }
+.field__label { font-weight: var(--emphasis-strong); }
+.field__hint { margin: 0; color: var(--color-muted); font-size: var(--type-small); }
+.field__error { display: flex; gap: var(--space-hair); align-items: center; margin: 0; color: var(--color-error); font-size: var(--type-small); font-weight: var(--emphasis-strong); }
+.field__input {
+  width: 100%;
+  min-height: var(--field-height);
+  padding-inline: var(--space-control);
+  border: var(--control-edge) solid var(--color-edge);
+  border-radius: var(--shape-card);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--type-body);
+}
+/* A name can outrun a phone's width, so it wraps instead of cutting off. */
+.field__input--text {
+  display: block;
+  padding-block: var(--space-control);
+  field-sizing: content;
+  line-height: var(--leading-tight);
+  resize: none;
+}
+.field__input:hover:not(:where(.design-frame *)),
+.field__input.is-hover { border-color: var(--color-edge-strong); }
+.field__input:focus-visible,
+.field__input.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.field__input:disabled,
+.field__input.is-disabled { border-style: dashed; background: var(--color-sunken); color: var(--color-muted); cursor: not-allowed; }
+.field__input[aria-invalid="true"],
+.field__input.is-error { border-color: var(--color-error); }

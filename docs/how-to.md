@@ -564,7 +564,7 @@ Check the spelling of the source: `qodeca/erfana-skills:erfana` – the reposito
 
 ### A request does not start the skill you expected
 
-Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-18), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
+Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-19), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
 
 `erfana:fact-checking`, `erfana:ship`, and `erfana:handoff` never start from a phrase – type their slash command. On Qwen Code, skill choice from a request may be less reliable; name the skill.
 

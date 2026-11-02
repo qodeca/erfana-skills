@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient picks a session, a week, a day, and a time, with the same parts at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Choose a session and a time</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Choose a session and a time</span></nav>
+<main>
+  <h1>Choose a session and a time</h1>
+  <p class="ds-lede" id="decision">A patient picks a session, then a week, a day, and a time. Desktop is the main view. Judge whether the time is always the first thing read, and whether the one coral strip marks the right thing.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: desktop web is the main view, because most patients book from a computer at home or at work. This replaces the earlier guess that most use a phone, and it is inferred. To confirm from the clinic's visitor numbers.</li>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: the page stops growing at 1280 wide and centres in a wider window. A wider screen is not drawn.</li>
+      <li>Assumed: the bottom of a phone screen is where a patient in pain reaches most easily. To test with patients, because the sources on thumb reach are general.</li>
+      <li>Assumed: a patient picks a first visit or a follow-up before choosing a time, with a first visit at 60 minutes and a follow-up at 45. To confirm with the clinic.</li>
+      <li>Assumed: the help wording on Choose a session. To confirm with the clinic.</li>
+      <li>Assumed: any free therapist is fine, so the name sits beside the time and there is no therapist filter. To confirm.</li>
+      <li>Assumed: online booking opens 6 weeks ahead. The number is a guess. The clinic decides.</li>
+      <li>Assumed: the clinic is closed at weekends, and the number of free times on each day is known when the week loads.</li>
+      <li>Assumed: English only, 24-hour times. Other languages are not drawn; labels wrap rather than clip.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, the picker has four columns on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the week becomes seven cells and the actions move to the bottom. Choose a session sets two option panels and a help pane differently at each size.</p>
+    <ul>
+      <li class="design-size-exception" data-design-group="choose-input" data-design-size="tablet">A tablet held upright is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose.</li>
+      <li class="design-size-exception" data-design-group="choose-input" data-design-size="tablet-landscape">A tablet on its side is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose.</li>
+      <li class="design-size-exception" data-design-group="choose-input" data-design-size="phone">A phone is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose.</li>
+    </ul>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="session-desktop" data-design-group="session">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">What do you need?</h1>
+            <p class="lede">Pick one to see its free times.</p>
+          </div>
+          <div class="book book--start">
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">First visit</span><span class="choice__time">60 minutes</span></button>
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">Follow-up session</span><span class="choice__time">45 minutes</span></button>
+              </div>
+            </div>
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">Not sure which to pick?</p>
+                  <p class="notice__text">A first visit is for a new problem. A follow-up carries on treatment you have started. To ask, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Choose a session – desktop</strong> – Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it. Each panel carries its own duration. Three columns: two tall option panels and the help pane.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="session-tablet" data-design-group="session">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">What do you need?</h1>
+            <p class="lede">Pick one to see its free times.</p>
+          </div>
+          <div class="book book--start">
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">First visit</span><span class="choice__time">60 minutes</span></button>
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">Follow-up session</span><span class="choice__time">45 minutes</span></button>
+              </div>
+            </div>
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">Not sure which to pick?</p>
+                  <p class="notice__text">A first visit is for a new problem. A follow-up carries on treatment you have started. To ask, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Choose a session – tablet</strong> – Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it. Each panel carries its own duration. The panels share a row, each a large touch target, with the help below.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="session-tablet-landscape" data-design-group="session">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">What do you need?</h1>
+            <p class="lede">Pick one to see its free times.</p>
+          </div>
+          <div class="book book--start">
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">First visit</span><span class="choice__time">60 minutes</span></button>
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">Follow-up session</span><span class="choice__time">45 minutes</span></button>
+              </div>
+            </div>
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">Not sure which to pick?</p>
+                  <p class="notice__text">A first visit is for a new problem. A follow-up carries on treatment you have started. To ask, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Choose a session – tablet landscape</strong> – Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it. Each panel carries its own duration. Two panes in a shorter height: the panels stack on the left, and the help stands beside them.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="session-phone" data-design-group="session">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Start</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">What do you need?</h1>
+            <p class="lede">Pick one to see its free times.</p>
+          </div>
+          <div class="book book--start">
+            <div class="book__aside">
+              <div class="book__actions">
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">First visit</span><span class="choice__time">60 minutes</span></button>
+                <button class="choice" type="button" tabindex="-1"><span class="choice__name">Follow-up session</span><span class="choice__time">45 minutes</span></button>
+              </div>
+            </div>
+            <div class="book__main">
+              <div class="notice">
+                <div>
+                  <p class="notice__title">Not sure which to pick?</p>
+                  <p class="notice__text">A first visit is for a new problem. A follow-up carries on treatment you have started. To ask, call 01632 960 123.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Choose a session – phone</strong> – Comes before Choose a time, so a first-time patient can book. A link from the clinic may skip it. Each panel carries its own duration. One pane: the help comes first, and the panels sit at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-desktop" data-design-group="choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Choose a time – default – desktop</strong> – Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-tablet" data-design-group="choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Choose a time – default – tablet</strong> – Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. Two panes: the week is the list, and the times and actions are its detail, with the action low on the pane, near a hand holding the tablet.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-tablet-landscape" data-design-group="choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Choose a time – default – tablet landscape</strong> – Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. Three panes in a shorter height: the week, one column of times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-phone" data-design-group="choose">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Choose a time – default – phone</strong> – Follows Choose a session. Worst case: a full morning and the longest therapist name. This is the first bookable week, so "Earlier week" is off. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-desktop" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Choose a time – time selected – desktop</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. Continue wakes up and names the time. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-desktop-dark" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Choose a time – time selected – desktop, dark theme</strong> – Coral softens and loses its ink edge, because the fill alone clears 3:1 on the dark surface. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-tablet" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Choose a time – time selected – tablet</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. Continue wakes up and names the time. Two panes: the week is the list, and the times and actions are its detail, with the action low on the pane, near a hand holding the tablet.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-tablet-landscape" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Choose a time – time selected – tablet landscape</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. Continue wakes up and names the time. Three panes in a shorter height: the week, one column of times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-phone" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Choose a time – time selected – phone</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. Continue wakes up and names the time. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-phone-dark" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Choose a time – time selected – phone, dark theme</strong> – Coral softens and loses its ink edge, because the fill alone clears 3:1 on the dark surface. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-selected-smallest" data-design-group="choose-selected">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone-small" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot is-selected" type="button" tabindex="-1" aria-pressed="true"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span><span class="slot__mark"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Selected</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Continue with 09:45</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Choose a time – time selected – 320 wide</strong> – The strip presses on across the rail, with the word "Selected" and a tick, so colour is never alone. Continue wakes up and names the time. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb. The narrowest supported width: day cells shrink but stay in seven columns, long names wrap under the fixed time column, and the card stays stacked.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-input-desktop" data-design-group="choose-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day is-focus" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-hover" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Choose a time – hover and keyboard focus – desktop</strong> – The pointer rests on 10:30, and the focus ring sits on Thursday 12. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="time-states.html">Choose a time: other states</a>: moving between weeks.</li>
+    <li><a href="time-failures.html">Choose a time: failures</a>: empty, error, and refused.</li>
+    <li><a href="confirm.html">Confirm a booking</a>: where Continue leads.</li>
+    <li><a href="../../design-system/system/patterns/time-picker/index.html">Time picker</a>: the composition at each size.</li>
+    <li><a href="../../design-system/system/components/slot/index.html">Time slot</a>: the coral strip.</li>
+    <li><a href="../../design-system/system/components/ticket/index.html">Appointment card</a>: the summary and the booked card.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: every action.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

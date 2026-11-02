@@ -1,0 +1,47 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Summary and appointment card. */
+
+.ticket {
+  border: var(--control-edge) solid var(--color-edge-strong);
+  border-radius: var(--shape-card);
+  background: var(--color-raised);
+}
+.ticket__strip { height: var(--ticket-strip); border-block-end: var(--control-edge) solid var(--color-marker-edge); background: var(--color-marker); }
+.ticket__body { display: grid; gap: var(--space-tight); padding: var(--space-group); }
+.ticket__time {
+  margin: 0;
+  font-size: var(--type-time);
+  font-weight: var(--emphasis-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+}
+.ticket__label { order: -1; margin: 0; color: var(--color-muted); font-size: var(--type-small); font-weight: var(--emphasis-strong); }
+.ticket__line { margin: 0; overflow-wrap: anywhere; }
+.ticket__line--muted { color: var(--color-muted); font-size: var(--type-small); }
+.ticket--void { border-color: var(--color-edge); }
+.ticket--void .ticket__strip { border-color: var(--color-edge); background: var(--color-sunken); }
+.ticket--void .ticket__time { color: var(--color-muted); text-decoration: line-through; }
+
+/* Time beside its lines. --fold does it on a phone, where the card sits in the
+   actions at the bottom and height is short. Under 22rem the lines need the
+   whole width, so the card stays stacked. --wide does it from a landscape
+   tablet up, where the card has width to spare. The time stays the largest text. */
+@container (min-width: 22rem) and (max-width: 37.49rem) {
+  .ticket--fold .ticket__body {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 var(--space-group);
+    align-items: center;
+    padding: var(--space-tight) var(--space-control);
+  }
+  .ticket--fold .ticket__time { grid-row: 1 / span 4; }
+  .ticket--fold .ticket__label { order: 0; }
+}
+@container (min-width: 52.5rem) {
+  .ticket--wide .ticket__body {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-hair) var(--space-card);
+    align-items: center;
+  }
+  .ticket--wide .ticket__time { grid-row: 1 / span 4; }
+}

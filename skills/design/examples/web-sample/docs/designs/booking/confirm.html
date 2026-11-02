@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A patient checks the time, gives a name and a mobile number, and books.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Confirm a booking</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Confirm a booking</span></nav>
+<main>
+  <h1>Confirm a booking</h1>
+  <p class="ds-lede" id="decision">A patient checks the time, gives a name and a number, and books. Judge whether the card can be checked just before pressing "Book this time".</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: no account. A patient gives a name and a mobile number, and a text message carries the link back. To confirm with the clinic.</li>
+      <li>Assumed: online changes close 24 hours before a session. The number is a guess. The clinic decides.</li>
+      <li>Assumed: the on-screen keyboard covers the bottom of a phone, so this step does not pin its actions. Fields scroll, and the card and actions follow them.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, a form has its fields in a row beside the card on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the card folds and sits with the actions at the bottom.</p>
+    <p>Every state on this page is drawn at every size, so no exception is recorded.</p>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="confirm-desktop" data-design-group="confirm">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Confirm – default – desktop</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-tablet" data-design-group="confirm">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Confirm – default – tablet</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-tablet-landscape" data-design-group="confirm">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Confirm – default – tablet landscape</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-phone" data-design-group="confirm">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Confirm – default – phone</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-smallest" data-design-group="confirm">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone-small" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Confirm – default – 320 wide</strong> – The card repeats the choice so a mistake is caught here. Longest patient name shown. "Change time" keeps what is typed. A committing button ignores presses for 500 ms after its screen appears, so a repeat tap is safe at any phone height. One pane: the fields lead, and the card stays stacked, because its lines need the whole width. The actions sit at the bottom. The longest name wraps inside its field instead of cutting off.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-empty-desktop" data-design-group="confirm-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Confirm – empty form – desktop</strong> – First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-empty-tablet" data-design-group="confirm-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Confirm – empty form – tablet</strong> – First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-empty-tablet-landscape" data-design-group="confirm-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Confirm – empty form – tablet landscape</strong> – First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-empty-phone" data-design-group="confirm-empty">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input" type="tel" tabindex="-1" value="" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Confirm – empty form – phone</strong> – First arrival from Choose a time. Both fields are blank and "Book this time" stays on, so pressing it early explains what is missing instead of leaving a dead button. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-input-desktop" data-design-group="confirm-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-hover" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Confirm – typing and focus – desktop</strong> – The focus ring sits on the mobile number. On a desktop the pointer also rests on "Book this time"; touch sizes have no hover, so the keyboard is drawn instead. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-input-tablet" data-design-group="confirm-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Confirm – typing and focus – tablet</strong> – The focus ring sits on the mobile number. On a desktop the pointer also rests on "Book this time"; touch sizes have no hover, so the keyboard is drawn instead. Two panes stay. The keyboard takes the bottom of the screen, and "Book this time" stays in view above it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-input-tablet-landscape" data-design-group="confirm-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Confirm – typing and focus – tablet landscape</strong> – The focus ring sits on the mobile number. On a desktop the pointer also rests on "Book this time"; touch sizes have no hover, so the keyboard is drawn instead. Three panes stay, and the keyboard takes the lower half. "Book this time" stays in view above it.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-input-phone" data-design-group="confirm-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text" rows="1" tabindex="-1" readonly>Maria-Konstancja Wiśniewska-Adeyemi</textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-focus" type="tel" tabindex="-1" value="07700 900123" readonly>
+                  <p class="field__hint">We text your booking and a link to move or cancel it, up to 24 hours before.</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="keyboard">On-screen keyboard. Drawing only, not part of the product.</div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Confirm – typing and focus – phone</strong> – The focus ring sits on the mobile number. On a desktop the pointer also rests on "Book this time"; touch sizes have no hover, so the keyboard is drawn instead. Drawn in full, so all of it shows here. On a real screen the field stays above the keyboard, the card and "Book this time" are one swipe below.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-field-error-desktop" data-design-group="confirm-field-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-error" rows="1" tabindex="-1" readonly aria-invalid="true"></textarea>
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong class="design-state__label">Confirm – field error – desktop</strong> – Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. The fields share a row, and the card stays in the slot the summary held on the step before.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-field-error-tablet" data-design-group="confirm-field-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-error" rows="1" tabindex="-1" readonly aria-invalid="true"></textarea>
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong class="design-state__label">Confirm – field error – tablet</strong> – Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. Two panes: the fields on the left, the card and actions on the right.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-field-error-tablet-landscape" data-design-group="confirm-field-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-error" rows="1" tabindex="-1" readonly aria-invalid="true"></textarea>
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong class="design-state__label">Confirm – field error – tablet landscape</strong> – Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. Three panes in a shorter height: the fields, the card, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="confirm-field-error-phone" data-design-group="confirm-field-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 2 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Confirm your booking</h1>
+          </div>
+          <div class="book book--form">
+            <div class="book__main">
+              <div class="fields">
+                <div class="field">
+                  <label class="field__label">Your full name</label>
+                  <textarea class="field__input field__input--text is-error" rows="1" tabindex="-1" readonly aria-invalid="true"></textarea>
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter your full name</p>
+                </div>
+                <div class="field">
+                  <label class="field__label">Mobile number</label>
+                  <input class="field__input is-error" type="tel" tabindex="-1" value="07700 90" readonly aria-invalid="true">
+                  <p class="field__error"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>Enter all 11 digits of your mobile number</p>
+                </div>
+              </div>
+            </div>
+            <div class="book__aside">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">09:45</p>
+                  <p class="ticket__line">Tuesday 10 November</p>
+                  <p class="ticket__line ticket__line--muted">Aleksandra Nowakowska-Oyelaran, 45 minutes</p>
+                  <p class="ticket__line">Follow-up session, 45 minutes</p>
+                  <p class="ticket__line"><button class="link" type="button" tabindex="-1">Change time</button></p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Book this time</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">17</span><strong class="design-state__label">Confirm – field error – phone</strong> – Each message sits under its field, says what to type, and keeps what was typed. Drawn with a missing name and a short number together. One pane: the fields lead, and the card folds and sits with the actions at the bottom, so the time is checked just before pressing.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="flow.html">Choose a session and a time</a>: the step before.</li>
+    <li><a href="confirm-failures.html">Confirm: sending and failures</a>: what happens after pressing "Book this time".</li>
+    <li><a href="../../design-system/system/components/field/index.html">Fields</a>: name and mobile number.</li>
+    <li><a href="../../design-system/system/components/ticket/index.html">Appointment card</a>: the summary and the booked card.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: every action.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

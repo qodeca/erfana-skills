@@ -1,0 +1,23 @@
+/* Check: one rule the manager needs to see, pass or not. */
+.check {
+  display: flex;
+  gap: var(--space-medium);
+  padding-block: var(--space-medium);
+  border-block-end: var(--edge-hairline) solid var(--check-edge);
+  line-height: var(--text-style-body-strong-leading);
+}
+.check:last-child { border-block-end: 0; }
+.check__mark { color: var(--check-mark); }
+.check--warn .check__mark { color: var(--check-warn-mark); }
+.check--stop .check__mark { color: var(--check-stop-mark); }
+.check__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-tight);
+  min-width: 0;
+}
+.check__title { font-weight: var(--text-style-body-strong-weight); }
+.check__detail {
+  color: var(--check-detail);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+}

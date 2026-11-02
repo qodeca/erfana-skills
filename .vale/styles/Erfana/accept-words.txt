@@ -46,3 +46,6 @@ camelCase
 Rieseberg's
 CC's
 normalizer's
+mockup
+wireframe
+Cascadia

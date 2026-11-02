@@ -1,0 +1,52 @@
+/* Field. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-tight);
+}
+.field__label {
+  color: var(--field-label);
+  font-size: calc(var(--text-style-label-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-label-strong-weight);
+}
+.field__input {
+  inline-size: 100%;
+  min-height: var(--field-height);
+  padding: var(--field-padding);
+  border: var(--edge-control) solid var(--field-edge-color);
+  border-radius: var(--field-radius);
+  background: var(--field-bg);
+  color: var(--field-text);
+  font-family: inherit;
+  font-size: calc(var(--text-style-body-tight-size) * var(--type-scale));
+  line-height: var(--text-style-body-tight-leading);
+  resize: none;
+}
+.field__input::placeholder { color: var(--field-hint); }
+.field__input:hover:not(:where(.design-frame *)),
+.field__input.is-hover { background: var(--field-bg-hover); }
+.field__input:focus-visible,
+.field__input.is-focus {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.field__input:disabled,
+.field__input.is-disabled {
+  border-style: dashed;
+  background: var(--field-disabled-bg);
+  color: var(--field-disabled-text);
+}
+.field__input.is-error,
+.field__input[aria-invalid="true"] { border-color: var(--field-error); }
+.field__hint {
+  color: var(--field-hint);
+  font-size: calc(var(--text-style-label-size) * var(--type-scale));
+}
+.field__error {
+  display: flex;
+  gap: var(--space-tight);
+  align-items: flex-start;
+  color: var(--field-error);
+  font-size: calc(var(--text-style-label-strong-size) * var(--type-scale));
+  font-weight: var(--text-style-label-strong-weight);
+}

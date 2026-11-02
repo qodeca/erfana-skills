@@ -1,0 +1,21 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Loading: a spinner for a wait, and bars where rows will land. */
+
+.spinner {
+  flex: none;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border: var(--control-edge) solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: var(--shape-round);
+  animation: spin var(--motion-spin) linear infinite;
+}
+@keyframes spin { to { transform: rotate(1turn); } }
+
+.skeleton { display: block; height: var(--skeleton-height); border-radius: var(--shape-card); background: var(--color-sunken); }
+.skeleton--tall { height: var(--skeleton-height-tall); }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; border-block-start-color: currentColor; border-style: dotted; }
+}

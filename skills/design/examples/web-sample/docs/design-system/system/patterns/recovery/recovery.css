@@ -1,0 +1,7 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* What a state stacks: the notice, its actions, and what the person keeps. */
+
+.stack { display: grid; gap: var(--space-group); align-content: start; }
+.stack > .lede { margin: 0; }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-tight); align-items: center; }

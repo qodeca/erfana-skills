@@ -1,0 +1,80 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Buttons: ink for actions, so coral stays free to mark. */
+
+.button {
+  display: inline-flex;
+  gap: var(--space-tight);
+  align-items: center;
+  justify-content: center;
+  min-height: var(--button-height);
+  padding-inline: var(--button-padding);
+  border: var(--control-edge) solid var(--color-action);
+  border-radius: var(--shape-control);
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-family: inherit;
+  font-size: var(--type-body);
+  font-weight: var(--emphasis-strong);
+  cursor: pointer;
+  transition: background-color var(--motion-quick) var(--motion-curve), transform var(--motion-quick) var(--motion-curve);
+}
+.button--full { width: 100%; }
+.button--compact { min-height: var(--button-height-compact); font-size: var(--type-small); }
+.button:hover:not(:where(.design-frame *)),
+.button.is-hover { border-color: var(--color-action-hover); background: var(--color-action-hover); }
+.button:focus-visible,
+.button.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.button:active:not(:where(.design-frame *)),
+.button.is-active { border-color: var(--color-action-pressed); background: var(--color-action-pressed); transform: scale(0.98); }
+.button:disabled,
+.button.is-disabled {
+  border-color: var(--color-edge);
+  background: var(--color-sunken);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+.button[aria-busy="true"],
+.button.is-loading { cursor: progress; }
+
+.button--quiet { border-color: var(--color-edge-strong); background: transparent; color: var(--color-text); }
+.button--quiet:enabled:hover:not(:where(.design-frame *)),
+.button--quiet.is-hover { border-color: var(--color-edge-strong); background: var(--color-hover); }
+.button--quiet:enabled:active:not(:where(.design-frame *)),
+.button--quiet.is-active { border-color: var(--color-edge-strong); background: var(--color-sunken); }
+
+/* A large option: a name and what it takes, as one target. */
+.choice {
+  display: grid;
+  gap: var(--space-hair);
+  align-content: center;
+  width: 100%;
+  min-height: var(--choice-height);
+  padding: var(--space-group);
+  border: var(--control-edge) solid var(--color-edge-strong);
+  border-radius: var(--shape-control);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.choice__name { font-size: var(--type-title); font-weight: var(--emphasis-strong); line-height: var(--leading-tight); }
+.choice__time { color: var(--color-muted); font-size: var(--type-body); }
+.choice:hover:not(:where(.design-frame *)),
+.choice.is-hover { background: var(--color-hover); }
+.choice:focus-visible,
+.choice.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.choice:active:not(:where(.design-frame *)),
+.choice.is-active { background: var(--color-hover); }
+
+.button--danger { border-color: var(--color-error); background: var(--color-error); color: var(--color-on-error); }
+.button--danger:hover:not(:where(.design-frame *)),
+.button--danger.is-hover { border-color: var(--color-error-hover); background: var(--color-error-hover); }
+.button--danger:active:not(:where(.design-frame *)),
+.button--danger.is-active { border-color: var(--color-error-pressed); background: var(--color-error-pressed); }
+
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: none; }
+  .button:active:not(:where(.design-frame *)), .button.is-active { transform: none; }
+}

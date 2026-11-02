@@ -1,0 +1,58 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Days: one week, always visible, with its month and a way to the next. */
+
+.weeknav { display: flex; flex-wrap: wrap; gap: var(--space-tight); align-items: center; margin-block-end: var(--space-tight); }
+.weeknav__month { flex: 1 0 100%; margin: 0; font-weight: var(--emphasis-strong); }
+.weeknav .button { flex: 1; }
+.days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-hair); margin: 0; padding: 0; list-style: none; }
+.day {
+  display: grid;
+  width: 100%;
+  min-height: var(--day-height);
+  padding: var(--space-hair) 0;
+  border: var(--control-edge) solid var(--color-edge);
+  border-radius: var(--shape-card);
+  background: var(--color-raised);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--type-small);
+  line-height: var(--leading-tight);
+  cursor: pointer;
+}
+.day__date { font-size: var(--type-body); font-weight: var(--emphasis-strong); font-variant-numeric: tabular-nums; }
+.day__free { font-size: var(--type-small); font-weight: var(--emphasis-strong); text-align: end; }
+.day__free.skeleton { justify-self: end; width: var(--day-name-width); }
+.day:hover:not(:where(.design-frame *)),
+.day.is-hover { background: var(--color-sunken); }
+.day:focus-visible,
+.day.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.day:active:not(:where(.design-frame *)),
+.day.is-active { background: var(--color-sunken); transform: scale(0.98); }
+.day[aria-pressed="true"],
+.day.is-selected { border-color: var(--color-edge-strong); background: var(--color-text); color: var(--color-surface); }
+.day:disabled,
+.day.is-disabled { border-color: var(--color-sunken); background: transparent; color: var(--color-muted); cursor: not-allowed; }
+
+/* Below the base rules: an @container rule does not outrank a later rule of
+   the same weight. */
+/* From tablet up the week stands as a list beside the times, with room to say
+   how many times each day has. On a phone .day__free folds away in responsive.css. */
+@container (min-width: 37.5rem) {
+  /* Room for a week that crosses two months, so the buttons never shift. */
+  .weeknav__month { min-block-size: calc(var(--type-body) * var(--leading-body) * 2); }
+  .weeknav .button { flex: 1 0 100%; }
+  .days { grid-template-columns: minmax(0, 1fr); }
+  .day {
+    grid-template-columns: var(--day-name-width) var(--day-name-width) minmax(0, 1fr);
+    gap: var(--space-hair);
+    align-items: center;
+    min-height: var(--day-height-row);
+    padding-inline: var(--space-tight);
+    text-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day:active:not(:where(.design-frame *)), .day.is-active { transform: none; }
+}

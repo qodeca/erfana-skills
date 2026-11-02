@@ -1,0 +1,22 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Cascadia Mono, for documentation labels, code, and the status line. The two
+   font files sit in fonts/, each with a licence sidecar, under SIL OFL 1.1, so
+   every page renders the same offline. Copy to docs/design-system/ unchanged,
+   with fonts/. */
+
+@font-face {
+  font-family: 'Cascadia Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('./fonts/CascadiaMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cascadia Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('./fonts/CascadiaMono-Bold.woff2') format('woff2');
+}

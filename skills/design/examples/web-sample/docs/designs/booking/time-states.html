@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Choose a time in a later week, and while a week loads or fails, at every size.">
+<meta name="design-sizes" content="desktop tablet tablet-landscape phone">
+<title>Booking – Choose a time: other states</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<link rel="stylesheet" href="../../design-system/components.css">
+<link rel="stylesheet" href="../../design-system/docs-tokens.css">
+<link rel="stylesheet" href="../../design-system/docs.css">
+</head>
+<body data-design-page="screen">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../design-system/index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../index.html">Feature designs</a> <span aria-hidden="true">/</span> <a href="../index.html#booking">booking</a> <span aria-hidden="true">/</span> <span aria-current="page">Choose a time: other states</span></nav>
+<main>
+  <h1>Choose a time: other states</h1>
+  <p class="ds-lede" id="decision">What a patient sees while moving between weeks. Judge whether the screen ever blanks, and whether a failed week leaves the patient where they were.</p>
+
+  <aside class="ds-note design-questions">
+    <strong>Open questions</strong>
+    <ul>
+      <li>Assumed: a tablet is touch only. A tablet with a keyboard or mouse would need the desktop hover and focus states.</li>
+      <li>Assumed: the two tablet sizes are one 768 by 1024 screen, upright and on its side. Widths between the drawn sizes take the layout below them, and a phone on its side, which is short rather than narrow, is not drawn.</li>
+      <li>Assumed: online booking opens 6 weeks ahead. The number is a guess. The clinic decides.</li>
+      <li>Assumed: clinic phone number is a placeholder.</li>
+    </ul>
+  </aside>
+
+  <aside class="ds-note design-sizes">
+    <strong>Sizes</strong>
+    <p><strong>How this adapts:</strong> Each state is drawn desktop, tablet, tablet landscape, then phone. By width, the picker has four columns on a desktop, three panes on a landscape tablet, two on an upright tablet, and one on a phone, where the week becomes seven cells and the actions move to the bottom.</p>
+    <ul>
+      <li class="design-size-exception" data-design-group="time-input" data-design-size="tablet">A tablet held upright is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose-later.</li>
+      <li class="design-size-exception" data-design-group="time-input" data-design-size="tablet-landscape">A tablet on its side is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose-later.</li>
+      <li class="design-size-exception" data-design-group="time-input" data-design-size="phone">A phone is drawn as touch only, so it has no hover or keyboard focus state. Its layout is in the state choose-later.</li>
+    </ul>
+  </aside>
+
+  <h2 id="states">Every state</h2>
+  <div class="ds-states">
+  <figure class="ds-frame design-state" id="choose-later-desktop" data-design-group="choose-later">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November to December 2026</p>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span><span class="day__free">3 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong class="design-state__label">Choose a time – later week – desktop</strong> – Reached with "Later week", through the same wait as "Week loading". The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-later-tablet" data-design-group="choose-later">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November to December 2026</p>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span><span class="day__free">3 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong class="design-state__label">Choose a time – later week – tablet</strong> – Reached with "Later week", through the same wait as "Week loading". The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1. Two panes: the week is the list, and the times and actions are its detail, with the action low on the pane, near a hand holding the tablet.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-later-tablet-landscape" data-design-group="choose-later">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November to December 2026</p>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span><span class="day__free">3 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong class="design-state__label">Choose a time – later week – tablet landscape</strong> – Reached with "Later week", through the same wait as "Week loading". The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1. Three panes in a shorter height: the week, one column of times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="choose-later-phone" data-design-group="choose-later">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November to December 2026</p>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong class="design-state__label">Choose a time – later week – phone</strong> – Reached with "Later week", through the same wait as "Week loading". The month label names both months when a week crosses them, because the day numbers alone drop from 30 to 1. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="time-input-desktop" data-design-group="time-input">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link is-focus" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November to December 2026</p>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Mon</span><span class="day__date">30</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Tue</span><span class="day__date">1</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-hover" type="button" tabindex="-1"><span>Wed</span><span class="day__date">2</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">3</span><span class="day__free">3 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">4</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">5</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">6</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong class="design-state__label">Choose a time – hover and keyboard focus on a link – desktop</strong> – The focus ring sits on the "Change session" link, and the pointer rests on Wednesday 2. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-loading-desktop" data-design-group="week-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="row"><span class="spinner"></span><span>Loading the week of 16 November</span></div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong class="design-state__label">Choose a time – week loading – desktop</strong> – "Later week" or "Earlier week" was pressed, so both lock. The week on screen keeps its counts and times until the new week arrives, so the page never blanks. A day or a time on screen can still be pressed, and that drops the wait. Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-loading-tablet" data-design-group="week-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="row"><span class="spinner"></span><span>Loading the week of 16 November</span></div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong class="design-state__label">Choose a time – week loading – tablet</strong> – "Later week" or "Earlier week" was pressed, so both lock. The week on screen keeps its counts and times until the new week arrives, so the page never blanks. A day or a time on screen can still be pressed, and that drops the wait. Two panes: the week is the list, and the times and actions are its detail, with the action low on the pane, near a hand holding the tablet.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-loading-tablet-landscape" data-design-group="week-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="row"><span class="spinner"></span><span>Loading the week of 16 November</span></div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong class="design-state__label">Choose a time – week loading – tablet landscape</strong> – "Later week" or "Earlier week" was pressed, so both lock. The week on screen keeps its counts and times until the new week arrives, so the page never blanks. A day or a time on screen can still be pressed, and that drops the wait. Three panes in a shorter height: the week, one column of times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-loading-phone" data-design-group="week-loading">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="row"><span class="spinner"></span><span>Loading the week of 16 November</span></div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="ticket ticket--fold">
+                <div class="ticket__body">
+                  <p class="ticket__time">--:--</p>
+                  <p class="ticket__line">Pick a time to continue</p>
+                  <p class="ticket__line ticket__line--muted">No time selected yet</p>
+                </div>
+              </div>
+              <div class="book__actions">
+                <button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong class="design-state__label">Choose a time – week loading – phone</strong> – "Later week" or "Earlier week" was pressed, so both lock. The week on screen keeps its times until the new week arrives, so the page never blanks. A day or a time on screen can still be pressed, and that drops the wait. One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-error-desktop" data-design-group="week-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--desktop" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+              <div>
+                <p class="notice__title">We could not load the week of 16 November</p>
+                <p class="notice__text">You are still on the week of 9 November. Try again, or call 01632 960 123.</p>
+              </div>
+            </div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong class="design-state__label">Choose a time – week failed – desktop</strong> – The new week did not load. The patient keeps the week on screen and its times, and the notice says so. Pressing a time still works, and leads to "Time selected" for this week. "Try again" returns to "Week loading". Four columns: the week, morning, afternoon, and the actions.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-error-tablet" data-design-group="week-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+              <div>
+                <p class="notice__title">We could not load the week of 16 November</p>
+                <p class="notice__text">You are still on the week of 9 November. Try again, or call 01632 960 123.</p>
+              </div>
+            </div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong class="design-state__label">Choose a time – week failed – tablet</strong> – The new week did not load. The patient keeps the week on screen and its times, and the notice says so. Pressing a time still works, and leads to "Time selected" for this week. "Try again" returns to "Week loading". Two panes: the week is the list, and the times and actions are its detail, with the action low on the pane, near a hand holding the tablet.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-error-tablet-landscape" data-design-group="week-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--tablet-landscape" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span><span class="day__free">4 free</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span><span class="day__free">6 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span><span class="day__free">None free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span><span class="day__free">2 free</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span><span class="day__free">5 free</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span><span class="day__free">Closed</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span><span class="day__free">Closed</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+              <div>
+                <p class="notice__title">We could not load the week of 16 November</p>
+                <p class="notice__text">You are still on the week of 9 November. Try again, or call 01632 960 123.</p>
+              </div>
+            </div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong class="design-state__label">Choose a time – week failed – tablet landscape</strong> – The new week did not load. The patient keeps the week on screen and its times, and the notice says so. Pressing a time still works, and leads to "Time selected" for this week. "Try again" returns to "Week loading". Three panes in a shorter height: the week, one column of times, and the actions, with the heading on one line.</figcaption>
+  </figure>
+
+  <figure class="ds-frame design-state" id="week-error-phone" data-design-group="week-error">
+    <div class="design-tile" data-design-status="draft" data-updated="2026-11-01">
+      <span class="ds-status">Draft</span>
+      <span>updated 2026-11-01</span>
+      <span>Design, not a working product</span>
+    </div>
+    <div class="design-frame design-frame--phone" aria-hidden="true">
+      <div class="app">
+        <div class="appbar"><span class="appbar__name">Physiotherapy clinic</span><span class="appbar__step">Step 1 of 2</span></div>
+        <div class="page">
+          <div class="pagehead">
+            <h1 class="title">Choose a time</h1>
+            <p class="lede">Follow-up session, 45 minutes <button class="link" type="button" tabindex="-1">Change session</button></p>
+          </div>
+          <div class="book book--pick">
+            <div class="book__week">
+              <div class="weeknav">
+                <p class="weeknav__month">November 2026</p>
+                <button class="button button--quiet button--compact is-disabled" type="button" tabindex="-1" disabled>Earlier week</button>
+                <button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button>
+              </div>
+              <ul class="days">
+                <li><button class="day" type="button" tabindex="-1"><span>Mon</span><span class="day__date">9</span></button></li>
+                <li><button class="day is-selected" type="button" tabindex="-1" aria-pressed="true"><span>Tue</span><span class="day__date">10</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Wed</span><span class="day__date">11</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Thu</span><span class="day__date">12</span></button></li>
+                <li><button class="day" type="button" tabindex="-1"><span>Fri</span><span class="day__date">13</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sat</span><span class="day__date">14</span></button></li>
+                <li><button class="day is-disabled" type="button" tabindex="-1" disabled><span>Sun</span><span class="day__date">15</span></button></li>
+              </ul>
+            </div>
+            <div class="book__times">
+            <div class="notice notice--error">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 4v10M12 18v2"/></svg>
+              <div>
+                <p class="notice__title">We could not load the week of 16 November</p>
+                <p class="notice__text">You are still on the week of 9 November. Try again, or call 01632 960 123.</p>
+              </div>
+            </div>
+            <div class="times">
+              <div>
+                <h2 class="group-title">Morning</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">08:15</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot is-disabled" type="button" tabindex="-1" disabled><span class="slot__time">09:00</span><span class="slot__who">Taken</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">09:45</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">10:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">11:15</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                </ul>
+              </div>
+              <div>
+                <h2 class="group-title">Afternoon</h2>
+                <ul class="rail">
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">14:00</span><span class="slot__who">Tomasz Lindqvist</span></button></li>
+                  <li><button class="slot" type="button" tabindex="-1"><span class="slot__time">16:30</span><span class="slot__who">Aleksandra Nowakowska-Oyelaran</span></button></li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="book__aside book__aside--dock">
+              <div class="book__actions">
+                <button class="button button--full" type="button" tabindex="-1">Try again</button>
+                <button class="button button--quiet button--full" type="button" tabindex="-1">Call 01632 960 123</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong class="design-state__label">Choose a time – week failed – phone</strong> – The new week did not load. The patient keeps the week on screen and its times, and the notice says so. Pressing a time still works, and leads to "Time selected" for this week. "Try again" returns to "Week loading". One pane: the week folds into seven cells, and the actions sit in a bar at the bottom, in reach of one thumb.</figcaption>
+  </figure>
+  </div>
+
+  <h2 id="related">Related</h2>
+  <ul class="ds-muted">
+    <li><a href="flow.html">Choose a session and a time</a>: the default of this screen.</li>
+    <li><a href="time-loading.html">Choose a time: loading</a>: first load and a day change.</li>
+    <li><a href="time-failures.html">Choose a time: failures</a>: when no time can be picked.</li>
+    <li><a href="../../design-system/system/patterns/time-picker/index.html">Time picker</a>: the composition at each size.</li>
+    <li><a href="../../design-system/system/patterns/recovery/index.html">Empty, loading, and error states</a>: what every failure keeps.</li>
+    <li><a href="../../design-system/system/components/button/index.html">Buttons</a>: every action.</li>
+  </ul>
+
+  <section id="exceptions">
+    <h2>Exceptions</h2>
+    <p class="ds-muted">None recorded.</p>
+  </section>
+</main>
+</body>
+</html>

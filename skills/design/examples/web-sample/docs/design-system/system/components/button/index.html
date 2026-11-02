@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ink for actions, quiet for supporting ones, wine for the one irreversible step.">
+<meta name="design-tasks" content="Add a button; Choose between a filled and a quiet action; Label an action that cancels a booking">
+<title>Buttons – Design system</title>
+<link rel="stylesheet" href="../../../tokens.css">
+<link rel="stylesheet" href="../../../docs-tokens.css">
+<link rel="stylesheet" href="../../../docs.css">
+<link rel="stylesheet" href="../app/app.css">
+<link rel="stylesheet" href="../loading/loading.css">
+<link rel="stylesheet" href="./button.css">
+</head>
+<body data-design-page="doc">
+<nav class="ds-crumbs" aria-label="Breadcrumb"><a href="../../../index.html">Design system</a> <span aria-hidden="true">/</span> <a href="../../../index.html#components">Components</a> <span aria-hidden="true">/</span> <span aria-current="page">Buttons</span></nav>
+<main>
+<h1>Buttons</h1>
+<p class="ds-meta" data-design-status="draft" data-updated="2026-11-01"><span class="ds-status">Draft</span> updated 2026-11-01 · Design, not a working product</p>
+<p class="ds-lede" id="decision">Actions are ink, never coral, so the strip stays free to mark. A screen has one filled button; the rest are quiet, and only cancelling a booking is danger.</p>
+
+<h2 id="states">Every state</h2>
+<div class="ds-frames">
+  <figure class="ds-frame" id="resting">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">01</span><strong>Resting</strong> – the default action.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="hover">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-hover" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">02</span><strong>Hover</strong> – pointer over the button.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="focus">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-focus" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">03</span><strong>Focus</strong> – reached with <kbd>Tab</kbd>.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="pressed">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-active" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">04</span><strong>Pressed</strong> – held down; it scales to 98%.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="off">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-disabled" type="button" tabindex="-1" disabled>Continue</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">05</span><strong>Off</strong> – "Continue" before a time is picked.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="busy">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Booking your time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">06</span><strong>Busy</strong> – the button stays in place and says what is happening.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="quiet">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--quiet button--full" type="button" tabindex="-1">Move booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">07</span><strong>Quiet</strong> – a supporting action, or one of several.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="quiet-hover">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--quiet button--full is-hover" type="button" tabindex="-1">Move booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">08</span><strong>Quiet, hover</strong> – pointer over a quiet button.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="quiet-pressed">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--quiet button--full is-active" type="button" tabindex="-1">Move booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">09</span><strong>Quiet, pressed</strong> – held down.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="danger">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">10</span><strong>Danger</strong> – the one irreversible action.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="danger-hover">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--danger button--full is-hover" type="button" tabindex="-1">Yes, cancel booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">11</span><strong>Danger, hover</strong> – pointer over it.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="danger-pressed">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--danger button--full is-active" type="button" tabindex="-1">Yes, cancel booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">12</span><strong>Danger, pressed</strong> – held down.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="danger-busy">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--full button--danger is-loading" type="button" tabindex="-1" aria-busy="true"><span class="spinner"></span>Cancelling your booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">13</span><strong>Danger, busy</strong> – the question has gone.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="compact">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app">
+        <div class="page"><button class="button button--quiet button--compact" type="button" tabindex="-1">Later week</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">14</span><strong>Compact</strong> – week and day buttons; 44 px tall.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><button class="button button--full" type="button" tabindex="-1">Book this time</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">15</span><strong>Dark theme</strong> – the fill turns plaster and the text turns night.</figcaption>
+  </figure>
+  <figure class="ds-frame" id="dark-danger">
+    <div class="design-frame" aria-hidden="true">
+      <div class="app" data-theme="dark">
+        <div class="page"><button class="button button--danger button--full" type="button" tabindex="-1">Yes, cancel booking</button></div>
+      </div>
+    </div>
+    <figcaption><span class="ds-frame__step">16</span><strong>Danger, dark theme</strong> – the wine softens.</figcaption>
+  </figure>
+</div>
+
+<h2 id="keyboard">The keyboard contract</h2>
+<table class="ds-keys">
+  <thead><tr><th>Key</th><th>Result</th><th>Focus ends on</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Enter</kbd> or <kbd>Space</kbd></td><td>Runs the action</td><td>The button, or the next screen's heading after Continue</td></tr>
+    <tr><td><kbd>Tab</kbd></td><td>Skips an off button</td><td>The next control</td></tr>
+  </tbody>
+</table>
+
+<h2 id="markup">Markup</h2>
+<pre class="ds-code"><code>&lt;button class="button button--full" type="button"&gt;Book this time&lt;/button&gt;
+&lt;button class="button button--full" type="button" aria-busy="true"&gt;&lt;span class="spinner"&gt;&lt;/span&gt;Booking your time&lt;/button&gt;</code></pre>
+
+<h2 id="tokens">Tokens</h2>
+<table class="ds-tokens">
+  <thead><tr><th>Token</th><th>Level</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td><code>--choice-height</code></td><td>Component</td><td>A large option, and <code>--choice-height-tall</code> on a desktop</td></tr>
+    <tr><td><code>--color-hover</code></td><td>Semantic</td><td>Quiet button and large option hover, apart from a disabled fill</td></tr>
+    <tr><td><code>--button-height</code></td><td>Component</td><td>Height, 52 px at the default text size</td></tr>
+    <tr><td><code>--button-height-compact</code></td><td>Component</td><td>Compact height, 44 px</td></tr>
+    <tr><td><code>--button-padding</code></td><td>Component</td><td>Inline padding</td></tr>
+    <tr><td><code>--color-action</code></td><td>Semantic</td><td>Fill; <code>-hover</code> and <code>-pressed</code> for its states</td></tr>
+    <tr><td><code>--color-on-action</code></td><td>Semantic</td><td>Text on the fill</td></tr>
+    <tr><td><code>--color-error</code></td><td>Semantic</td><td>Danger fill; <code>-hover</code> and <code>-pressed</code> for its states</td></tr>
+    <tr><td><code>--motion-press</code></td><td>Semantic</td><td>Pressed scale</td></tr>
+  </tbody>
+</table>
+
+<h2 id="related">Related</h2>
+<ul class="ds-muted">
+  <li><a href="../loading/index.html">Loading</a>: the spinner inside a busy button.</li>
+  <li><a href="../../foundations/focus.html">Focus</a>: the ring.</li>
+  <li><a href="../../foundations/colour.html">Colour</a>: why actions are ink.</li>
+</ul>
+
+<section id="exceptions">
+<h2>Exceptions</h2>
+<p class="ds-muted">None recorded.</p>
+</section>
+</main>
+</body>
+</html>

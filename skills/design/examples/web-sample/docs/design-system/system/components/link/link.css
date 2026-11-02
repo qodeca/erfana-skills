@@ -1,0 +1,24 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* Text links. */
+
+.link {
+  min-height: var(--link-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: var(--emphasis-strong);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link:disabled,
+.link.is-disabled { color: var(--color-muted); cursor: not-allowed; text-decoration: none; }
+.link:enabled:hover:not(:where(.design-frame *)),
+.link.is-hover { color: var(--color-muted); }
+.link:focus-visible,
+.link.is-focus { outline: var(--control-edge) solid var(--color-focus); outline-offset: var(--control-edge); }
+.link:active:not(:where(.design-frame *)),
+.link.is-active { color: var(--color-muted); }

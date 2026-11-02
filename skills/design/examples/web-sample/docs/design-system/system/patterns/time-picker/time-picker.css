@@ -1,0 +1,82 @@
+/* SPDX-FileCopyrightText: 2025-2026 Qodeca sp. z o.o. */
+/* SPDX-License-Identifier: GPL-3.0-only */
+/* The screen composition: one set of parts, one column fewer at each size.
+   .book holds a main pane and .book__aside, and --pick splits the main pane into
+   the week and the times. Phone: one pane, actions at the bottom. Tablet: two.
+   Landscape tablet: three, in less height. Desktop: four. Breakpoints follow the
+   window size classes: 37.5rem, 52.5rem, 75rem. */
+
+.book { display: grid; flex: 1; grid-template-rows: 1fr auto; gap: var(--space-card); }
+.book--pick { grid-template-rows: auto 1fr auto; }
+.book--start .book__aside { order: 1; }
+.book__main, .book__week, .book__times { display: grid; min-inline-size: 0; align-content: start; }
+.book__main, .book__times { gap: var(--space-group); }
+.book__week { gap: var(--space-tight); }
+.book__aside { display: grid; gap: var(--space-group); align-content: start; min-inline-size: 0; }
+.book__aside .group-title { margin: 0; }
+.book__actions { display: grid; gap: var(--space-tight); align-content: start; min-inline-size: 0; }
+.times { display: grid; gap: var(--space-card); align-items: start; }
+.times .group-title { margin-block-start: 0; }
+
+/* Below the base rules: an @container rule does not outrank a later rule of
+   the same weight. */
+
+/* The Booked stack and the cancel question's stack. Both pin in responsive.css to
+   the same edge, so the safe choice takes the place of "Cancel booking" on a phone
+   of any height. */
+.book__aside--pin { background: var(--color-surface); }
+
+/* Phone. The actions become a bar across the bottom of the screen. The rule that
+   pins it there as a long list scrolls is in responsive.css, because a pinned bar
+   would cover other content in a drawing. */
+@container (max-width: 37.49rem) {
+  .book__aside--dock {
+    gap: var(--space-tight);
+    margin-inline: calc(var(--space-group) * -1);
+    margin-block-end: calc(var(--space-card) * -1);
+    padding: var(--space-control) var(--space-group);
+    border-block-start: var(--control-edge) solid var(--color-edge-strong);
+    background: var(--color-raised);
+  }
+  /* A pinned bar must stay short. The time matches the slot times above it. */
+  .book__aside--dock .ticket__time { font-size: var(--type-display); }
+  .book__aside--dock .ticket__line { font-size: var(--type-small); }
+}
+
+/* Tablet: list and detail side by side. */
+@container (min-width: 37.5rem) {
+  .book { grid-template-columns: minmax(0, 1fr) var(--book-aside-compact); grid-template-rows: auto; align-items: start; }
+  .book--pick { grid-template-columns: var(--book-week) minmax(0, 1fr); grid-template-rows: 1fr auto; }
+  .book--pick .book__week { grid-row: 1 / span 2; }
+  .book--pick .book__aside { grid-column: 2; }
+  .book--start { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  .book--start .book__aside { order: 0; }
+  .book--start .book__actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Landscape tablet: a third pane, because the height is short. */
+@container (min-width: 52.5rem) {
+  .book { grid-template-columns: minmax(0, 1fr) var(--book-aside); gap: var(--space-section); }
+  .book--pick { grid-template-columns: var(--book-week) minmax(0, 1fr) var(--book-aside-compact); grid-template-rows: auto; gap: var(--space-card); }
+  .book--pick .book__week { grid-row: auto; }
+  .book--pick .book__aside { grid-column: auto; }
+  .book--form { grid-template-columns: minmax(0, 1fr) var(--book-card) var(--book-card); gap: var(--space-card); }
+  .book--form .book__aside { grid-column: 2 / span 2; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-card); }
+  .book--start { grid-template-columns: minmax(0, 1fr) var(--book-aside-compact); gap: var(--space-card); }
+  .book--start .book__actions { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Desktop: the most columns, and a line length that stays readable. */
+@container (min-width: 75rem) {
+  .book { grid-template-columns: minmax(0, 1fr) var(--book-aside); }
+  .book__main > .field { max-inline-size: var(--book-reading); }
+  .book--pick { grid-template-columns: var(--book-week) minmax(0, 1fr) var(--book-aside); gap: var(--space-section); }
+  .book--form { grid-template-columns: minmax(0, 1fr) var(--book-aside); gap: var(--space-section); }
+  .book--form .book__aside { grid-column: auto; grid-template-columns: minmax(0, 1fr); gap: var(--space-group); }
+  .book--start { grid-template-columns: minmax(0, 1fr) var(--book-aside); gap: var(--space-section); }
+  .book--start .book__actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .choice { min-height: var(--choice-height-tall); }
+  .times { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Only here, where the longest name still fits inside its field. */
+  .book--form .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-card); }
+}
