@@ -146,22 +146,27 @@ can run here, say which one you did not run and why.>>
 time, such as what is allowed, required, or charged.>>
 ```
 
-**Fable 5.1**
+**Fable 5.2**
 
 ```text
 Use <<SECTION_STRUCTURE>>, with lists where the content has several parallel
 parts and plain prose otherwise. Write direct sentences, and mark exact source
 wording as quotations.
-<<IF_AGENTIC: The user is not watching in real time. For reversible steps the
-request already covers, proceed without asking; stop only for destructive
-actions or a genuine change of scope. Do the next step rather than describing
-it, and keep changes to what the task needs – note anything else as a
-follow-up.>>
+<<IF_AGENTIC: Keep working until the task asked for is done, and carry on with
+work that does not depend on my answer. Diagnose ordinary obstacles such as
+errors, timeouts, or failing tools and work through them; leave deliberate
+blockers alone and say what you found. Ask before risky or destructive
+actions.>>
+<<IF_OWNS_CODE: You are the owner and long-term maintainer of this codebase,
+and its design is up to you.>>
 <<IF_PROGRESS_WANTED: Say in a line what you are about to do, give brief
 updates while you work, and end with a recap that stands on its own.>>
+<<IF_FINAL_REPORT: Write the final report for a reader who has not seen your
+tool calls or files: key points first, plain words, and no terms you made up
+during the work.>>
 ```
 
-Resolve every `IF_` field into ordinary sentences or remove it; no markers stay in a delivered prompt. Claim the user is absent only when the interview established an unattended run. For source summaries on Fable 5.1, one complete example of a correct answer – mostly paraphrased, one short marked quotation, and a sentence on why it is correct – works better than a rule alone.
+Resolve every `IF_` field into ordinary sentences or remove it; no markers stay in a delivered prompt. Claim the user is absent only when the interview established an unattended run. Use `IF_OWNS_CODE` only when the user wants the structure improved – it costs tokens and brings unrequested changes. For source summaries, one complete example of a correct answer – mostly paraphrased, one short marked quotation, and a sentence on why it is correct – works better than a rule alone.
 
 ## Task modules
 

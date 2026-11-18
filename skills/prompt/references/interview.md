@@ -18,7 +18,7 @@ Keep a compact ledger: decision ID | dimension | exact question and options | an
 | --- | --- |
 | Purpose | The problem, the desired outcome, why it matters, what the result is used for |
 | Audience | Reader or user, prior knowledge, language and locale, accessibility needs |
-| Target | Model (Opus 5.5, Sonnet 5.5, Fable 5.1, or several); destination (chat, Claude project, Claude Code, API, other host) |
+| Target | Model (Opus 5.5, Sonnet 5.5, Fable 5.2, or several); destination (chat, Claude project, Claude Code, API, other host) |
 | Deliverable | Artifact type, required contents, number of variants, one-off or reusable |
 | Inputs | Available material, what is missing, provenance, freshness, volume |
 | Scope | Must-haves, exclusions, boundaries, current state versus desired state |
@@ -37,7 +37,7 @@ Rows are coverage, not questions. Ask only what is unknown and relevant, one dec
 ## Opening sequence
 
 1. **Goal.** "What should Claude accomplish? Describe the full goal in the custom answer." Offer a few task types as starting points, but treat a chosen category as provisional and follow it with one task-specific question that gets the concrete outcome or an explicit delegation. Avoid category funnels (implementation → improve code → maintainability).
-2. **Model.** Options: Opus 5.5, Sonnet 5.5, Fable 5.1, Several. Recommend from what the user said about task difficulty, latency, and cost; if nothing points either way, say so and let the user pick. Other models go through the custom answer.
+2. **Model.** Options: Opus 5.5, Sonnet 5.5, Fable 5.2, Several. Recommend from what the user said about task difficulty, latency, and cost; if nothing points either way, say so and let the user pick. Other models go through the custom answer.
 3. **Destination.** Options: chat, Claude project, Claude Code, API. Other hosts go through the custom answer.
 
 After these three, offer the ambition pass from [ambition.md](ambition.md) when the goal is a task with a measurable outcome; record a skip and its reason in the ledger otherwise.
