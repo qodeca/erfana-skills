@@ -13,7 +13,7 @@ The plugin is four kinds of parts in one folder:
 | Part | Where it lives | Count today |
 |---|---|---|
 | Skills | `skills/<name>/SKILL.md` | 18 |
-| Agents | `agents/<name>.md` | 38 |
+| Agents | `agents/<name>.md` | 39 |
 | Slash commands | `commands/<name>.md` | 7 |
 | Safety hooks | `hooks/`, wired in `hooks/hooks.json` | 6 |
 

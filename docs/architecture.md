@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `ship`, `handoff`) behind one bootstrap router, and 38 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `ship`, `handoff`) behind one bootstrap router, and 39 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -83,7 +83,7 @@ erfana-skills/
 ├── .vale.ini                ← Vale style config; rules in .vale/styles/Erfana (dashes, headings, plain words), vocabulary in .vale/styles/config/vocabularies/Erfana
 ├── .markdownlint-cli2.jsonc ← Markdown structure rules
 ├── lychee.toml              ← link-checker config (local links and #fragments block; the docs CI job reports web links without blocking)
-├── agents/                  ← 38 shared agents; flat directory; Claude Code auto-discovers (history in CHANGELOG.md)
+├── agents/                  ← 39 shared agents; flat directory; Claude Code auto-discovers (history in CHANGELOG.md)
 ├── skills/
 │   ├── agent/     ← orchestration skill; references/ (agent standard, pairs), templates/
 │   ├── article/   ← references/, templates/ (research and review through 2 plugin-root article-* agents)
@@ -160,10 +160,10 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 38 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; skills and commands delegate to them through the subagent tool. They fall into three groups:
+- **`agents/` at plugin root** – 39 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; skills and commands delegate to them through the subagent tool. They fall into three groups:
   - *Skill-owned* (12) – the name starts with the owning skill's name: `spec-` (3), `issue-` (1), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2).
   - *Command-owned* (1) – `lens-agent-discoverer`, used by `/erfana:lens-review`.
-  - *Shared or standalone* (20) – the `e2e-` agents (4), the `release-` agents (2), and generic names (14, including `solution-*`, UI/UX, and the general reviewers and developers). Most are called by `issue`, `spec`, `expert-panel`, or `lens-review`; four – `e2e-test-reviewer`, `release-preparer`, `release-quality-runner`, and `ui-reviewer` – are not referenced by any skill or command and run only when a user or Claude picks them directly.
+  - *Shared or standalone* (26) – the `e2e-` agents (4), the `release-` agents (2), and generic names (20, including `solution-*`, UI/UX, `finding-verifier`, and the general reviewers and developers). Most are called by `issue`, `spec`, `expert-panel`, or `lens-review`; four – `e2e-test-reviewer`, `release-preparer`, `release-quality-runner`, and `ui-reviewer` – are not referenced by any skill or command and run only when a user or Claude picks them directly.
 
    The generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
 - **No shared content bundle.** Since v7.0.0 every skill owns its own references and templates; there is no hoisted bundle. Three skills do link straight into a sibling's folder, and renaming or moving the target file breaks them (Gate 7 catches the broken link):
@@ -265,7 +265,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 - **Project-level skills** (`.claude/skills/` in employee repos). The plugin is plugin-scope only. Personal/project skills override plugin skills per CC's scope precedence; that's documented in README troubleshooting, not enforced by this plugin.
 - **Cross-skill invocation**. No skill invokes another. Apart from the router, the only coupling is the three reference-file links listed under [Shared resources](#shared-resources). A skill that would need a sibling's behaviour prints the sibling's command and ends the turn instead of invoking it.
 
-Note on agents: v4.0.0 added `agents/` and per-skill nested agents; the nested agents are gone and the live count is the one stated at the top of this document. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding an agent requires updating every "38 shared agents" count claim (`CLAUDE.md`, `README.md`, `docs/architecture.md`, `MAINTAINER.md`) and the agent count in the `plugin.json` description; Gate 15 enforces the prose claims.
+Note on agents: v4.0.0 added `agents/` and per-skill nested agents; the nested agents are gone and the live count is the one stated at the top of this document. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding an agent requires updating every "39 shared agents" count claim (`CLAUDE.md`, `README.md`, `docs/architecture.md`, `MAINTAINER.md`) and the agent count in the `plugin.json` description; Gate 15 enforces the prose claims.
 
 ## See also
 
