@@ -12,7 +12,7 @@ Pick the one erfana skill that fits the request, so the user gets the plugin's s
 ## Ground rules
 
 - **The user decides.** An explicit instruction ("don't use a skill", "just answer") wins over any routing here.
-- **Route only to skills Claude may start.** A skill marked `disable-model-invocation` runs only when the user starts it – the "Suggest" rows below – because they edit documents, push code, or end a session. For those, name the command – `/erfana:fact-checking <file>`, `/erfana:ship [commit | push | pr | merge | cleanup]`, `/erfana:handoff [purpose]` – and let the user run it.
+- **Route only to skills Claude may start.** A skill marked `disable-model-invocation` runs only when the user starts it – the "Suggest" rows below – because they edit documents, push code, or end a session. For those, name the command – `/erfana:fact-checking <file>`, `/erfana:finish [commit | push | pr | merge | cleanup]`, `/erfana:handoff [purpose]` – and let the user run it.
 - **Load a skill only when it clearly fits.** A plain question about a topic is not a request to run a lifecycle skill. When nothing fits, answer normally.
 - **One skill at a time.** When a request spans two skills (a spec and the issues that implement it), name the order, start with the skill that produces the source material, and let the user move on to the next one.
 
@@ -36,7 +36,7 @@ Pick the one erfana skill that fits the request, so the user gets the plugin's s
 | Have specialists review a plan, design, or documents and improve it | `erfana:expert-panel` |
 | Design a UI, or create or change a design system | `erfana:design` |
 | Check a document's facts against its sources | Suggest `/erfana:fact-checking <file>` |
-| Commit, push, open, or merge a pull request | Suggest `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
+| Commit, push, open, or merge a pull request | Suggest `/erfana:finish [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | Suggest `/erfana:handoff [purpose]` |
 
 When two skills could fit, choose the more specific one; if it is still unclear, ask the user which outcome they want.

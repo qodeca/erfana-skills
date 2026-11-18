@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 ## [Unreleased]
 
+### Changed (breaking)
+
+- **`erfana:ship` is now `erfana:finish`.** "Ship" read as a release to customers, while the skill commits, pushes, opens the pull request, and on request merges and cleans up. Type `/erfana:finish` where you typed `/erfana:ship`; the arguments (`commit`, `push`, `pr`, `merge`, `cleanup`) and the behaviour are unchanged. The old command no longer exists.
+
 ### Changed
 
 - **Eleven shared agents state their rules plainly, with reasons.** `bug-investigator`, `e2e-test-design-reviewer`, `e2e-test-designer`, `e2e-test-writer`, `issue-solution-designer`, `lens-agent-discoverer`, `solution-reviewer`, `ui-designer`, `ui-reviewer`, `ux-designer`, and `ux-reviewer` no longer carry all-caps rule lists (ALWAYS / NEVER / MUST), because current Claude models over-apply shouted rules. Severity labels are unchanged. `bug-investigator` now names the outcomes an investigation must reach instead of a nine-step script.

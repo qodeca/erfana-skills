@@ -671,7 +671,7 @@ merge.
   fail-open cases are documented in `SECURITY.md`.
 - Agent tool grants (an agent with `Bash`, or web access together with write tools) and skill
   `allowed-tools`.
-- Skills that commit, push or merge (`ship`) and anything with `disable-model-invocation`.
+- Skills that commit, push or merge (`finish`) and anything with `disable-model-invocation`.
 - The CI workflows, including downloaded release binaries.
 
 ### Architecture review here

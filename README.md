@@ -21,7 +21,7 @@ Before you start:
 - **Claude Code** with the `/plugin` command. If Claude Code does not know `/plugin`, update it.
 - Or **Qwen Code** 0.22.3 or later.
 - **`jq`** on your `PATH` (macOS: `brew install jq`). Without it, five of the six safety hooks skip themselves and protect nothing. On Windows, the hooks need Git Bash and `powershell.exe` instead.
-- **GitHub CLI (`gh`), signed in**, only for what reads or changes GitHub: the skills `issue`, `next-batch`, `coordinate`, and `ship`, and the slash commands `/erfana:explain-issue`, `/erfana:project-status`, `/erfana:cleanup`, and `/erfana:lens-review` on a pull request.
+- **GitHub CLI (`gh`), signed in**, only for what reads or changes GitHub: the skills `issue`, `next-batch`, `coordinate`, and `finish`, and the slash commands `/erfana:explain-issue`, `/erfana:project-status`, `/erfana:cleanup`, and `/erfana:lens-review` on a pull request.
 
 On **Claude Code**, run these inside a session:
 
@@ -89,10 +89,10 @@ erfana ships 19 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. 
 
 **Closing a session:**
 
-- [`erfana:ship`](docs/reference.md#erfanaship) – commits, pushes, opens or merges the pull request, as far as you say.
+- [`erfana:finish`](docs/reference.md#erfanafinish) – commits, pushes, opens or merges the pull request, as far as you say.
 - [`erfana:handoff`](docs/reference.md#erfanahandoff) – writes a handoff document so another session or colleague can continue.
 
-Three skills never start from a phrase, because Claude may not start them on its own: `fact-checking`, `ship`, and `handoff`. Type their slash command. The same holds for the `/erfana:project-status`, `/erfana:session-status`, `/erfana:session-watch`, and `/erfana:cleanup` commands.
+Three skills never start from a phrase, because Claude may not start them on its own: `fact-checking`, `finish`, and `handoff`. Type their slash command. The same holds for the `/erfana:project-status`, `/erfana:session-status`, `/erfana:session-watch`, and `/erfana:cleanup` commands.
 
 The [slash commands](docs/reference.md#slash-commands-7) cover status briefs, a task list timer, project cleanup, documentation refresh, issue explanations, and researched code review. The [safety hooks](docs/reference.md#safety-hooks-6) run on their own and block risky actions, such as deleting your home folder or writing an API key into a file. The [38 shared agents](docs/reference.md#agents-38) are the helpers the skills hand work to.
 
