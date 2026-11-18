@@ -1,6 +1,6 @@
 ---
 name: finding-verifier
-description: "Used by erfana:expert-panel, erfana:issue, and /erfana:lens-review to test review findings against the target and rule each confirmed, rejected, or not proven."
+description: "Used by erfana:expert-panel, erfana:issue, erfana:backlog, and /erfana:lens-review to rule each review finding confirmed, rejected, or not proven."
 tools: Read, Grep, Glob
 model: opus
 effort: medium
@@ -16,7 +16,7 @@ A review produced findings about a target – a plan, a design, a specification,
 
 ## Inputs
 
-- `findings` – up to eight findings, each with an `id`, a severity, a location, the quoted text, the stated problem, and the proposed fix.
+- `findings` – up to eight findings, each with an `id`, a severity, a location, the quoted text, the stated problem, and the proposed fix. A finding may also be a claim that something holds – "criterion 2 is met at `src/export.ts:88`", "#141 asks for the same outcome as #140" – with an `id` and the reference it rests on. Rule a claim the same way: confirmed only on text that shows it holds, rejected on text that shows it does not.
 - `target` – the files to read, or the target's text in a labelled block.
 - `purpose` – what the target is for and, when there is one, the requirement or plan it must satisfy. A deliberate choice can only be told from a mistake against this.
 
