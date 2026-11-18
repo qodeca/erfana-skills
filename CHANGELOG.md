@@ -3,6 +3,20 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Eleven shared agents state their rules plainly, with reasons.** `bug-investigator`, `e2e-test-design-reviewer`, `e2e-test-designer`, `e2e-test-writer`, `issue-solution-designer`, `lens-agent-discoverer`, `solution-reviewer`, `ui-designer`, `ui-reviewer`, `ux-designer`, and `ux-reviewer` no longer carry all-caps rule lists (ALWAYS / NEVER / MUST), because current Claude models over-apply shouted rules. Severity labels are unchanged. `bug-investigator` now names the outcomes an investigation must reach instead of a nine-step script.
+- **The `erfana:report` sentence-case rule gives its reason.** It keeps its top priority but drops the CRITICAL / MUST wording.
+- **`erfana:prompt` targets Claude Fable 5.2** instead of Fable 5.1, because Fable 5.2 replaced 5.1 as the current Fable model, and `claude-5-patterns.md` lists Opus 5.5 and Fable 5.2 as the current models.
+
+### Fixed
+
+- **The reasoning-display rule states the right fallback behaviour.** A `reasoning_extraction` refusal is not retried on a fallback model. `claude-5-patterns.md`, `.claude/CLAUDE.md`, the Gate 2 page, and the detector comment said it re-routed to Claude Opus 4.8.
+- **The code-review standards in `erfana:issue` name actions, not Claude tool calls.** `Grep(...)` snippets do not exist on Qwen Code. Human review-timing rows that a model reviewer cannot apply are gone.
+- **The effort guidance in `claude-5-patterns.md` agrees with the agent standard.** Judgment-heavy work starts at `medium`; `high` stays a measured exception for the agents that already declare it.
+
 ## [9.4.0] - 2026-11-02
 
 ### Added

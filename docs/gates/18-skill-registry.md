@@ -40,6 +40,8 @@ Fix a warning or failure by regenerating:
 bash scripts/gen-skill-registry.sh
 ```
 
+Do this in a registry-only change, not in a skill PR. Until it lands, the `gates` CI job also fails on `develop` and on each feature PR cut from it, with the skill's stale row in the message. The PR did not cause this failure.
+
 Never hand-edit the table – the next regeneration discards manual edits, and check 3 treats a fabricated date or subject as a hard failure.
 
 ## Shallow clones are refused, not tolerated

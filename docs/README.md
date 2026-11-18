@@ -9,7 +9,7 @@ Start here to find the right page. The user docs follow four types: a tutorial t
 | Page | What it answers |
 |---|---|
 | [Tutorial](tutorial.md) | How do I install erfana and finish my first task with it, step by step? |
-| [How-to guides](how-to.md) | How do I install, update, pick a skill, write a spec, work an issue, run unattended, review code, or fix a problem? |
+| [How-to guides](how-to.md) | How do I install, update, pick a skill, write a spec, work an issue, run unattended, review code, design screens, or fix a problem? |
 | [Reference](reference.md) | What does each of the 19 skills, 38 shared agents, 7 slash commands, and 6 safety hooks do, and how do I start it? |
 | [Explanation](explanation.md) | How is erfana built, why are reviews blinded, why do the hooks fail open, and what do its terms mean? |
 | [Hosts](hosts.md) | What works differently on Claude Code and on Qwen Code? |

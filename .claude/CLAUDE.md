@@ -12,7 +12,7 @@ Current version: **v9.4.0**. The plugin ships 19 auto-discovered skills + 38 sha
 
 - Orchestration (6): `agent`, `issue`, `skill`, `spec`, `report`, `article` (per-skill agent notes below).
 - `article` researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation.
-- `report` (named `managing-reports` until its brief rebuild) reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
+- `report` reviews through 2 plugin-root `report-*` checker agents; it ships no skill-internal agents.
 - `skill` opens every operation with a coverage-map requirements interview: Create always interviews in the main conversation per `references/interview-protocol.md`; Modify/Review/Modernize gate-then-grill. Reviews run through the blinded `skill-reviewer` against `references/skill-standard.md`. Backstopped by the plugin-root `ms-grill-guard` Stop hook (sentinel `<!-- erfana:ms-grill-open -->`).
 - `design` is the only skill that ships runnable scripts: `skills/design/scripts/` holds a checker, a token builder, and an index builder, Node standard library only. Gate 20 proves them with `tests/design/run-fixtures.mjs`.
 - Process (1): `grill-me`. Verification (1): `fact-checking` (user-invoked only). Prompting (3): `prompt`, `draft-goal`, and `raise-the-bar`. Work session (4): `autopilot`, `next-batch`, `coordinate`, and `expert-panel`. Session closeout (2): `ship` and `handoff` (both user-invoked only). Design (1): `design`. Router (1): `using-erfana` (an ordinary skill, loaded when its trigger phrases match – no hook pre-loads it).
@@ -56,7 +56,7 @@ Pre-commit + CI verification – single command for all 14 gates (all hard):
 bash scripts/run-all-gates.sh
 ```
 
-Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are historical and non-contiguous – gates 5, 6, 8, 9, 12 and 13 retired with the old design skills in v7.0.0 and the survivors kept their numbers. Gate 15 (doc-claim sync) is hard – nine checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem, a Qwen Code version that disagrees with `host_matrix.py`, or a total count in words or in the manifests.
+Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are non-contiguous by design: retired gates leave gaps, and the survivors keep their numbers. Gate 15 (doc-claim sync) is hard – nine checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem, a Qwen Code version that disagrees with `host_matrix.py`, or a total count in words or in the manifests.
 
 Cross-host verification is a separate command, deliberately outside `run-all-gates.sh`:
 
@@ -74,15 +74,7 @@ Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](../docs/verification-gates.md) `## Quick spot-checks`.
 
-The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-written**. Any change that adds, removes, renames, or touches a skill must be followed by:
-
-```bash
-bash scripts/gen-skill-registry.sh
-```
-
-and the regenerated file committed alongside it. Gate 18 hard-fails when the registry's skill list drifts from `ls skills/`, a skill is listed twice, or a row carries a date or subject git contradicts, and warns (without blocking) when dates merely lag – dates go stale the moment a skill is committed, so blocking on that would red-light `develop` after every skill change. Step 3 of the release process regenerates the file, so every shipped version is accurate.
-
-**Squash caveat.** Feature PRs are squash-merged into `develop`, so the squash commit's subject *becomes* the touched skill's latest-commit subject there. A registry regenerated **inside** a skill-touching PR records the pre-squash subject, and Gate 18 hard-fails the instant that PR is squashed. Fix: regenerate the registry in its own **registry-only** change (nothing under `skills/`) that lands *after* the skill-source PR is already on `develop`. A registry-only commit cannot rewrite any skill's latest-commit subject, so the row it records stays valid through its own squash. Do not bundle skill-source edits and the registry regen into one squash-merged PR. History: see `CHANGELOG.md`.
+The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-edited**: regenerate it with `bash scripts/gen-skill-registry.sh`. **Squash caveat:** run the regen in its own registry-only PR (nothing under `skills/`) after the skill PR has squash-merged into `develop` – a regen inside a skill PR records the pre-squash subject, and Gate 18 hard-fails once that PR is squashed. Release step 3 regenerates it again, so every shipped version is accurate. Gate 18's failure and warning rules: [`docs/gates/18-skill-registry.md`](../docs/gates/18-skill-registry.md).
 
 ## Release process
 
@@ -105,10 +97,8 @@ Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking wo
 - Using SSH-based marketplace add in onboarding instructions (known Windows breakage).
 - Bypassing the admin-merge gate for routine releases without a one-line rationale in the PR (audit trail).
 - Running the Modernize operation without appending its row to [`docs/modernization-registry.md`](../docs/modernization-registry.md) – not Gate-enforced, discipline by convention.
-- Mandating "validate after every step" rituals in skill bodies – Opus 4.7+ and Claude 5 models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
+- Mandating "validate after every step" rituals in skill bodies – current Claude models self-verify (and over-verify when told to); validate only irreversible-side-effect steps (file writes, agent-file creation, breaking changes). **Carve-out:** this bans per-micro-step ritual, not phase-boundary outputs – a skill's declared quality gates, the `AskUserQuestion` calls that satisfy them, the turn-ending handoffs that satisfy them (a gate that prints a command for the user to run and then ends the turn, waiting on the user's result), its declared output artifacts, and its progress-tracking advance are required deliverables, not ceremony.
 - Letting a skill invoke another skill or a slash command. A skill that needs one prints the command and ends the turn so the user runs it: invoking it re-enters skill-level work, and `/erfana:lens-review` in particular fans out up to ten reviewers into the caller's context. Worked example of *satisfying* this rule the other way: the ground rules of `skills/issue/SKILL.md`, whose QG-4a / QG-8 / QG-11a reviews run as embedded agent fan-outs directly in-context (no turn boundary, no user hand-off) rather than by printing a command and ending the turn.
-- Hand-editing [`docs/skill-registry.md`](../docs/skill-registry.md) instead of regenerating it with `scripts/gen-skill-registry.sh` – it is a generated artifact, the next regeneration discards manual edits, and Gate 18 hard-fails any date written ahead of git.
-- Ignoring a Gate 18 staleness warning through a release – Step 3 of the release process exists to clear it; shipping a lagging registry is the one case where the warning becomes a real defect.
 - Authoring soft-quantifier prose (`~30-50 words`, `approximately`, `aim for`) in shipped command/skill bodies without a hard ceiling or measurable invariant – pair every soft target with a hard ceiling.
 
 ## Repository workflow
@@ -119,7 +109,7 @@ Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking wo
 
 1. **Gates pass locally** – `bash scripts/run-all-gates.sh` and `claude plugin validate .` both report success.
 2. **Feature branch in use** – `git branch --show-current` is neither `main` nor `develop`. Skill, agent and infra changes go through `feature/...` cut from `develop` and merge into `develop` via PR; `main` receives only release PRs (`develop` -> `main`) and emergency fixes.
-3. **Registry regenerated separately** – if the change touches anything under `skills/`, do NOT regenerate `docs/skill-registry.md` in the same PR (see the squash caveat above).
+3. **Registry regenerated separately** – if the change touches anything under `skills/`, do NOT regenerate `docs/skill-registry.md` in the same PR (see the squash caveat under Critical commands).
 
 ### Atomic commits
 

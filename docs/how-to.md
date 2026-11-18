@@ -198,6 +198,7 @@ You rarely need to name a skill. Describe what you want ("create a spec for the 
 | Pick the next issues to work on | [`erfana:next-batch`](reference.md#erfananext-batch) |
 | Keep parallel sessions off each other's issues | [`erfana:coordinate`](reference.md#erfanacoordinate) |
 | Have specialists review and improve a plan | [`erfana:expert-panel`](reference.md#erfanaexpert-panel) |
+| Design screens or a design system a client can review | [`erfana:design`](reference.md#erfanadesign) |
 
 Three skills never start from a request, because they edit documents, push code, or end a session. You type their command yourself:
 
@@ -474,6 +475,19 @@ It chooses up to ten review angles, called lenses (architecture, security, perfo
 ### Review a plan or design instead of code
 
 Say "have specialists review this plan" or run `/erfana:expert-panel <path> [review | improve | apply]`. It picks three to six specialist roles, has each review the target, merges the findings, and asks you the decisions that are yours. The default, `improve`, writes an improved version to a new file next to the target (`<name>-improved.md`); `review` stops at the findings; `apply` changes the original after backing it up.
+
+## Design screens for a product
+
+`erfana:design` draws static HTML and CSS pages with every state visible, so a client can comment on each one. It needs Node.
+
+1. Say "design this screen" or run `/erfana:design <brief>`.
+2. Answer its questions, and agree the flows before any visual work starts.
+3. Check the sizes. The line in `docs/designs/README.md` names them, for example `Target sizes: desktop, tablet, tablet-landscape, phone`. If the line is missing, the skill asks you. With no answer, it picks from the product type and shows that as an open question on each page.
+4. Open the pages it prints. They are under `docs/designs/<area>/`.
+
+Each state is drawn at each size. The checker fails a page that leaves a size out, unless the page gives a reason. If it cannot pass, the skill stops and says what is blocked.
+
+Two worked examples ship with the skill: [the web sample](../skills/design/examples/web-sample/) and [the mobile sample](../skills/design/examples/mobile-sample/).
 
 ## Write a report or an article
 
