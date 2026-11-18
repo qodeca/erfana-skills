@@ -12,8 +12,8 @@ The plugin is four kinds of parts in one folder:
 
 | Part | Where it lives | Count today |
 |---|---|---|
-| Skills | `skills/<name>/SKILL.md` | 18 |
-| Agents | `agents/<name>.md` | 39 |
+| Skills | `skills/<name>/SKILL.md` | 20 |
+| Agents | `agents/<name>.md` | 40 |
 | Slash commands | `commands/<name>.md` | 7 |
 | Safety hooks | `hooks/`, wired in `hooks/hooks.json` | 6 |
 
@@ -25,7 +25,7 @@ Three design rules shape the rest of this page:
 - **Every skill stands alone.** A skill carries its own reference notes and templates in its own folder. Nothing is shared between skills, so changing one cannot break another.
 - **No skill starts another skill or a slash command.** When a skill wants you to run something next, it prints the command and stops, so you see what is about to run before it runs. The one skill that only picks other skills, `erfana:using-erfana`, works the same way: it names the skill to use and leaves the work to that skill.
 
-The skills fall into a few groups: six that manage a whole piece of work from start to finish (`agent`, `article`, `issue`, `report`, `skill`, `spec`), one that stress-tests a plan by questioning you (`grill-me`), one that checks a document against its sources (`fact-checking`), three that help you write prompts and goals (`prompt`, `draft-goal`, `raise-the-bar`), four for long or parallel sessions (`autopilot`, `next-batch`, `coordinate`, `expert-panel`), two that close a session (`ship`, `handoff`), and the router `using-erfana`. Each one is described in the [skills reference](reference.md#skills-19).
+The skills fall into a few groups: six that manage a whole piece of work from start to finish (`agent`, `article`, `issue`, `report`, `skill`, `spec`), one that stress-tests a plan by questioning you (`grill-me`), one that checks a document against its sources (`fact-checking`), three that help you write prompts and goals (`prompt`, `draft-goal`, `raise-the-bar`), five for long or parallel sessions and the issue list behind them (`autopilot`, `next-batch`, `coordinate`, `expert-panel`, `backlog`), two that close a session (`ship`, `handoff`), and the router `using-erfana`. Each one is described in the [skills reference](reference.md#skills-20).
 
 ## Skills, agents, commands, and hooks
 
