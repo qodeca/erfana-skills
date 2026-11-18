@@ -32,7 +32,7 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:handoff`](#erfanahandoff) | you start it | Compacts the current conversation into a handoff document that another agent, harness, directory, or colleague can pick up. |
 | [`erfana:issue`](#erfanaissue) | you or Claude | Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
 | [`erfana:next-batch`](#erfananext-batch) | you or Claude | Picks the next batch of GitHub issues for a working session – reads the open issues, skips the ones other sessions have claimed, ranks the rest by impact on delivery, groups the top ones by theme, and saves the batch for an unattended run. |
-| [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
+| [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
 | [`erfana:raise-the-bar`](#erfanaraise-the-bar) | you or Claude | Rewrites a request the user is about to give Claude into a more ambitious one – aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields – grounded in what Claude can actually reach and checked by something other than Claude. |
 | [`erfana:report`](#erfanareport) | you or Claude | Creates, reviews, revises, and versions professional consulting reports to a house standard – Pyramid Principle, SCQA, Five C's findings, a bottom-line-first executive summary, sentence case, and plain, precise prose. |
 | [`erfana:ship`](#erfanaship) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
@@ -148,7 +148,7 @@ Picks the next batch of GitHub issues for a working session – reads the open i
 
 ### `erfana:prompt`
 
-Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. Use when someone wants a new prompt, a better prompt, or prompt-engineering help – not to carry out the task the prompt describes.
+Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. Use when someone wants a new prompt, a better prompt, or prompt-engineering help – not to carry out the task the prompt describes.
 
 - **Start:** `/erfana:prompt` `[goal, or a draft prompt to improve]`
 - **Started by:** you or Claude

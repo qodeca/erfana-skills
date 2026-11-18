@@ -3,8 +3,8 @@
 """Gate 2 reasoning-display detector (Section 12.7 / 13.5, v6.3.0).
 
 Prose instructing a model to surface its internal reasoning trips the
-reasoning_extraction refusal classifier on Claude Fable 5 and Claude Opus 5
-(stop_reason "refusal"; re-routes to Opus 4.8 where fallback is configured).
+reasoning_extraction refusal classifier on current Claude models
+(stop_reason "refusal"; a fallback model does not retry it).
 
 Shared by scripts/run-all-gates.sh (Gate 2) and the Gate 2 fixture runner so
 both always execute the same code. Fixtures: tests/gate-02-fixtures/.
