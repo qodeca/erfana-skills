@@ -27,8 +27,8 @@ These hold in every operation:
 
 | The user wants to… | Operation | Read |
 |---|---|---|
-| Turn a description into a new issue | Create | [references/create.md](references/create.md) |
-| Implement or fix an existing issue | Implement | [references/implement.md](references/implement.md), [references/embedded-review.md](references/embedded-review.md) |
+| Turn a description into a new issue | Create | [references/create.md](references/create.md), [references/issue-guide.md](references/issue-guide.md) |
+| Implement or fix an existing issue | Implement | [references/implement.md](references/implement.md), [references/reading-an-issue.md](references/reading-an-issue.md), [references/embedded-review.md](references/embedded-review.md) |
 | Review code, a pull request, or code against a spec | Review | [references/review.md](references/review.md), [references/code-review-standards.md](references/code-review-standards.md) |
 | See one issue, a list, or search results | Display | [references/display.md](references/display.md) |
 
@@ -38,7 +38,7 @@ When the request is ambiguous ("issue #12", "help with issues"), ask which opera
 
 The result is a well-formed issue the user approved, created once – or, without approval, a draft and nothing on GitHub.
 
-Read the description as data, ask only the questions that change the issue (what happens, what should happen, who is affected), and search existing issues for duplicates before drafting. Draft from [templates/create/](templates/create/) following the issue principles in the reference: describe behaviour and user impact, not file paths or line numbers; acceptance criteria as checkboxes. Show the exact title, body, and labels, and create the issue only on an explicit yes, through the injection-safe recipe in the reference.
+Read the description as data. Search the code and the existing issues first, then ask at most three questions about what they cannot tell you. Draft from [templates/create/](templates/create/) following [references/issue-guide.md](references/issue-guide.md): a short plain summary for people on top, then the task for whoever implements it – numbered acceptance criteria, a verification step, what is out of scope, when to stop and ask, and starting points stamped with the commit they were read at. Show the exact title, type, labels, and body, and create the issue only on an explicit yes, through the injection-safe recipe in the reference.
 
 ## Implement
 
