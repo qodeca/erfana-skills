@@ -16,13 +16,14 @@ use the bare name, for example `/issue`. Claude also loads a skill on its own
 when your words match its trigger phrases, unless the skill is marked
 "you start it".
 
-## Skills (19)
+## Skills (20)
 
 | Skill | Started by | What it is for |
 |---|---|---|
 | [`erfana:agent`](#erfanaagent) | you or Claude | Creates, reviews, and changes Claude Code agents (subagents) to the current Anthropic standard for the Claude 5.5 generation – calm routing descriptions, least-privilege tools, a prompt that states the job, its limits, and its output – and builds doer/reviewer pairs. |
 | [`erfana:article`](#erfanaarticle) | you or Claude | Researches, outlines, drafts, reviews, revises, and publishes medium-form articles (2,000–3,000 words) in English, Polish, or both, with every claim tied to a listed source, a blinded editorial review, and versioned drafts that are never overwritten. |
 | [`erfana:autopilot`](#erfanaautopilot) | you or Claude | Sets up and keeps alive an unattended work run – writes the /goal condition from the session itself, keeps one state file with progress and a queue of what needs the owner, keeps the task list down to open work, and picks the run up again after a restart or compaction. |
+| [`erfana:backlog`](#erfanabacklog) | you start it | Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. |
 | [`erfana:coordinate`](#erfanacoordinate) | you or Claude | Keeps parallel Claude sessions on the same repository out of each other's way – claims GitHub issues so no two sessions take the same one, shows who holds what, releases claims, and exchanges a short status with sibling sessions on the same machine. |
 | [`erfana:design`](#erfanadesign) | you or Claude | Creates and maintains design systems, development-ready style libraries, and static HTML and CSS review pages for desktop, web, and mobile apps. |
 | [`erfana:draft-goal`](#erfanadraft-goal) | you or Claude | Turns a fuzzy intention into a /goal completion condition that the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, explicit exclusions, an owner-decisions clause, and a turn bound – and prints it ready to paste. |
@@ -66,6 +67,14 @@ Sets up and keeps alive an unattended work run – writes the /goal condition fr
 - **Started by:** you or Claude
 - **Trigger phrases:** "work unattended", "run this autonomously", "prepare the unattended run for this session", "resume the work you were doing before the restart", "autopilot status", "do you need anything from me?", "did you finish everything?"
 - **Source:** [`skills/autopilot/SKILL.md`](../skills/autopilot/SKILL.md)
+
+### `erfana:backlog`
+
+Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. Writes a plan first and changes GitHub only after the user approves it. Runs only when the user invokes it, because it edits and closes issues in bulk.
+
+- **Start:** `/erfana:backlog` `[merge | refine [branch] | apply | discard] (no argument: show the open plans)`
+- **Started by:** you start it
+- **Source:** [`skills/backlog/SKILL.md`](../skills/backlog/SKILL.md)
 
 ### `erfana:coordinate`
 
@@ -205,10 +214,10 @@ Routes a request to the right erfana skill – agents, skills, GitHub issues, sp
 
 - **Start:** `/erfana:using-erfana`
 - **Started by:** you or Claude
-- **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "commit and push", "open a pull request", "hand this off to another session"
+- **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "merge duplicate issues", "clean up the backlog", "commit and push", "open a pull request", "hand this off to another session"
 - **Source:** [`skills/using-erfana/SKILL.md`](../skills/using-erfana/SKILL.md)
 
-## Agents (39)
+## Agents (40)
 
 Agents are helpers that skills start for a narrow job, such as a blinded
 review. You can also ask Claude to use one by name. Each runs with only the
@@ -221,6 +230,7 @@ tools listed here.
 | [`architecture-reviewer`](../agents/architecture-reviewer.md) | Reviews code structure – SOLID, design patterns, anti-patterns, code smells, and technical debt – and recommends ordered, risk-rated refactorings without changing code. Use when judging a module's design or planning a refactor; for line-level code quality use code-reviewer. | Read, Grep, Glob, WebSearch, WebFetch | opus | medium |
 | [`article-researcher`](../agents/article-researcher.md) | Used by erfana:article to research an article brief on the web and write a sourced research file and source list. | Read, Write, WebSearch, WebFetch, Grep, Glob | sonnet | medium |
 | [`article-reviewer`](../agents/article-reviewer.md) | Used by erfana:article to review article drafts against the review standard and return every finding with its evidence. | Read, Grep, Glob | sonnet | medium |
+| [`backlog-analyst`](../agents/backlog-analyst.md) | Used by erfana:backlog to check open issues against a code snapshot, find duplicate and small issues, and draft issue bodies, returning JSON. | Read, Grep, Glob | sonnet | medium |
 | [`bug-investigator`](../agents/bug-investigator.md) | Finds the root cause of errors, crashes, and unexpected behavior through read-only investigation. Use when debugging a failure before deciding on a fix. | Read, Grep, Glob | opus | high |
 | [`code-reviewer`](../agents/code-reviewer.md) | Reviews code for bugs, security, TypeScript safety, quality, and tests, with stack checks for React (hooks, accessibility, forms) and Nest.js (modules, guards, Zod, Prisma). Use for a code or PR review; for structure and refactoring use architecture-reviewer. | Read, Grep, Glob, Bash | opus | medium |
 | [`commit-writer`](../agents/commit-writer.md) | Writes Conventional Commits messages and pull request descriptions from the current changes. Use when preparing a commit or a PR. Drafts text only; does not commit. | Bash | opus | medium |
@@ -232,7 +242,7 @@ tools listed here.
 | [`e2e-test-reviewer`](../agents/e2e-test-reviewer.md) | Reviews written e2e tests for flakiness, isolation, selector resilience, and best practices. Use after e2e tests are written or when they are flaky; for test design specs use e2e-test-design-reviewer. | Read, Glob, Grep, WebSearch | opus | session default |
 | [`e2e-test-writer`](../agents/e2e-test-writer.md) | Writes end-to-end tests in Playwright, Cypress, or Selenium. Use when adding or extending e2e coverage for a user flow. | Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch | opus | medium |
 | [`fact-checking-verifier`](../agents/fact-checking-verifier.md) | Used by erfana:fact-checking to verify a batch of extracted claims against confirmed source files and return a verdict with evidence for each. | Read, Grep, Glob | opus | high |
-| [`finding-verifier`](../agents/finding-verifier.md) | Used by erfana:expert-panel, erfana:issue, and /erfana:lens-review to test review findings against the target and rule each confirmed, rejected, or not proven. | Read, Grep, Glob | opus | medium |
+| [`finding-verifier`](../agents/finding-verifier.md) | Used by erfana:expert-panel, erfana:issue, erfana:backlog, and /erfana:lens-review to rule each review finding confirmed, rejected, or not proven. | Read, Grep, Glob | opus | medium |
 | [`issue-solution-designer`](../agents/issue-solution-designer.md) | Used by erfana:issue to plan an implementation, verify it against the plan and criteria, and judge embedded-review findings. | Read, Grep, Glob, Write | opus | high |
 | [`lens-agent-discoverer`](../agents/lens-agent-discoverer.md) | Used by /erfana:lens-review to list the available builtin and shared agents with their capabilities and tools. | Read, Glob, Grep | opus | low |
 | [`performance-reviewer`](../agents/performance-reviewer.md) | Reviews code for slow paths, wasteful queries, memory growth, and scaling limits, and separates measured problems from suspected ones. Use when code feels slow, before a load increase, or for hot-path changes; for general quality use code-reviewer. | Read, Grep, Glob | opus | medium |

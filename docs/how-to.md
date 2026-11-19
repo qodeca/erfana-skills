@@ -11,7 +11,7 @@ Before you start, check what erfana needs on your machine:
 | Need | Why |
 |---|---|
 | On macOS and Linux: [`jq`](https://jqlang.github.io/jq/) on your `PATH` (macOS: `brew install jq`) | Without it, five of the six [safety hooks](explanation.md#safety-hooks-and-why-they-fail-open) skip themselves and protect nothing. |
-| The GitHub CLI (`gh`), logged in | The skills `erfana:issue`, `erfana:next-batch`, `erfana:coordinate`, and `erfana:ship` use it, and so do the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request. |
+| The GitHub CLI (`gh`), logged in | The skills `erfana:issue`, `erfana:backlog`, `erfana:next-batch`, `erfana:coordinate`, and `erfana:ship` use it, and so do the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request. |
 | On Windows: Git Bash, with `powershell.exe` on `PATH` | The hooks start through Git Bash and run their PowerShell versions; a Windows machine with no Git Bash runs no hooks. |
 
 The marketplace is public, so you need no GitHub token. Inside Claude Code, run:
@@ -200,11 +200,12 @@ You rarely need to name a skill. Describe what you want ("create a spec for the 
 | Have specialists review and improve a plan | [`erfana:expert-panel`](reference.md#erfanaexpert-panel) |
 | Design screens or a design system a client can review | [`erfana:design`](reference.md#erfanadesign) |
 
-Three skills never start from a request, because they edit documents, push code, or end a session. You type their command yourself:
+Four skills never start from a request, because they edit documents, push code, change issues in bulk, or end a session. You type their command yourself:
 
 | You want to | Type |
 |---|---|
 | Check a document's facts against its sources | `/erfana:fact-checking <file>` |
+| Merge duplicate issues, or check the open issues against the code | `/erfana:backlog [merge \| refine \| apply \| discard]` |
 | Commit, push, open, or merge a pull request | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 
@@ -578,7 +579,7 @@ Check the spelling of the source: `qodeca/erfana-skills:erfana` – the reposito
 
 ### A request does not start the skill you expected
 
-Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-19), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
+Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-20), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
 
 `erfana:fact-checking`, `erfana:ship`, and `erfana:handoff` never start from a phrase – type their slash command. On Qwen Code, skill choice from a request may be less reliable; name the skill.
 

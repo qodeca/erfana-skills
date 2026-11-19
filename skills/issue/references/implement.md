@@ -8,9 +8,9 @@ Thirteen phases, each closed by a quality gate (QG-0 … QG-12), plus three embe
 
 | Phase | The result | Gate |
 |---|---|---|
-| 0 Pre-flight | The issue is readable and open with acceptance criteria; the tree is clean; the run starts from the default branch on a new branch; the baseline checks pass; tier, task type, UI impact, and toolchain commands are recorded | QG-0 – **never skipped** |
+| 0 Pre-flight | The issue is readable and open with acceptance criteria (found as [reading-an-issue.md](reading-an-issue.md) says, in the current or the earlier issue format); the tree is clean; the run starts from the default branch on a new branch; the baseline checks pass; tier, task type, UI impact, and toolchain commands are recorded | QG-0 – **never skipped** |
 | 1 Team | The agents for this run are chosen (table below) | QG-1 |
-| 2 Requirements | Every acceptance criterion is understood and testable; genuine product ambiguities are asked, technical ones are not | QG-2 |
+| 2 Requirements | Every acceptance criterion is understood and testable; the issue's verification step, out-of-scope list, and stop-and-ask points are recorded when it has them; genuine product ambiguities are asked, technical ones are not | QG-2 |
 | 3 Discovery | The files the change touches, their dependencies, and the patterns to follow (a read-only exploration with the brief below) | QG-3 |
 | 4 Design | A plan on disk that meets every criterion (`issue-solution-designer`), reviewed by QG-4a and judged by QG-4b | QG-4, QG-4a, QG-4b |
 | 5 Build | Code and tests written (`software-developer`, `test-writer`, `e2e-test-writer` for UI flows); the detected typecheck and test commands exit 0 | QG-5 |
