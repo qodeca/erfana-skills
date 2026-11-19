@@ -29,6 +29,7 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:draft-goal`](#erfanadraft-goal) | you or Claude | Turns a fuzzy intention into a /goal completion condition that the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, explicit exclusions, an owner-decisions clause, and a turn bound – and prints it ready to paste. |
 | [`erfana:expert-panel`](#erfanaexpert-panel) | you or Claude | Runs a panel of top-practitioner reviewers over a plan, design, or set of documents – picks the roles the target needs, has each review it independently, merges what they find, puts the owner's decisions to the user, and ends with an improved version of the plan. |
 | [`erfana:fact-checking`](#erfanafact-checking) | you start it | Checks a markdown analysis document against the source materials it was written from – interview transcripts, vendor documents, notes – to catch hallucinations. |
+| [`erfana:finish`](#erfanafinish) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
 | [`erfana:grill-me`](#erfanagrill-me) | you or Claude | Use when the user wants to stress-test a plan or design through relentless one-at-a-time questioning until shared understanding is reached, sized to the stakes of the plan. |
 | [`erfana:handoff`](#erfanahandoff) | you start it | Compacts the current conversation into a handoff document that another agent, harness, directory, or colleague can pick up. |
 | [`erfana:issue`](#erfanaissue) | you or Claude | Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
@@ -36,7 +37,6 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
 | [`erfana:raise-the-bar`](#erfanaraise-the-bar) | you or Claude | Rewrites a request the user is about to give Claude into a more ambitious one – aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields – grounded in what Claude can actually reach and checked by something other than Claude. |
 | [`erfana:report`](#erfanareport) | you or Claude | Creates, reviews, revises, and versions professional consulting reports to a house standard – Pyramid Principle, SCQA, Five C's findings, a bottom-line-first executive summary, sentence case, and plain, precise prose. |
-| [`erfana:ship`](#erfanaship) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
 | [`erfana:skill`](#erfanaskill) | you or Claude | Creates, reviews, changes, and modernizes Claude Code skills to the current Anthropic standard for the Claude 5.5 generation – trigger-shaped descriptions, a body written as a brief with its ground rules first, least-privilege tools, and a way out when blocked – starting every create with a requirements interview. |
 | [`erfana:spec`](#erfanaspec) | you or Claude | Creates, changes, reviews, reconciles, and archives right-sized requirements specifications in four tiers (T1 issue, T2 spec, T3 lite spec, T4 standard spec), with a project registry whose spec IDs are never reused and a separate checker that reviews each spec. |
 | [`erfana:using-erfana`](#erfanausing-erfana) | you or Claude | Routes a request to the right erfana skill – agents, skills, GitHub issues, specifications, reports, articles, plan stress-tests, prompts, goals – and names the slash command for the skills only the user can start. |
@@ -120,6 +120,14 @@ Checks a markdown analysis document against the source materials it was written 
 - **Started by:** you start it
 - **Source:** [`skills/fact-checking/SKILL.md`](../skills/fact-checking/SKILL.md)
 
+### `erfana:finish`
+
+Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. Runs only when the user invokes it, because it pushes to a shared remote.
+
+- **Start:** `/erfana:finish` `[commit | push | pr | merge | cleanup] (default: pr)`
+- **Started by:** you start it
+- **Source:** [`skills/finish/SKILL.md`](../skills/finish/SKILL.md)
+
 ### `erfana:grill-me`
 
 Use when the user wants to stress-test a plan or design through relentless one-at-a-time questioning until shared understanding is reached, sized to the stakes of the plan.
@@ -181,14 +189,6 @@ Creates, reviews, revises, and versions professional consulting reports to a hou
 - **Started by:** you or Claude
 - **Trigger phrases:** "create report", "review report", "validate report", "fix report issues", "version report"
 - **Source:** [`skills/report/SKILL.md`](../skills/report/SKILL.md)
-
-### `erfana:ship`
-
-Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. Runs only when the user invokes it, because it pushes to a shared remote.
-
-- **Start:** `/erfana:ship` `[commit | push | pr | merge | cleanup] (default: pr)`
-- **Started by:** you start it
-- **Source:** [`skills/ship/SKILL.md`](../skills/ship/SKILL.md)
 
 ### `erfana:skill`
 

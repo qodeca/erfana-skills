@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `ship`, `handoff`) behind one bootstrap router, and 40 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `finish`, `handoff`) behind one bootstrap router, and 40 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -64,12 +64,12 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:ship` | Git closeout – commit, push, pull request, optional merge after the checks pass, and cleanup of merged branches and worktrees – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
+| `erfana:finish` | Git closeout – commit, push, pull request, optional merge after the checks pass, and cleanup of merged branches and worktrees – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
 | `erfana:handoff` | Write a portable handoff document to the OS temp directory for another agent or person. `disable-model-invocation: true`. Adapted from `mattpocock/skills` (MIT); upstream files are kept verbatim under `references/` and licensed MIT in `REUSE.toml`, provenance in `references/UPSTREAM.md`. |
 
 ### Bootstrap (1)
 
-`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 17 other skills. For the three skills only the user can start (`fact-checking`, `ship`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
+`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 17 other skills. For the three skills only the user can start (`fact-checking`, `finish`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
 
 Each skill's frontmatter follows the shape in `skills/skill/references/skill-standard.md` section 3: `description:` says what the skill does, in the third person (Gate 2 soft-warns over 500 characters), and `when_to_use:` carries the triggers ("Use when the user says …", with at least three quoted phrases). Only `grill-me` still opens its description with "Use when". Adding a new skill repeats the pattern.
 
@@ -102,7 +102,7 @@ erfana-skills/
 │   ├── coordinate/          ← work-session skill; references/claims.md (shared with next-batch and autopilot)
 │   ├── expert-panel/        ← work-session skill; SKILL.md only
 │   ├── backlog/             ← work-session skill (user-invoked only); references/ (bulk rules, plan and apply); uses issue's guide and templates
-│   ├── ship/                ← session-closeout skill (user-invoked only)
+│   ├── finish/              ← session-closeout skill (user-invoked only)
 │   ├── handoff/             ← session-closeout skill (user-invoked only); references/ holds MIT upstream files
 │   └── using-erfana/        ← bootstrap meta-router
 ├── hooks/                   ← six safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+; interview guards promoted to plugin root v7.1.0+)
@@ -203,7 +203,7 @@ When a skill file approaches the 500-line cap, hoist the single most cohesive se
 
 ## Cross-skill flow
 
-The bootstrap (`skills/using-erfana/SKILL.md`) routes to the orchestration skills and to single-skill branches: a process branch (`grill-me`, v4.2.3+), a prompting branch (`prompt`, `draft-goal`, `raise-the-bar`), and a work-session branch (`autopilot`, `next-batch`, `coordinate`, `expert-panel`). It does not route to the four user-invoked skills – `fact-checking`, `backlog`, `ship`, and `handoff` – it only suggests their slash command. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
+The bootstrap (`skills/using-erfana/SKILL.md`) routes to the orchestration skills and to single-skill branches: a process branch (`grill-me`, v4.2.3+), a prompting branch (`prompt`, `draft-goal`, `raise-the-bar`), and a work-session branch (`autopilot`, `next-batch`, `coordinate`, `expert-panel`). It does not route to the four user-invoked skills – `fact-checking`, `backlog`, `finish`, and `handoff` – it only suggests their slash command. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
 
 ### Orchestration flow
 
@@ -227,7 +227,7 @@ User intent → using-erfana (router, one flat table)
                   └─ user-invoked only (suggest the command, never route)
                        ├─ fact-check a document → /erfana:fact-checking <file>
                        ├─ merge duplicates, check open issues → /erfana:backlog
-                       ├─ commit, push, pull request → /erfana:ship
+                       ├─ commit, push, pull request → /erfana:finish
                        └─ hand the work over → /erfana:handoff
 ```
 
@@ -246,7 +246,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - `when_to_use:` the triggers, starting "Use when the user says …" (specific triggers per Anthropic; ≥3 quoted activation phrases is the plugin-convention Gate 2 v4.2.0+ heuristic for activation reliability, refined v4.2.1).
    - `allowed-tools:` minimal set.
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
-   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `backlog`, `ship`, and `handoff`).
+   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `backlog`, `finish`, and `handoff`).
    - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the model and effort table in `skills/agent/references/agent-standard.md` section 7.
 3. **Body structure**: write the body as a brief – ground rules first, then one outcome-led section per operation – per section 4 of `skills/skill/references/skill-standard.md` ("The body: write a brief").
 4. **References**: skill-internal docs go under `skills/<name>/references/` and `skills/<name>/templates/` (plus `examples/` where a skill needs worked examples). Prefer citing nothing outside the skill's own folder except plugin-root `agents/`; if the skill must use a sibling's reference file, link it relatively and add it to the cross-skill list under [Shared resources](#shared-resources).

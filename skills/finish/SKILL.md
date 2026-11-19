@@ -1,13 +1,13 @@
 ---
-name: ship
+name: finish
 description: Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. Runs only when the user invokes it, because it pushes to a shared remote.
 when_to_use: |
-  The user invokes the skill directly, optionally saying how far to go. It runs only from the slash command, in these forms: "/erfana:ship", "/erfana:ship merge", "/erfana:ship cleanup".
+  The user invokes the skill directly, optionally saying how far to go. It runs only from the slash command, in these forms: "/erfana:finish", "/erfana:finish merge", "/erfana:finish cleanup".
 argument-hint: "[commit | push | pr | merge | cleanup] (default: pr)"
 disable-model-invocation: true
 ---
 
-# erfana:ship
+# erfana:finish
 
 Take the current work as far as the argument says, and no further, running every earlier step that is still needed. The default is `pr`. It runs only from the slash command.
 

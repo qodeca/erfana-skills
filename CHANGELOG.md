@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 ## [Unreleased]
 
+### Changed (breaking)
+
+- **`erfana:ship` is now `erfana:finish`.** "Ship" read as a release to customers, while the skill commits, pushes, opens the pull request, and on request merges and cleans up. Type `/erfana:finish` where you typed `/erfana:ship`; the arguments (`commit`, `push`, `pr`, `merge`, `cleanup`) and the behaviour are unchanged. The old command no longer exists.
+
 ### Added
 
 - **New skill `erfana:backlog` keeps the open-issue list true.** `merge` folds duplicate issues into one and groups very small issues into a checklist issue; `refine` checks every open issue against the merged code, closes what is proven done, and rewrites what is vague. It writes a plan under `.local/backlog/` first and changes GitHub only after you approve it, one paced write at a time, with a report that lists how to undo every close. Every close is confirmed by a second agent (`finding-verifier`) before it enters the plan. You start it yourself with `/erfana:backlog`; Claude never starts it. Its helper is the new read-only agent `backlog-analyst`.

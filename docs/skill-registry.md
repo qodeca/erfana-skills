@@ -18,14 +18,15 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| backlog | 2026-11-18 | feat(skills): add erfana:backlog to merge and refine open issues |
-| expert-panel | 2026-11-18 | feat(skills): check findings before acting on them in expert-panel an... |
-| issue | 2026-11-18 | feat(skills)!: new issue format; Implement reads both formats |
-| next-batch | 2026-11-18 | feat(skills)!: new issue format; Implement reads both formats |
+| backlog | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
+| expert-panel | 2026-11-19 | feat: add finding-verifier to check review findings (#95) |
+| issue | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
+| next-batch | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
+| using-erfana | 2026-11-19 | Merge remote-tracking branch 'origin/develop' into feature/rename-shi... |
+| finish | 2026-11-18 | feat(skills)!: rename the ship skill to finish |
 | prompt | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | report | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | skill | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
-| using-erfana | 2026-11-18 | feat(skills)!: new issue format; Implement reads both formats |
 | design | 2026-11-02 | fix(design): drop a dead link from the web sample (#90) |
 | article | 2026-10-29 | docs: restructure the docs, generate the reference, and check docs in... |
 | autopilot | 2026-10-29 | fix: harden autopilot against replacing or losing a running goal (#73) |
@@ -37,7 +38,6 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | fact-checking | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | grill-me | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | handoff | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
-| ship | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 
 20 skills, one row per folder under `skills/`.
 
