@@ -186,7 +186,7 @@ You rarely need to name a skill. Describe what you want ("create a spec for the 
 |---|---|
 | Create, review, or change a Claude Code agent | [`erfana:agent`](reference.md#erfanaagent) |
 | Create, review, change, or modernize a Claude Code skill | [`erfana:skill`](reference.md#erfanaskill) |
-| Create, implement, review, or show GitHub issues | [`erfana:issue`](reference.md#erfanaissue) |
+| Create one new issue, implement or review one, or show issues | [`erfana:issue`](reference.md#erfanaissue) |
 | Write or check a requirements spec | [`erfana:spec`](reference.md#erfanaspec) |
 | Create or review a consulting report | [`erfana:report`](reference.md#erfanareport) |
 | Research and write an article | [`erfana:article`](reference.md#erfanaarticle) |
@@ -205,7 +205,7 @@ Four skills never start from a request, because they edit documents, push code, 
 | You want to | Type |
 |---|---|
 | Check a document's facts against its sources | `/erfana:fact-checking <file>` |
-| Merge duplicate issues, or check the open issues against the code | `/erfana:backlog [merge \| refine \| apply \| discard]` |
+| Merge duplicate issues, rewrite old ones, or check the open issues against the code | `/erfana:backlog [merge \| refine [#N …] \| apply \| discard]` |
 | Commit, push, open, or merge a pull request | `/erfana:finish [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 
@@ -219,7 +219,7 @@ Three commands keep a session and its project tidy:
 |---|---|---|
 | Keep the task list right while you are away | `/erfana:session-watch` | A check every 30 minutes that changes only the task list. It runs only when the session is idle. It stops when the session closes, returns if you resume it, and ends after 7 days. To end it sooner, ask Claude to cancel the timer. |
 | Bring the docs up to date with recent work | `/erfana:doc-update` | It updates docs and adds what future sessions need, and three reviewers check the result. It asks before it changes `CLAUDE.md` or a similar file. Add `--dry-run` to see the plan first, or `--quick` to skip the review. |
-| Clear up after finished work | `/erfana:cleanup` | It lists leftover files, worktrees, branches, and issue actions, then asks you to approve each group. Files go to `.local/cleanup-trash/`, and each deleted branch gets a restore line. |
+| Clear up after finished work | `/erfana:cleanup` | It lists leftover files, worktrees, branches, and actions on the issues this work touched, then asks you to approve each group. For the rest of the open issues it prints `/erfana:backlog refine`. Files go to `.local/cleanup-trash/`, and each deleted branch gets a restore line. |
 
 ### Namespaced and bare names
 
@@ -303,7 +303,9 @@ When the spec is ready, [work the issue end to end](#work-a-github-issue-end-to-
 
 ### Create the issue
 
-Say "create an issue for the login timeout bug". The skill asks only what changes the issue (what happens, what should happen, who is affected), searches for duplicates, and shows you the exact title, body, and labels. It creates the issue only when you say yes.
+Say "create an issue for the login timeout bug". The skill searches the code and the existing issues first, then asks at most three questions about what they cannot tell it. The draft opens with a short summary and a "Done when" line for people. Below that is the task for whoever implements it: numbered acceptance criteria, a command that proves the work, what is out of scope, when to stop and ask, and files to start from, stamped with the commit they were read at. You see the exact title, type, labels, and body, and the issue is created only when you say yes.
+
+Issues written before this format still work: Implement reads acceptance criteria as a numbered list or as checkboxes.
 
 ### Implement it
 
@@ -328,6 +330,22 @@ The run keeps its progress in the session, not on the issue. If the session ends
 If you did not push at QG-12, type `/erfana:finish pr`. It commits anything left, pushes the branch, and opens or updates the pull request, linking the issue when the branch name or your request gives its number. `/erfana:finish merge` also waits up to 30 minutes for the checks, merges, deletes the branch, and closes the linked issue. It never force-pushes and never merges over a failing check.
 
 To work several issues in a row without watching, see [run an unattended session](#run-an-unattended-session).
+
+## Keep the open issues in order
+
+`erfana:backlog` works on issues that already exist. You start it yourself: Claude never starts it, because it edits and closes issues in bulk.
+
+Before you start: you need `gh` logged in and write access to the repository.
+
+Every operation writes a plan first and changes nothing on GitHub until you run `apply`. Merge first, then refine, so that the check against the code sees the list as it is after the merges.
+
+1. **Merge duplicates.** Run `/erfana:backlog merge`. The plan folds issues that ask for the same outcome into one and gathers very small issues into one checklist issue.
+2. **Read the plan.** It is under `.local/backlog/` in the repository. Closes and merges come first, one by one, each with its proof. Clear the tick on any line you reject. Apply posts the plan's comments as notices that cannot be taken back, so read them with care on a repository that clients or the public can see.
+3. **Apply or drop it.** Run `/erfana:backlog apply`, or `/erfana:backlog discard`. Apply shows the counts and asks for a final go, then writes one change at a time. Its report ends with the command that reopens each issue it closed.
+4. **Check the issues against the code.** Run `/erfana:backlog refine`. An issue is closed only when its acceptance criteria are written down, every one is shown done in the merged code, and a second agent confirmed each of those claims. Vague or part-done issues are rewritten to the current format, with the original text kept in a folded block.
+5. **Apply the refine plan.** Read it and run `/erfana:backlog apply`, as in steps 2 and 3.
+
+To refine only some issues, name them: `/erfana:backlog refine #87 #88`. The code is read from the default branch; if your project merges into another branch first, name it: `/erfana:backlog refine develop`.
 
 ## Run an unattended session
 
@@ -471,11 +489,13 @@ For a review grounded in current best practice, type:
 /erfana:lens-review <path | "path path ..." | #PR | "description"> [--lens a,b,c] [--out file.md]
 ```
 
-It chooses up to ten review angles, called lenses (architecture, security, performance, UI, and so on), from the target, has each reviewer research recent practice online, and returns one report ranked by severity, in plain language with the technical detail kept for engineers. `--lens` fixes the lenses yourself. `--out` also writes the report to a `.md` file inside the current folder. A pull-request target needs `gh` logged in. It is meant for you to start; erfana skills print it for you rather than run it.
+It chooses up to ten review angles, called lenses (architecture, security, performance, UI, and so on), from the target, has each reviewer research recent practice online, and returns one report ranked by severity, in plain language with the technical detail kept for engineers. `--lens` fixes the lenses yourself. `--out` also writes the report to a `.md` file inside the current folder. A separate agent then checks each must-fix and should-fix finding. A rejected finding moves to the report's Coverage section with the reason; a rejected security finding stays in the table, marked as disputed. See [why findings get a second check](explanation.md#why-findings-get-a-second-check). A pull-request target needs `gh` logged in. It is meant for you to start; erfana skills print it for you rather than run it.
 
 ### Review a plan or design instead of code
 
-Say "have specialists review this plan" or run `/erfana:expert-panel <path> [review | improve | apply]`. It picks three to six specialist roles, has each review the target, merges the findings, and asks you the decisions that are yours. The default, `improve`, writes an improved version to a new file next to the target (`<name>-improved.md`); `review` stops at the findings; `apply` changes the original after backing it up.
+Say "have specialists review this plan" or run `/erfana:expert-panel <path> [review | improve | apply]`. It picks three to six specialist roles, has each review the target, and merges the findings. For a plan that commits money, data, or security, or has a step that cannot be undone, one of the roles assumes the plan failed and traces how.
+
+A separate agent then tries to disprove each finding. Confirmed findings are ranked. Unproven ones stay in the list with that label. Rejected ones are listed apart with the reason, so you can overrule a ruling. After that, the skill asks you the decisions that are yours. The default, `improve`, writes an improved version to a new file next to the target (`<name>-improved.md`); `review` stops at the findings; `apply` changes the original after backing it up.
 
 ## Design screens for a product
 

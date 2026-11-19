@@ -22,6 +22,8 @@ Behavioural cases for `erfana:backlog`, written with the skill. The plan phase c
 | 16 | interactive | `/erfana:backlog discard` | State `discarded`, the code snapshot removed, nothing on GitHub changed. |
 | 17 | interactive | `/erfana:backlog refine develop` in a repository whose default branch is `main` | The snapshot is `origin/develop`, and the plan header says so. |
 | 18 | interactive | `/erfana:backlog refine` where an analyst reference is two lines off | The reference is corrected or dropped before the comment enters the plan. |
+| 19 | interactive | `/erfana:backlog refine #87 #88` in a repository with four open issues | The plan covers only #87 and #88 and its header says so; no line touches another issue. |
+| 20 | interactive | `/erfana:backlog refine #abc` or a number of a closed issue | Reported and left out; nothing planned for it. |
 
 ## First run – 2026-11-18
 

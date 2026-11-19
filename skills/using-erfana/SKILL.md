@@ -22,7 +22,7 @@ Pick the one erfana skill that fits the request, so the user gets the plugin's s
 |---|---|
 | Create, review, or change a Claude Code agent, or a doer/reviewer pair | `erfana:agent` |
 | Create, review, change, or modernize a Claude Code skill | `erfana:skill` |
-| Create, implement, review, or display GitHub issues | `erfana:issue` – its Implement operation needs a person at acceptance and before git actions, so not in a headless `claude -p` run |
+| Create one new issue, implement or review one, or display issues | `erfana:issue` – its Implement operation needs a person at acceptance and before git actions, so not in a headless `claude -p` run |
 | Write or validate a requirements specification | `erfana:spec` |
 | Create, review, or revise a consulting report | `erfana:report` |
 | Research, write, review, or revise a medium-form article | `erfana:article` |
@@ -33,7 +33,7 @@ Pick the one erfana skill that fits the request, so the user gets the plugin's s
 | Hand over a body of work to run unattended, or resume one after a restart | `erfana:autopilot` |
 | Pick the next issues to work on | `erfana:next-batch` |
 | Claim issues or check what parallel sessions are doing | `erfana:coordinate` |
-| Merge duplicate issues, group small ones, or check the open issues against the code | Suggest `/erfana:backlog [merge \| refine \| apply \| discard]` |
+| Rewrite or close existing issues, merge duplicates, group small ones, or check the open issues against the code | Suggest `/erfana:backlog [merge \| refine [#N …] \| apply \| discard]` |
 | Have specialists review a plan, design, or documents and improve it | `erfana:expert-panel` |
 | Design a UI, or create or change a design system | `erfana:design` |
 | Check a document's facts against its sources | Suggest `/erfana:fact-checking <file>` |

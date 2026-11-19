@@ -49,7 +49,7 @@ If the issue list returns 1,000 entries, say that the plan covers the first 1,00
 ~~~markdown
 # backlog <merge|refine> plan – <owner>/<name> – <date>
 
-Snapshot: <default> @ <commit> | Wording: <decision – reason> | Account: <login>, <scopes or "broad token"> | Issue types: <available | not available>
+Snapshot: <default> @ <commit> | Wording: <decision – reason> | Account: <login>, <scopes or "broad token"> | Issue types: <available | not available> | Scope: <all open issues | #87, #88>
 Actions: close 12 · edit 20 · comment 20 · type 31 · label 4 · merge groups 4 · groups 1 · manual review 2 · skipped 3
 
 ## Review first – closes, merges, and groups

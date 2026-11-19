@@ -70,6 +70,14 @@ Three more rules make the verdict trustworthy:
 
 Other skills use the same idea in their own way. `erfana:issue` **fans out** its own reviewer agents over the design and the change set while it implements an issue. `erfana:expert-panel` gives each specialist the target and its role but not the author's reasoning or the other reviewers' findings. `erfana:report` runs its six house checks through two separate checker agents.
 
+### Why findings get a second check
+
+A blinded reviewer has the opposite weakness to a writer: asked to look for problems, it reports some that are not there. Anthropic's [Claude Code best practices](https://code.claude.com/docs/en/best-practices) say it in one line: "A reviewer that's asked to find problems will always find something." Acting on every finding adds code and changes nobody needed.
+
+So three places in erfana put a second agent, `finding-verifier`, between "a reviewer found it" and "someone acts on it": `erfana:expert-panel`, `/erfana:lens-review`, and the reviews inside `erfana:issue`. It gets the findings and the target, not the reviewer's reasoning, and rules each finding confirmed, rejected, or not proven, with the text that shows it. "Not proven" never counts as confirmed, and it runs once – the reviewers do not argue back. `erfana:backlog` uses the same agent the other way round: before it closes an issue as done, each "this is done" claim has to be confirmed.
+
+A rejected finding is never hidden. It is listed with the reason, so you can overrule the ruling; where it is listed depends on the skill or command.
+
 ## You decide, Claude does the work
 
 erfana is built for a person who makes the calls and wants Claude to carry out everything else. The skills work through the technical steps by themselves and stop only for decisions that are yours: what the work should achieve, whether the result is acceptable, and anything that leaves your machine or cannot be undone.

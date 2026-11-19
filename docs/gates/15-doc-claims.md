@@ -50,6 +50,7 @@ A green Gate 15 does not prove every count is right. After adding or removing a 
 - Counts in phrases check 9 does not read, such as "three of the seven" or "seven commands" with no word before it.
 - The lists of names in the `description` fields of `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. Users see these in their plugin list. Check 9 reads the counts there, not the names.
 - `docs/explanation.md` (its parts table and the line saying how many commands Claude can start) and `SECURITY.md` (the generic-agent count).
+- Per-group breakdowns that no check reads: the agent groups in `docs/architecture.md` ("Skill-owned (N)", "Shared or standalone (N)", and the generic-name count inside it), the category counts in its section headings ("Work-session skills (N)"), the skill breakdown in `docs/verification-gates.md` ("N work session"), and the category counts in `.claude/CLAUDE.md` ("Work session (N)"). The groups must add up to the total.
 - Links to count-bearing headings, such as `reference.md#slash-commands-7` and `reference.md#agents-40`. `scripts/gen-reference.sh` renames the heading, so `scripts/check-docs.sh` reports each old link as a missing fragment.
 
 To find them, search for each old number in digits and in words: `git grep -n -i -E "(7|seven) (slash )?commands|of the seven|agents-38|38 (shared )?agents"`, with the old values in place of these. Repeat for the old generic-agent count, which is a different number. Keep `\b` out of the pattern: with `git grep -E` on macOS it finds nothing and prints no error.
