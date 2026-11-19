@@ -18,7 +18,8 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| issue | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
+| expert-panel | 2026-11-18 | feat(skills): check findings before acting on them in expert-panel an... |
+| issue | 2026-11-18 | feat(skills): check findings before acting on them in expert-panel an... |
 | prompt | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | report | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | skill | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
@@ -31,7 +32,6 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | spec | 2026-10-29 | docs: restructure the docs, generate the reference, and check docs in... |
 | agent | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | coordinate | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
-| expert-panel | 2026-10-28 | feat: work-session skills (autopilot, next-batch, coordinate, expert-... |
 | fact-checking | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | grill-me | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | handoff | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
