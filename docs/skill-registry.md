@@ -18,7 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| backlog | uncommitted | not yet committed |
+| backlog | 2026-11-18 | feat(skills): add erfana:backlog to merge and refine open issues |
 | expert-panel | 2026-11-18 | feat(skills): check findings before acting on them in expert-panel an... |
 | issue | 2026-11-18 | feat(skills)!: new issue format; Implement reads both formats |
 | next-batch | 2026-11-18 | feat(skills)!: new issue format; Implement reads both formats |
