@@ -55,7 +55,7 @@ Updating, removing, proxies, and other install problems are covered in the [how-
 
 ## What is inside
 
-erfana ships 19 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. A skill is a packaged way of doing one kind of task; Claude loads it when your words match its trigger phrases, or you start it with `/erfana:<name>`. Not sure which one fits? Ask Claude "which erfana skill should I use for this?" and the [`erfana:using-erfana`](docs/reference.md#erfanausing-erfana) router points you to one.
+erfana ships 19 skills, 39 shared agents, 7 slash commands, and 6 safety hooks. A skill is a packaged way of doing one kind of task; Claude loads it when your words match its trigger phrases, or you start it with `/erfana:<name>`. Not sure which one fits? Ask Claude "which erfana skill should I use for this?" and the [`erfana:using-erfana`](docs/reference.md#erfanausing-erfana) router points you to one.
 
 **Build and plan:**
 
@@ -94,7 +94,7 @@ erfana ships 19 skills, 38 shared agents, 7 slash commands, and 6 safety hooks. 
 
 Three skills never start from a phrase, because Claude may not start them on its own: `fact-checking`, `ship`, and `handoff`. Type their slash command. The same holds for the `/erfana:project-status`, `/erfana:session-status`, `/erfana:session-watch`, and `/erfana:cleanup` commands.
 
-The [slash commands](docs/reference.md#slash-commands-7) cover status briefs, a task list timer, project cleanup, documentation refresh, issue explanations, and researched code review. The [safety hooks](docs/reference.md#safety-hooks-6) run on their own and block risky actions, such as deleting your home folder or writing an API key into a file. The [38 shared agents](docs/reference.md#agents-38) are the helpers the skills hand work to.
+The [slash commands](docs/reference.md#slash-commands-7) cover status briefs, a task list timer, project cleanup, documentation refresh, issue explanations, and researched code review. The [safety hooks](docs/reference.md#safety-hooks-6) run on their own and block risky actions, such as deleting your home folder or writing an API key into a file. The [39 shared agents](docs/reference.md#agents-39) are the helpers the skills hand work to.
 
 ## Your data
 

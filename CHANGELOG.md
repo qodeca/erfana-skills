@@ -5,6 +5,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow 
 
 ## [Unreleased]
 
+### Added
+
+- **A `finding-verifier` agent checks review findings before they reach the user.** A reviewer asked to look for problems reports some that are not real. The new read-only agent gets the findings and the target – not the reviewers' reasoning – and rules each one confirmed, rejected, or not proven, with the text that shows it. `erfana:expert-panel` checks every finding, `/erfana:lens-review` checks blocker and major findings, and the embedded reviews of `erfana:issue` check critical and high findings before anything is fixed. Rejected findings stay visible with the reason; a rejected security finding goes to the user to decide. The check runs once and never loops.
+- **`erfana:expert-panel` adds a failure analyst for high-stakes plans.** When a plan commits money, data, security, or a step that cannot be undone, one role assumes the plan failed and traces how. It may report that it found no credible way to fail.
+
 ### Changed
 
 - **Eleven shared agents state their rules plainly, with reasons.** `bug-investigator`, `e2e-test-design-reviewer`, `e2e-test-designer`, `e2e-test-writer`, `issue-solution-designer`, `lens-agent-discoverer`, `solution-reviewer`, `ui-designer`, `ui-reviewer`, `ux-designer`, and `ux-reviewer` no longer carry all-caps rule lists (ALWAYS / NEVER / MUST), because current Claude models over-apply shouted rules. Severity labels are unchanged. `bug-investigator` now names the outcomes an investigation must reach instead of a nine-step script.

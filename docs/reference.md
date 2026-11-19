@@ -208,7 +208,7 @@ Routes a request to the right erfana skill – agents, skills, GitHub issues, sp
 - **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "commit and push", "open a pull request", "hand this off to another session"
 - **Source:** [`skills/using-erfana/SKILL.md`](../skills/using-erfana/SKILL.md)
 
-## Agents (38)
+## Agents (39)
 
 Agents are helpers that skills start for a narrow job, such as a blinded
 review. You can also ask Claude to use one by name. Each runs with only the
@@ -232,6 +232,7 @@ tools listed here.
 | [`e2e-test-reviewer`](../agents/e2e-test-reviewer.md) | Reviews written e2e tests for flakiness, isolation, selector resilience, and best practices. Use after e2e tests are written or when they are flaky; for test design specs use e2e-test-design-reviewer. | Read, Glob, Grep, WebSearch | opus | session default |
 | [`e2e-test-writer`](../agents/e2e-test-writer.md) | Writes end-to-end tests in Playwright, Cypress, or Selenium. Use when adding or extending e2e coverage for a user flow. | Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch | opus | medium |
 | [`fact-checking-verifier`](../agents/fact-checking-verifier.md) | Used by erfana:fact-checking to verify a batch of extracted claims against confirmed source files and return a verdict with evidence for each. | Read, Grep, Glob | opus | high |
+| [`finding-verifier`](../agents/finding-verifier.md) | Used by erfana:expert-panel, erfana:issue, and /erfana:lens-review to test review findings against the target and rule each confirmed, rejected, or not proven. | Read, Grep, Glob | opus | medium |
 | [`issue-solution-designer`](../agents/issue-solution-designer.md) | Used by erfana:issue to plan an implementation, verify it against the plan and criteria, and judge embedded-review findings. | Read, Grep, Glob, Write | opus | high |
 | [`lens-agent-discoverer`](../agents/lens-agent-discoverer.md) | Used by /erfana:lens-review to list the available builtin and shared agents with their capabilities and tools. | Read, Glob, Grep | opus | low |
 | [`performance-reviewer`](../agents/performance-reviewer.md) | Reviews code for slow paths, wasteful queries, memory growth, and scaling limits, and separates measured problems from suspected ones. Use when code feels slow, before a load increase, or for hot-path changes; for general quality use code-reviewer. | Read, Grep, Glob | opus | medium |
