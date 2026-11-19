@@ -205,7 +205,7 @@ Four skills never start from a request, because they edit documents, push code, 
 | You want to | Type |
 |---|---|
 | Check a document's facts against its sources | `/erfana:fact-checking <file>` |
-| Merge duplicate issues, or check the open issues against the code | `/erfana:backlog [merge \| refine \| apply \| discard]` |
+| Merge duplicate issues, rewrite old ones, or check the open issues against the code | `/erfana:backlog [merge \| refine [#N …] \| apply \| discard]` |
 | Commit, push, open, or merge a pull request | `/erfana:finish [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 

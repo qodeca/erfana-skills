@@ -32,7 +32,7 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:finish`](#erfanafinish) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
 | [`erfana:grill-me`](#erfanagrill-me) | you or Claude | Use when the user wants to stress-test a plan or design through relentless one-at-a-time questioning until shared understanding is reached, sized to the stakes of the plan. |
 | [`erfana:handoff`](#erfanahandoff) | you start it | Compacts the current conversation into a handoff document that another agent, harness, directory, or colleague can pick up. |
-| [`erfana:issue`](#erfanaissue) | you or Claude | Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
+| [`erfana:issue`](#erfanaissue) | you or Claude | Works one GitHub issue at a time – drafts a well-formed issue for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
 | [`erfana:next-batch`](#erfananext-batch) | you or Claude | Picks the next batch of GitHub issues for a working session – reads the open issues, skips the ones other sessions have claimed, ranks the rest by impact on delivery, groups the top ones by theme, and saves the batch for an unattended run. |
 | [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
 | [`erfana:raise-the-bar`](#erfanaraise-the-bar) | you or Claude | Rewrites a request the user is about to give Claude into a more ambitious one – aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields – grounded in what Claude can actually reach and checked by something other than Claude. |
@@ -72,7 +72,7 @@ Sets up and keeps alive an unattended work run – writes the /goal condition fr
 
 Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. Writes a plan first and changes GitHub only after the user approves it. Runs only when the user invokes it, because it edits and closes issues in bulk.
 
-- **Start:** `/erfana:backlog` `[merge | refine [branch] | apply | discard] (no argument: show the open plans)`
+- **Start:** `/erfana:backlog` `[merge | refine [#N …] [branch] | apply | discard] (no argument: show the open plans)`
 - **Started by:** you start it
 - **Source:** [`skills/backlog/SKILL.md`](../skills/backlog/SKILL.md)
 
@@ -147,7 +147,7 @@ Compacts the current conversation into a handoff document that another agent, ha
 
 ### `erfana:issue`
 
-Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only.
+Works one GitHub issue at a time – drafts a well-formed issue for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only.
 
 - **Start:** `/erfana:issue` `[create … | implement #N | review <scope> | show #N | list | search <query>]`
 - **Started by:** you or Claude
