@@ -1,6 +1,6 @@
 # Understanding erfana
 
-*This page describes erfana v10.0.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.1.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 This page explains how erfana works and why it is built the way it is. It does not walk you through a task – for that, start with the [tutorial](tutorial.md) or pick a recipe from the [how-to guides](how-to.md). For the full list of what ships, see the [reference](reference.md). Terms in bold at first use are defined in the [glossary](#glossary).
 
@@ -13,7 +13,7 @@ The plugin is four kinds of parts in one folder:
 | Part | Where it lives | Count today |
 |---|---|---|
 | Skills | `skills/<name>/SKILL.md` | 20 |
-| Agents | `agents/<name>.md` | 40 |
+| Agents | `agents/<name>.md` | 41 |
 | Slash commands | `commands/<name>.md` | 7 |
 | Safety hooks | `hooks/`, wired in `hooks/hooks.json` | 6 |
 
@@ -40,7 +40,7 @@ The four kinds of parts do different jobs, and knowing which is which tells you 
 
 **Skills** are the main way you use erfana. Each skill lists **trigger phrases** – the kind of thing you would say when you need it, such as "create an issue" or "grill me". When your request matches, Claude loads the skill and follows it. You can also start any skill by name, for example `/erfana:issue`. Three skills never start on their own because they act outside the conversation: `fact-checking` edits your document, `finish` pushes code, and `handoff` ends a session's work. For those, you type the command yourself.
 
-**Agents** do the focused parts of a skill's work. An agent runs in its own context: it sees only what the skill hands it, does its task, and returns a result. That separation is what makes [blinded reviews](#why-reviews-are-blinded) possible. It also means an agent cannot ask you a question – Claude Code does not give agents the question tool – so every erfana agent returns its questions to the main conversation, and the skill asks you there. About half of the agents belong to one skill and start with that skill's name, such as `spec-validator` or `article-reviewer`. Nineteen have general names, such as `code-reviewer`; if another plugin ships an agent with the same name, which one runs is not predictable, so prefer the prefixed names when you call an agent directly. [SECURITY.md](../SECURITY.md#known-limitations) explains the risk.
+**Agents** do the focused parts of a skill's work. An agent runs in its own context: it sees only what the skill hands it, does its task, and returns a result. That separation is what makes [blinded reviews](#why-reviews-are-blinded) possible. It also means an agent cannot ask you a question – Claude Code does not give agents the question tool – so every erfana agent returns its questions to the main conversation, and the skill asks you there. About half of the agents belong to one skill and start with that skill's name, such as `spec-validator` or `article-reviewer`. Twenty-one have general names, such as `code-reviewer`; if another plugin ships an agent with the same name, which one runs is not predictable, so prefer the prefixed names when you call an agent directly. [SECURITY.md](../SECURITY.md#known-limitations) explains the risk.
 
 **Slash commands** are for quick, single-step jobs: a project status brief, a plain-language explanation of a GitHub issue, a documentation refresh, a task list timer, a project cleanup, or a multi-reviewer code review. `/erfana:project-status`, `/erfana:session-status`, `/erfana:session-watch`, and `/erfana:cleanup` run only when you type them; the other three can also be started by Claude. See the [slash commands reference](reference.md#slash-commands-7).
 

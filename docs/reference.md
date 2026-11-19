@@ -3,7 +3,7 @@
 <!-- GENERATED FILE - DO NOT EDIT BY HAND. -->
 <!-- Regenerate with: bash scripts/gen-reference.sh -->
 
-*This page describes erfana v10.0.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.1.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Everything erfana ships, read straight from the plugin files by
 [`scripts/gen-reference.sh`](../scripts/gen-reference.sh). Gate 19 fails the
@@ -217,7 +217,7 @@ Routes a request to the right erfana skill – agents, skills, GitHub issues, sp
 - **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "merge duplicate issues", "clean up the backlog", "commit and push", "open a pull request", "hand this off to another session"
 - **Source:** [`skills/using-erfana/SKILL.md`](../skills/using-erfana/SKILL.md)
 
-## Agents (40)
+## Agents (41)
 
 Agents are helpers that skills start for a narrow job, such as a blinded
 review. You can also ask Claude to use one by name. Each runs with only the
@@ -265,6 +265,7 @@ tools listed here.
 | [`ui-reviewer`](../agents/ui-reviewer.md) | Reviews implemented visual design – color, typography, spacing, design tokens, animation, and visual fidelity. Use for visual quality audits; for usability and accessibility use ux-reviewer. | Read, Glob, Grep, Bash, WebSearch, WebFetch | opus | session default |
 | [`ux-designer`](../agents/ux-designer.md) | Designs user flows, interaction patterns, information architecture, and accessibility requirements for web, desktop, and mobile. Use for how users navigate and interact; for visual design use ui-designer. | Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch | opus | medium |
 | [`ux-reviewer`](../agents/ux-reviewer.md) | Reviews UI code against usability heuristics, accessibility standards, and platform guidelines. Use for UX and accessibility audits; for visual design quality use ui-reviewer. | Read, Glob, Grep, Bash, WebSearch, WebFetch | opus | medium |
+| [`ux-writer`](../agents/ux-writer.md) | Writes and reviews interface text – labels, buttons, hints, errors, empty states, help – in plain words for non-technical users, in English or Polish. Use when screens or design-system pages gain or change text; for flows use ux-designer, for usability audits ux-reviewer. | Read, Grep, Glob, Edit | sonnet | medium |
 
 ## Slash commands (7)
 
