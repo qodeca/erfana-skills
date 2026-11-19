@@ -157,3 +157,11 @@ v9.2.0 changes what `draft-goal`, `autopilot`, and `raise-the-bar` print (START 
 2. **`/erfana:doc-update` and `/erfana:lens-review` behave differently.** `doc-update` asks for more permissions and adds docs by itself; `lens-review` no longer picks reviewers with shell tools, so a security lens may have less depth.
 
 **Staged rollout: waived by explicit maintainer decision (2026-10-31).** The owner chose a direct release in this session. This is the **nineteenth consecutive no-soak release**.
+
+## v10.0.0 – a skill rename, a new issue format, and a bulk issue skill, shipped without an rc soak (accepted risk)
+
+1. **No rc soak and no live run of `erfana:backlog apply`.** The evidence is the gate suite, the docs checks, the Qwen smoke test, CI, the golden cases in `tests/issue/` and `tests/backlog/`, the `finding-verifier` fixture run in `tests/finding-verifier/`, and one plan-only run of `merge` and `refine` that changed nothing on GitHub. The `apply` step, a real close with the second check, a real merge or group, the draft mode of `backlog-analyst`, and the `refine #N` form have not run.
+2. **No blinded review of the new parts.** `erfana:backlog`, `backlog-analyst`, and `finding-verifier` did not go through a `skill-reviewer` or `agent-reviewer` pass.
+3. **The rename has no alias.** `/erfana:ship` stops working on update; the upgrade guide in `docs/how-to.md` is the only notice.
+
+**Staged rollout: waived by explicit maintainer decision (2026-11-19).** The `rc.1` soak was recommended and declined; the owner chose a direct release in this session. The running count of no-soak releases is not extended here, because v9.3.1 and v9.4.0 have no entry in this record.

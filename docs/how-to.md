@@ -1,6 +1,6 @@
 # How-to guides
 
-*This page describes erfana v9.4.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.0.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Each section below is a recipe for one goal. It assumes you know what you want to do and need the steps. If you are new to erfana, start with the [tutorial](tutorial.md). For every skill, agent, command, and hook in one list, see the [reference](reference.md). For why erfana works the way it does, see the [explanation](explanation.md).
 
@@ -37,7 +37,7 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
 
    ```text
      ❯ erfana@erfana-skills
-       Version: 9.4.0
+       Version: 10.0.0
        Scope: user
        Status: ✔ enabled
    ```
@@ -94,11 +94,11 @@ Then start a new `qwen` session, because skills, agents, and hooks load at sessi
 Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the output starts like this, followed by the lists of commands and skills:
 
 ```text
-✓ erfana (9.4.0)
+✓ erfana (10.0.0)
  Path: /Users/you/.qwen/extensions/erfana
  Source: https://github.com/qodeca/erfana-skills (Type: github-release)
  Origin: Claude
- Release tag: v9.4.0
+ Release tag: v10.0.0
 ```
 
 The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
@@ -142,6 +142,17 @@ qwen extensions update erfana
 Or run `qwen extensions update --all`. The update lists the extension's contents and asks `Do you want to continue? [Y/n]`, so run it in a terminal where you can answer. With no answer, it stops and the old version stays. On success it prints `Extension "erfana" successfully updated`, with the old and new versions. Then start a new `qwen` session, because skills, agents, and hooks load at session start. To check that it worked, run `qwen extensions list`: the first line `✓ erfana (x.y.z)` and the `Release tag:` line should match the [latest release](https://github.com/qodeca/erfana-skills/releases/latest). If the update fails or the install looks broken, run `qwen extensions uninstall erfana`, then `qwen extensions install qodeca/erfana-skills:erfana`, accept the prompt, and start a new `qwen` session.
 
 Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
+
+### Upgrade from 9.x to 10.x
+
+Version 10.0 renamed one skill and changed the issue format. Check these before you update:
+
+- **`/erfana:ship` is now `/erfana:finish`.** The arguments are the same. The old name no longer exists, so update your scripts, `CLAUDE.md` files, and saved prompts.
+- **`erfana:issue` Create writes a new issue format.** Implement still reads issues in the old format. If a tool of yours parses issue bodies, or your repository uses the issue forms from `skills/issue/templates/create/`, update them: the form files are now `bug.yml`, `feature.yml`, and `task.yml`.
+- **`/erfana:cleanup` closes fewer issues.** It covers only the issues the finished work touched. For the whole list, run `/erfana:backlog refine`.
+- **Reload after updating.** Restart Claude Code or run `/reload-plugins`, because a running session keeps the version it loaded.
+
+On Qwen Code the same changes apply, under bare names: `/ship` becomes `/finish`.
 
 ### Upgrade from 8.x to 9.x
 
