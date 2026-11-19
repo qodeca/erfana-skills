@@ -20,10 +20,10 @@ and checked by Gate 18, which hard-fails if this list stops matching
 |---|---|---|
 | backlog | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
 | expert-panel | 2026-11-19 | feat: add finding-verifier to check review findings (#95) |
+| finish | 2026-11-19 | feat(skills)!: rename the ship skill to finish (#96) |
 | issue | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
 | next-batch | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
-| using-erfana | 2026-11-19 | Merge remote-tracking branch 'origin/develop' into feature/rename-shi... |
-| finish | 2026-11-18 | feat(skills)!: rename the ship skill to finish |
+| using-erfana | 2026-11-19 | feat(skills)!: rename the ship skill to finish (#96) |
 | prompt | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | report | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | skill | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
