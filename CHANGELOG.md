@@ -3,6 +3,16 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [10.1.0] - 2026-11-19
+
+### Added
+
+- **New agent `ux-writer` writes and reviews interface text.** It covers labels, buttons, hints, errors, empty states, and help, in plain words for non-technical users, in English or Polish. It removes developer notes and internal or client names from what users see, keeps one term per concept, and gives every error a next step. In `review` mode (the default) it only reports; in `write` mode it changes visible text and nothing else. It returns a table with each string's location, the old text, the new text, and the reason. Use it when screens or design-system pages gain or change text; flows stay with `ux-designer` and usability audits with `ux-reviewer`.
+
+### Changed
+
+- **Agent counts say 41**, and the count of agents with general names is corrected to 21. `docs/explanation.md` said nineteen, which was already out of date.
+
 ## [10.0.0] - 2026-11-19
 
 ### Changed (breaking)
