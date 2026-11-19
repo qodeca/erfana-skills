@@ -18,12 +18,12 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
-| backlog | 2026-11-19 | fix(skills): give issue and backlog one dividing line |
+| backlog | 2026-11-19 | fix: one dividing line between issue, backlog and cleanup (#99) |
 | expert-panel | 2026-11-19 | feat: add finding-verifier to check review findings (#95) |
 | finish | 2026-11-19 | feat(skills)!: rename the ship skill to finish (#96) |
-| issue | 2026-11-19 | fix(skills): give issue and backlog one dividing line |
+| issue | 2026-11-19 | fix: one dividing line between issue, backlog and cleanup (#99) |
 | next-batch | 2026-11-19 | feat(skills)!: one issue lifecycle with erfana:backlog (#97) |
-| using-erfana | 2026-11-19 | fix(skills): give issue and backlog one dividing line |
+| using-erfana | 2026-11-19 | fix: one dividing line between issue, backlog and cleanup (#99) |
 | prompt | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | report | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
 | skill | 2026-11-18 | fix: remove dated prompt patterns found by the prompt audit (#94) |
