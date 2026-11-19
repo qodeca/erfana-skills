@@ -1,0 +1,88 @@
+# GitHub issue form – feature request.
+# Reference form: copy it to a repository's .github/ISSUE_TEMPLATE/ to get the same sections that
+# erfana:issue Create writes. The field labels become the headings that erfana:issue Implement reads.
+name: "Feature request"
+description: "Ask for new behaviour for users"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The first two fields are for people. The rest is the task for whoever implements it, a person or an AI agent.
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "Two to four plain sentences: who needs this, what they will be able to do, and why it matters now."
+    validations:
+      required: true
+  - type: input
+    id: done-when
+    attributes:
+      label: "Done when"
+      description: "One plain sentence that a non-engineer can check."
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: "Goal"
+      description: "One sentence that starts with a verb and names the result a user will see."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context"
+      description: "Who uses this and who else is affected, constraints with their reasons, and existing patterns to copy."
+    validations:
+      required: true
+  - type: textarea
+    id: requirements
+    attributes:
+      label: "Requirements"
+      description: "Behaviour a user can observe, with the scope of each rule stated."
+      value: |
+        1. 
+        2. 
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Acceptance criteria"
+      description: "Numbered statements that two reviewers would judge the same way, with a concrete threshold where it matters."
+      value: |
+        1. 
+        2. 
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: "Verification"
+      description: "The command that proves the work (tests, build, lint) and the check a user would do. Tests are evidence of correct behaviour, not the goal."
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: "Out of scope"
+      description: "Nearby work that is not part of this issue."
+    validations:
+      required: false
+  - type: textarea
+    id: stop-and-ask
+    attributes:
+      label: "Stop and ask when"
+      description: "The situations where the implementer must stop and ask, such as a new dependency or a public API change."
+    validations:
+      required: false
+  - type: textarea
+    id: starting-points
+    attributes:
+      label: "Starting points (verify before use)"
+      description: "Files or functions worth reading first, with the commit they were checked at. They go stale, so the implementer checks them."
+    validations:
+      required: false

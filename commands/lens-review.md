@@ -133,7 +133,8 @@ The main chat is the aggregator – it collects every subagent's findings and sy
 
 - **Validate each result first.** Check it against the finding contract. A reviewer that errors, times out, or returns unparseable / empty-contract output is a **failed lens** – record it in coverage ("performance: reviewer failed – lens not covered"), never drop it silently. Emit the report from the surviving reviewers; one reviewer's failure must not abort the others.
 - **Guard against context loss at high lens count.** Before synthesizing, enumerate the lenses recorded in step 2 and confirm each has a result (found, clean, not-assessable, or failed) so a mid-list lens cannot vanish.
-- **Confirm the evidence.** Search the target for each finding's `quote`, and set aside any that does not appear, saying how many in coverage. Verify each `blocker` yourself.
+- **Confirm the evidence.** Search the target for each finding's `quote`, and set aside any that does not appear, saying how many in coverage.
+- **Check the serious findings.** A reviewer asked to look for problems reports some that are not real. Send every `blocker` and `major` finding to the `finding-verifier` agent in batches of at most eight, the batches in parallel, each with the file list (and the diff for a PR) and one line on what the target is for – not the reviewers' research, reasoning, or lens briefs. It rules each finding confirmed, rejected, or not proven, with the text that shows it; the check runs once. Keep confirmed findings. Keep not-proven findings and say so in their technical detail, with what would settle them. Move rejected findings out of the table into coverage, each with the ruling's reason – except a rejected security-lens finding, which stays in the table marked "disputed by the check" so the reader decides. A batch that fails twice leaves its findings in the table marked "not checked". `minor` and `nit` findings are not checked: the cost of a wrong one is small.
 - **Collapse duplicates** – the same underlying issue under more than one lens merges into one finding naming both lenses.
 - **Rank** all findings by underlying engineering severity (`blocker` → `nit`), then by lens; this ranked order sets the table's row numbers.
 - **Translate severities for the reader.** When building the table and the technical-detail headers, map each engineering severity to its reader-facing label: `blocker` → Must-fix, `major` → Should-fix, `minor` → Nice-to-fix, `nit` → Cosmetic. The engineering severity still drives ranking; only the displayed label changes.
@@ -191,6 +192,7 @@ Emit the report to chat. If a validated `--out <file>` was accepted, also write 
     - Areas with no findings: <areas that ran and found nothing, or "none">.
     - Could not be assessed: <areas whose research returned no recent source, or "none">.
     - Reviewer problems: <areas whose reviewer or research pre-pass failed, or "none">.
+    - Set aside by the check: <each rejected finding in one line with the reason, or "none">; not proven: <count>; not checked: <count>.
     - Dropped to stay within the area cap: <list or "none">.
     - What was read and checked: <one plain line on files read and sources fetched>.
     - Reviewers used (for the maintainer): <area → agent>.

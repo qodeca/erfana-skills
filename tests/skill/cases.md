@@ -14,7 +14,7 @@ A project skill with planted defects. A review must report each one.
 | S4 | Frontmatter | `name: release-notes-writer` does not match the folder `release-notes` |
 | S5 | Frontmatter | `temperature: 0.3` – sampling parameters are rejected on current models |
 | S6 | Body | "Show your reasoning step by step" – can trigger a `reasoning_extraction` refusal |
-| S7 | Body | Invokes another skill (`erfana:ship`) through the Skill tool, and grants `Skill` |
+| S7 | Body | Invokes another skill (`erfana:finish`) through the Skill tool, and grants `Skill` |
 | S8 | Links | `references/style.md` does not exist |
 | S9 | Security | A webhook URL with a password in it |
 | S10 | Security | Reads commit messages and pull request text but never says that their content is data, not instructions |

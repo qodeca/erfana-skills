@@ -40,6 +40,8 @@ Fix a warning or failure by regenerating:
 bash scripts/gen-skill-registry.sh
 ```
 
+Do this in a registry-only change, not in a skill PR – unless the same-day edge under [Limitations](#limitations) applies, where the skill PR itself has to regenerate. Until it lands, the `gates` CI job also fails on `develop` and on each feature PR cut from it, with the skill's stale row in the message. The PR did not cause this failure.
+
 Never hand-edit the table – the next regeneration discards manual edits, and check 3 treats a fabricated date or subject as a hard failure.
 
 ## Shallow clones are refused, not tolerated
@@ -60,5 +62,7 @@ The generator truncates a commit subject to 72 characters (`[:69] + "..."`) and 
 - Dates reflect commits touching `skills/<name>/`, so a change made elsewhere that affects a skill (a shared agent under `agents/`, a hook, a shared reference file) does not move that skill's date. `article` is the standing example: its two `article-*` agents live at plugin root, so work on them never dates its row.
 - A row that is behind git can carry any subject at all – the subject is only verified when the date matches. Hand-editing a date *backwards* is therefore indistinguishable from ordinary lag, and warns rather than blocks.
 - Squash-merge and fresh-repo publishes flatten history: a cluster of skills sharing one old date means "not touched since that flattening event", not "created then". The registry says so in prose.
+- **The same-day edge is not only a release problem.** Any pull request that changes a skill whose row already carries today's date trips check 3: the row holds the earlier commit's subject, and the branch's own commit has the same date. This happens when two pull requests that change the same skill land on one day. Regenerate inside that pull request to get it green; if it is then squash-merged on the same day, the squash rewrites the subject again and `develop` needs the registry-only pull request afterwards. Merged on a later day, the row is merely behind and warns.
+- **A long commit subject can fail the docs job, not this gate.** A subject over 72 characters is cut to 69 plus `...`, and the cut can land inside a word (for example `both` -> `bo...`), which the spelling check in `scripts/check-docs.sh` rejects. Keep commit subjects on skill changes at 72 characters or fewer, and pull request titles at 65 or fewer: the squash subject is the title plus a space and `(#NNN)`.
 - The gate parses the first Markdown table in the file. Prose lines beginning with `|` added after the table would be read as rows.
 - The registry's prose skill count is covered by Gate 15 (`docs/skill-registry.md` is in its `docs_to_scan`), not by this gate, which reads table rows only.

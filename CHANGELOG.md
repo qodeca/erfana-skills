@@ -3,6 +3,35 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [10.0.0] - 2026-11-19
+
+### Changed (breaking)
+
+- **`erfana:ship` is now `erfana:finish`.** "Ship" read as a release to customers, while the skill commits, pushes, opens the pull request, and on request merges and cleans up. Type `/erfana:finish` where you typed `/erfana:ship`; the arguments (`commit`, `push`, `pr`, `merge`, `cleanup`) and the behaviour are unchanged. The old command no longer exists.
+
+### Added
+
+- **New skill `erfana:backlog` keeps the open-issue list true.** `merge` folds duplicate issues into one and groups very small issues into a checklist issue; `refine` checks every open issue against the merged code, closes what is proven done, and rewrites what is vague. It writes a plan under `.local/backlog/` first and changes GitHub only after you approve it, one paced write at a time, with a report that lists how to undo every close. Every close is confirmed by a second agent (`finding-verifier`) before it enters the plan. You start it yourself with `/erfana:backlog`; Claude never starts it. Its helper is the new read-only agent `backlog-analyst`.
+- **A `finding-verifier` agent checks review findings before they reach the user.** A reviewer asked to look for problems reports some that are not real. The new read-only agent gets the findings and the target – not the reviewers' reasoning – and rules each one confirmed, rejected, or not proven, with the text that shows it. `erfana:expert-panel` checks every finding, `/erfana:lens-review` checks blocker and major findings, and the embedded reviews of `erfana:issue` check critical and high findings before anything is fixed. Rejected findings stay visible with the reason; a rejected security finding goes to the user to decide. The check runs once and never loops.
+- **`erfana:expert-panel` adds a failure analyst for high-stakes plans.** When a plan commits money, data, security, or a step that cannot be undone, one role assumes the plan failed and traces how. It may report that it found no credible way to fail.
+
+### Changed
+
+- **`erfana:issue` and `erfana:backlog` have one dividing line.** `issue` carries one piece of work – a new issue, one implementation, one review – and its description now says so. Every change to issues that already exist goes through `backlog`. `/erfana:backlog refine #12 #15` now refines only the issues named, which covers "rewrite this one old issue".
+- **`/erfana:cleanup` no longer closes issues across the whole list.** Its GitHub group covers only the issues the finished block of work touched; for the rest it prints `/erfana:backlog refine`, which re-checks every close with a second agent and keeps an undo list.
+- **`erfana:issue` Create writes a new issue format (breaking for anything that parses issue bodies).** Issues now open with a short summary and a "Done when" line for people, followed by a "For AI agents" part with numbered acceptance criteria, a verification command, an out-of-scope list, stop-and-ask points, and starting points stamped with a commit. Create now searches the code and the open issues before asking, and asks at most three questions. The rule "no file paths" is gone: paths are given as starting points to verify. The rules come from the new `skills/issue/references/issue-guide.md`, each with its Anthropic source. Templates are `bug.md`, `feature.md`, `task.md`, and `kind-sections.md`; the issue forms are `bug.yml`, `feature.yml`, and `task.yml`. If your repository copied the old `bug-report.yml` or `enhancement.yml`, replace them. GitHub issue types are set only where the repository has them.
+- **`erfana:issue` Implement reads both issue formats.** It finds acceptance criteria as a numbered list or as checkboxes, and from a new-format issue it also takes the verification step, the out-of-scope list, and the stop-and-ask points (`skills/issue/references/reading-an-issue.md`). Old-format issues run as before.
+- **`erfana:next-batch` sizes an issue from its acceptance criteria and starting points** when the issue has them.
+- **Eleven shared agents state their rules plainly, with reasons.** `bug-investigator`, `e2e-test-design-reviewer`, `e2e-test-designer`, `e2e-test-writer`, `issue-solution-designer`, `lens-agent-discoverer`, `solution-reviewer`, `ui-designer`, `ui-reviewer`, `ux-designer`, and `ux-reviewer` no longer carry all-caps rule lists (ALWAYS / NEVER / MUST), because current Claude models over-apply shouted rules. Severity labels are unchanged. `bug-investigator` now names the outcomes an investigation must reach instead of a nine-step script.
+- **The `erfana:report` sentence-case rule gives its reason.** It keeps its top priority but drops the CRITICAL / MUST wording.
+- **`erfana:prompt` targets Claude Fable 5.2** instead of Fable 5.1, because Fable 5.2 replaced 5.1 as the current Fable model, and `claude-5-patterns.md` lists Opus 5.5 and Fable 5.2 as the current models.
+
+### Fixed
+
+- **The reasoning-display rule states the right fallback behaviour.** A `reasoning_extraction` refusal is not retried on a fallback model. `claude-5-patterns.md`, `.claude/CLAUDE.md`, the Gate 2 page, and the detector comment said it re-routed to Claude Opus 4.8.
+- **The code-review standards in `erfana:issue` name actions, not Claude tool calls.** `Grep(...)` snippets do not exist on Qwen Code. Human review-timing rows that a model reviewer cannot apply are gone.
+- **The effort guidance in `claude-5-patterns.md` agrees with the agent standard.** Judgment-heavy work starts at `medium`; `high` stays a measured exception for the agents that already declare it.
+
 ## [9.4.0] - 2026-11-02
 
 ### Added

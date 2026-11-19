@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `ship`, `handoff`) behind one bootstrap router, and 38 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `finish`, `handoff`) behind one bootstrap router, and 40 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -24,7 +24,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 |---|---|
 | `erfana:agent` | Claude Code agent lifecycle – Create, Review, Modify, and Pairs (doer/reviewer agents) – written as a brief. Interviews, design, writing, and edits run in the main conversation against `references/agent-standard.md`; `agent-researcher` gathers sourced best practices and the blinded `agent-reviewer` judges readiness. |
 | `erfana:article` | Medium-form article authoring (research → outline → draft → review → revise → publish or archive, plus status and listing), bilingual Polish/English. Researches through `article-researcher` and reviews through the blinded `article-reviewer`; outlining, drafting, and revising run in the main conversation. |
-| `erfana:issue` | GitHub-issue lifecycle (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `search issues`). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and commits nothing before the user accepts the result at UAT; the brief rebuild retired the run-state comment and resume. It runs 13 phases with 13 phase gates plus 3 embedded review sub-gates (QG-4a design review, QG-4b judgment, QG-11a change-set review); the design (QG-4a) and the change set (QG-8, QG-11a) are reviewed by reviewer agents the operation fans out itself – no user-run `/erfana:lens-review` – with CRITICAL/HIGH findings fixed inline and MEDIUM/LOW routed to a judge. The user is asked at five points only: a genuine requirements ambiguity in the requirements phase (phase 2), UAT acceptance (QG-11), the commit and branch-action confirmation (QG-12), a reviewer contradiction that cannot be resolved, and a gate that still fails after three attempts; a headless run stops before creating a branch, and a CI run is refused at QG-0. |
+| `erfana:issue` | One GitHub issue at a time (create / multi-phase implement / review code / display read-only `show issue` / `list issues` / `search issues`). The Implement operation is **autonomous** – it designs, builds, reviews, and fixes without blocking on intermediate approvals, resolving architecture/technical decisions by best practice plus judgment – and commits nothing before the user accepts the result at UAT; the brief rebuild retired the run-state comment and resume. It runs 13 phases with 13 phase gates plus 3 embedded review sub-gates (QG-4a design review, QG-4b judgment, QG-11a change-set review); the design (QG-4a) and the change set (QG-8, QG-11a) are reviewed by reviewer agents the operation fans out itself – no user-run `/erfana:lens-review` – with CRITICAL/HIGH findings fixed inline and MEDIUM/LOW routed to a judge. The user is asked at five points only: a genuine requirements ambiguity in the requirements phase (phase 2), UAT acceptance (QG-11), the commit and branch-action confirmation (QG-12), a reviewer contradiction that cannot be resolved, and a gate that still fails after three attempts; a headless run stops before creating a branch, and a CI run is refused at QG-0. |
 | `erfana:report` | Consulting reports with Pyramid Principle, SCQA, Five Cs. Written as a brief (ground rules, house standard, one section per operation); reviews run six checks through the shared `report-language-checker` and `report-structure-checker` agents. |
 | `erfana:skill` | Claude Code skill lifecycle – Create, Review, Modify, and the **Modernize operation**, which reviews an existing skill with the blinded `skill-reviewer` against `references/skill-standard.md`, lets the user pick the changes, and applies them in the main conversation with backups and a focused re-review. Every operation opens with a **coverage-map requirements interview** run in the main conversation per `references/interview-protocol.md`: Create always interviews; Modify/Review/Modernize gate-then-grill, backstopped by the `ms-grill-guard` Stop hook (registered in plugin-root `hooks/hooks.json` since v7.1.0; scoped to a live interview by its open-marker sentinel, not by its registration). Audit-trail per skill: [`modernization-registry.md`](modernization-registry.md). |
 | `erfana:spec` | 4-tier specification management (T1 issue → T4 standard) – Create, Change, Review, Reconcile, Archive and list – written as a brief. Requirements, creation, edits, and reconciliation run in the main conversation; `spec-app-researcher` researches similar applications, the blinded `spec-validator` reviews, and `spec-compliance-checker` compares a spec with the code. |
@@ -45,30 +45,31 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:prompt` | Interview the user one decision at a time and write or improve a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.1. SKILL.md holds the question protocol and the Claude 5 wording principles; `references/` holds the interview ledger and branches, the composable templates, and model guidance with the official URLs and a review date to recheck against. Authors prompts only – never executes the task a prompt describes. |
+| `erfana:prompt` | Interview the user one decision at a time and write or improve a prompt for Claude Opus 5.5, Sonnet 5.5, or Fable 5.2. SKILL.md holds the question protocol and the Claude 5 wording principles; `references/` holds the interview ledger and branches, the composable templates, and model guidance with the official URLs and a review date to recheck against. Authors prompts only – never executes the task a prompt describes. |
 | `erfana:raise-the-bar` | Rewrite a request the user is about to give Claude into a more ambitious one through three lenses – altitude (the outcome behind the task), depth (how a top practitioner would do it), range (other fields, as work rather than role-play) – keeping only raises the workspace supports and an outside judge can check, then print it for the user to run. `references/lenses.md` holds the lenses and the grounding test. Adapted from Felix Rieseberg's "How to be more ambitious: a tutorial for humans with models"; wording is new. Never does the work itself. |
 | `erfana:draft-goal` | Turn an intention into a `/goal` completion condition the goal evaluator can judge from the transcript (one outcome, numbered checks with visible evidence, exclusions, owner-decisions clause, turn bound) and print it for the user to paste between fixed START and END marker lines, at or under about 3,500 characters (Claude Code refuses a `/goal` over 4,000) – never runs `/goal` itself. `references/` holds the goal mechanics (checked against the Claude Code docs, with Qwen Code differences) and weak-to-strong condition patterns. Step structure adapted from Qwen Code's bundled `goal-draft` skill (Apache-2.0); wording is new, so it carries the repository's default GPL-3.0-only licence with a credit paragraph in SKILL.md. |
 
-### Work-session skills (4)
+### Work-session skills (5)
 
 | Sub-skill | Single concern |
 |---|---|
 | `erfana:autopilot` | Unattended run setup and upkeep – goal condition from the session, `.local/autopilot.md` state file (progress, owner queue, decisions), resume after restart; the `post-compact-reminder` hook points to the state file while it says `Status: active`. Prints the `/goal` line between START and END marker lines; never runs it. When a `/goal` is already running, it writes no new one and sets the run up against it, keeping its run rules in a Run rules section of the state file. |
 | `erfana:next-batch` | Rank free open issues by delivery impact, group the top N by theme, save `.local/next-batch.md`. Read-only on GitHub. |
 | `erfana:coordinate` | Claims on GitHub (`claimed` label + `<!-- erfana:claim -->` comment) so parallel sessions and clones do not collide; board, release, and sibling-session status exchange. The claim rules (`references/claims.md`) are shared with `next-batch` and `autopilot`. |
-| `erfana:expert-panel` | Fan out read-only top-practitioner reviewers over a plan, design, or documents; merge, ask the owner's decisions, write an improved version to a new file. |
+| `erfana:expert-panel` | Fan out read-only top-practitioner reviewers over a plan, design, or documents; merge; have `finding-verifier` rule on every finding; ask the owner's decisions; write an improved version to a new file. Adds a failure-analyst role for plans with an irreversible or high-stakes step. |
+| `erfana:backlog` | Keep the open-issue list true: `merge` folds duplicates and groups small issues, `refine` checks every open issue against the merged code. Plan first under `.local/backlog/`, apply only the lines the user left ticked, one paced write at a time; every close is confirmed by `finding-verifier`. `disable-model-invocation: true`. |
 | `erfana:design` | Design systems and HTML and CSS designs for desktop, web, and mobile, through seven operations (Create system, Change system, Audit system, New design, Revise, Migrate, Set status). Review pages run no JavaScript and hide nothing, so every comment stays visible. Ships a checker, a token builder, and an index builder in `skills/design/scripts/`, proved by Gate 20, and the Cascadia Mono files its documentation pages use; `ux-designer`, `ui-designer`, `ux-reviewer`, and `ui-reviewer` do the design and review work. |
 
 ### Session closeout skills (2)
 
 | Sub-skill | Single concern |
 |---|---|
-| `erfana:ship` | Git closeout – commit, push, pull request, optional merge after the checks pass, and cleanup of merged branches and worktrees – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
+| `erfana:finish` | Git closeout – commit, push, pull request, optional merge after the checks pass, and cleanup of merged branches and worktrees – stopping where the project's own rules forbid a step. `disable-model-invocation: true` because it pushes. |
 | `erfana:handoff` | Write a portable handoff document to the OS temp directory for another agent or person. `disable-model-invocation: true`. Adapted from `mattpocock/skills` (MIT); upstream files are kept verbatim under `references/` and licensed MIT in `REUSE.toml`, provenance in `references/UPSTREAM.md`. |
 
 ### Bootstrap (1)
 
-`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 17 other skills. For the three skills only the user can start (`fact-checking`, `ship`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
+`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 17 other skills. For the three skills only the user can start (`fact-checking`, `finish`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
 
 Each skill's frontmatter follows the shape in `skills/skill/references/skill-standard.md` section 3: `description:` says what the skill does, in the third person (Gate 2 soft-warns over 500 characters), and `when_to_use:` carries the triggers ("Use when the user says …", with at least three quoted phrases). Only `grill-me` still opens its description with "Use when". Adding a new skill repeats the pattern.
 
@@ -83,7 +84,7 @@ erfana-skills/
 ├── .vale.ini                ← Vale style config; rules in .vale/styles/Erfana (dashes, headings, plain words), vocabulary in .vale/styles/config/vocabularies/Erfana
 ├── .markdownlint-cli2.jsonc ← Markdown structure rules
 ├── lychee.toml              ← link-checker config (local links and #fragments block; the docs CI job reports web links without blocking)
-├── agents/                  ← 38 shared agents; flat directory; Claude Code auto-discovers (history in CHANGELOG.md)
+├── agents/                  ← 40 shared agents; flat directory; Claude Code auto-discovers (history in CHANGELOG.md)
 ├── skills/
 │   ├── agent/     ← orchestration skill; references/ (agent standard, pairs), templates/
 │   ├── article/   ← references/, templates/ (research and review through 2 plugin-root article-* agents)
@@ -100,7 +101,8 @@ erfana-skills/
 │   ├── next-batch/          ← work-session skill; SKILL.md only (uses coordinate's claim rules)
 │   ├── coordinate/          ← work-session skill; references/claims.md (shared with next-batch and autopilot)
 │   ├── expert-panel/        ← work-session skill; SKILL.md only
-│   ├── ship/                ← session-closeout skill (user-invoked only)
+│   ├── backlog/             ← work-session skill (user-invoked only); references/ (bulk rules, plan and apply); uses issue's guide and templates
+│   ├── finish/              ← session-closeout skill (user-invoked only)
 │   ├── handoff/             ← session-closeout skill (user-invoked only); references/ holds MIT upstream files
 │   └── using-erfana/        ← bootstrap meta-router
 ├── hooks/                   ← six safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+; interview guards promoted to plugin root v7.1.0+)
@@ -160,16 +162,17 @@ Slash commands (`commands/`) follow the same auto-discovery pattern as skills: d
 
 ### Shared resources
 
-- **`agents/` at plugin root** – 38 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; skills and commands delegate to them through the subagent tool. They fall into three groups:
-  - *Skill-owned* (12) – the name starts with the owning skill's name: `spec-` (3), `issue-` (1), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2).
+- **`agents/` at plugin root** – 40 shared agents; flat directory of `*.md` files. Auto-discovered by Claude Code; skills and commands delegate to them through the subagent tool. They fall into three groups:
+  - *Skill-owned* (13) – the name starts with the owning skill's name: `spec-` (3), `issue-` (1), `skill-` (1), `agent-` (2), `article-` (2), `fact-checking-` (1), `report-` (2), `backlog-` (1).
   - *Command-owned* (1) – `lens-agent-discoverer`, used by `/erfana:lens-review`.
-  - *Shared or standalone* (20) – the `e2e-` agents (4), the `release-` agents (2), and generic names (14, including `solution-*`, UI/UX, and the general reviewers and developers). Most are called by `issue`, `spec`, `expert-panel`, or `lens-review`; four – `e2e-test-reviewer`, `release-preparer`, `release-quality-runner`, and `ui-reviewer` – are not referenced by any skill or command and run only when a user or Claude picks them directly.
+  - *Shared or standalone* (26) – the `e2e-` agents (4), the `release-` agents (2), and generic names (20, including `solution-*`, UI/UX, `finding-verifier`, and the general reviewers and developers). Most are called by `issue`, `spec`, `expert-panel`, or `lens-review`; four – `e2e-test-reviewer`, `release-preparer`, `release-quality-runner`, and `ui-reviewer` – are not referenced by any skill or command and run only when a user or Claude picks them directly.
 
    The generic-name agents (`code-reviewer`, `commit-writer`, `software-developer`, etc.) carry collision risk with built-ins or other plugins (last-loaded wins) – see `SECURITY.md > Known limitations`.
-- **No shared content bundle.** Since v7.0.0 every skill owns its own references and templates; there is no hoisted bundle. Three skills do link straight into a sibling's folder, and renaming or moving the target file breaks them (Gate 7 catches the broken link):
+- **No shared content bundle.** Since v7.0.0 every skill owns its own references and templates; there is no hoisted bundle. Four skills do link straight into a sibling's folder, and renaming or moving the target file breaks them (Gate 7 catches the broken link):
   - `next-batch` and `autopilot` use the claim rules in `skills/coordinate/references/claims.md`.
   - `autopilot` writes its goal condition by `skills/draft-goal/references/condition-patterns.md`.
   - `skill` points agent authors to `skills/agent/references/agent-standard.md`.
+  - `backlog` writes issue bodies by `skills/issue/references/issue-guide.md` and the templates in `skills/issue/templates/create/`.
 
 ### Per-skill nested agents
 
@@ -200,7 +203,7 @@ When a skill file approaches the 500-line cap, hoist the single most cohesive se
 
 ## Cross-skill flow
 
-The bootstrap (`skills/using-erfana/SKILL.md`) routes to the orchestration skills and to single-skill branches: a process branch (`grill-me`, v4.2.3+), a prompting branch (`prompt`, `draft-goal`, `raise-the-bar`), and a work-session branch (`autopilot`, `next-batch`, `coordinate`, `expert-panel`). It does not route to the three user-invoked skills – `fact-checking`, `ship`, and `handoff` – it only suggests their slash command. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
+The bootstrap (`skills/using-erfana/SKILL.md`) routes to the orchestration skills and to single-skill branches: a process branch (`grill-me`, v4.2.3+), a prompting branch (`prompt`, `draft-goal`, `raise-the-bar`), and a work-session branch (`autopilot`, `next-batch`, `coordinate`, `expert-panel`). It does not route to the four user-invoked skills – `fact-checking`, `backlog`, `finish`, and `handoff` – it only suggests their slash command. Orchestration skills are independent of each other; the process branch is a leaf that may hand off to an orchestration skill when the user is ready to execute the locked plan.
 
 ### Orchestration flow
 
@@ -223,7 +226,8 @@ User intent → using-erfana (router, one flat table)
                   │    └─ specialist review of a plan? → expert-panel
                   └─ user-invoked only (suggest the command, never route)
                        ├─ fact-check a document → /erfana:fact-checking <file>
-                       ├─ commit, push, pull request → /erfana:ship
+                       ├─ merge duplicates, check open issues → /erfana:backlog
+                       ├─ commit, push, pull request → /erfana:finish
                        └─ hand the work over → /erfana:handoff
 ```
 
@@ -242,7 +246,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
    - `when_to_use:` the triggers, starting "Use when the user says …" (specific triggers per Anthropic; ≥3 quoted activation phrases is the plugin-convention Gate 2 v4.2.0+ heuristic for activation reliability, refined v4.2.1).
    - `allowed-tools:` minimal set.
    - Combined `description` + `when_to_use` ≤1,536 chars (Anthropic-documented truncation limit, Gate 2 v4.2.0+).
-   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `ship`, and `handoff`).
+   - `disable-model-invocation: true` ONLY if the skill is user-invoked-only (currently `fact-checking`, `backlog`, `finish`, and `handoff`).
    - `effort:` and `model:` (v4.2.0+, optional but recommended for orchestrator skills): per the model and effort table in `skills/agent/references/agent-standard.md` section 7.
 3. **Body structure**: write the body as a brief – ground rules first, then one outcome-led section per operation – per section 4 of `skills/skill/references/skill-standard.md` ("The body: write a brief").
 4. **References**: skill-internal docs go under `skills/<name>/references/` and `skills/<name>/templates/` (plus `examples/` where a skill needs worked examples). Prefer citing nothing outside the skill's own folder except plugin-root `agents/`; if the skill must use a sibling's reference file, link it relatively and add it to the cross-skill list under [Shared resources](#shared-resources).
@@ -265,7 +269,7 @@ If a single conversation spans two skills (e.g. a spec and the issues that imple
 - **Project-level skills** (`.claude/skills/` in employee repos). The plugin is plugin-scope only. Personal/project skills override plugin skills per CC's scope precedence; that's documented in README troubleshooting, not enforced by this plugin.
 - **Cross-skill invocation**. No skill invokes another. Apart from the router, the only coupling is the three reference-file links listed under [Shared resources](#shared-resources). A skill that would need a sibling's behaviour prints the sibling's command and ends the turn instead of invoking it.
 
-Note on agents: v4.0.0 added `agents/` and per-skill nested agents; the nested agents are gone and the live count is the one stated at the top of this document. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding an agent requires updating every "38 shared agents" count claim (`CLAUDE.md`, `README.md`, `docs/architecture.md`, `MAINTAINER.md`) and the agent count in the `plugin.json` description; Gate 15 enforces the prose claims.
+Note on agents: v4.0.0 added `agents/` and per-skill nested agents; the nested agents are gone and the live count is the one stated at the top of this document. The architectural rule is that agents are an **implementation detail of orchestration skills** – they execute multi-phase work the orchestration skills break down via the `Task` tool. Adding an agent requires updating every "40 shared agents" count claim (`CLAUDE.md`, `README.md`, `docs/architecture.md`, `MAINTAINER.md`) and the agent count in the `plugin.json` description; Gate 15 enforces the prose claims.
 
 ## See also
 

@@ -3,7 +3,7 @@
 <!-- GENERATED FILE - DO NOT EDIT BY HAND. -->
 <!-- Regenerate with: bash scripts/gen-reference.sh -->
 
-*This page describes erfana v9.4.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.0.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Everything erfana ships, read straight from the plugin files by
 [`scripts/gen-reference.sh`](../scripts/gen-reference.sh). Gate 19 fails the
@@ -16,26 +16,27 @@ use the bare name, for example `/issue`. Claude also loads a skill on its own
 when your words match its trigger phrases, unless the skill is marked
 "you start it".
 
-## Skills (19)
+## Skills (20)
 
 | Skill | Started by | What it is for |
 |---|---|---|
 | [`erfana:agent`](#erfanaagent) | you or Claude | Creates, reviews, and changes Claude Code agents (subagents) to the current Anthropic standard for the Claude 5.5 generation – calm routing descriptions, least-privilege tools, a prompt that states the job, its limits, and its output – and builds doer/reviewer pairs. |
 | [`erfana:article`](#erfanaarticle) | you or Claude | Researches, outlines, drafts, reviews, revises, and publishes medium-form articles (2,000–3,000 words) in English, Polish, or both, with every claim tied to a listed source, a blinded editorial review, and versioned drafts that are never overwritten. |
 | [`erfana:autopilot`](#erfanaautopilot) | you or Claude | Sets up and keeps alive an unattended work run – writes the /goal condition from the session itself, keeps one state file with progress and a queue of what needs the owner, keeps the task list down to open work, and picks the run up again after a restart or compaction. |
+| [`erfana:backlog`](#erfanabacklog) | you start it | Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. |
 | [`erfana:coordinate`](#erfanacoordinate) | you or Claude | Keeps parallel Claude sessions on the same repository out of each other's way – claims GitHub issues so no two sessions take the same one, shows who holds what, releases claims, and exchanges a short status with sibling sessions on the same machine. |
 | [`erfana:design`](#erfanadesign) | you or Claude | Creates and maintains design systems, development-ready style libraries, and static HTML and CSS review pages for desktop, web, and mobile apps. |
 | [`erfana:draft-goal`](#erfanadraft-goal) | you or Claude | Turns a fuzzy intention into a /goal completion condition that the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, explicit exclusions, an owner-decisions clause, and a turn bound – and prints it ready to paste. |
 | [`erfana:expert-panel`](#erfanaexpert-panel) | you or Claude | Runs a panel of top-practitioner reviewers over a plan, design, or set of documents – picks the roles the target needs, has each review it independently, merges what they find, puts the owner's decisions to the user, and ends with an improved version of the plan. |
 | [`erfana:fact-checking`](#erfanafact-checking) | you start it | Checks a markdown analysis document against the source materials it was written from – interview transcripts, vendor documents, notes – to catch hallucinations. |
+| [`erfana:finish`](#erfanafinish) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
 | [`erfana:grill-me`](#erfanagrill-me) | you or Claude | Use when the user wants to stress-test a plan or design through relentless one-at-a-time questioning until shared understanding is reached, sized to the stakes of the plan. |
 | [`erfana:handoff`](#erfanahandoff) | you start it | Compacts the current conversation into a handoff document that another agent, harness, directory, or colleague can pick up. |
-| [`erfana:issue`](#erfanaissue) | you or Claude | Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
+| [`erfana:issue`](#erfanaissue) | you or Claude | Works one GitHub issue at a time – drafts a well-formed issue for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only. |
 | [`erfana:next-batch`](#erfananext-batch) | you or Claude | Picks the next batch of GitHub issues for a working session – reads the open issues, skips the ones other sessions have claimed, ranks the rest by impact on delivery, groups the top ones by theme, and saves the batch for an unattended run. |
-| [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
+| [`erfana:prompt`](#erfanaprompt) | you or Claude | Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. |
 | [`erfana:raise-the-bar`](#erfanaraise-the-bar) | you or Claude | Rewrites a request the user is about to give Claude into a more ambitious one – aimed at the outcome behind the task, done the way a top practitioner would, and drawing on other fields – grounded in what Claude can actually reach and checked by something other than Claude. |
 | [`erfana:report`](#erfanareport) | you or Claude | Creates, reviews, revises, and versions professional consulting reports to a house standard – Pyramid Principle, SCQA, Five C's findings, a bottom-line-first executive summary, sentence case, and plain, precise prose. |
-| [`erfana:ship`](#erfanaship) | you start it | Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. |
 | [`erfana:skill`](#erfanaskill) | you or Claude | Creates, reviews, changes, and modernizes Claude Code skills to the current Anthropic standard for the Claude 5.5 generation – trigger-shaped descriptions, a body written as a brief with its ground rules first, least-privilege tools, and a way out when blocked – starting every create with a requirements interview. |
 | [`erfana:spec`](#erfanaspec) | you or Claude | Creates, changes, reviews, reconciles, and archives right-sized requirements specifications in four tiers (T1 issue, T2 spec, T3 lite spec, T4 standard spec), with a project registry whose spec IDs are never reused and a separate checker that reviews each spec. |
 | [`erfana:using-erfana`](#erfanausing-erfana) | you or Claude | Routes a request to the right erfana skill – agents, skills, GitHub issues, specifications, reports, articles, plan stress-tests, prompts, goals – and names the slash command for the skills only the user can start. |
@@ -66,6 +67,14 @@ Sets up and keeps alive an unattended work run – writes the /goal condition fr
 - **Started by:** you or Claude
 - **Trigger phrases:** "work unattended", "run this autonomously", "prepare the unattended run for this session", "resume the work you were doing before the restart", "autopilot status", "do you need anything from me?", "did you finish everything?"
 - **Source:** [`skills/autopilot/SKILL.md`](../skills/autopilot/SKILL.md)
+
+### `erfana:backlog`
+
+Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. Writes a plan first and changes GitHub only after the user approves it. Runs only when the user invokes it, because it edits and closes issues in bulk.
+
+- **Start:** `/erfana:backlog` `[merge | refine [#N …] [branch] | apply | discard] (no argument: show the open plans)`
+- **Started by:** you start it
+- **Source:** [`skills/backlog/SKILL.md`](../skills/backlog/SKILL.md)
 
 ### `erfana:coordinate`
 
@@ -111,6 +120,14 @@ Checks a markdown analysis document against the source materials it was written 
 - **Started by:** you start it
 - **Source:** [`skills/fact-checking/SKILL.md`](../skills/fact-checking/SKILL.md)
 
+### `erfana:finish`
+
+Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. Runs only when the user invokes it, because it pushes to a shared remote.
+
+- **Start:** `/erfana:finish` `[commit | push | pr | merge | cleanup] (default: pr)`
+- **Started by:** you start it
+- **Source:** [`skills/finish/SKILL.md`](../skills/finish/SKILL.md)
+
 ### `erfana:grill-me`
 
 Use when the user wants to stress-test a plan or design through relentless one-at-a-time questioning until shared understanding is reached, sized to the stakes of the plan.
@@ -130,7 +147,7 @@ Compacts the current conversation into a handoff document that another agent, ha
 
 ### `erfana:issue`
 
-Works the GitHub issue lifecycle – drafts well-formed issues for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only.
+Works one GitHub issue at a time – drafts a well-formed issue for approval, implements an existing issue end to end with embedded reviews and the user's acceptance at UAT, reviews source code from one file up to a pull request or a spec-compliance audit, and shows issues read-only.
 
 - **Start:** `/erfana:issue` `[create … | implement #N | review <scope> | show #N | list | search <query>]`
 - **Started by:** you or Claude
@@ -148,7 +165,7 @@ Picks the next batch of GitHub issues for a working session – reads the open i
 
 ### `erfana:prompt`
 
-Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.1), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. Use when someone wants a new prompt, a better prompt, or prompt-engineering help – not to carry out the task the prompt describes.
+Interviews the user and writes or improves a prompt for a current Claude model (Opus 5.5, Sonnet 5.5, Fable 5.2), ending with a paste-ready prompt that follows Anthropic's guidance for Claude 5-generation models. Use when someone wants a new prompt, a better prompt, or prompt-engineering help – not to carry out the task the prompt describes.
 
 - **Start:** `/erfana:prompt` `[goal, or a draft prompt to improve]`
 - **Started by:** you or Claude
@@ -172,14 +189,6 @@ Creates, reviews, revises, and versions professional consulting reports to a hou
 - **Started by:** you or Claude
 - **Trigger phrases:** "create report", "review report", "validate report", "fix report issues", "version report"
 - **Source:** [`skills/report/SKILL.md`](../skills/report/SKILL.md)
-
-### `erfana:ship`
-
-Closes out the current work – commits, pushes, opens or updates the pull request, and on request waits for the checks, merges, deletes the branch, closes the linked issue, and tidies merged branches and worktrees. Runs only when the user invokes it, because it pushes to a shared remote.
-
-- **Start:** `/erfana:ship` `[commit | push | pr | merge | cleanup] (default: pr)`
-- **Started by:** you start it
-- **Source:** [`skills/ship/SKILL.md`](../skills/ship/SKILL.md)
 
 ### `erfana:skill`
 
@@ -205,10 +214,10 @@ Routes a request to the right erfana skill – agents, skills, GitHub issues, sp
 
 - **Start:** `/erfana:using-erfana`
 - **Started by:** you or Claude
-- **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "commit and push", "open a pull request", "hand this off to another session"
+- **Trigger phrases:** "which erfana skill", "what can erfana do", "help me pick a skill", "create an agent", "create a skill", "implement issue", "create a spec", "write an article", "create a report", "grill me", "write a prompt", "draft a goal", "pick the next issues", "claim issue", "fan out specialists", "have specialists review this plan", "run this unattended", "raise the bar", "review my skill", "stress-test this plan", "fact-check this", "merge duplicate issues", "clean up the backlog", "commit and push", "open a pull request", "hand this off to another session"
 - **Source:** [`skills/using-erfana/SKILL.md`](../skills/using-erfana/SKILL.md)
 
-## Agents (38)
+## Agents (40)
 
 Agents are helpers that skills start for a narrow job, such as a blinded
 review. You can also ask Claude to use one by name. Each runs with only the
@@ -221,6 +230,7 @@ tools listed here.
 | [`architecture-reviewer`](../agents/architecture-reviewer.md) | Reviews code structure – SOLID, design patterns, anti-patterns, code smells, and technical debt – and recommends ordered, risk-rated refactorings without changing code. Use when judging a module's design or planning a refactor; for line-level code quality use code-reviewer. | Read, Grep, Glob, WebSearch, WebFetch | opus | medium |
 | [`article-researcher`](../agents/article-researcher.md) | Used by erfana:article to research an article brief on the web and write a sourced research file and source list. | Read, Write, WebSearch, WebFetch, Grep, Glob | sonnet | medium |
 | [`article-reviewer`](../agents/article-reviewer.md) | Used by erfana:article to review article drafts against the review standard and return every finding with its evidence. | Read, Grep, Glob | sonnet | medium |
+| [`backlog-analyst`](../agents/backlog-analyst.md) | Used by erfana:backlog to check open issues against a code snapshot, find duplicate and small issues, and draft issue bodies, returning JSON. | Read, Grep, Glob | sonnet | medium |
 | [`bug-investigator`](../agents/bug-investigator.md) | Finds the root cause of errors, crashes, and unexpected behavior through read-only investigation. Use when debugging a failure before deciding on a fix. | Read, Grep, Glob | opus | high |
 | [`code-reviewer`](../agents/code-reviewer.md) | Reviews code for bugs, security, TypeScript safety, quality, and tests, with stack checks for React (hooks, accessibility, forms) and Nest.js (modules, guards, Zod, Prisma). Use for a code or PR review; for structure and refactoring use architecture-reviewer. | Read, Grep, Glob, Bash | opus | medium |
 | [`commit-writer`](../agents/commit-writer.md) | Writes Conventional Commits messages and pull request descriptions from the current changes. Use when preparing a commit or a PR. Drafts text only; does not commit. | Bash | opus | medium |
@@ -232,6 +242,7 @@ tools listed here.
 | [`e2e-test-reviewer`](../agents/e2e-test-reviewer.md) | Reviews written e2e tests for flakiness, isolation, selector resilience, and best practices. Use after e2e tests are written or when they are flaky; for test design specs use e2e-test-design-reviewer. | Read, Glob, Grep, WebSearch | opus | session default |
 | [`e2e-test-writer`](../agents/e2e-test-writer.md) | Writes end-to-end tests in Playwright, Cypress, or Selenium. Use when adding or extending e2e coverage for a user flow. | Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch | opus | medium |
 | [`fact-checking-verifier`](../agents/fact-checking-verifier.md) | Used by erfana:fact-checking to verify a batch of extracted claims against confirmed source files and return a verdict with evidence for each. | Read, Grep, Glob | opus | high |
+| [`finding-verifier`](../agents/finding-verifier.md) | Used by erfana:expert-panel, erfana:issue, erfana:backlog, and /erfana:lens-review to rule each review finding confirmed, rejected, or not proven. | Read, Grep, Glob | opus | medium |
 | [`issue-solution-designer`](../agents/issue-solution-designer.md) | Used by erfana:issue to plan an implementation, verify it against the plan and criteria, and judge embedded-review findings. | Read, Grep, Glob, Write | opus | high |
 | [`lens-agent-discoverer`](../agents/lens-agent-discoverer.md) | Used by /erfana:lens-review to list the available builtin and shared agents with their capabilities and tools. | Read, Glob, Grep | opus | low |
 | [`performance-reviewer`](../agents/performance-reviewer.md) | Reviews code for slow paths, wasteful queries, memory growth, and scaling limits, and separates measured problems from suspected ones. Use when code feels slow, before a load increase, or for hot-path changes; for general quality use code-reviewer. | Read, Grep, Glob | opus | medium |

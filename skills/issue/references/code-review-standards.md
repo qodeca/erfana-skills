@@ -4,7 +4,7 @@ Code review standards. The stack-specific sections (Electron, Node.js, React, Ty
 
 ## Contents
 
-- [Mandatory enforcement](#mandatory-enforcement)
+- [When these reviews apply](#when-these-reviews-apply)
 - [1. General code review standards](#1-general-code-review-standards)
 - [2. Electron security checklist](#2-electron-security-checklist) (Electron projects)
 - [3. Node.js code review checklist](#3-nodejs-code-review-checklist) (Node projects)
@@ -16,9 +16,9 @@ Code review standards. The stack-specific sections (Electron, Node.js, React, Ty
 
 ---
 
-## MANDATORY ENFORCEMENT
+## When these reviews apply
 
-**This reference is NOT optional. ALL file-modifying operations MUST complete these reviews.**
+Every file-modifying operation completes these reviews before it is reported done, because an unreviewed file change reaches users with whatever security or quality defect it carries. The table shows which gate each review belongs to and whether it can be overridden.
 
 | Review Type | Gate | Can Override |
 |-------------|------|--------------|
@@ -36,13 +36,11 @@ Code review standards. The stack-specific sections (Electron, Node.js, React, Ty
 | Metric | Threshold | Action |
 |--------|-----------|--------|
 | PR size | 200-400 lines max | Split larger PRs |
-| Review time | 1-5 hours response | Block if exceeded |
-| Inspection rate | 150-500 LOC/hour | Slow down if faster |
 | Files per review | ≤20 files | Split if larger |
 
 ### 1.2 Feedback labels
 
-**MANDATORY: Use these prefixes for all findings:**
+Start every finding with one of these prefixes, so the blocking findings can be told apart from the optional ones at a glance:
 
 | Prefix | Meaning | Blocking |
 |--------|---------|----------|
@@ -68,17 +66,17 @@ Code review standards. The stack-specific sections (Electron, Node.js, React, Ty
 
 ## 2. Electron Security Checklist
 
-### 2.1 webPreferences validation (MANDATORY)
+### 2.1 webPreferences validation (required)
 
-**STOP if ANY of these are misconfigured:**
+Stop and report a blocking finding if any of these is misconfigured – each one opens the renderer to code running with Node.js privileges:
 
 ```javascript
-// REQUIRED SECURE CONFIGURATION
+// Required secure configuration
 webPreferences: {
-  nodeIntegration: false,           // MUST be false
-  contextIsolation: true,           // MUST be true
+  nodeIntegration: false,           // must be false
+  contextIsolation: true,           // must be true
   sandbox: true,                    // SHOULD be true
-  webSecurity: true,                // MUST be true
+  webSecurity: true,                // must be true
   allowRunningInsecureContent: false,
   nodeIntegrationInWorker: false,
   nodeIntegrationInSubFrames: false,
@@ -87,12 +85,11 @@ webPreferences: {
 }
 ```
 
-**Detection pattern:**
-```
-Grep(pattern="nodeIntegration:\\s*true", path="src/main/")
-Grep(pattern="contextIsolation:\\s*false", path="src/main/")
-Grep(pattern="webSecurity:\\s*false", path="src/main/")
-```
+**Detection pattern:** search `src/main/` for each of these patterns:
+
+- `nodeIntegration:\s*true`
+- `contextIsolation:\s*false`
+- `webSecurity:\s*false`
 
 ### 2.2 Electron fuses validation
 
@@ -104,7 +101,7 @@ Grep(pattern="webSecurity:\\s*false", path="src/main/")
 
 ### 2.3 IPC security
 
-**CRITICAL - Always validate:**
+Validate the sender and the data in every IPC handler – an unvalidated handler lets any loaded page trigger privileged actions:
 
 ```typescript
 // ❌ BAD: No sender validation
@@ -120,11 +117,7 @@ ipcMain.on('sensitive-action', (event, data) => {
 });
 ```
 
-**Detection patterns:**
-```
-Grep(pattern="ipcMain\\.on|ipcMain\\.handle", path="src/main/")
-→ Verify each handler validates event.sender or event.senderFrame
-```
+**Detection patterns:** search `src/main/` for `ipcMain\.on|ipcMain\.handle`, then verify each handler validates `event.sender` or `event.senderFrame`.
 
 ### 2.4 Dangerous patterns to flag
 
@@ -144,7 +137,7 @@ Grep(pattern="ipcMain\\.on|ipcMain\\.handle", path="src/main/")
 
 | Check | Pattern | Severity |
 |-------|---------|----------|
-| No `var` usage | `Grep(pattern="\\bvar\\s")` | Medium |
+| No `var` usage | search for `\bvar\s` | Medium |
 | Prefer `const` | Variables that aren't reassigned | Low |
 | ES Modules | `import/export` vs `require` | Low |
 | Naming conventions | camelCase functions, PascalCase classes | Medium |
@@ -153,7 +146,7 @@ Grep(pattern="ipcMain\\.on|ipcMain\\.handle", path="src/main/")
 
 | Check | Detection | Severity |
 |-------|-----------|----------|
-| No hardcoded secrets | `Grep(pattern="api[_-]?key|secret|password|token")` | CRITICAL |
+| No hardcoded secrets | search for `api[_-]?key|secret|password|token` | CRITICAL |
 | Input validation | Boundary checks present | HIGH |
 | SQL injection | Parameterized queries used | CRITICAL |
 | Path traversal | `path.resolve` + validation | HIGH |
@@ -235,7 +228,7 @@ useEffect(() => {
 
 // ❌ BAD: Conditional hook call
 if (condition) {
-  useState(); // NEVER conditional hooks
+  useState(); // hooks must not be called conditionally
 }
 ```
 
@@ -247,11 +240,7 @@ if (condition) {
 | `useMemo` | Expensive calculations | Simple values |
 | `useCallback` | Callbacks passed to memoized children | Not passed down |
 
-**Detection:**
-```
-Grep(pattern="React\\.memo|useMemo|useCallback", path="src/renderer/")
-→ Verify each usage is justified
-```
+**Detection:** search `src/renderer/` for `React\.memo|useMemo|useCallback`, then verify each usage is justified.
 
 ### 4.4 Security
 
@@ -279,20 +268,20 @@ Grep(pattern="React\\.memo|useMemo|useCallback", path="src/renderer/")
 
 | Rule | Check | Severity |
 |------|-------|----------|
-| No `any` | `Grep(pattern=": any")` | HIGH |
-| No `as` assertions | `Grep(pattern="as [A-Z]")` | MEDIUM |
+| No `any` | search for `: any` | HIGH |
+| No `as` assertions | search for `as [A-Z]` | MEDIUM |
 | Strict mode enabled | tsconfig.json | HIGH |
-| No `!` non-null | `Grep(pattern="!\\.")` | MEDIUM |
+| No `!` non-null | search for `!\.` | MEDIUM |
 
 ### 5.2 Configuration requirements
 
 ```jsonc
-// tsconfig.json - REQUIRED settings
+// tsconfig.json – required settings
 {
   "compilerOptions": {
-    "strict": true,              // MANDATORY
-    "strictNullChecks": true,    // MANDATORY
-    "noImplicitAny": true,       // MANDATORY
+    "strict": true,              // required
+    "strictNullChecks": true,    // required
+    "noImplicitAny": true,       // required
     "noUncheckedIndexedAccess": true  // RECOMMENDED
   }
 }
@@ -331,7 +320,7 @@ const name = user!.profile!.name;
 
 ### 5.4 API boundaries
 
-**MANDATORY: Validate at system boundaries:**
+Validate data at system boundaries, because types alone do not check what arrives at runtime:
 
 ```typescript
 import { z } from 'zod';
@@ -371,11 +360,9 @@ function handleApiResponse(response: User): User {
 ```
 # Count lines per file
 wc -l src/**/*.ts | sort -n
-
-# Check for mixed concerns
-Grep(pattern="import.*from.*(api|store|service)", path="<component>")
-→ Flag if component imports from multiple layers
 ```
+
+Check for mixed concerns: search `<component>` for `import.*from.*(api|store|service)`, and flag the component if it imports from multiple layers.
 
 ### 6.2 Open/Closed Principle (OCP)
 
@@ -383,8 +370,8 @@ Grep(pattern="import.*from.*(api|store|service)", path="<component>")
 
 | Violation | Detection | Severity |
 |-----------|-----------|----------|
-| Growing switch statements | `Grep(pattern="switch.*type")` | HIGH |
-| Multiple if/else on type | `Grep(pattern="if.*typeof")` | HIGH |
+| Growing switch statements | search for `switch.*type` | HIGH |
+| Multiple if/else on type | search for `if.*typeof` | HIGH |
 | Hardcoded lists that grow | Manual review | MEDIUM |
 
 **Fix pattern:**
@@ -414,8 +401,8 @@ function getIcon(type: string) {
 
 | Violation | Detection | Severity |
 |-----------|-----------|----------|
-| Methods throwing "not implemented" | `Grep(pattern="not implemented")` | HIGH |
-| Type checks after interface use | `Grep(pattern="instanceof")` | MEDIUM |
+| Methods throwing "not implemented" | search for `not implemented` | HIGH |
+| Type checks after interface use | search for `instanceof` | MEDIUM |
 | Overrides with different behavior | Manual review | HIGH |
 
 ### 6.4 Interface Segregation Principle (ISP)
@@ -425,7 +412,7 @@ function getIcon(type: string) {
 | Violation | Detection | Severity |
 |-----------|-----------|----------|
 | Interface > 7 methods | Interface analysis | MEDIUM |
-| Optional methods (?) | `Grep(pattern="\\?:")` in interfaces | LOW |
+| Optional methods (?) | search interfaces for `\?:` | LOW |
 | Empty method implementations | Manual review | HIGH |
 
 ### 6.5 Dependency Inversion Principle (DIP)
@@ -434,16 +421,11 @@ function getIcon(type: string) {
 
 | Violation | Detection | Severity |
 |-----------|-----------|----------|
-| Direct instantiation | `Grep(pattern="new [A-Z]")` | MEDIUM |
+| Direct instantiation | search for `new [A-Z]` | MEDIUM |
 | Concrete imports across layers | Import analysis | HIGH |
-| Global singletons | `Grep(pattern="getInstance")` | MEDIUM |
+| Global singletons | search for `getInstance` | MEDIUM |
 
-**Detection pattern:**
-```
-# Check for concrete dependencies
-Grep(pattern="import.*Service|import.*Repository", path="src/renderer/")
-→ Should import interfaces, not implementations
-```
+**Detection pattern:** to check for concrete dependencies, search `src/renderer/` for `import.*Service|import.*Repository`; the matches should import interfaces, not implementations.
 
 See [code-review-standards-dimensions.md](code-review-standards-dimensions.md) for detailed dimension criteria (sections 7–13: code smells, complexity metrics, test coverage, documentation, severity matrix, automated checks, review workflow).
 

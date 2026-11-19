@@ -1,6 +1,6 @@
 # Claude 5 patterns for skill and agent authors
 
-Practical guidance for designing Claude Code skills and agents targeting the Claude 5 family — the current Opus 5.5 (`claude-opus-5-5`), Sonnet 5.5 (`claude-sonnet-5-5`), and Fable 5.1 (`claude-fable-5-1`), and the earlier Opus 5 and Fable 5. Supersedes the retired `opus-4-7-patterns.md` guide (deleted in v6.3.0; its two model-agnostic sections — cache-friendliness and skill granularity — are ported below as §10 and §11, and the rest is preserved in git history).
+Practical guidance for designing Claude Code skills and agents targeting the Claude 5 family — the current Opus 5.5 (`claude-opus-5-5`), Sonnet 5.5 (`claude-sonnet-5-5`), Haiku 5.5 (`claude-haiku-5-5`), and Fable 5.2 (`claude-fable-5-2`), and the earlier Opus 5, Fable 5.1, and Fable 5. Supersedes the retired `opus-4-7-patterns.md` guide (deleted in v6.3.0; its two model-agnostic sections — cache-friendliness and skill granularity — are ported below as §10 and §11, and the rest is preserved in git history).
 
 **Audience:** anyone authoring or modernizing skills and shared agents in this plugin.
 
@@ -16,12 +16,13 @@ Per https://www.anthropic.com/news/claude-opus-5 and https://www.anthropic.com/n
 
 | Model | ID | Position |
 |-------|----|----------|
-| Opus 5 | `claude-opus-5` | Current Opus; same pricing as Opus 4.8 ◎ (default Opus in Claude Code v2.1.219+ on Max/Team Premium/Enterprise/API; Pro and Team Standard default to Sonnet 5) |
+| Opus 5 | `claude-opus-5` | Previous Opus (succeeded by Opus 5.5); same pricing as Opus 4.8 ◎ (default Opus in Claude Code v2.1.219+ on Max/Team Premium/Enterprise/API; Pro and Team Standard default to Sonnet 5) |
 | Fable 5 | `claude-fable-5` | Mythos-class tier above Opus; additional safety classifiers for dual-use capabilities |
 | Opus 5.5 | `claude-opus-5-5` | Current Opus (2026-09-22, https://www.anthropic.com/claude-opus-5-5). Thinking always on; API default effort `medium`; built for long unattended runs; output more concise than Opus 5 |
 | Sonnet 5.5 | `claude-sonnet-5-5` | 2026-09-28 (https://www.anthropic.com/claude-sonnet-5-5). Default effort `medium` in Claude Code, `high` on the API |
-| Fable 5.1 | `claude-fable-5-1` | 2026-09 (https://www.anthropic.com/claude-fable-and-mythos-5-1). Default effort `high` in Claude Code; `low`/`medium` often match Fable 5 |
-| Opus 4.8 | `claude-opus-4-8` | Previous generation, still Active (retirement not sooner than 2027-05-28); the configured-fallback target for Claude 5 refusals (§3) |
+| Fable 5.1 | `claude-fable-5-1` | Previous Fable, still served (2026-09, https://www.anthropic.com/claude-fable-and-mythos-5-1). Default effort `high` in Claude Code; `low`/`medium` often match Fable 5 |
+| Fable 5.2 | `claude-fable-5-2` | Current Fable (https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2). Thinking always on; effort `low`–`max`, start at `high` (the API default); history-editing check on every account |
+| Opus 4.8 | `claude-opus-4-8` | Previous generation, still Active (retirement not sooner than 2027-05-28); one of the models an explicit `fallbacks` list may name; `fallbacks: "default"` picks the target per refusal category, and `reasoning_extraction` has none (§3) |
 
 Frontmatter `model:` aliases remain `opus`, `sonnet`, `haiku` (plus `inherit`). **Never pin `fable`** — the alias is not universally available across harnesses, and Mythos-class access is gated; skills that need frontier capability should inherit the session model.
 
@@ -37,7 +38,7 @@ Per https://platform.claude.com/docs/en/about-claude/models/introducing-claude-f
 
 ## 3. The reasoning-display hazard (Claude 5 classifiers) ✓
 
-**Never instruct a model to surface its internal reasoning.** This is an **Anthropic classifier constraint**, not a property of language models in general - other families expose reasoning as a first-class field and would simply comply. The ban still applies to everything this plugin ships, because what this plugin ships runs on Anthropic models too. Prose like `show your reasoning`, `reproduce your thinking`, `explain your chain of thought step by step`, or config like `thinking.display: visible` can trigger the `reasoning_extraction` refusal category on Claude Fable 5 and Claude Opus 5. The refusal is visible — a normal HTTP 200 with `stop_reason: "refusal"` naming the classifier — and **where fallback is configured** (server-side `fallbacks` param + beta header, SDK middleware, or manual retry), the request re-routes to Claude Opus 4.8: Anthropic's wording is "causing elevated fallbacks to Claude Opus 4.8". Either outcome breaks the skill — a refusal instead of a result, or a response from a different model than intended — so audit skills for these instructions (per https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5 and https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback).
+**Never instruct a model to surface its internal reasoning.** This is an **Anthropic classifier constraint**, not a property of language models in general - other families expose reasoning as a first-class field and would simply comply. The ban still applies to everything this plugin ships, because what this plugin ships runs on Anthropic models too. Prose like `show your reasoning`, `reproduce your thinking`, `explain your chain of thought step by step`, or config like `thinking.display: visible` can trigger the `reasoning_extraction` refusal category on Claude Fable 5.x (5, 5.1, 5.2), Claude Opus 5 and 5.5, and Claude Sonnet 5.5. The refusal is visible – a normal HTTP 200 with `stop_reason: "refusal"` and `stop_details.category: "reasoning_extraction"` – and it is **not retried on a fallback model**: this category has no recommended fallback, so even with `fallbacks: "default"` configured the refusal stands. Anthropic's advice is to change the prompt rather than retry the request. Either way the skill breaks – a refusal instead of a result – so audit skills for these instructions (per https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#keep-reasoning-in-thinking-blocks and https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-2#safeguard-refusals).
 
 **Safe replacement:** request evidence and justification in the structured *output*, not the thinking:
 
@@ -46,7 +47,7 @@ Per https://platform.claude.com/docs/en/about-claude/models/introducing-claude-f
 
 **Exemption:** author-filled `<critical_thinking>` blocks in agent files are static design records written at authoring time (alternatives weighed, edge cases, adaptation criteria). They are content the model *reads*, not an instruction to externalize runtime reasoning — they are exempt from this ban. They are optional: useful for agents that make judgment calls (agent standard, section 6).
 
-**Fallback dependency note:** whether a classifier trip surfaces as a refusal or as an Opus 4.8 response depends on harness configuration, not on the skill. Skills must not assume either outcome; they must simply never contain the triggering instructions.
+**Fallback dependency note:** for other refusal categories, whether a classifier trip surfaces as a refusal or as a response from a fallback model depends on harness configuration (`fallbacks: "default"`, an explicit list such as `[{"model": "claude-opus-4-8"}]`, or SDK middleware), not on the skill. A `reasoning_extraction` refusal is never rescued by fallback, so skills must simply never contain the triggering instructions.
 
 Rule 12.7 of `skill-standard.md` (13.5 for agents) and a Gate 2 WARN.
 
@@ -58,12 +59,12 @@ Per the Fable 5 prompting guide: *"lower effort settings on Claude Fable 5 still
 |-------|--------------|
 | `low` | Validators, format-appliers, classifiers, scoped one-shot jobs |
 | `medium` | File creation, refactoring, research — the routine-work default |
-| `high` | Security review and ambiguous investigation — measured exceptions; fan-out reviewers stay at `medium` per the agent standard |
+| `high` | A measured exception, kept only for the agents that already declare it (security review and hard investigation). Everything else, judgment-heavy review included, starts at `medium` per the agent standard, section 7 |
 | `xhigh` / `max` | Genuinely frontier problems only. No longer the Claude Code default posture. Higher effort can produce over-planning and unrequested refactoring — pair with scope-fence constraints if used. |
 
 - **The 5.5 generation shifts again** ✓ (https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5): Opus 5.5 at `medium` matches Opus 5 at `high`; start there and keep `xhigh`/`max` for measured gains. Higher is not always better – Sonnet 5.5 scored lower at `max` than at `xhigh` on FrontierCode, partly because it ran subagent-heavy review flows more often and went out of scope (https://www.anthropic.com/claude-sonnet-5-5). Cap effort for fan-out review agents.
 - **Omitting `effort` is a valid choice** — the agent inherits the session effort and adaptive thinking self-calibrates. Plugin agents still declare it explicitly so role intent is auditable.
-- Rule of thumb: take the 4.7-era role table and go **one step cooler**. The current role→model/effort table lives in the agent standard, section 7 — that copy is canonical.
+- The current role→model/effort table lives in the agent standard, section 7 – that copy is canonical.
 - Keep 4.x-style explicit rigor in skills aimed at *smaller* models (a subagent pinned to an older 4.x model still benefits from checklists and examples).
 
 ## 5. Delegation calibration (the 12.4 inversion) ✓
@@ -103,7 +104,7 @@ Litmus test for every line (◎): *"Would a strong model behave worse without th
 ## 7. What carries over unchanged ✓
 
 - **Third-person descriptions + specific quoted triggers** (12.1 / 12.2) — skill discovery is unchanged; the description remains the discovery surface. Combined `description` + `when_to_use` ≤ 1,536 chars.
-- **Deprecated API bans** (12.7 / 13.3 / 13.4) — an **Anthropic-model constraint, not a universal authoring rule**: `temperature` / `top_p` / `top_k` return a 400 error when set to a non-default value on "Claude Opus 4.7 and later" per Anthropic's parameter-deprecation table (https://platform.claude.com/docs/en/about-claude/model-deprecations); fixed `budget_tokens` is unsupported on Claude 5 models (only a subagent pinned to Haiku 4.5 by full ID is excepted — see §2).
+- **Deprecated API bans** (12.7 / 13.3 / 13.4) — an **Anthropic-model constraint, not a universal authoring rule**: sampling parameters (`temperature` / `top_p` / `top_k` set to a non-default value) and fixed `budget_tokens` are rejected with a 400 error on current Claude models (https://platform.claude.com/docs/en/about-claude/model-deprecations); only a subagent pinned to Haiku 4.5 by full model ID still takes `budget_tokens` – see §2.
 - **Find-vs-filter decoupling** (12.6) ◎ — confirmed on Opus 5: "report only critical issues" is followed literally and silently drops the long tail. Enumerate everything, filter in a second pass.
 - **500-line file ceiling, orchestrator pattern, single-responsibility agents, Q&A requirements gathering** — architectural rules unaffected by the model generation.
 

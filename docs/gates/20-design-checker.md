@@ -19,12 +19,13 @@ The `design` skill's promises rest on `skills/design/scripts/check-design.mjs`, 
 - A stale index fails, and the builder refuses a comment block inside a generated region and leaves the file as it was.
 - The system index builds "Start here by task" from each page's `<meta name="design-tasks">`, and "Which card owns this token" from each `#tokens` table.
 - A `docs.css`, `docs-tokens.css`, or `fonts.css` in `design-system/` that differs from the skill's template fails [copies].
+- A page with a missing target size fails [sizes]. The sizes come from the `Target sizes:` line in `docs/designs/README.md` and each page's `design-sizes` meta, and a page may leave a size out only through an exception written on the page. A missing `Target sizes:` line also fails. See "Target sizes" in [`page-rules.md`](../../skills/design/references/page-rules.md).
 - An area's `index.html` of kind `index` is listed as the area's overview, not as a screen.
 - Templates carry nothing that must not ship, and each font has its licence sidecar.
 - Token levels and token drift are caught.
 - The shipped samples in `skills/design/examples/web-sample/` and `skills/design/examples/mobile-sample/` still pass.
 
-The last check keeps the sample current: a rule change that leaves it behind fails here.
+The last check keeps the samples current: a rule change that leaves them behind fails here.
 
 A pass does not prove a page is visible as drawn. The fixtures read files, so a browser look stays part of the review.
 

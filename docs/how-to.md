@@ -1,6 +1,6 @@
 # How-to guides
 
-*This page describes erfana v9.4.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.0.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Each section below is a recipe for one goal. It assumes you know what you want to do and need the steps. If you are new to erfana, start with the [tutorial](tutorial.md). For every skill, agent, command, and hook in one list, see the [reference](reference.md). For why erfana works the way it does, see the [explanation](explanation.md).
 
@@ -11,7 +11,7 @@ Before you start, check what erfana needs on your machine:
 | Need | Why |
 |---|---|
 | On macOS and Linux: [`jq`](https://jqlang.github.io/jq/) on your `PATH` (macOS: `brew install jq`) | Without it, five of the six [safety hooks](explanation.md#safety-hooks-and-why-they-fail-open) skip themselves and protect nothing. |
-| The GitHub CLI (`gh`), logged in | The skills `erfana:issue`, `erfana:next-batch`, `erfana:coordinate`, and `erfana:ship` use it, and so do the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request. |
+| The GitHub CLI (`gh`), logged in | The skills `erfana:issue`, `erfana:backlog`, `erfana:next-batch`, `erfana:coordinate`, and `erfana:finish` use it, and so do the slash commands `/erfana:explain-issue`, `/erfana:project-status`, and `/erfana:lens-review` on a pull request. |
 | On Windows: Git Bash, with `powershell.exe` on `PATH` | The hooks start through Git Bash and run their PowerShell versions; a Windows machine with no Git Bash runs no hooks. |
 
 The marketplace is public, so you need no GitHub token. Inside Claude Code, run:
@@ -37,7 +37,7 @@ Restart Claude Code: type `/exit` (or close the session), then run `claude` agai
 
    ```text
      ❯ erfana@erfana-skills
-       Version: 9.4.0
+       Version: 10.0.0
        Scope: user
        Status: ✔ enabled
    ```
@@ -94,11 +94,11 @@ Then start a new `qwen` session, because skills, agents, and hooks load at sessi
 Check the result with `qwen extensions list` again. On Qwen Code 0.26.2 the output starts like this, followed by the lists of commands and skills:
 
 ```text
-✓ erfana (9.4.0)
+✓ erfana (10.0.0)
  Path: /Users/you/.qwen/extensions/erfana
  Source: https://github.com/qodeca/erfana-skills (Type: github-release)
  Origin: Claude
- Release tag: v9.4.0
+ Release tag: v10.0.0
 ```
 
 The version in the first line and the release tag should match the [latest GitHub release](https://github.com/qodeca/erfana-skills/releases/latest). This list is also the way to see the installed version; these docs name no version command inside a session.
@@ -143,6 +143,17 @@ Or run `qwen extensions update --all`. The update lists the extension's contents
 
 Qwen Code installs erfana from the latest GitHub release tag, not from a branch, so a change reaches you when it is released, not when it is merged. `qwen extensions list` shows the tag it installed. A way to go back to an older tag on Qwen Code has not been verified.
 
+### Upgrade from 9.x to 10.x
+
+Version 10.0 renamed one skill and changed the issue format. Check these before you update:
+
+- **`/erfana:ship` is now `/erfana:finish`.** The arguments are the same. The old name no longer exists, so update your scripts, `CLAUDE.md` files, and saved prompts.
+- **`erfana:issue` Create writes a new issue format.** Implement still reads issues in the old format. If a tool of yours parses issue bodies, or your repository uses the issue forms from `skills/issue/templates/create/`, update them: the form files are now `bug.yml`, `feature.yml`, and `task.yml`.
+- **`/erfana:cleanup` closes fewer issues.** It covers only the issues the finished work touched. For the whole list, run `/erfana:backlog refine`.
+- **Reload after updating.** Restart Claude Code or run `/reload-plugins`, because a running session keeps the version it loaded.
+
+On Qwen Code the same changes apply, under bare names: `/ship` becomes `/finish`.
+
 ### Upgrade from 8.x to 9.x
 
 Version 9.0 renamed skills and agents. Check these before you update:
@@ -186,7 +197,7 @@ You rarely need to name a skill. Describe what you want ("create a spec for the 
 |---|---|
 | Create, review, or change a Claude Code agent | [`erfana:agent`](reference.md#erfanaagent) |
 | Create, review, change, or modernize a Claude Code skill | [`erfana:skill`](reference.md#erfanaskill) |
-| Create, implement, review, or show GitHub issues | [`erfana:issue`](reference.md#erfanaissue) |
+| Create one new issue, implement or review one, or show issues | [`erfana:issue`](reference.md#erfanaissue) |
 | Write or check a requirements spec | [`erfana:spec`](reference.md#erfanaspec) |
 | Create or review a consulting report | [`erfana:report`](reference.md#erfanareport) |
 | Research and write an article | [`erfana:article`](reference.md#erfanaarticle) |
@@ -198,13 +209,15 @@ You rarely need to name a skill. Describe what you want ("create a spec for the 
 | Pick the next issues to work on | [`erfana:next-batch`](reference.md#erfananext-batch) |
 | Keep parallel sessions off each other's issues | [`erfana:coordinate`](reference.md#erfanacoordinate) |
 | Have specialists review and improve a plan | [`erfana:expert-panel`](reference.md#erfanaexpert-panel) |
+| Design screens or a design system a client can review | [`erfana:design`](reference.md#erfanadesign) |
 
-Three skills never start from a request, because they edit documents, push code, or end a session. You type their command yourself:
+Four skills never start from a request, because they edit documents, push code, change issues in bulk, or end a session. You type their command yourself:
 
 | You want to | Type |
 |---|---|
 | Check a document's facts against its sources | `/erfana:fact-checking <file>` |
-| Commit, push, open, or merge a pull request | `/erfana:ship [commit \| push \| pr \| merge \| cleanup]` |
+| Merge duplicate issues, rewrite old ones, or check the open issues against the code | `/erfana:backlog [merge \| refine [#N …] \| apply \| discard]` |
+| Commit, push, open, or merge a pull request | `/erfana:finish [commit \| push \| pr \| merge \| cleanup]` |
 | Hand the work over to another session or person | `/erfana:handoff [what the next session is for]` |
 
 The seven slash commands, such as `/erfana:session-status`, are listed in the [slash commands reference](reference.md#slash-commands-7).
@@ -217,7 +230,7 @@ Three commands keep a session and its project tidy:
 |---|---|---|
 | Keep the task list right while you are away | `/erfana:session-watch` | A check every 30 minutes that changes only the task list. It runs only when the session is idle. It stops when the session closes, returns if you resume it, and ends after 7 days. To end it sooner, ask Claude to cancel the timer. |
 | Bring the docs up to date with recent work | `/erfana:doc-update` | It updates docs and adds what future sessions need, and three reviewers check the result. It asks before it changes `CLAUDE.md` or a similar file. Add `--dry-run` to see the plan first, or `--quick` to skip the review. |
-| Clear up after finished work | `/erfana:cleanup` | It lists leftover files, worktrees, branches, and issue actions, then asks you to approve each group. Files go to `.local/cleanup-trash/`, and each deleted branch gets a restore line. |
+| Clear up after finished work | `/erfana:cleanup` | It lists leftover files, worktrees, branches, and actions on the issues this work touched, then asks you to approve each group. For the rest of the open issues it prints `/erfana:backlog refine`. Files go to `.local/cleanup-trash/`, and each deleted branch gets a restore line. |
 
 ### Namespaced and bare names
 
@@ -287,7 +300,7 @@ Later, say "update the spec" to change it. If your request states the exact chan
 
 Say "archive a spec" when the work is built and done. The skill has no shell, so it shows a `mkdir -p specs/archived && mv …` command for you to run from the project root, then checks the result and updates the registry.
 
-The skill does not commit or push. Review the new files under `specs/` and commit them yourself, for example with `/erfana:ship commit`.
+The skill does not commit or push. Review the new files under `specs/` and commit them yourself, for example with `/erfana:finish commit`.
 
 In a headless run (`claude -p`, with nobody to answer questions), the skill stops before writing and says which tier it recommends and what it needs.
 
@@ -301,7 +314,9 @@ When the spec is ready, [work the issue end to end](#work-a-github-issue-end-to-
 
 ### Create the issue
 
-Say "create an issue for the login timeout bug". The skill asks only what changes the issue (what happens, what should happen, who is affected), searches for duplicates, and shows you the exact title, body, and labels. It creates the issue only when you say yes.
+Say "create an issue for the login timeout bug". The skill searches the code and the existing issues first, then asks at most three questions about what they cannot tell it. The draft opens with a short summary and a "Done when" line for people. Below that is the task for whoever implements it: numbered acceptance criteria, a command that proves the work, what is out of scope, when to stop and ask, and files to start from, stamped with the commit they were read at. You see the exact title, type, labels, and body, and the issue is created only when you say yes.
+
+Issues written before this format still work: Implement reads acceptance criteria as a numbered list or as checkboxes.
 
 ### Implement it
 
@@ -323,9 +338,25 @@ The run keeps its progress in the session, not on the issue. If the session ends
 
 ### Push and open the pull request
 
-If you did not push at QG-12, type `/erfana:ship pr`. It commits anything left, pushes the branch, and opens or updates the pull request, linking the issue when the branch name or your request gives its number. `/erfana:ship merge` also waits up to 30 minutes for the checks, merges, deletes the branch, and closes the linked issue. It never force-pushes and never merges over a failing check.
+If you did not push at QG-12, type `/erfana:finish pr`. It commits anything left, pushes the branch, and opens or updates the pull request, linking the issue when the branch name or your request gives its number. `/erfana:finish merge` also waits up to 30 minutes for the checks, merges, deletes the branch, and closes the linked issue. It never force-pushes and never merges over a failing check.
 
 To work several issues in a row without watching, see [run an unattended session](#run-an-unattended-session).
+
+## Keep the open issues in order
+
+`erfana:backlog` works on issues that already exist. You start it yourself: Claude never starts it, because it edits and closes issues in bulk.
+
+Before you start: you need `gh` logged in and write access to the repository.
+
+Every operation writes a plan first and changes nothing on GitHub until you run `apply`. Merge first, then refine, so that the check against the code sees the list as it is after the merges.
+
+1. **Merge duplicates.** Run `/erfana:backlog merge`. The plan folds issues that ask for the same outcome into one and gathers very small issues into one checklist issue.
+2. **Read the plan.** It is under `.local/backlog/` in the repository. Closes and merges come first, one by one, each with its proof. Clear the tick on any line you reject. Apply posts the plan's comments as notices that cannot be taken back, so read them with care on a repository that clients or the public can see.
+3. **Apply or drop it.** Run `/erfana:backlog apply`, or `/erfana:backlog discard`. Apply shows the counts and asks for a final go, then writes one change at a time. Its report ends with the command that reopens each issue it closed.
+4. **Check the issues against the code.** Run `/erfana:backlog refine`. An issue is closed only when its acceptance criteria are written down, every one is shown done in the merged code, and a second agent confirmed each of those claims. Vague or part-done issues are rewritten to the current format, with the original text kept in a folded block.
+5. **Apply the refine plan.** Read it and run `/erfana:backlog apply`, as in steps 2 and 3.
+
+To refine only some issues, name them: `/erfana:backlog refine #87 #88`. The code is read from the default branch; if your project merges into another branch first, name it: `/erfana:backlog refine develop`.
 
 ## Run an unattended session
 
@@ -469,11 +500,26 @@ For a review grounded in current best practice, type:
 /erfana:lens-review <path | "path path ..." | #PR | "description"> [--lens a,b,c] [--out file.md]
 ```
 
-It chooses up to ten review angles, called lenses (architecture, security, performance, UI, and so on), from the target, has each reviewer research recent practice online, and returns one report ranked by severity, in plain language with the technical detail kept for engineers. `--lens` fixes the lenses yourself. `--out` also writes the report to a `.md` file inside the current folder. A pull-request target needs `gh` logged in. It is meant for you to start; erfana skills print it for you rather than run it.
+It chooses up to ten review angles, called lenses (architecture, security, performance, UI, and so on), from the target, has each reviewer research recent practice online, and returns one report ranked by severity, in plain language with the technical detail kept for engineers. `--lens` fixes the lenses yourself. `--out` also writes the report to a `.md` file inside the current folder. A separate agent then checks each must-fix and should-fix finding. A rejected finding moves to the report's Coverage section with the reason; a rejected security finding stays in the table, marked as disputed. See [why findings get a second check](explanation.md#why-findings-get-a-second-check). A pull-request target needs `gh` logged in. It is meant for you to start; erfana skills print it for you rather than run it.
 
 ### Review a plan or design instead of code
 
-Say "have specialists review this plan" or run `/erfana:expert-panel <path> [review | improve | apply]`. It picks three to six specialist roles, has each review the target, merges the findings, and asks you the decisions that are yours. The default, `improve`, writes an improved version to a new file next to the target (`<name>-improved.md`); `review` stops at the findings; `apply` changes the original after backing it up.
+Say "have specialists review this plan" or run `/erfana:expert-panel <path> [review | improve | apply]`. It picks three to six specialist roles, has each review the target, and merges the findings. For a plan that commits money, data, or security, or has a step that cannot be undone, one of the roles assumes the plan failed and traces how.
+
+A separate agent then tries to disprove each finding. Confirmed findings are ranked. Unproven ones stay in the list with that label. Rejected ones are listed apart with the reason, so you can overrule a ruling. After that, the skill asks you the decisions that are yours. The default, `improve`, writes an improved version to a new file next to the target (`<name>-improved.md`); `review` stops at the findings; `apply` changes the original after backing it up.
+
+## Design screens for a product
+
+`erfana:design` draws static HTML and CSS pages with every state visible, so a client can comment on each one. It needs Node.
+
+1. Say "design this screen" or run `/erfana:design <brief>`.
+2. Answer its questions, and agree the flows before any visual work starts.
+3. Check the sizes. The line in `docs/designs/README.md` names them, for example `Target sizes: desktop, tablet, tablet-landscape, phone`. If the line is missing, the skill asks you. With no answer, it picks from the product type and shows that as an open question on each page.
+4. Open the pages it prints. They are under `docs/designs/<area>/`.
+
+Each state is drawn at each size. The checker fails a page that leaves a size out, unless the page gives a reason. If it cannot pass, the skill stops and says what is blocked.
+
+Two worked examples ship with the skill: [the web sample](../skills/design/examples/web-sample/) and [the mobile sample](../skills/design/examples/mobile-sample/).
 
 ## Write a report or an article
 
@@ -564,9 +610,9 @@ Check the spelling of the source: `qodeca/erfana-skills:erfana` – the reposito
 
 ### A request does not start the skill you expected
 
-Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-19), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
+Check that the plugin is enabled with `claude plugin list`. Then use a phrase close to the skill's trigger phrases in the [skills reference](reference.md#skills-20), or name what you are working on: "issue", "spec", "article", "report", "agent", or "skill". Typing the slash command, such as `/erfana:spec`, always works.
 
-`erfana:fact-checking`, `erfana:ship`, and `erfana:handoff` never start from a phrase – type their slash command. On Qwen Code, skill choice from a request may be less reliable; name the skill.
+`erfana:fact-checking`, `erfana:finish`, and `erfana:handoff` never start from a phrase – type their slash command. On Qwen Code, skill choice from a request may be less reliable; name the skill.
 
 ### Both `/erfana:issue` and `/issue` appear in autocomplete
 

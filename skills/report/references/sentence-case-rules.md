@@ -12,7 +12,7 @@
 - [Validation checklist](#validation-checklist)
 - [Automated detection patterns](#automated-detection-patterns)
 
-> **CRITICAL**: This is the highest-priority validation rule. All headings, labels, and captions MUST use sentence case.
+> **Highest-priority rule**: every heading, label, and caption uses sentence case. It is the house style the report checker tests first, because it keeps headings easy to scan and translate and removes guesswork about which words to capitalize (see [Why sentence case?](#why-sentence-case)).
 
 ## Definition
 

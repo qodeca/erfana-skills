@@ -41,11 +41,11 @@ When a remote exists, run `git fetch --no-prune origin`. Then build these groups
 - Merged remote branches that this work created or that the current GitHub user wrote. Teammates' branches go under "Kept".
 - Stale remote-tracking references.
 
-**Group D – GitHub.** Read the open issues with `gh issue list --state open --limit 500`, skip those another session has claimed, and say so if the result reaches the limit.
+**Group D – GitHub.** This group covers only the issues this block of work touched: those linked from its merged pull requests (`gh pr view <n> --json closingIssuesReferences`), named in its commits or branch names, or named by the user. Skip those another session has claimed. Leave the rest of the open-issue list alone: checking it is the job of `/erfana:backlog refine`, which re-checks every close with a second agent and keeps an undo list. When open issues exist outside this block, say how many and print that command under "Kept".
 
 - **Close:** an issue with evidence on the default branch for each of its requirements: a merged pull request or a commit. Draft a closing comment that links that evidence. An issue with only partial evidence stays open.
 - **Comment:** an open issue where finished work changes its status or scope. Draft the comment. Do not comment when the comment adds no new fact.
-- **Create:** real follow-up work the block left open, after a search shows no matching issue. Draft the title and the full body: the problem, the evidence, and how to know it is done.
+- **Create:** real follow-up work the block left open, after a search of the open and closed issues (`gh issue list --state all --search "<keywords>" --limit 50`) shows no matching issue. Draft the title and the full body: the problem, the evidence, and how to know it is done.
 
 ## 2. Show and ask
 

@@ -151,7 +151,7 @@ Tracked in `BACKLOG.md` under "Deferred to a future major – concrete-trigger e
 
 See [`BACKLOG.md`](BACKLOG.md) for the full deprioritized list. Highlights of what is **not** here and why:
 
-- **Reinstating any design capability** – removed in v7.0.0. Re-adding one is a new plugin, not a roadmap item here.
+- **Reinstating the brand-system layer** – removed in v7.0.0. Re-adding one is a new plugin, not a roadmap item here. The `design` skill (v9.4.0) ships no brand, so this exclusion does not cover it.
 - **Email / proposal skills** – different problem domain; belongs in a separate plugin or roadmap.
 - **Public docs site** – not yet justified by demand; re-evaluate post-launch now that the project is public.
 - **Vendor full `jsonschema`** – historical: moot since v7.0.0 removed the brand schemas and `json_schema_lite.py` with them.
