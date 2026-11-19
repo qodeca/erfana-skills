@@ -1,6 +1,6 @@
 {
   "name": "erfana-skills",
-  "description": "A Claude Code toolkit marketplace – orchestration, verification, prompt-authoring, work-session, session-closeout and design skills, plus 40 shared agents.",
+  "description": "A Claude Code toolkit marketplace – orchestration, verification, prompt-authoring, work-session, session-closeout and design skills, plus 41 shared agents.",
   "owner": {
     "name": "Qodeca sp. z o.o."
   },
@@ -21,7 +21,7 @@
       ],
       "homepage": "https://github.com/qodeca/erfana-skills",
       "repository": "https://github.com/qodeca/erfana-skills",
-      "description": "An orchestration toolkit for Claude Code and Qwen Code: six orchestration skills (Modernize op + Display op in issue) + one process skill (grill-me) + one verification skill (fact-checking) + three prompt-authoring skills (prompt, draft-goal, raise-the-bar) + five work-session skills (autopilot, next-batch, coordinate, expert-panel, backlog) + two session-closeout skills (finish, handoff) + one design skill (design) + 40 shared agents (per-agent effort/model overrides) + using-erfana router + six safety hooks + seven slash commands (doc-update, project-status, session-status, session-watch, cleanup, lens-review, explain-issue)"
+      "description": "An orchestration toolkit for Claude Code and Qwen Code: six orchestration skills (Modernize op + Display op in issue) + one process skill (grill-me) + one verification skill (fact-checking) + three prompt-authoring skills (prompt, draft-goal, raise-the-bar) + five work-session skills (autopilot, next-batch, coordinate, expert-panel, backlog) + two session-closeout skills (finish, handoff) + one design skill (design) + 41 shared agents (per-agent effort/model overrides) + using-erfana router + six safety hooks + seven slash commands (doc-update, project-status, session-status, session-watch, cleanup, lens-review, explain-issue)"
     }
   ]
 }
