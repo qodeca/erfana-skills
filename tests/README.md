@@ -9,7 +9,8 @@ tests/
 ├── design/              – checker fixtures replayed by Gate 20
 ├── gate-02-fixtures/    – frontmatter-detector fixtures replayed by Gate 2
 ├── hooks/               – verify-completion + guard fixtures replayed by Gate 16
-└── skill/     – pilot notes and manual run records
+├── <skill>/             – golden cases (`cases.md`) where the skill has them, fixtures, and dated run records for one skill, for example `issue/`, `backlog/`, `skill/`
+└── finding-verifier/    – fixture plan, findings, and dated run records for the `finding-verifier` agent
 ```
 
 ## Convention

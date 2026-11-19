@@ -74,7 +74,7 @@ Full gate definitions: [`docs/verification-gates.md`](../docs/verification-gates
 
 Per-gate standalone spot-checks (frontmatter/name, manifest parse, brand consistency, hook health): [`docs/verification-gates.md`](../docs/verification-gates.md) `## Quick spot-checks`.
 
-The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-edited**: regenerate it with `bash scripts/gen-skill-registry.sh`. **Squash caveat:** run the regen in its own registry-only PR (nothing under `skills/`) after the skill PR has squash-merged into `develop` – a regen inside a skill PR records the pre-squash subject, and Gate 18 hard-fails once that PR is squashed. Release step 3 regenerates it again, so every shipped version is accurate. Gate 18's failure and warning rules: [`docs/gates/18-skill-registry.md`](../docs/gates/18-skill-registry.md).
+The skill registry ([`docs/skill-registry.md`](../docs/skill-registry.md) – every shipped skill and when it was last changed) is **generated, never hand-edited**: regenerate it with `bash scripts/gen-skill-registry.sh`. **Squash caveat:** run the regen in its own registry-only PR (nothing under `skills/`; the one exception is the same-day row in pre-commit checklist item 3) after the skill PR has squash-merged into `develop` – a regen inside a skill PR records the pre-squash subject, and Gate 18 hard-fails once that PR is squashed. Release step 3 regenerates it again, so every shipped version is accurate. Gate 18's failure and warning rules: [`docs/gates/18-skill-registry.md`](../docs/gates/18-skill-registry.md).
 
 ## Release process
 
@@ -107,9 +107,10 @@ Succession + bus-factor: [`MAINTAINER.md`](../MAINTAINER.md). Forward-looking wo
 
 ### Pre-commit checklist
 
-1. **Gates pass locally** – `bash scripts/run-all-gates.sh` and `claude plugin validate .` both report success.
+1. **Checks pass locally** – `bash scripts/run-all-gates.sh`, `claude plugin validate .`, and `bash scripts/check-docs.sh --offline` (needs lychee, vale, and markdownlint-cli2) all report success. Run them again after committing: Gate 18 and `scripts/gen-skill-registry.sh` read git history, so a tree that passes before the commit can fail after it.
 2. **Feature branch in use** – `git branch --show-current` is neither `main` nor `develop`. Skill, agent and infra changes go through `feature/...` cut from `develop` and merge into `develop` via PR; `main` receives only release PRs (`develop` -> `main`) and emergency fixes.
-3. **Registry regenerated separately** – if the change touches anything under `skills/`, do NOT regenerate `docs/skill-registry.md` in the same PR (see the squash caveat under Critical commands).
+3. **Registry regenerated separately** – if the change touches anything under `skills/`, do NOT regenerate `docs/skill-registry.md` in the same PR (see the squash caveat under Critical commands). One exception: when a skill this PR changes already has today's date in its registry row, Gate 18 hard-fails the PR until you regenerate inside it. If that PR is then squash-merged the same day, open a registry-only PR into `develop` afterwards ([same-day rows](../docs/gates/18-skill-registry.md#limitations)).
+4. **Short subjects on skill changes** – keep the commit subject at 72 characters or fewer and the PR title at 65 or fewer, because the squash subject is the title plus a space and `(#NNN)`. The registry cuts a longer subject mid-word, and the docs spelling check then fails.
 
 ### Atomic commits
 
