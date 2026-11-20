@@ -4,7 +4,7 @@ How the erfana plugin is organized internally, and the conventions a maintainer 
 
 ## One domain, one plugin (v7.0+)
 
-The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`; session closeout – `finish`, `handoff`) behind one bootstrap router, and 41 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
+The plugin shipped as a focused design toolkit through v3.2.0. v4.0.0 widened it into a design + orchestration toolkit by absorbing a pool of shared agents and 6 orchestrator skills from the maintainer's previously-global `~/.claude/` configuration. **v7.0.0 removed the design half entirely** – the six `design-*` skills, the `design-shared` asset bundle, the brand-system layer, and the six gates that guarded them. What remained was a single-domain orchestration toolkit; a new `design` skill, built on different rules, returned after v9.3.1: six orchestration skills plus single-skill branches (process – `grill-me`; verification – `fact-checking`; prompting – `prompt`, `raise-the-bar`, `draft-goal`; work session – `autopilot`, `next-batch`, `coordinate`, `expert-panel`, `backlog`, `cut-waste`; design – `design`; session closeout – `finish`, `handoff`) behind one bootstrap router, and 41 shared agents today. How the agent pool grew and shrank release by release is in [`../CHANGELOG.md`](../CHANGELOG.md).
 
 Every skill is self-contained. There is no shared asset bundle and no brand data: skills produce code, prose, and repository artifacts for whatever project they run against.
 
@@ -58,7 +58,13 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 | `erfana:coordinate` | Claims on GitHub (`claimed` label + `<!-- erfana:claim -->` comment) so parallel sessions and clones do not collide; board, release, and sibling-session status exchange. The claim rules (`references/claims.md`) are shared with `next-batch` and `autopilot`. |
 | `erfana:expert-panel` | Fan out read-only top-practitioner reviewers over a plan, design, or documents; merge; have `finding-verifier` rule on every finding; ask the owner's decisions; write an improved version to a new file. Adds a failure-analyst role for plans with an irreversible or high-stakes step. |
 | `erfana:backlog` | Keep the open-issue list true: `merge` folds duplicates and groups small issues, `refine` checks every open issue against the merged code. Plan first under `.local/backlog/`, apply only the lines the user left ticked, one paced write at a time; every close is confirmed by `finding-verifier`. `disable-model-invocation: true`. |
-| `erfana:design` | Design systems and HTML and CSS designs for desktop, web, and mobile, through seven operations (Create system, Change system, Audit system, New design, Revise, Migrate, Set status). Review pages run no JavaScript and hide nothing, so every comment stays visible. Ships a checker, a token builder, and an index builder in `skills/design/scripts/`, proved by Gate 20, and the Cascadia Mono files its documentation pages use; `ux-designer`, `ui-designer`, `ux-reviewer`, and `ui-reviewer` do the design and review work. |
+| `erfana:cut-waste` | Measure where one project's Claude Code sessions wasted tokens and time, from counts only – `scripts/scan-sessions.mjs` and `scripts/scan-log.mjs` (Node 18+, standard library only) never write log content – rank it, and turn the top items into at most five project rules, scripts, or hooks after one approval. Each run saves its numbers under `.local/cut-waste/`, so the next run shows which change cut waste and proposes removing the rest. Proved by [Gate 21](gates/21-cut-waste.md). `disable-model-invocation: true`. |
+
+### Design skills (1)
+
+| Sub-skill | Single concern |
+|---|---|
+| `erfana:design` | Design systems and HTML and CSS designs for desktop, web, and mobile, through seven operations (Create system, Change system, Audit system, New design, Revise, Migrate, Set status). Review pages run no JavaScript and hide nothing, so every comment stays visible. Ships a checker, a token builder, and an index builder in `skills/design/scripts/`, proved by [Gate 20](gates/20-design-checker.md), and the Cascadia Mono files its documentation pages use; `ux-designer`, `ui-designer`, `ux-reviewer`, and `ui-reviewer` do the design and review work. |
 
 ### Session closeout skills (2)
 
@@ -69,7 +75,7 @@ Every skill follows the superpowers `writing-skills` rule "one skill, one well-d
 
 ### Bootstrap (1)
 
-`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 17 other skills. For the three skills only the user can start (`fact-checking`, `finish`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
+`erfana:using-erfana` – the router. Claude loads it like any other skill when a request matches its triggers; nothing loads it automatically. It holds one flat "Which skill" table that maps what the user wants straight to one of the 20 other skills. For the five skills only the user can start (`fact-checking`, `backlog`, `cut-waste`, `finish`, `handoff`) the row says "Suggest" and names the slash command instead of routing.
 
 Each skill's frontmatter follows the shape in `skills/skill/references/skill-standard.md` section 3: `description:` says what the skill does, in the third person (Gate 2 soft-warns over 500 characters), and `when_to_use:` carries the triggers ("Use when the user says …", with at least three quoted phrases). Only `grill-me` still opens its description with "Use when". Adding a new skill repeats the pattern.
 
@@ -102,22 +108,26 @@ erfana-skills/
 │   ├── coordinate/          ← work-session skill; references/claims.md (shared with next-batch and autopilot)
 │   ├── expert-panel/        ← work-session skill; SKILL.md only
 │   ├── backlog/             ← work-session skill (user-invoked only); references/ (bulk rules, plan and apply); uses issue's guide and templates
+│   ├── cut-waste/           ← work-session skill (user-invoked only); references/, templates/, scripts/ (session-log scanner, Gate 21)
+│   ├── design/              ← design skill; references/, templates/, scripts/ (checker, token builder, index builder, Gate 20)
 │   ├── finish/              ← session-closeout skill (user-invoked only)
 │   ├── handoff/             ← session-closeout skill (user-invoked only); references/ holds MIT upstream files
 │   └── using-erfana/        ← bootstrap meta-router
 ├── hooks/                   ← six safety hooks (.sh + .ps1 siblings) + dispatch.sh launcher + hooks.json wiring (v4.1+; cross-platform v4.2.20+; interview guards promoted to plugin root v7.1.0+)
 ├── commands/                ← slash commands (v4.1+: doc-update; v4.2.5+: project-status; v4.2.6+: session-status; v4.2.11+: lens-review; v4.2.14+: explain-issue; session-watch; cleanup)
 ├── scripts/
-│   ├── run-all-gates.sh     ← runs every gate; gates 1-11 run inline, gates 14-19 call the scripts below
-│   ├── gate-14-hooks.sh, gate-15-doc-claims.sh, gate-16-hook-fixtures.sh, gate-17-publication-readiness.sh, gate-18-skill-registry.sh, gate-19-reference.sh
+│   ├── run-all-gates.sh     ← runs every gate; gates 1-11 run inline, gates 14-21 call the scripts below
+│   ├── gate-14-hooks.sh, gate-15-doc-claims.sh, gate-16-hook-fixtures.sh, gate-17-publication-readiness.sh, gate-18-skill-registry.sh, gate-19-reference.sh, gate-20-design-checker.sh, gate-21-cut-waste.sh
 │   ├── gen-skill-registry.sh, gen-reference.sh, gen-hosts-table.sh ← generators for docs/skill-registry.md, docs/reference.md, docs/hosts.md
 │   ├── check-docs.sh        ← lychee + vale + markdownlint-cli2 in one command (--offline skips web links)
 │   ├── qwen-smoke.sh        ← cross-host install check (outside the gates)
 │   └── _lib/                ← host_matrix.py (host vocabulary), gate2_detector.py
 ├── tests/
 │   ├── hooks/               ← fixtures replayed by Gate 16: bash-safety, secret-detector (Claude Code and Qwen Code payloads), verify-completion, grill-guard, ms-grill-guard, plus _fixtures (slow hooks for the timeout test)
+│   ├── cut-waste/           ← scanner test (builds made-up session logs at run time), run by Gate 21
+│   ├── design/              ← checker fixtures run by Gate 20
 │   ├── gate-02-fixtures/, gate-02-top-bar-fixtures/ ← valid and invalid frontmatter replayed by Gate 2
-│   └── <skill>/cases.md     ← golden cases per skill (agent, article, autopilot, coordinate, expert-panel, fact-checking, issue, next-batch, report, skill, spec)
+│   └── <skill>/cases.md     ← golden cases per skill (agent, article, autopilot, backlog, coordinate, expert-panel, fact-checking, issue, next-batch, report, skill, spec)
 └── docs/
     ├── README.md            ← docs home: the four user doc types, then the maintainer pages
     ├── tutorial.md          ← your first erfana session, install to first finished task
