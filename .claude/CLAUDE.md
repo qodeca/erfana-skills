@@ -56,6 +56,8 @@ Pre-commit + CI verification – single command for all 15 gates (all hard):
 bash scripts/run-all-gates.sh
 ```
 
+While you work, run only the gate for what you changed (`bash scripts/gate-NN-*.sh`, listed in [`docs/gates/`](../docs/gates/)). Run the full suite, `bash scripts/check-docs.sh`, and the generators once at the end – before committing and again after, as the pre-commit checklist asks. In the last audit (8 sessions, 2026-10-28 to 2026-11-19), the full suite ran 254 times, the doc checks 127, and the generators 108, about 4.4 hours in all; one session ran the full suite 36 times for 8 edits.
+
 Pass condition: `=== ALL GATES PASSED ===` plus `claude plugin validate` returning `Validation passed`. Gate numbers are non-contiguous by design: retired gates leave gaps, and the survivors keep their numbers. Gate 15 (doc-claim sync) is hard – nine checks blocking releases that ship with version banner, per-skill and shared agent counts, skills count, hooks count, slash command count, or per-gate detail-file count drifted from the filesystem, a Qwen Code version that disagrees with `host_matrix.py`, or a total count in words or in the manifests.
 
 Cross-host verification is a separate command, deliberately outside `run-all-gates.sh`:
