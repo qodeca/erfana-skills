@@ -18,6 +18,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 
 | Skill | Last updated | Last change |
 |---|---|---|
+| cut-waste | uncommitted | not yet committed |
 | backlog | 2026-11-19 | fix: one dividing line between issue, backlog and cleanup (#99) |
 | expert-panel | 2026-11-19 | feat: add finding-verifier to check review findings (#95) |
 | finish | 2026-11-19 | feat(skills)!: rename the ship skill to finish (#96) |
@@ -39,7 +40,7 @@ and checked by Gate 18, which hard-fails if this list stops matching
 | grill-me | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 | handoff | 2026-10-28 | feat!: v9.0.0 – every skill, agent and command on the Opus 5.5 brief ... |
 
-20 skills, one row per folder under `skills/`.
+21 skills, one row per folder under `skills/`.
 
 ## Reading the dates
 
