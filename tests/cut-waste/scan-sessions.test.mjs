@@ -265,7 +265,9 @@ test('exit codes: 1 with no logs, 2 on bad input', () => {
 })
 
 test('--cwd finds the folder Claude Code uses for the project', () => {
-  assert.equal(slugFor('/Users/me/Projects/my.app'), '-Users-me-Projects-my-app')
+  // Windows paths carry a drive letter, which Claude Code keeps in the folder name.
+  if (process.platform === 'win32') assert.equal(slugFor('C:\\Users\\me\\my.app'), 'C--Users-me-my-app')
+  else assert.equal(slugFor('/Users/me/Projects/my.app'), '-Users-me-Projects-my-app')
   const f = fixture()
   const config = path.join(f.dir, 'config')
   fs.mkdirSync(path.join(config, 'projects'), { recursive: true })
