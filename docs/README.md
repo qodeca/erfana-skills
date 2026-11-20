@@ -1,6 +1,6 @@
 # erfana documentation
 
-*This page describes erfana v10.1.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Start here to find the right page. The user docs follow four types: a tutorial to learn, how-to guides to get a job done, a reference to look things up, and an explanation to understand why. The [front page](../README.md) has the short overview and the install commands.
 
@@ -10,7 +10,7 @@ Start here to find the right page. The user docs follow four types: a tutorial t
 |---|---|
 | [Tutorial](tutorial.md) | How do I install erfana and finish my first task with it, step by step? |
 | [How-to guides](how-to.md) | How do I install, update, pick a skill, write a spec, work an issue, keep the open issues in order, run unattended, review code, design screens, or fix a problem? |
-| [Reference](reference.md) | What does each of the 20 skills, 41 shared agents, 7 slash commands, and 6 safety hooks do, and how do I start it? |
+| [Reference](reference.md) | What does each of the 21 skills, 41 shared agents, 7 slash commands, and 6 safety hooks do, and how do I start it? |
 | [Explanation](explanation.md) | How is erfana built, why are reviews blinded, why do findings get a second check, why do the hooks fail open, and what do its terms mean? |
 | [Hosts](hosts.md) | What works differently on Claude Code and on Qwen Code? |
 

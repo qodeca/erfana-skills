@@ -35,8 +35,8 @@ happens on the user's machine, after the release.
 **Qwen resolves the latest GitHub release tag, not a branch.** Verified from a
 real install of a newer Qwen release than the tested one: `qwen extensions list`
 reports a header line
-`✓ erfana (10.1.0)`, then `Source: https://github.com/qodeca/erfana-skills
-(Type: github-release)` and `Release tag: v10.1.0`. Two consequences for maintainers. A fix reaches Qwen
+`✓ erfana (10.2.0)`, then `Source: https://github.com/qodeca/erfana-skills
+(Type: github-release)` and `Release tag: v10.2.0`. Two consequences for maintainers. A fix reaches Qwen
 users when it is **released**, not when it merges to `main` – so a correction
 worth shipping needs a release, not just a merge. And the tree a Qwen user runs
 is the tagged tree, while `scripts/qwen-smoke.sh` installs the working tree by
@@ -167,6 +167,7 @@ would live upstream or would cost Claude Code users something.
   appends the raw invocation to the end of the prompt. Each argument-taking
   command carries both tokens and a rule for telling which one the host filled
   in.
+- **`erfana:cut-waste` has nothing to read.** It scans Claude Code's session logs under `~/.claude/projects/`; Qwen Code keeps its sessions elsewhere in another format, so the scanner finds no logs and the skill stops and says so.
 - **Skill activation may be less reliable.** A field report on Claude-authored
   skills under Qwen found the host worse at deciding to load a skill at all, and
   the workaround that helped was a `UserPromptSubmit` hook re-injecting the

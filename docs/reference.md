@@ -3,7 +3,7 @@
 <!-- GENERATED FILE - DO NOT EDIT BY HAND. -->
 <!-- Regenerate with: bash scripts/gen-reference.sh -->
 
-*This page describes erfana v10.1.0. See the [changelog](../CHANGELOG.md) for what changed since.*
+*This page describes erfana v10.2.0. See the [changelog](../CHANGELOG.md) for what changed since.*
 
 Everything erfana ships, read straight from the plugin files by
 [`scripts/gen-reference.sh`](../scripts/gen-reference.sh). Gate 19 fails the
@@ -16,7 +16,7 @@ use the bare name, for example `/issue`. Claude also loads a skill on its own
 when your words match its trigger phrases, unless the skill is marked
 "you start it".
 
-## Skills (20)
+## Skills (21)
 
 | Skill | Started by | What it is for |
 |---|---|---|
@@ -25,6 +25,7 @@ when your words match its trigger phrases, unless the skill is marked
 | [`erfana:autopilot`](#erfanaautopilot) | you or Claude | Sets up and keeps alive an unattended work run – writes the /goal condition from the session itself, keeps one state file with progress and a queue of what needs the owner, keeps the task list down to open work, and picks the run up again after a restart or compaction. |
 | [`erfana:backlog`](#erfanabacklog) | you start it | Keeps a repository's open GitHub issues true and short – finds duplicates and folds them into one issue, groups very small issues into one checklist issue, and checks every open issue against the merged code to close what is proven done and rewrite what is vague. |
 | [`erfana:coordinate`](#erfanacoordinate) | you or Claude | Keeps parallel Claude sessions on the same repository out of each other's way – claims GitHub issues so no two sessions take the same one, shows who holds what, releases claims, and exchanges a short status with sibling sessions on the same machine. |
+| [`erfana:cut-waste`](#erfanacut-waste) | you start it | Measures where one project's Claude Code sessions wasted tokens and time, and turns the biggest waste into project rules, scripts, and hooks the user approves. |
 | [`erfana:design`](#erfanadesign) | you or Claude | Creates and maintains design systems, development-ready style libraries, and static HTML and CSS review pages for desktop, web, and mobile apps. |
 | [`erfana:draft-goal`](#erfanadraft-goal) | you or Claude | Turns a fuzzy intention into a /goal completion condition that the goal evaluator can judge from the transcript – one outcome, numbered checks with visible evidence, explicit exclusions, an owner-decisions clause, and a turn bound – and prints it ready to paste. |
 | [`erfana:expert-panel`](#erfanaexpert-panel) | you or Claude | Runs a panel of top-practitioner reviewers over a plan, design, or set of documents – picks the roles the target needs, has each review it independently, merges what they find, puts the owner's decisions to the user, and ends with an improved version of the plan. |
@@ -84,6 +85,14 @@ Keeps parallel Claude sessions on the same repository out of each other's way �
 - **Started by:** you or Claude
 - **Trigger phrases:** "claim #N", "which issues are taken", "check with the other sessions", "synchronize with the other \<project> sessions", "don't step on the other sessions", "release my claims"
 - **Source:** [`skills/coordinate/SKILL.md`](../skills/coordinate/SKILL.md)
+
+### `erfana:cut-waste`
+
+Measures where one project's Claude Code sessions wasted tokens and time, and turns the biggest waste into project rules, scripts, and hooks the user approves.
+
+- **Start:** `/erfana:cut-waste` `[optional: focus, such as screenshots or subagents]`
+- **Started by:** you start it
+- **Source:** [`skills/cut-waste/SKILL.md`](../skills/cut-waste/SKILL.md)
 
 ### `erfana:design`
 

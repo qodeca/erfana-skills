@@ -3,6 +3,12 @@
 All notable changes to the erfana plugin for Claude Code are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versions follow [Semantic Versioning](https://semver.org/).
 
+## [10.2.0] - 2026-11-20
+
+### Added
+
+- **New skill `erfana:cut-waste` turns measured session waste into project rules and checks.** It scans one project's Claude Code session logs with a shipped script that writes counts only – never message text – and ranks the waste by price-weighted tokens and by minutes: subagent runs, owner question rounds, full check-suite and screenshot reruns, identical re-reads and reruns, goal checks not met, and compactions. It proposes at most five changes per run, each tied to its number, and prefers a script or a hook to a sentence. After one approval it applies them inside the project only, with a test for each script and hook, and never commits. Each run saves its table under `.local/cut-waste/`, so the next run shows which changes cut waste and proposes removing those that did not. You start it yourself with `/erfana:cut-waste`. Gate 21 proves the scanner on made-up logs. It reads Claude Code logs only, so on Qwen Code it finds nothing and says so.
+
 ## [10.1.0] - 2026-11-19
 
 ### Added
