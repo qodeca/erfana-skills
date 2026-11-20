@@ -555,6 +555,12 @@ echo "=== Gate 20 — design checker ==="
 # shipped sample. Standalone runner: scripts/gate-20-design-checker.sh.
 bash scripts/gate-20-design-checker.sh
 
+echo "=== Gate 21 — cut-waste scanner ==="
+# Replays made-up session logs through the cut-waste skill's scanner: planted
+# waste is counted and no log content is written. Standalone runner:
+# scripts/gate-21-cut-waste.sh.
+bash scripts/gate-21-cut-waste.sh
+
 echo "=== claude plugin validate ==="
 if command -v claude > /dev/null; then
     cv_log=$(mktemp)

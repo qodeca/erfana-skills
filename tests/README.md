@@ -6,6 +6,7 @@ Scratch space for skill outputs and gate fixtures produced while testing the erf
 
 ```
 tests/
+├── cut-waste/           – session-log scanner fixtures run by Gate 21
 ├── design/              – checker fixtures replayed by Gate 20
 ├── gate-02-fixtures/    – frontmatter-detector fixtures replayed by Gate 2
 ├── hooks/               – verify-completion + guard fixtures replayed by Gate 16
@@ -26,4 +27,4 @@ Nothing here is locally ignored – every artifact you produce is visible to `gi
 ## Not for
 
 - Automated test suites of the plugin's behaviour – there are none (verification is done via `scripts/run-all-gates.sh` against source; the fixtures below are inputs to those gates, not a test suite of their own).
-- Anything that should be reviewed in a PR – gate fixtures are the exception: `tests/design/`, `tests/gate-02-fixtures/`, and `tests/hooks/` are read by CI and must be committed.
+- Anything that should be reviewed in a PR – gate fixtures are the exception: `tests/cut-waste/`, `tests/design/`, `tests/gate-02-fixtures/`, and `tests/hooks/` are read by CI and must be committed.

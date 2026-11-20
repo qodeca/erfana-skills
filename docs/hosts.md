@@ -167,6 +167,7 @@ would live upstream or would cost Claude Code users something.
   appends the raw invocation to the end of the prompt. Each argument-taking
   command carries both tokens and a rule for telling which one the host filled
   in.
+- **`erfana:cut-waste` has nothing to read.** It scans Claude Code's session logs under `~/.claude/projects/`; Qwen Code keeps its sessions elsewhere in another format, so the scanner finds no logs and the skill stops and says so.
 - **Skill activation may be less reliable.** A field report on Claude-authored
   skills under Qwen found the host worse at deciding to load a skill at all, and
   the workaround that helped was a `UserPromptSubmit` hook re-injecting the

@@ -158,6 +158,8 @@ jobs:
         # Line endings, drive-letter paths, and link rights all differ here. A
         # step Windows refuses a symbolic link for prints SKIP and carries on.
         run: bash scripts/gate-20-design-checker.sh
+      - name: Session scanner fixtures on Windows
+        run: bash scripts/gate-21-cut-waste.sh
 
   secret-scan:
     runs-on: ubuntu-latest
